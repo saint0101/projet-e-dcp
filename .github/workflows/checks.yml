@@ -1,0 +1,44 @@
+---
+    # Nom du flux de travail
+    name: Les Vérifications
+
+    # Événement déclencheur
+    on: # Événement déclencheur
+      push: # Déclenché lors d'une poussée sur github (push)
+        branches: # specifier le banche concernées
+          - main # Seulement la branche principale (main)
+
+    # Définition des tâches à exécuter
+    jobs:
+      test-lint: # nom de la tâche
+        name: Test et Linting. # Nom affiché dans l'interface utilisateur
+        runs-on: ubuntu-20.04  # Environnement d'exécution
+
+        # Étapes à exécuter dans la tâche
+        steps:
+          - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
+            uses: docker/login-action@v3 # Utilisation de l'action docker/login-action@v1
+            with: # parametre de docker hub
+              username: ${{ secrets.DOCKERHUB_USER }}  # Nom d'utilisateur Docker Hub
+              password: ${{ secrets.DOCKERHUB_TOKEN }} # Mot de passe d'utilisateur Docker Hub
+
+          # Ajoutez cette étape pour afficher les informations sur la connexion.
+          - name: Afficher les informations de connexion de Docker Hub # nom d el'etape
+            run: |
+              echo "Logged in as: $DOCKER_USERNAME"
+              echo "Docker token: $DOCKER_TOKEN"
+            env:  # Variables d'environnement
+              DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USER }} # Nom d'utilisateur Docker Hub
+              DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }} # Token Docker Hub
+
+            # Étape de récupération du code source
+          - name: Téléchargement
+            uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
+
+            # Étape d'exécution des tests
+          - name: Tests
+            run: docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
+
+            # Étape de vérification du linting
+          - name: Tests de linting
+            run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8

@@ -1,0 +1,32 @@
+## Les fichiers GIT
+# Répertoire Git (gestion de version)
+# Fichier spécifiant les fichiers et répertoires à ignorer dans Git
+
+## Les fichiers DOCKER
+# Répertoire contenant des fichiers liés à Docker
+
+## Les fichiers PYTHON
+# Répertoire généré par Python, contenant des fichiers cache
+# Répertoires générés par Python, contenant des fichiers cache
+# Répertoires générés par Python, contenant des fichiers cache
+# Répertoires générés par Python, contenant des fichiers cache
+# Fichier contenant des variables d'environnement
+# Répertoire virtuel Python (environnement virtuel)
+# Répertoire virtuel Python (environnement virtuel)
+
+# Les fichiers GIT
+.git
+.gitignore
+
+# Les fichier DOCKER
+.docker
+
+# Les fichier PYTHON
+app/__pycache__/
+app./*/__pycache__/
+app./*/*/__pycache__/
+app./*/*/*/__pycache__/
+.env/
+.venv/
+venv/
+
