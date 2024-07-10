@@ -37,7 +37,8 @@
 
             # Étape d'exécution des tests
           - name: Tests
-            run: docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
+            run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
+            # run: docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
 
             # Étape de vérification du linting
           - name: Tests de linting
