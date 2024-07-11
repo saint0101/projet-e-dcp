@@ -28,6 +28,10 @@ urlpatterns = [
 
     # ajouter l'url enregistrement
     path('edcp/enregistrement/', include('enregistrement.urls')),
+
+    # ajouter l'url correspondant
+    path('edcp/correspondant/', include('correspondant.urls')),
 ]
+
 
 

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user',
     'enregistrement',
     'demande_auto',
+    'correspondant',
 ]
 
 MIDDLEWARE = [

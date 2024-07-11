@@ -2,12 +2,12 @@
 FROM python:3.9-alpine3.13
 
 
-#RUN apk update \
-#    && apk add --update --no-cache tzdata wkhtmltopdf \
-#       curl zlib-dev libressl-dev readline-dev yaml-dev libxml2-dev libxslt-dev bash \
-#       curl-dev libffi-dev \
-#       poppler-utils imagemagick imagemagick-dev imagemagick-libs \
-#       nodejs yarn build-base git postgresql-dev postgresql-client
+RUN apk update \
+    && apk add --update --no-cache tzdata wkhtmltopdf \
+       curl zlib-dev libressl-dev readline-dev yaml-dev libxml2-dev libxslt-dev bash \
+       curl-dev libffi-dev \
+       poppler-utils imagemagick imagemagick-dev imagemagick-libs \
+       nodejs yarn build-base git postgresql-dev postgresql-client
 
 # Ajouter le nom de l'instructeur (étiquette maintainer)
 LABEL maintainer="projetedcp.ci"
@@ -57,6 +57,7 @@ RUN python -m venv /py && \
         --disabled-password \
         --no-create-home \
         django-user
+
 
 # Définir le chemin pour inclure le binaire du Python de l'environnement virtuel
 ENV PATH="/py/bin:$PATH"
