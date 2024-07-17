@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor', # compression des fichiers statiques CSS et JS
     # 'bootstrap5',
+    # 'django_feather',
     'public',
     'dashboard',
     'base_edcp',

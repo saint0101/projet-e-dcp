@@ -1,5 +1,6 @@
 {% load compress %}
 {% load static %}
+{% comment %} {% load icon %} {% endcomment %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -30,6 +31,9 @@
 
     <main class="d-flex flex-nowrap">
         {% block sidebar %}
+        {% endblock %}
+
+        {% block breadcrumbs %}
         {% endblock %}
 
         {% block content %}

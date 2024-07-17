@@ -11,5 +11,21 @@ $warning: #F7D117;
 $danger: #ee0813;
 
 @import "./bootstrap/scss/bootstrap.scss";
-// @import "./bootstrap/scss/variables";
+@import "./bootstrap-icons/font/bootstrap-icons.min.css";
 
+
+.large{
+  font-size: large;
+}
+
+.larger{
+  font-size: larger;
+}
+
+.x-large{
+  font-size: x-large;
+}
+
+.xx-larg{
+  font-size: xx-large;
+}
