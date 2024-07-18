@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.conf import settings
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
 from base_edcp import models
-
 
 
 # module TypeClient
@@ -173,6 +174,7 @@ class EnregistrementAdmin(admin.ModelAdmin):
         }),
     )
 
+
 # module Autorisation
 class AutorisationAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
@@ -187,6 +189,158 @@ class AutorisationAdmin(admin.ModelAdmin):
         }),
     )
 
+
+# modeule enregistreprement d'un utilisateur
+class UserAdmin(BaseUserAdmin):
+    """
+    Définit les pages d'administration pour les utilisateurs.
+    """
+    ordering = ['id']  # Ordonne les utilisateurs par ID
+    list_display = ['email', 'login', 'organisation', 'consentement']  # Affiche les utilisateurs par e-mail et login
+
+    # Éditer l'utilisateur
+    fieldsets = (
+        (None, {'fields': ('email', "password")}),  # Informations de connexion
+        (
+            _('Personal Info'),  # Titre pour les champs d'informations personnelles
+            {
+                'fields': (
+                    'nom',
+                    'prenoms',
+                    'organisation',
+                    'telephone',
+                    'fonction',
+                    'consentement',
+                    'login',
+                    'avatar',
+                )
+            }
+        ),
+        (
+            _('Permissions'),  # Titre pour les champs de permission
+            {
+                'fields': (
+                    'is_active',    # Active ou désactive le compte
+                    'is_staff',     # Accorde l'accès au site d'administration
+                    'is_superuser', # Accorde tous les accès
+                )
+            }
+        ),
+        (_('Dates importantes'), {'fields': ('last_login',)}),  # Date de dernière connexion
+    )
+    readonly_fields = ['last_login']  # Affiche la dernière connexion en lecture seule
+
+    # Ajout d'un utilisateur
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': (
+                'email',
+                'password1',
+                'password2',
+                'nom',
+                'prenoms',
+                'organisation',
+                'telephone',
+                'fonction',
+                'consentement',
+                'login',
+                'avatar',
+                'is_active',
+                'is_staff',
+                'is_superuser',
+            ),
+        }),
+    )
+
+
+class SousFinaliteAdmin(admin.ModelAdmin):
+    """ Definir la table sous finalite dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les notifications par ID
+    list_display = ['label', 'sensible', 'ordre', 'finalite']  # Affiche informatons de la table
+
+    # Éditer le type des sous finalite
+    fieldsets = (
+        (None, {
+            'fields': ('label', 'sensible', 'ordre', 'finalite')
+        }),
+    )
+
+
+class RoleAdmin(admin.ModelAdmin):
+    """ Definir la table Role dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les Role par ID
+    list_display = ['role']  # Affiche informatons de la table
+
+    # Éditer le type des sous finalite
+    fieldsets = (
+        (None, {
+            'fields': ('role', ) # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class PersConcerneeAdmin(admin.ModelAdmin):
+    """ Definir la table Role dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les personne concernee par ID
+    list_display = ['label', 'sensible', 'ordre']  # Affiche informatons de la table
+
+    # Éditer le type des personne concernee
+    fieldsets = (
+        (None, {
+            'fields': ('label', 'sensible', 'ordre') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class HabilitationAdmin(admin.ModelAdmin):
+    """ Definir la table Habilitation dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les Habilitation par ID
+    list_display = ['role', 'fonction', 'created']  # Affiche informatons de la table
+
+    # Éditer le type des Habilitation
+    fieldsets = (
+        (None, {
+            'fields': ('role', 'fonction', 'created') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class JournalTransactionAdmin(admin.ModelAdmin):
+    """ Definir la table JournalTransaction dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les JournalTransaction par ID
+    list_display = ['transaction', 'cible', 'created', 'user']  # Affiche informatons de la table
+
+    # Éditer le type des JournalTransaction
+    fieldsets = (
+        (None, {
+            'fields': ('transaction', 'cible', 'created', 'user') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+# Enregistrer le modèle Habilitation avec l'interface d'administration
+admin.site.register(models.JournalTransaction, JournalTransactionAdmin)
+
+# Enregistrer le modèle Habilitation avec l'interface d'administration
+admin.site.register(models.Habilitation, HabilitationAdmin)
+
+# Enregistrer le modèle PersConcernee avec l'interface d'administration
+admin.site.register(models.PersConcernee, PersConcerneeAdmin)
+
+# Enregistrer le modèle role avec l'interface d'administration
+admin.site.register(models.Role, RoleAdmin)
+
+# Enregistrer le modèle sous finalite avec l'interface d'administration
+admin.site.register(models.SousFinalite, SousFinaliteAdmin)
+
+# Enregistrer le modèle CustomUser avec l'interface d'administration
+admin.site.register(models.User, UserAdmin)
 
 # Enregistrer le modèle Autorisation avec l'interface d'administration
 admin.site.register(models.Autorisation, AutorisationAdmin)

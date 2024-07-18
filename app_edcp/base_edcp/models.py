@@ -126,6 +126,11 @@ class FondJuridique(models.Model):
     label = models.CharField(max_length=100)
     description = models.TextField()
 
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Fondement Juridique'
+        verbose_name_plural = 'Fondements Juridique'
+
     def __str__(self):
         """ les champs a retourner """
         return self.label
@@ -146,33 +151,57 @@ class PersConcernee(models.Model):
     sensible = models.BooleanField()
     ordre = models.IntegerField()
 
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Personne Concernée'
+        verbose_name_plural = 'Personnes Concernées'
+
     def __str__(self):
         """ les champs à retourner """
         return f"La finalié {self.label} a pour {self.sensible}"
 
 
 # Gestionnaire personnalisé pour le modèle d'utilisateur
-    # - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
+    ## - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
 class CustomUserManager(BaseUserManager):
     """Gestionnaire pour les utilisateurs"""
 
+    # Méthode pour créer un utilisateur
     def create_user(self, email, password=None, **extra_fields):
         """Crée, enregistre et retourne un nouvel utilisateur."""
         # verifier si l'email est fourni
         if not email:
             raise ValueError("L'utilisateur doit avoire une adresse email.")
         # Crée une instance du modèle utilisateur
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=self.normalize_email(email), **extra_fields)
         # Définit le mot de passe de l'utilisateur
         user.set_password(password)
         # Sauvegarde l'utilisateur dans la base de données
         user.save(using=self._db)
+
         return user
 
 
+    # Méthode pour créer un superutilisateur
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Crée et enregistre un superutilisateur avec les informations fournies."""
+        # Assurer que l'utilisateur est un membre du personnel et un superutilisateur
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        # Vérification des droits de superutilisateur
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Les superutilisateurs doivent avoir is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Les superutilisateurs doivent avoir is_superuser=True.')
+
+        # Création de l'utilisateur avec les droits de superutilisateur
+        return self.create_user(email, password, **extra_fields)
+
+
 # Gestion del'utiilsateur
-    # -  AbstractBaseUser: fournit les fonctionnalités de base pour un modèle d'utilisateur personnalisé
-    # - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
+    ## -  AbstractBaseUser: fournit les fonctionnalités de base pour un modèle d'utilisateur personnalisé
+    ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
 class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de la BD """
     login = models.CharField(max_length=100, unique=True, verbose_name='Nom d\'Utilisateur')
@@ -209,14 +238,10 @@ class User(AbstractBaseUser, PermissionsMixin):
             'consentement',
         ]
 
-    def __str__(self):
-        """ les champs a retourner """
-        # self.nom, self.organisation, self.telephone, self.fonction
-        return self.nom
 
     def __str__(self):
         """ les champs a retourner """
-        return f"Nom {self.nom}, Fonction {self.fonction}, Organisation {self.organisation}, Numéro de téléphone {self.telephone}"
+        return f"{self.nom} - {self.fonction} - {self.organisation}"
 
 
 class Notification(models.Model):
@@ -284,7 +309,10 @@ class JournalTransaction(models.Model):
     cible = models.CharField(max_length=100)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
 
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Journal Transaction'
+        verbose_name_plural = 'Journals Transactions'
+
     def __str__(self):
         return self.transaction
-
-# TODO: ajouter a l'admin (SousFinalite, Role, PersConcernee, User, Habilitation, JournalTransaction)
