@@ -1,0 +1,45 @@
+{% load compress %}
+{% load static %}
+{% comment %} {% load icon %} {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    
+    {% block title %}
+        <title>Plateforme e-DCP</title>
+    {% endblock %}
+
+    {% comment %} {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %} {% endcomment %}
+
+    
+    {% compress css %}
+        {% comment %}       <link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen">
+        {% endcomment %}      
+        <link type="text/x-scss" href="{% static 'theme-apdcp.scss' %}" rel="stylesheet" media="screen">
+        <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
+    {% endcompress %}
+    <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+</head>
+<body>
+    {% block header %}
+    {% endblock %}
+
+    <main class="d-flex flex-nowrap">
+        {% block sidebar %}
+        {% endblock %}
+
+        {% block breadcrumbs %}
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+  {% include "./footer.html" %}
+</body>
+</html>

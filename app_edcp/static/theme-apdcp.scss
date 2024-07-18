@@ -1,0 +1,31 @@
+// Custom.scss
+// Option A: Include all of Bootstrap
+
+// Include any default variable overrides here (though functions won't be available)
+
+$primary: #FB8521;
+$secondary: #999999;
+$success: #339966;
+$info: #0073D1 ;
+$warning: #F7D117;
+$danger: #ee0813;
+
+@import "./bootstrap/scss/bootstrap.scss";
+@import "./bootstrap-icons/font/bootstrap-icons.min.css";
+
+
+.large{
+  font-size: large;
+}
+
+.larger{
+  font-size: larger;
+}
+
+.x-large{
+  font-size: x-large;
+}
+
+.xx-larg{
+  font-size: xx-large;
+}

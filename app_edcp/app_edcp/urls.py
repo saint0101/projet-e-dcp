@@ -19,7 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('public/', include('public.urls')),
+    path('dashboard/', include('dashboard.urls')),
     # ajouter l'utiisateur
     path('edcp/user/', include('user.urls')),
 
