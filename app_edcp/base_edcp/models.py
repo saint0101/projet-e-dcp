@@ -1,5 +1,11 @@
 from django.db import models
 
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
+
 # Create your models here.
 
 
@@ -145,7 +151,29 @@ class PersConcernee(models.Model):
         return f"La finalié {self.label} a pour {self.sensible}"
 
 
-class User(models.Model):
+# Gestionnaire personnalisé pour le modèle d'utilisateur
+    # - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
+class CustomUserManager(BaseUserManager):
+    """Gestionnaire pour les utilisateurs"""
+
+    def create_user(self, email, password=None, **extra_fields):
+        """Crée, enregistre et retourne un nouvel utilisateur."""
+        # verifier si l'email est fourni
+        if not email:
+            raise ValueError("L'utilisateur doit avoire une adresse email.")
+        # Crée une instance du modèle utilisateur
+        user = self.model(email=email, **extra_fields)
+        # Définit le mot de passe de l'utilisateur
+        user.set_password(password)
+        # Sauvegarde l'utilisateur dans la base de données
+        user.save(using=self._db)
+        return user
+
+
+# Gestion del'utiilsateur
+    # -  AbstractBaseUser: fournit les fonctionnalités de base pour un modèle d'utilisateur personnalisé
+    # - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
+class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de la BD """
     login = models.CharField(max_length=100, unique=True, verbose_name='Nom d\'Utilisateur')
     avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
@@ -163,6 +191,28 @@ class User(models.Model):
         """ définir le nom singulier et pluriel du modèle """
         verbose_name = 'Utilisateur'
         verbose_name_plural = 'Utilisateurs'
+
+    # extenssier la gestionnaire d'utilisateur
+    objects = CustomUserManager()
+
+    # USERNAME_FIELD est défini sur 'email' pour l'authentification par e-mail.
+    USERNAME_FIELD = 'email'
+
+    #REQUIRED_FIELDS spécifie les champs supplémentaires requis
+    REQUIRED_FIELDS = [
+            'login',
+            'nom',
+            'prenoms',
+            'organisation',
+            'telephone',
+            'fonction',
+            'consentement',
+        ]
+
+    def __str__(self):
+        """ les champs a retourner """
+        # self.nom, self.organisation, self.telephone, self.fonction
+        return self.nom
 
     def __str__(self):
         """ les champs a retourner """
