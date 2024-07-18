@@ -36,7 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'livereload', # rechargement automatique de la page web en cas de changement sur les fichiers
     'django.contrib.staticfiles',
+    'compressor', # compression des fichiers statiques CSS et JS
+    # 'bootstrap5',
+    # 'django_feather',
+    'public',
+    'dashboard',
     'base_edcp',
     'user',
     'enregistrement',
@@ -52,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'app_edcp.urls'
@@ -87,13 +94,24 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
 # }
 
 # configure Database postgresql avecs d'environnement
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST'),
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS')
+    }
+}"""
+# version alternative en cad de développement local sans docker
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'localhost',
+        'PORT': '5435',
+        'NAME': 'edcp_db',
+        'USER': 'root',
+        'PASSWORD': 'root',
     }
 }
 
@@ -134,10 +152,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
  ]
+
+# COMPRESS_ROOT = BASE_DIR / 'static'
+
+# STATICFILES_FINDERS.append(compressor.finders.CompressorFinder)
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
 
 
 # Default primary key field type

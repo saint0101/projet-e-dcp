@@ -58,14 +58,21 @@ Créez la base de données et appliquez les migrations :
 Créez un super utilisateur pour accéder à l'interface d'administration de Django :
 
 ```bash
-    ddocker-compose run --rm app_edcp sh -c "python manage.py createsuperuser"
+    docker-compose run --rm app_edcp sh -c "python manage.py createsuperuser"
 ```
 
+### 6. Lancer l'exécuption de l'application
+Utiliser docker compose up pour démarrer tous les conteneurs en une fois :
 
 ```bash
     docker-compose up -d
 ```
 
+Ou passer par la commande runserver de Django pour un affichage de l'output dans le terminal :
+
+```bash
+    docker-compose run --rm app_edcp sh -c "python manage.py runserver"
+```
 
 # Travailler sur le projet
 
