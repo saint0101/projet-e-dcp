@@ -126,6 +126,11 @@ class FondJuridique(models.Model):
     label = models.CharField(max_length=100)
     description = models.TextField()
 
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Fondement Juridique'
+        verbose_name_plural = 'Fondements Juridique'
+
     def __str__(self):
         """ les champs a retourner """
         return self.label
@@ -145,6 +150,11 @@ class PersConcernee(models.Model):
     label = models.CharField(max_length=100, null=True)
     sensible = models.BooleanField()
     ordre = models.IntegerField()
+
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Personne Concernée'
+        verbose_name_plural = 'Personnes Concernées'
 
     def __str__(self):
         """ les champs à retourner """
@@ -231,7 +241,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """ les champs a retourner """
-        return f"Nom {self.nom}, Fonction {self.fonction}, Organisation {self.organisation}, Numéro de téléphone {self.telephone}"
+        return f"{self.nom} - {self.fonction} - {self.organisation}"
 
 
 class Notification(models.Model):
@@ -299,7 +309,10 @@ class JournalTransaction(models.Model):
     cible = models.CharField(max_length=100)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
 
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Journal Transaction'
+        verbose_name_plural = 'Journals Transactions'
+
     def __str__(self):
         return self.transaction
-
-# TODO: ajouter a l'admin (Role, PersConcernee, User, Habilitation, JournalTransaction)

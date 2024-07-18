@@ -3,10 +3,8 @@ from django.conf import settings
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-
 # Register your models here.
 from base_edcp import models
-
 
 
 # module TypeClient
@@ -214,7 +212,6 @@ class UserAdmin(BaseUserAdmin):
                     'fonction',
                     'consentement',
                     'login',
-                    # 'role',
                     'avatar',
                 )
             }
@@ -248,7 +245,6 @@ class UserAdmin(BaseUserAdmin):
                 'fonction',
                 'consentement',
                 'login',
-                # 'role',
                 'avatar',
                 'is_active',
                 'is_staff',
@@ -271,6 +267,74 @@ class SousFinaliteAdmin(admin.ModelAdmin):
         }),
     )
 
+
+class RoleAdmin(admin.ModelAdmin):
+    """ Definir la table Role dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les Role par ID
+    list_display = ['role']  # Affiche informatons de la table
+
+    # Éditer le type des sous finalite
+    fieldsets = (
+        (None, {
+            'fields': ('role', ) # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class PersConcerneeAdmin(admin.ModelAdmin):
+    """ Definir la table Role dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les personne concernee par ID
+    list_display = ['label', 'sensible', 'ordre']  # Affiche informatons de la table
+
+    # Éditer le type des personne concernee
+    fieldsets = (
+        (None, {
+            'fields': ('label', 'sensible', 'ordre') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class HabilitationAdmin(admin.ModelAdmin):
+    """ Definir la table Habilitation dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les Habilitation par ID
+    list_display = ['role', 'fonction', 'created']  # Affiche informatons de la table
+
+    # Éditer le type des Habilitation
+    fieldsets = (
+        (None, {
+            'fields': ('role', 'fonction', 'created') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+class JournalTransactionAdmin(admin.ModelAdmin):
+    """ Definir la table JournalTransaction dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les JournalTransaction par ID
+    list_display = ['transaction', 'cible', 'created', 'user']  # Affiche informatons de la table
+
+    # Éditer le type des JournalTransaction
+    fieldsets = (
+        (None, {
+            'fields': ('transaction', 'cible', 'created', 'user') # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+# Enregistrer le modèle Habilitation avec l'interface d'administration
+admin.site.register(models.JournalTransaction, JournalTransactionAdmin)
+
+# Enregistrer le modèle Habilitation avec l'interface d'administration
+admin.site.register(models.Habilitation, HabilitationAdmin)
+
+# Enregistrer le modèle PersConcernee avec l'interface d'administration
+admin.site.register(models.PersConcernee, PersConcerneeAdmin)
+
+# Enregistrer le modèle role avec l'interface d'administration
+admin.site.register(models.Role, RoleAdmin)
 
 # Enregistrer le modèle sous finalite avec l'interface d'administration
 admin.site.register(models.SousFinalite, SousFinaliteAdmin)
