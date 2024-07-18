@@ -141,6 +141,62 @@ class FondJuridiqueAdmin(admin.ModelAdmin):
     )
 
 
+# module notificaton
+class NotificationAdmin(admin.ModelAdmin):
+    """ definir la page de l'administrateur """
+
+    ordering = ['id']  # Ordonne les notifications par ID
+    list_display = ['user', 'message', 'created_at', 'is_read']  # Affiche les utilisateurs par user et message
+
+    # Éditer l'utilisateur
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'message', 'is_read')
+        }),
+    )
+
+
+# module Enregistrement
+class EnregistrementAdmin(admin.ModelAdmin):
+    """ Page d'administration pour Enregistrement """
+
+    ordering = ['id']  # Ordonne les enregistrements par ID
+    list_display = ['user', 'created_at', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur',
+                    'secteur_description', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
+                    'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif', ]
+
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur',
+                       'secteur_description', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
+                       'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif',)
+        }),
+    )
+
+# module Autorisation
+class AutorisationAdmin(admin.ModelAdmin):
+    """ definir la page de l'administrateur """
+
+    ordering = ['id']  # Ordonne les notifications par ID
+    list_display = ['enregistrement', 'numero_autorisation', 'created_at']  # Affiche informatons de la table
+
+    # Éditer le type du client
+    fieldsets = (
+        (None, {
+            'fields': ('enregistrement', 'numero_autorisation', )
+        }),
+    )
+
+
+# Enregistrer le modèle Autorisation avec l'interface d'administration
+admin.site.register(models.Autorisation, AutorisationAdmin)
+
+# Enregistrer le modèle RegistrationAdmin avec l'interface d'administration
+admin.site.register(models.Enregistrement, EnregistrementAdmin)
+
+# Enregistrer le modèle CustomUser avec l'interface d'administration
+admin.site.register(models.Notification, NotificationAdmin)
+
 # Enregistrer le modèle SecteurAdmin avec l'interface d'administration
 admin.site.register(models.Secteur, SecteurAdmin)
 
