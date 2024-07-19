@@ -148,11 +148,160 @@ MENU_CLIENT = [
 
 ]
 
-def index(request):
-  if request.user.is_authenticated :
-    return redirect('dashboard:index_mgr')
+MENU_MGR = [
+  {
+    'text' : 'Formalités',
+    'type' : 'section',
+  },
+
+  {
+    'text' : 'Enregistrement',
+    'id' : 'enregistrement',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Récent',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False,
+      },
+      {
+        'text' : 'Toutes les organisation',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ], 
+  },
   
-  return redirect('dashboard:index_client')
+  {
+    'text' : 'Demandes d\'autorisation',
+    'id' : 'demande-auto',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Nouvelle demande',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'En cours',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Toutes les demandes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ]
+  },
+  
+  {
+    'text' : 'Mise en conformité',
+    'id' : 'mise-en-conf',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : 'dashboard:index',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Démarrer',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'En cours',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Toutes les demandes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
+  
+  {
+    'text' : 'Notifications',
+    'type' : 'section',
+  },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignation',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
+  
+  {
+    'text' : 'Violations',
+    'id' : 'violations',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [],
+  },
+
+  {
+    'text' : 'AIPD',
+    'id' : 'aipd',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [],
+  },
+
+]
+
+
+def index(request):
+  user = request.user
+  if user.is_staff :
+    return render(request, 'dashboard/index.html', context={'menu': MENU_MGR})
+  
+  return render(request, 'dashboard/index.html', context={'menu': MENU_CLIENT})
 
 
 def index_client(request):

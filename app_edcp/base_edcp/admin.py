@@ -7,6 +7,86 @@ from django.utils.translation import gettext_lazy as _
 from base_edcp import models
 
 
+# modeule enregistreprement d'un utilisateur
+class UserAdmin(BaseUserAdmin):
+    """
+    Définit les pages d'administration pour les utilisateurs.
+    """
+    ordering = ['id']  # Ordonne les utilisateurs par ID
+    list_display = ['email', 'username', 'organisation', 'consentement']  # Affiche les utilisateurs par e-mail et login
+
+    # Éditer l'utilisateur
+    fieldsets = (
+        (None, {'fields': ('email', "password")}),  # Informations de connexion
+        (
+            _('Personal Info'),  # Titre pour les champs d'informations personnelles
+            {
+                'fields': (
+                    'nom',
+                    'prenoms',
+                    'organisation',
+                    'telephone',
+                    'fonction',
+                    'consentement',
+                    'username',
+                    'avatar',
+                )
+            }
+        ),
+        (
+            _('Permissions'),  # Titre pour les champs de permission
+            {
+                'fields': (
+                    'is_active',    # Active ou désactive le compte
+                    'is_staff',     # Accorde l'accès au site d'administration
+                    'is_superuser', # Accorde tous les accès
+                )
+            }
+        ),
+        (_('Dates importantes'), {'fields': ('last_login',)}),  # Date de dernière connexion
+    )
+    readonly_fields = ['last_login']  # Affiche la dernière connexion en lecture seule
+
+    # Ajout d'un utilisateur
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': (
+                'email',
+                'password1',
+                'password2',
+                'nom',
+                'prenoms',
+                'organisation',
+                'telephone',
+                'fonction',
+                'consentement',
+                'username',
+                'avatar',
+                'is_active',
+                'is_staff',
+                'is_superuser',
+            ),
+        }),
+    )
+
+
+
+class RoleAdmin(admin.ModelAdmin):
+    """ Definir la table Role dans l'espace admin """
+
+    ordering = ['id']  # Ordonne les Role par ID
+    list_display = ['role']  # Affiche informatons de la table
+
+    # Éditer le type des sous finalite
+    fieldsets = (
+        (None, {
+            'fields': ('role', ) # Utilisez un tuple même pour un seul champ
+        }),
+    )
+
+
+
 # module TypeClient
 class TypeClientAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
@@ -190,68 +270,6 @@ class AutorisationAdmin(admin.ModelAdmin):
     )
 
 
-# modeule enregistreprement d'un utilisateur
-class UserAdmin(BaseUserAdmin):
-    """
-    Définit les pages d'administration pour les utilisateurs.
-    """
-    ordering = ['id']  # Ordonne les utilisateurs par ID
-    list_display = ['email', 'login', 'organisation', 'consentement']  # Affiche les utilisateurs par e-mail et login
-
-    # Éditer l'utilisateur
-    fieldsets = (
-        (None, {'fields': ('email', "password")}),  # Informations de connexion
-        (
-            _('Personal Info'),  # Titre pour les champs d'informations personnelles
-            {
-                'fields': (
-                    'nom',
-                    'prenoms',
-                    'organisation',
-                    'telephone',
-                    'fonction',
-                    'consentement',
-                    'login',
-                    'avatar',
-                )
-            }
-        ),
-        (
-            _('Permissions'),  # Titre pour les champs de permission
-            {
-                'fields': (
-                    'is_active',    # Active ou désactive le compte
-                    'is_staff',     # Accorde l'accès au site d'administration
-                    'is_superuser', # Accorde tous les accès
-                )
-            }
-        ),
-        (_('Dates importantes'), {'fields': ('last_login',)}),  # Date de dernière connexion
-    )
-    readonly_fields = ['last_login']  # Affiche la dernière connexion en lecture seule
-
-    # Ajout d'un utilisateur
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': (
-                'email',
-                'password1',
-                'password2',
-                'nom',
-                'prenoms',
-                'organisation',
-                'telephone',
-                'fonction',
-                'consentement',
-                'login',
-                'avatar',
-                'is_active',
-                'is_staff',
-                'is_superuser',
-            ),
-        }),
-    )
 
 
 class SousFinaliteAdmin(admin.ModelAdmin):
@@ -267,19 +285,6 @@ class SousFinaliteAdmin(admin.ModelAdmin):
         }),
     )
 
-
-class RoleAdmin(admin.ModelAdmin):
-    """ Definir la table Role dans l'espace admin """
-
-    ordering = ['id']  # Ordonne les Role par ID
-    list_display = ['role']  # Affiche informatons de la table
-
-    # Éditer le type des sous finalite
-    fieldsets = (
-        (None, {
-            'fields': ('role', ) # Utilisez un tuple même pour un seul champ
-        }),
-    )
 
 
 class PersConcerneeAdmin(admin.ModelAdmin):
