@@ -197,3 +197,6 @@ ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application 
 
 """Utilisé pour l'affichage des formulaires avec boostratp"""
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+LOGIN_REDIRECT_URL = 'dashboard:index'
+LOGOUT_REDIRECT_URL = 'public:index'

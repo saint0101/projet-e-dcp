@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 # from django.contrib.auth.models import User
 # from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from connexion.forms import UserRegistrationForm
 
 
@@ -18,7 +19,12 @@ def signup(request):
         user = UserRegistrationForm(request.POST)
         if user.is_valid():
             user.save()
-            return HttpResponse('Bienvenue !')
+            # return HttpResponse('Bienvenue !')
+            context['message'] = 'Inscription effectuée avec succès !'
+            # return redirect('connexion:login')
+            form = AuthenticationForm()
+            context['form'] = form
+            return render(request, 'registration/login.html', context=context)
         
         else:
             context['errors'] = user.errors
@@ -28,6 +34,11 @@ def signup(request):
     context['form'] = form
 
     return render(request, 'connexion/signup.html', context=context)
+
+
+""" def login(request):
+    context = {}
+ """
 
 
 def signup_basic(request):

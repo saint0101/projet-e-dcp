@@ -22,6 +22,7 @@ urlpatterns = [
     path('public/', include('public.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('connexion/', include('connexion.urls')),
+    path('connexion/', include('django.contrib.auth.urls')),
     # ajouter l'utiisateur
     path('edcp/user/', include('user.urls')),
 
