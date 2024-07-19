@@ -23,6 +23,4 @@ Les modifications du CSS exigeant des rafraichissements fréquents des pages, la
 - **django-bootstrap-v5** : intégration de bootstrap. Désactivé ;
 - **django-livereload-server** : rechargement automatique des pages web. Lancer la commande avec `python manage.py livereload`, avant de lancer `runserver` ;
 - **django-compress** et **django-libsass** : utilisés conjointement pour la compilation des fichiers `scss` en `css` et la compression des fichiers statiques CSS et JS.
-
-crispy-form, cruspy-bootstrap
-
+- **django-crispy-form** et **crispy-bootstrap5** : utilisés pour la mise en forme automatique des formulaires django avec bootstrap ;
