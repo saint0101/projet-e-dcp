@@ -1,0 +1,1642 @@
+ create mode 100644 app_edcp/static/bootstrap-icons/thermometer-high.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thermometer-low.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thermometer-snow.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thermometer-sun.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thermometer.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/threads-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/threads.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/three-dots-vertical.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/three-dots.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thunderbolt-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/thunderbolt.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket-detailed-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket-detailed.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket-perforated-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket-perforated.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ticket.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tiktok.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggle-off.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggle-on.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggle2-off.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggle2-on.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggles.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/toggles2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tools.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tornado.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-freight-front-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-freight-front.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-front-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-front.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-lightrail-front-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/train-lightrail-front.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/translate.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/transparency.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash2-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash3-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trash3.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tree-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tree.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trello.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/triangle-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/triangle-half.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/triangle.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trophy-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/trophy.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tropical-storm.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/truck-flatbed.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/truck-front-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/truck-front.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/truck.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tsunami.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tv-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/tv.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/twitch.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/twitter-x.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/twitter.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-bold.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h1.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h3.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h4.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h5.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-h6.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-italic.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-strikethrough.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type-underline.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/type.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ubuntu.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ui-checks-grid.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ui-checks.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ui-radios-grid.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/ui-radios.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/umbrella-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/umbrella.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/unindent.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/union.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/unity.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/universal-access-circle.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/universal-access.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/unlock-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/unlock.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/upc-scan.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/upc.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/upload.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-c-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-c.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-drive-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-drive.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-micro-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-micro.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-mini-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-mini.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-plug-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-plug.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb-symbol.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/usb.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/valentine.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/valentine2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vector-pen.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/view-list.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/view-stacked.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vignette.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vimeo.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vinyl-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vinyl.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/virus.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/virus2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/voicemail.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-down-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-down.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-mute-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-mute.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-off-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-off.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-up-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/volume-up.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/vr.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wallet-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wallet.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wallet2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/watch.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/water.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/webcam-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/webcam.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wechat.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/whatsapp.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wifi-1.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wifi-2.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wifi-off.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wifi.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wikipedia.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wind.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-dash.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-desktop.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-dock.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-fullscreen.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-plus.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-sidebar.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-split.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-stack.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window-x.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/window.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/windows.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wordpress.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wrench-adjustable-circle-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wrench-adjustable-circle.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wrench-adjustable.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/wrench.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-circle-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-circle.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-diamond-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-diamond.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-lg.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-octagon-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-octagon.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-square-fill.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x-square.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/x.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/xbox.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/yelp.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/yin-yang.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/youtube.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/zoom-in.svg
+ create mode 100644 app_edcp/static/bootstrap-icons/zoom-out.svg
+ create mode 100644 app_edcp/static/bootstrap/.babelrc.js
+ create mode 100644 app_edcp/static/bootstrap/.browserslistrc
+ create mode 100644 app_edcp/static/bootstrap/.bundlewatch.config.json
+ create mode 100644 app_edcp/static/bootstrap/.cspell.json
+ create mode 100644 app_edcp/static/bootstrap/.editorconfig
+ create mode 100644 app_edcp/static/bootstrap/.eslintignore
+ create mode 100644 app_edcp/static/bootstrap/.eslintrc.json
+ create mode 100644 app_edcp/static/bootstrap/.gitattributes
+ create mode 100644 app_edcp/static/bootstrap/.github/CODEOWNERS
+ create mode 100644 app_edcp/static/bootstrap/.github/CONTRIBUTING.md
+ create mode 100644 app_edcp/static/bootstrap/.github/ISSUE_TEMPLATE/bug_report.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/ISSUE_TEMPLATE/config.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/ISSUE_TEMPLATE/feature_request.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/PULL_REQUEST_TEMPLATE.md
+ create mode 100644 app_edcp/static/bootstrap/.github/SUPPORT.md
+ create mode 100644 app_edcp/static/bootstrap/.github/codeql/codeql-config.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/dependabot.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/release-drafter.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/browserstack.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/bundlewatch.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/calibreapp-image-actions.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/codeql.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/cspell.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/css.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/docs.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/issue-close-require.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/issue-labeled.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/js.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/lint.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/node-sass.yml
+ create mode 100644 app_edcp/static/bootstrap/.github/workflows/release-notes.yml
+ create mode 100644 app_edcp/static/bootstrap/.gitignore
+ create mode 100644 app_edcp/static/bootstrap/.npmrc
+ create mode 100644 app_edcp/static/bootstrap/.stylelintignore
+ create mode 100644 app_edcp/static/bootstrap/.stylelintrc.json
+ create mode 100644 app_edcp/static/bootstrap/CODE_OF_CONDUCT.md
+ create mode 100644 app_edcp/static/bootstrap/LICENSE
+ create mode 100644 app_edcp/static/bootstrap/README.md
+ create mode 100644 app_edcp/static/bootstrap/SECURITY.md
+ create mode 100644 app_edcp/static/bootstrap/composer.json
+ create mode 100644 app_edcp/static/bootstrap/hugo.yml
+ create mode 100644 app_edcp/static/bootstrap/js/index.esm.js
+ create mode 100644 app_edcp/static/bootstrap/js/index.umd.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/alert.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/base-component.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/button.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/carousel.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/collapse.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/dom/data.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/dom/event-handler.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/dom/manipulator.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/dom/selector-engine.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/dropdown.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/modal.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/offcanvas.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/popover.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/scrollspy.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/tab.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/toast.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/tooltip.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/backdrop.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/component-functions.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/config.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/focustrap.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/index.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/sanitizer.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/scrollbar.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/swipe.js
+ create mode 100644 app_edcp/static/bootstrap/js/src/util/template-factory.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/README.md
+ create mode 100644 app_edcp/static/bootstrap/js/tests/browsers.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/helpers/fixture.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/integration/bundle-modularity.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/integration/bundle.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/integration/index.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/integration/rollup.bundle-modularity.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/integration/rollup.bundle.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/karma.conf.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/alert.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/base-component.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/button.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/carousel.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/collapse.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/dom/data.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/dom/event-handler.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/dom/manipulator.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/dom/selector-engine.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/dropdown.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/jquery.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/modal.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/offcanvas.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/popover.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/scrollspy.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/tab.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/toast.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/tooltip.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/backdrop.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/component-functions.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/config.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/focustrap.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/index.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/sanitizer.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/scrollbar.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/swipe.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/unit/util/template-factory.spec.js
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/alert.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/button.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/carousel.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/collapse.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/dropdown.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/input.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/modal.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/popover.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/scrollspy.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/tab.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/toast.html
+ create mode 100644 app_edcp/static/bootstrap/js/tests/visual/tooltip.html
+ create mode 100644 app_edcp/static/bootstrap/nuget/MyGet.ps1
+ create mode 100644 app_edcp/static/bootstrap/nuget/bootstrap.nuspec
+ create mode 100644 app_edcp/static/bootstrap/nuget/bootstrap.png
+ create mode 100644 app_edcp/static/bootstrap/nuget/bootstrap.sass.nuspec
+ create mode 100644 app_edcp/static/bootstrap/package-lock.json
+ create mode 100644 app_edcp/static/bootstrap/package.js
+ create mode 100644 app_edcp/static/bootstrap/package.json
+ create mode 100644 app_edcp/static/bootstrap/scss/_accordion.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_alert.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_badge.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_breadcrumb.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_button-group.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_buttons.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_card.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_carousel.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_close.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_containers.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_dropdown.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_forms.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_functions.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_grid.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_helpers.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_images.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_list-group.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_maps.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_mixins.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_modal.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_nav.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_navbar.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_offcanvas.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_pagination.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_placeholders.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_popover.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_progress.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_reboot.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_root.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_spinners.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_tables.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_toasts.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_tooltip.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_transitions.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_type.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_utilities.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_variables-dark.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/_variables.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/bootstrap-grid.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/bootstrap-reboot.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/bootstrap-utilities.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/bootstrap.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_floating-labels.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_form-check.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_form-control.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_form-range.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_form-select.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_form-text.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_input-group.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_labels.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/forms/_validation.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_clearfix.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_color-bg.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_colored-links.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_focus-ring.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_icon-link.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_position.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_ratio.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_stacks.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_stretched-link.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_text-truncation.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_visually-hidden.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/helpers/_vr.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_alert.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_backdrop.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_banner.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_border-radius.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_box-shadow.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_breakpoints.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_buttons.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_caret.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_clearfix.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_color-mode.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_color-scheme.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_container.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_deprecate.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_forms.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_gradients.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_grid.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_image.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_list-group.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_lists.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_pagination.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_reset-text.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_resize.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_table-variants.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_text-truncate.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_transition.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_utilities.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/mixins/_visually-hidden.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/jasmine.js
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/mixins/_auto-import-of-variables-dark.test.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/mixins/_color-modes.test.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/mixins/_media-query-color-mode-full.test.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/mixins/_utilities.test.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/sass-true/register.js
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/sass-true/runner.js
+ create mode 100644 app_edcp/static/bootstrap/scss/tests/utilities/_api.test.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/utilities/_api.scss
+ create mode 100644 app_edcp/static/bootstrap/scss/vendor/_rfs.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/js/application.js
+ create mode 100644 app_edcp/static/bootstrap/site/assets/js/code-examples.js
+ create mode 100644 app_edcp/static/bootstrap/site/assets/js/search.js
+ create mode 100644 app_edcp/static/bootstrap/site/assets/js/snippets.js
+ create mode 100644 app_edcp/static/bootstrap/site/assets/js/vendor/clipboard.min.js
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_ads.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_anchor.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_brand.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_buttons.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_callouts.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_clipboard-js.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_colors.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_component-examples.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_content.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_footer.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_layout.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_masthead.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_navbar.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_placeholder-img.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_scrolling.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_search.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_sidebar.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_skippy.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_syntax.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_toc.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/_variables.scss
+ create mode 100644 app_edcp/static/bootstrap/site/assets/scss/docs.scss
+ create mode 100644 app_edcp/static/bootstrap/site/content/404.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/_index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/about/brand.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/about/license.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/about/overview.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/about/team.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/about/translations.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/accordion.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/alerts.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/badge.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/breadcrumb.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/button-group.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/buttons.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/card.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/carousel.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/close-button.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/collapse.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/dropdowns.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/list-group.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/modal.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/navbar.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/navs-tabs.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/offcanvas.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/pagination.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/placeholders.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/popovers.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/progress.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/scrollspy.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/spinners.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/toasts.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/components/tooltips.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/content/figures.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/content/images.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/content/reboot.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/content/tables.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/content/typography.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/color-modes.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/color.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/components.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/css-variables.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/optimize.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/options.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/overview.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/customize/sass.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/docsref.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/_index.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/album-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/album/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/badges/badges.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/badges/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/blog-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/blog/blog.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/blog/blog.rtl.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/blog/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/breadcrumbs/breadcrumbs.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/breadcrumbs/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/buttons/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/carousel-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/carousel/carousel.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/carousel/carousel.rtl.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/carousel/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/cheatsheet-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/cheatsheet/cheatsheet.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/cheatsheet/cheatsheet.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/cheatsheet/cheatsheet.rtl.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/cheatsheet/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/checkout-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/checkout/checkout.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/checkout/checkout.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/checkout/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard-rtl/dashboard.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard-rtl/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard/dashboard.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard/dashboard.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard/dashboard.rtl.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dashboard/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dropdowns/dropdowns.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/dropdowns/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/features/features.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/features/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/features/unsplash-photo-1.jpg
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/features/unsplash-photo-2.jpg
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/features/unsplash-photo-3.jpg
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/footers/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/grid/grid.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/grid/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/headers/headers.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/headers/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/heroes/bootstrap-docs.png
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/heroes/bootstrap-themes.png
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/heroes/heroes.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/heroes/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/jumbotron/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/jumbotrons/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/jumbotrons/jumbotrons.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/list-groups/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/list-groups/list-groups.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/masonry/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/modals/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/modals/modals.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbar-bottom/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbar-fixed/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbar-fixed/navbar-fixed.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbar-static/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbar-static/navbar-static.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbars-offcanvas/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbars-offcanvas/navbars-offcanvas.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbars/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/navbars/navbars.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/offcanvas-navbar/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/offcanvas-navbar/offcanvas-navbar.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/offcanvas-navbar/offcanvas-navbar.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/pricing/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/pricing/pricing.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/product/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/product/product.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sidebars/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sidebars/sidebars.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sidebars/sidebars.js
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sign-in/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sign-in/sign-in.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/starter-template/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sticky-footer-navbar/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sticky-footer-navbar/sticky-footer-navbar.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sticky-footer/index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/examples/sticky-footer/sticky-footer.css
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/extend/approach.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/extend/icons.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/checks-radios.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/floating-labels.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/form-control.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/input-group.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/layout.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/overview.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/range.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/select.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/forms/validation.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/accessibility.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/best-practices.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/browsers-devices.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/contents.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/contribute.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/download.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/introduction.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/javascript.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/parcel.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/rfs.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/rtl.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/vite.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/getting-started/webpack.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/clearfix.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/color-background.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/colored-links.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/focus-ring.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/icon-link.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/position.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/ratio.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/stacks.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/stretched-link.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/text-truncation.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/vertical-rule.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/helpers/visually-hidden.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/breakpoints.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/columns.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/containers.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/css-grid.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/grid.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/gutters.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/utilities.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/layout/z-index.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/migration.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/api.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/background.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/borders.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/colors.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/display.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/flex.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/float.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/interactions.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/link.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/object-fit.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/opacity.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/overflow.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/position.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/shadows.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/sizing.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/spacing.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/text.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/vertical-align.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/visibility.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/5.3/utilities/z-index.md
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/_index.html
+ create mode 100644 app_edcp/static/bootstrap/site/content/docs/versions.md
+ create mode 100644 app_edcp/static/bootstrap/site/data/breakpoints.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/colors.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/core-team.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/docs-versions.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/examples.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/grays.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/icons.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/plugins.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/sidebar.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/theme-colors.yml
+ create mode 100644 app_edcp/static/bootstrap/site/data/translations.yml
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/404.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/_markup/render-heading.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/baseof.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/docs.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/examples.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/home.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/redirect.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/_default/single.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/alias.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/ads.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/analytics.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/danger-async-methods.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/info-mediaqueries-breakpoints.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/info-npm-starter.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/info-prefersreducedmotion.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/info-sanitizer.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/warning-color-assistive-technologies.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/warning-data-bs-title-vs-title.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/callouts/warning-input-support.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/docs-navbar.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/docs-sidebar.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/docs-versions.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/favicons.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/footer.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/guide-footer.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/header.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/components-utilities.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/css-variables.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/customize.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/get-started.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/icons.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/masthead.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/plugins.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/home/themes.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/bootstrap-white-fill.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/circle-square.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/droplet-fill.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/github.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/hamburger.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/opencollective.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/icons/twitter.svg
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/js-data-attributes.md
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/redirect.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/scripts.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/skippy.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/social.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/stylesheet.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/partials/table-content.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/robots.txt
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/added-in.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/bs-table.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/callout-deprecated-dark-variants.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/callout.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/deprecated-in.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/docsref.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/example.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/js-dismiss.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/js-docs.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/markdown.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/param.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/partial.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/placeholder.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/scss-docs.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/table.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/shortcodes/year.html
+ create mode 100644 app_edcp/static/bootstrap/site/layouts/sitemap.xml
+ create mode 100644 app_edcp/static/bootstrap/site/static/CNAME
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/brand/bootstrap-logo-black.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/brand/bootstrap-logo-shadow.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/brand/bootstrap-logo-white.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/brand/bootstrap-logo.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/brand/bootstrap-social.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-icons.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-icons@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-themes-collage.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-themes-collage@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-themes.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/bootstrap-themes@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/album-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/album-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/album.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/album@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/badges.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/badges@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/blog-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/blog-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/blog.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/blog@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/breadcrumbs.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/breadcrumbs@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/buttons.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/buttons@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/carousel-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/carousel-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/carousel.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/carousel@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cheatsheet-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cheatsheet-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cheatsheet.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cheatsheet@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/checkout-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/checkout-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/checkout.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/checkout@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cover.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/cover@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dashboard-rtl.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dashboard-rtl@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dashboard.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dashboard@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dropdowns.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/dropdowns@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/features.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/features@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/footers.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/footers@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/grid.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/grid@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/headers.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/headers@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/heroes.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/heroes@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/jumbotron.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/jumbotron@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/jumbotrons.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/jumbotrons@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/list-groups.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/list-groups@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/masonry.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/masonry@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/modals.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/modals@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-bottom.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-bottom@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-fixed.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-fixed@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-static.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbar-static@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbars-offcanvas.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbars-offcanvas@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbars.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/navbars@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/offcanvas-navbar.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/offcanvas-navbar@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/pricing.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/pricing@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/product.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/product@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sidebars.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sidebars@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sign-in.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sign-in@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/starter-template.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/starter-template@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sticky-footer-navbar.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sticky-footer-navbar@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sticky-footer.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/examples/sticky-footer@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/android-chrome-192x192.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/android-chrome-512x512.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/apple-touch-icon.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/favicon-16x16.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/favicon-32x32.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/favicon.ico
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/manifest.json
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/favicons/safari-pinned-tab.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-parcel.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-parcel@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-vite.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-vite@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-webpack.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/bootstrap-webpack@2x.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/parcel-dev-server-bootstrap.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/parcel-dev-server.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/vite-dev-server-bootstrap.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/vite-dev-server.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/webpack-dev-server-bootstrap.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/guides/webpack-dev-server.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/parcel.png
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/vite.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/img/webpack.svg
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/js/color-modes.js
+ create mode 100644 app_edcp/static/bootstrap/site/static/docs/5.3/assets/js/validate-forms.js
+ create mode 100644 app_edcp/static/bootstrap/site/static/sw.js
+ create mode 100644 app_edcp/static/theme-apdcp.scss
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.3213ddb0ef8b.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.44217cf11753.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.65987ff3a851.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.99159217de5a.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.e3b0c44298fc.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.e84099b146f0.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/styles.ef3fab00cbfc.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.27b39c3fc51b.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.4150e9ca3497.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.88e75e90f7bf.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.a6d8df961b71.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.b67121526c61.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.c0dcb057b09b.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme-apdcp.d1cf4987c525.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme.88e75e90f7bf.css
+ create mode 100644 app_edcp/staticfiles/CACHE/css/theme.b5b76247b105.css
+ create mode 100644 drafts.txt
+ create mode 100644 requirements.django5.txt
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git push origin dev_edcp_v0.1
+Énumération des objets: 19, fait.
+Décompte des objets: 100% (19/19), fait.
+Compression par delta en utilisant jusqu'à 10 fils d'exécution
+Compression des objets: 100% (7/7), fait.
+Écriture des objets: 100% (7/7), 944 octets | 944.00 Kio/s, fait.
+Total 7 (delta 6), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
+To github.com:saint0101/projet-e-dcp.git
+   50ad2bb..a6c91d5  dev_edcp_v0.1 -> dev_edcp_v0.1
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git checkout br_fourier
+Basculement sur la branche 'br_fourier'
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+        modifié :         app_edcp/base_edcp/admin.py
+        modifié :         app_edcp/base_edcp/models.py
+        modifié :         app_edcp/base_edcp/tests/test_models.py
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+        app_edcp/avatars/
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+        modifié :         app_edcp/base_edcp/admin.py
+        modifié :         app_edcp/base_edcp/models.py
+        modifié :         app_edcp/base_edcp/tests/test_models.py
+
+Fichiers non suivis:
+  (utilisez "git add <fichier>..." pour inclure dans ce qui sera validé)
+        app_edcp/avatars/
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git add .
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git commit
+[br_fourier e4571ef]    - creation du module utilisateur                - modification de l'utilisateur classique     -  creation du super utlisateur          - ecriture des tests de l'utilisateur   - ajouter la table notification a l'espace admin
+ 4 files changed, 200 insertions(+), 9 deletions(-)
+ create mode 100644 app_edcp/avatars/7772498006_la-balance-de-la-justice.jpg
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git push origin br_fourier
+Énumération des objets: 17, fait.
+Décompte des objets: 100% (17/17), fait.
+Compression par delta en utilisant jusqu'à 10 fils d'exécution
+Compression des objets: 100% (10/10), fait.
+Écriture des objets: 100% (10/10), 86.86 Kio | 17.37 Mio/s, fait.
+Total 10 (delta 6), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (6/6), completed with 6 local objects.
+To github.com:saint0101/projet-e-dcp.git
+   50ad2bb..e4571ef  br_fourier -> br_fourier
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+rien à valider, la copie de travail est propre
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+        modifié :         app_edcp/base_edcp/admin.py
+        modifié :         app_edcp/base_edcp/models.py
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+        modifié :         app_edcp/base_edcp/admin.py
+        modifié :         app_edcp/base_edcp/models.py
+
+aucune modification n'a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git add .
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % dit commit
+zsh: command not found: dit
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git commit
+[br_fourier 389e127]    - finaliser la base de donnees  - ajouter les tables a l'espace admin   - corriger les nom des tables
+ 2 files changed, 84 insertions(+), 7 deletions(-)
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git push origin br_fourier
+Énumération des objets: 11, fait.
+Décompte des objets: 100% (11/11), fait.
+Compression par delta en utilisant jusqu'à 10 fils d'exécution
+Compression des objets: 100% (6/6), fait.
+Écriture des objets: 100% (6/6), 1.07 Kio | 1.07 Mio/s, fait.
+Total 6 (delta 5), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (5/5), completed with 5 local objects.
+To github.com:saint0101/projet-e-dcp.git
+   e4571ef..389e127  br_fourier -> br_fourier
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche br_fourier
+rien à valider, la copie de travail est propre
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % history
+ 1135  git merge cheick_remote/cheik-v1.1
+ 1136  git push origin dev_edcp_v0.1
+ 1137  git checkout br_fourier
+ 1138  git status
+ 1139  git status
+ 1140  git add .
+ 1141  git commit
+ 1142  git push origin br_fourier
+ 1143  git status
+ 1144  git status
+ 1145  git status
+ 1146  git add .
+ 1147  dit commit
+ 1148  git commit
+ 1149  git push origin br_fourier
+ 1150  git status
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git branch
+* br_fourier
+  dev_edcp_v0.1
+  main
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git checkout dev_edcp_v0.1
+Basculement sur la branche 'dev_edcp_v0.1'
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git status
+Sur la branche dev_edcp_v0.1
+rien à valider, la copie de travail est propre
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git merge br_fourier
+Merge made by the 'ort' strategy.
+ app_edcp/avatars/7772498006_la-balance-de-la-justice.jpg | Bin 0 -> 85581 bytes
+ app_edcp/base_edcp/admin.py                              | 156 +++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ app_edcp/base_edcp/models.py                             |  50 +++++++++++++----
+ app_edcp/base_edcp/tests/test_models.py                  |  86 ++++++++++++++++++++++++++++++
+ 4 files changed, 280 insertions(+), 12 deletions(-)
+ create mode 100644 app_edcp/avatars/7772498006_la-balance-de-la-justice.jpg
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git push origin dev_edcp_v0.1
+Énumération des objets: 10, fait.
+Décompte des objets: 100% (10/10), fait.
+Compression par delta en utilisant jusqu'à 10 fils d'exécution
+Compression des objets: 100% (4/4), fait.
+Écriture des objets: 100% (4/4), 515 octets | 515.00 Kio/s, fait.
+Total 4 (delta 3), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:saint0101/projet-e-dcp.git
+   a6c91d5..2cd6607  dev_edcp_v0.1 -> dev_edcp_v0.1
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp % git checkout br_fourier
+Basculement sur la branche 'br_fourier'
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+(env) fouriernguessan@MBP-de-FOURIER projet-e-dcp %
+
+
+
+
+envfouriernguessan@MBP-de-FOURIER newedcp % docker-compose run --rm app_edcp sh -c "python manage.py startapp base_edcp"
+envfouriernguessan@MBP-de-FOURIER newedcp %
+envfouriernguessan@MBP-de-FOURIER newedcp %
+envfouriernguessan@MBP-de-FOURIER newedcp % docker-compose run --rm app_edcp sh -c "python manage.py --help"
+no configuration file provided: not found
+envfouriernguessan@MBP-de-FOURIER newedcp % docker-compose run --rm app_edcp sh -c "python manage.py ?"
+no configuration file provided: not found
+envfouriernguessan@MBP-de-FOURIER newedcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigration"
+no configuration file provided: not found
+envfouriernguessan@MBP-de-FOURIER newedcp % cd projet-e-dcp
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py --help"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+
+Type 'manage.py help <subcommand>' for help on a specific subcommand.
+
+Available subcommands:
+
+[auth]
+    changepassword
+    createsuperuser
+
+[base_edcp]
+    wait_for_db
+
+[contenttypes]
+    remove_stale_contenttypes
+
+[django]
+    check
+    compilemessages
+    createcachetable
+    dbshell
+    diffsettings
+    dumpdata
+    flush
+    inspectdb
+    loaddata
+    makemessages
+    makemigrations
+    migrate
+    sendtestemail
+    shell
+    showmigrations
+    sqlflush
+    sqlmigrate
+    sqlsequencereset
+    squashmigrations
+    startapp
+    startproject
+    test
+    testserver
+
+[sessions]
+    clearsessions
+
+[staticfiles]
+    collectstatic
+    findstatic
+    runserver
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Migrations for 'base_edcp':
+  base_edcp/migrations/0003_enregistrement_finalite_fonction_fondjuridique_notification_persconcernee_role_sousfinalite_user.py
+    - Create model Finalite
+    - Create model Fonction
+    - Create model FondJuridique
+    - Create model PersConcernee
+    - Create model Role
+    - Create model User
+    - Create model SousFinalite
+    - Create model Notification
+    - Create model Enregistrement
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  Applying base_edcp.0003_enregistrement_finalite_fonction_fondjuridique_notification_persconcernee_role_sousfinalite_user... OK
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Migrations for 'base_edcp':
+  base_edcp/migrations/0004_autorisation.py
+    - Create model Autorisation
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  Applying base_edcp.0004_autorisation... OK
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Migrations for 'base_edcp':
+  base_edcp/migrations/0005_auto_20240717_1655.py
+    - Change Meta options on secteur
+    - Change Meta options on typeclient
+    - Create model JournalTransaction
+    - Create model Habilitation
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  Applying base_edcp.0005_auto_20240717_1655... OK
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Created                                                                           0.0s
+[+] Running 1/1
+ ✔ Container projet-e-dcp-db-1  Started                                                                           0.2s
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 156, in get_app_config
+    return self.app_configs[app_label]
+KeyError: 'app_edcp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 160, in get_user_model
+    return django_apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 206, in get_model
+    app_config = self.get_app_config(app_label)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 163, in get_app_config
+    raise LookupError(message)
+LookupError: No installed app with label 'app_edcp'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app_edcp/manage.py", line 22, in <module>
+    main()
+  File "/app_edcp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 395, in execute
+    django.setup()
+  File "/py/lib/python3.9/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 122, in populate
+    app_config.ready()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/apps.py", line 27, in ready
+    self.module.autodiscover()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/__init__.py", line 24, in autodiscover
+    autodiscover_modules('admin', register_to=site)
+  File "/py/lib/python3.9/site-packages/django/utils/module_loading.py", line 47, in autodiscover_modules
+    import_module('%s.%s' % (app_config.name, module_to_search))
+  File "/usr/local/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/admin.py", line 6, in <module>
+    from django.contrib.auth.forms import (
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/forms.py", line 21, in <module>
+    UserModel = get_user_model()
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 164, in get_user_model
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'app_edcp.User' that has not been installed
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % ls
+Dockerfile              README.md               docker-compose.yml      requirements.dev.txt
+LICENSE                 app_edcp                env                     requirements.txt
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % cd app_edcp/
+envfouriernguessan@MBP-de-FOURIER app_edcp % l
+zsh: command not found: l
+envfouriernguessan@MBP-de-FOURIER app_edcp % cd base_edcp
+envfouriernguessan@MBP-de-FOURIER base_edcp % cd migrations
+envfouriernguessan@MBP-de-FOURIER migrations % ls
+0001_initial.py
+0002_casexemption_categoriedcp_categorietrait_pays.py
+0003_enregistrement_finalite_fonction_fondjuridique_notification_persconcernee_role_sousfinalite_user.py
+0004_autorisation.py
+0005_auto_20240717_1655.py
+__init__.py
+__pycache__
+envfouriernguessan@MBP-de-FOURIER migrations % rm -fr 0001_initial.py 0002_casexemption_categoriedcp_categorietrait_pays.py 0003_enregistrement_finalite_fonction_fondjuridique_notification_persconcernee_role_sousfinalite_user.py 0004_autorisation.py 0005_auto_20240717_1655.py
+envfouriernguessan@MBP-de-FOURIER migrations %
+envfouriernguessan@MBP-de-FOURIER migrations %
+envfouriernguessan@MBP-de-FOURIER migrations % ls
+__init__.py     __pycache__
+envfouriernguessan@MBP-de-FOURIER migrations % cd ..
+envfouriernguessan@MBP-de-FOURIER base_edcp % cd ..
+envfouriernguessan@MBP-de-FOURIER app_edcp % cd ..
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 156, in get_app_config
+    return self.app_configs[app_label]
+KeyError: 'app_edcp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 160, in get_user_model
+    return django_apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 206, in get_model
+    app_config = self.get_app_config(app_label)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 163, in get_app_config
+    raise LookupError(message)
+LookupError: No installed app with label 'app_edcp'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app_edcp/manage.py", line 22, in <module>
+    main()
+  File "/app_edcp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 395, in execute
+    django.setup()
+  File "/py/lib/python3.9/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 122, in populate
+    app_config.ready()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/apps.py", line 27, in ready
+    self.module.autodiscover()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/__init__.py", line 24, in autodiscover
+    autodiscover_modules('admin', register_to=site)
+  File "/py/lib/python3.9/site-packages/django/utils/module_loading.py", line 47, in autodiscover_modules
+    import_module('%s.%s' % (app_config.name, module_to_search))
+  File "/usr/local/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/admin.py", line 6, in <module>
+    from django.contrib.auth.forms import (
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/forms.py", line 21, in <module>
+    UserModel = get_user_model()
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 164, in get_user_model
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'app_edcp.User' that has not been installed
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Created                                                                           0.0s
+[+] Running 1/1
+ ✔ Container projet-e-dcp-db-1  Started                                                                           0.1s
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 156, in get_app_config
+    return self.app_configs[app_label]
+KeyError: 'app_edcp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 160, in get_user_model
+    return django_apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 206, in get_model
+    app_config = self.get_app_config(app_label)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 163, in get_app_config
+    raise LookupError(message)
+LookupError: No installed app with label 'app_edcp'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app_edcp/manage.py", line 22, in <module>
+    main()
+  File "/app_edcp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 395, in execute
+    django.setup()
+  File "/py/lib/python3.9/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 122, in populate
+    app_config.ready()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/apps.py", line 27, in ready
+    self.module.autodiscover()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/__init__.py", line 24, in autodiscover
+    autodiscover_modules('admin', register_to=site)
+  File "/py/lib/python3.9/site-packages/django/utils/module_loading.py", line 47, in autodiscover_modules
+    import_module('%s.%s' % (app_config.name, module_to_search))
+  File "/usr/local/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/admin.py", line 6, in <module>
+    from django.contrib.auth.forms import (
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/forms.py", line 21, in <module>
+    UserModel = get_user_model()
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 164, in get_user_model
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'app_edcp.User' that has not been installed
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 156, in get_app_config
+    return self.app_configs[app_label]
+KeyError: 'app_edcp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 160, in get_user_model
+    return django_apps.get_model(settings.AUTH_USER_MODEL, require_ready=False)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 206, in get_model
+    app_config = self.get_app_config(app_label)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 163, in get_app_config
+    raise LookupError(message)
+LookupError: No installed app with label 'app_edcp'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app_edcp/manage.py", line 22, in <module>
+    main()
+  File "/app_edcp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 395, in execute
+    django.setup()
+  File "/py/lib/python3.9/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/py/lib/python3.9/site-packages/django/apps/registry.py", line 122, in populate
+    app_config.ready()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/apps.py", line 27, in ready
+    self.module.autodiscover()
+  File "/py/lib/python3.9/site-packages/django/contrib/admin/__init__.py", line 24, in autodiscover
+    autodiscover_modules('admin', register_to=site)
+  File "/py/lib/python3.9/site-packages/django/utils/module_loading.py", line 47, in autodiscover_modules
+    import_module('%s.%s' % (app_config.name, module_to_search))
+  File "/usr/local/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/admin.py", line 6, in <module>
+    from django.contrib.auth.forms import (
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/forms.py", line 21, in <module>
+    UserModel = get_user_model()
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/__init__.py", line 164, in get_user_model
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'app_edcp.User' that has not been installed
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Migrations for 'base_edcp':
+  base_edcp/migrations/0001_initial.py
+    - Create model User
+    - Create model CasExemption
+    - Create model CategorieDCP
+    - Create model CategorieTrait
+    - Create model Finalite
+    - Create model Fonction
+    - Create model FondJuridique
+    - Create model Pays
+    - Create model PersConcernee
+    - Create model Role
+    - Create model Secteur
+    - Create model TypeClient
+    - Create model SousFinalite
+    - Create model Notification
+    - Create model JournalTransaction
+    - Create model Habilitation
+    - Create model Enregistrement
+    - Create model Autorisation
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying base_edcp.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sessions.0001_initial... OK
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py --help"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+
+Type 'manage.py help <subcommand>' for help on a specific subcommand.
+
+Available subcommands:
+
+[auth]
+    changepassword
+    createsuperuser
+
+[base_edcp]
+    wait_for_db
+
+[contenttypes]
+    remove_stale_contenttypes
+
+[django]
+    check
+    compilemessages
+    createcachetable
+    dbshell
+    diffsettings
+    dumpdata
+    flush
+    inspectdb
+    loaddata
+    makemessages
+    makemigrations
+    migrate
+    sendtestemail
+    shell
+    showmigrations
+    sqlflush
+    sqlmigrate
+    sqlsequencereset
+    squashmigrations
+    startapp
+    startproject
+    test
+    testserver
+
+[sessions]
+    clearsessions
+
+[staticfiles]
+    collectstatic
+    findstatic
+    runserver
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py createsuperuser"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Email: fouriersaint@gmail.com
+Nom d'Utilisateur: Fourier
+Nom: Saint
+Prénoms: onesyme
+Organisation: ARTCI
+Téléphone: 0708406861
+Fonction: DEVELOPPEUR
+Consentement: Oui
+Password:
+Password (again):
+Traceback (most recent call last):
+  File "/app_edcp/manage.py", line 22, in <module>
+    main()
+  File "/app_edcp/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/py/lib/python3.9/site-packages/django/core/management/__init__.py", line 413, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/py/lib/python3.9/site-packages/django/core/management/base.py", line 354, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py", line 79, in execute
+    return super().execute(*args, **options)
+  File "/py/lib/python3.9/site-packages/django/core/management/base.py", line 398, in execute
+    output = self.handle(*args, **options)
+  File "/py/lib/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py", line 189, in handle
+    self.UserModel._default_manager.db_manager(database).create_superuser(**user_data)
+AttributeError: 'CustomUserManager' object has no attribute 'create_superuser'
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py --help"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+
+Type 'manage.py help <subcommand>' for help on a specific subcommand.
+
+Available subcommands:
+
+[auth]
+    changepassword
+    createsuperuser
+
+[base_edcp]
+    wait_for_db
+
+[contenttypes]
+    remove_stale_contenttypes
+
+[django]
+    check
+    compilemessages
+    createcachetable
+    dbshell
+    diffsettings
+    dumpdata
+    flush
+    inspectdb
+    loaddata
+    makemessages
+    makemigrations
+    migrate
+    sendtestemail
+    shell
+    showmigrations
+    sqlflush
+    sqlmigrate
+    sqlsequencereset
+    squashmigrations
+    startapp
+    startproject
+    test
+    testserver
+
+[sessions]
+    clearsessions
+
+[staticfiles]
+    collectstatic
+    findstatic
+    runserver
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+En attente de la base de données...
+Base de données disponible !
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && test"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+En attente de la base de données...
+Base de données disponible !
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+No changes detected
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py createsuperuser"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Email: fouriersaint@gmail.com
+Nom d'Utilisateur: Saint_fourier
+Nom: N'GUESSAN
+Prénoms: SAINT FOURIER
+Organisation: ARTCI
+Téléphone: +225 07 08 40 63 61
+Fonction: DEVELOPPEUR
+Consentement: OUI
+Password:
+Password (again):
+Superuser created successfully.
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp %
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py makemigrations"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+No changes detected
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+WARN[0000] /Users/fouriernguessan/Documents/Dev/newedcp/projet-e-dcp/docker-compose.yml: `version` is obsolete
+[+] Creating 1/0
+ ✔ Container projet-e-dcp-db-1  Running                                                                           0.0s
+Operations to perform:
+  Apply all migrations: admin, auth, base_edcp, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edcp sh -c "python manage.py migrate"
+
+
+ projet-e-dcp %  docker-compose run --rm app_edcp sh -c "python manage.py test"
+
+
+
+
+
