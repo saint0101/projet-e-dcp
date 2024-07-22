@@ -1,0 +1,25 @@
+{% extends '../dashboard/base/master.html' %}
+
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% comment %} {% block sidebar %}
+  {% include "../dashboard/base/sidebar.html" %}
+{% endblock %} {% endcomment %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Créer">
+</form>
+
+{% endblock content %}

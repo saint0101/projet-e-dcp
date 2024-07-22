@@ -30,7 +30,11 @@
     {% endblock %}
 
     <main class="d-flex flex-nowrap">
+{% comment %}         {% block sidebar %}
+        {% endblock %} {% endcomment %}
+
         {% block sidebar %}
+            {% include "./sidebar.html" %}
         {% endblock %}
 
         {% block breadcrumbs %}
