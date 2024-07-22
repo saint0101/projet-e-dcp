@@ -18,7 +18,12 @@
     <h2 class="h3 mb-3 fw-normal">Connectez-vous</h2>
     {% comment %} <h1 id="title" class="title">Inscription</h1> {% endcomment %}
     <p class="mt-4">
-      Connectez-vous avec votre adresse email.
+      Connectez-vous avec votre adresse email.<br>
+      Identifiants de test : <br>
+      <ul>
+        <li><small>admin@mail.com / admin</small></li>
+        <li><small>guest@mail.com / @dmin09MP</small></li>
+      </ul>  
     </p>
 
     <main class="form-signin w-100 m-auto">
@@ -39,6 +44,10 @@
         
       </form>
     </main>
+
+    <p>
+      Pas encore de compte ? <a href="{% url 'connexion:signup' %}">Créez-en un</a>
+    </p>
 
     {% comment %} {% for error in errors.values %}
       <div class="alert alert-danger" role="alert">
