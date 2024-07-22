@@ -24,9 +24,8 @@ SECRET_KEY = 'django-insecure-6y#+$9x4^((t)&smclcdro&3fz55#(tb6mq+!nzfojq)ca9%cm
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = ['192.168.8.113', ]
 
 # Application definition
 
@@ -119,7 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-FR'
+
 
 TIME_ZONE = 'UTC'
 
@@ -158,3 +159,38 @@ AUTH_USER_MODEL = 'base_edcp.User'
 ADMIN_SITE_TITLE = "PROJET e-DCP"
 ADMIN_SITE_HEADER = "PROJET e-DCP"
 ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application e-DCP"
+
+"""
+    Configuration des parametres de email
+"""
+# configurez les paramètres du serveur SMTP
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # Spécifie le backend d'envoi d'email (SMTP)
+EMAIL_HOST = 'smtp.office365.com' # Adresse du serveur SMTP
+EMAIL_PORT = 587  # Port du serveur SMTP
+EMAIL_USE_TLS = True # TLS pour sécuriser la connexion
+
+# EMAIL_HOST_USER = 'pythondomotique@gmail.com'  # Votre adresse email
+# EMAIL_HOST_PASSWORD = '@W@rrenSaint.2023'  # Mot de passe de l'email
+# DEFAULT_FROM_EMAIL = 'fouriersaint@gmail.com' # email par défaut pour les emails envoyés depuis le site
+
+#  définir ces variables d'environnement dans votre système pour des question des securité
+    # source ~/.bashrc. ou source ~/.bash_profile | mac : source ~/.zshrc
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # Votre adresse email
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Mot de passe de l'email
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')  # Email par défaut pour les emails envoyés depuis le site
+
+# - sous Linux, vous pouvez les définir dans le fichier .bashrc ou .bash_profile
+# - sur macOS, vous pouvez les ajouter à votre fichier .bash_profile ou .zshrc (nano ~/.bash_profile) source ~/.zshrc
+# export EMAIL_HOST_USER='pythondomotique@gmail.com'
+# export EMAIL_HOST_PASSWORD='@*saint@2019*@'
+# export DEFAULT_FROM_EMAIL='fouriersaint@gmail.com'
+
+# DEBUG_PROPAGATE_EXCEPTIONS = True
+
+
+
+
+
+
+

@@ -1,0 +1,3 @@
+Hi {{ user.username }},
+Veuillez cliquer sur le lien ci-dessous pour confirmer votre adresse e-mail et finaliser l'enregistrement de votre compte :
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}

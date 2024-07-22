@@ -1635,8 +1635,3 @@ envfouriernguessan@MBP-de-FOURIER projet-e-dcp % docker-compose run --rm app_edc
 
 
  projet-e-dcp %  docker-compose run --rm app_edcp sh -c "python manage.py test"
-
-
-
-
-
