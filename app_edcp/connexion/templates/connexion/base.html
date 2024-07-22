@@ -1,0 +1,28 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    
+    {% block title %}
+        <title>Connexion à la plateforme</title>
+    {% endblock %}
+   
+    {% compress css %}
+        {% comment %}<link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen"> {% endcomment %}      
+        <link type="text/x-scss" href="{% static 'theme-apdcp.scss' %}" rel="stylesheet" media="screen">
+    {% endcompress %}
+
+    <link rel="stylesheet" href="{% static 'connexion/styles.css' %}">
+</head>
+<body>
+  <p>
+    <a href="{% url 'public:index' %}"><i class="bi bi-arrow-left fw-bold text-secondary x-large"></i> Accueil</a>
+  </p>  
+  {% block content %}
+  {% endblock %}
+
+</body>
+</html>

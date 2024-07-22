@@ -7,6 +7,88 @@ from django.contrib.auth.models import (
 )
 
 # Create your models here.
+# Gestionnaire personnalisé pour le modèle d'utilisateur
+    ## - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
+class CustomUserManager(BaseUserManager):
+    """Gestionnaire pour les utilisateurs"""
+
+    # Méthode pour créer un utilisateur
+    def create_user(self, email, password=None, **extra_fields):
+        """Crée, enregistre et retourne un nouvel utilisateur."""
+        # verifier si l'email est fourni
+        if not email:
+            raise ValueError("L'utilisateur doit avoire une adresse email.")
+        # Crée une instance du modèle utilisateur
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        # Définit le mot de passe de l'utilisateur
+        user.set_password(password)
+        # Sauvegarde l'utilisateur dans la base de données
+        user.save(using=self._db)
+
+        return user
+
+
+    # Méthode pour créer un superutilisateur
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Crée et enregistre un superutilisateur avec les informations fournies."""
+        # Assurer que l'utilisateur est un membre du personnel et un superutilisateur
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        # Vérification des droits de superutilisateur
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Les superutilisateurs doivent avoir is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Les superutilisateurs doivent avoir is_superuser=True.')
+
+        # Création de l'utilisateur avec les droits de superutilisateur
+        return self.create_user(email, password, **extra_fields)
+
+
+# Gestion del'utiilsateur
+    ## -  AbstractBaseUser: fournit les fonctionnalités de base pour un modèle d'utilisateur personnalisé
+    ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
+class User(AbstractBaseUser, PermissionsMixin):
+    """Utilisateur de l'application """
+    username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
+    avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
+    nom = models.CharField(max_length=225, verbose_name='Nom')
+    prenoms = models.CharField(max_length=255, verbose_name='Prénoms')
+    organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation')
+    telephone = models.CharField(max_length=100, null=True, blank=True, verbose_name='Téléphone')
+    fonction = models.CharField(max_length=255, null=True, blank=True, verbose_name='Fonction')
+    consentement = models.CharField(max_length=255, null=True, blank=True, verbose_name='Consentement')
+    email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
+    is_active = models.BooleanField(default=True, verbose_name='Est Actif')
+    is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
+
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
+
+    # extenssier la gestionnaire d'utilisateur
+    objects = CustomUserManager()
+
+    # USERNAME_FIELD est défini sur 'email' pour l'authentification par e-mail.
+    USERNAME_FIELD = 'email'
+
+    #REQUIRED_FIELDS spécifie les champs supplémentaires requis
+    REQUIRED_FIELDS = [
+            'username',
+            
+            """ 'nom',
+            'prenoms',
+            'organisation',
+            'telephone',
+            'fonction',
+            'consentement', """
+        ]
+
+
+    def __str__(self):
+        """ les champs a retourner """
+        return f"{self.nom} - {self.fonction} - {self.organisation}"
 
 
 class TypeClient(models.Model):
@@ -159,89 +241,6 @@ class PersConcernee(models.Model):
     def __str__(self):
         """ les champs à retourner """
         return f"La finalié {self.label} a pour {self.sensible}"
-
-
-# Gestionnaire personnalisé pour le modèle d'utilisateur
-    ## - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
-class CustomUserManager(BaseUserManager):
-    """Gestionnaire pour les utilisateurs"""
-
-    # Méthode pour créer un utilisateur
-    def create_user(self, email, password=None, **extra_fields):
-        """Crée, enregistre et retourne un nouvel utilisateur."""
-        # verifier si l'email est fourni
-        if not email:
-            raise ValueError("L'utilisateur doit avoire une adresse email.")
-        # Crée une instance du modèle utilisateur
-        user = self.model(email=self.normalize_email(email), **extra_fields)
-        # Définit le mot de passe de l'utilisateur
-        user.set_password(password)
-        # Sauvegarde l'utilisateur dans la base de données
-        user.save(using=self._db)
-
-        return user
-
-
-    # Méthode pour créer un superutilisateur
-    def create_superuser(self, email, password=None, **extra_fields):
-        """Crée et enregistre un superutilisateur avec les informations fournies."""
-        # Assurer que l'utilisateur est un membre du personnel et un superutilisateur
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        # Vérification des droits de superutilisateur
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Les superutilisateurs doivent avoir is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Les superutilisateurs doivent avoir is_superuser=True.')
-
-        # Création de l'utilisateur avec les droits de superutilisateur
-        return self.create_user(email, password, **extra_fields)
-
-
-# Gestion del'utiilsateur
-    ## -  AbstractBaseUser: fournit les fonctionnalités de base pour un modèle d'utilisateur personnalisé
-    ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
-class User(AbstractBaseUser, PermissionsMixin):
-    """Utilisateur de la BD """
-    login = models.CharField(max_length=100, unique=True, verbose_name='Nom d\'Utilisateur')
-    avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
-    nom = models.CharField(max_length=225, verbose_name='Nom')
-    prenoms = models.CharField(max_length=255, verbose_name='Prénoms')
-    organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation')
-    telephone = models.CharField(max_length=100, null=True, blank=True, verbose_name='Téléphone')
-    fonction = models.CharField(max_length=255, null=True, blank=True, verbose_name='Fonction')
-    consentement = models.CharField(max_length=255, null=True, blank=True, verbose_name='Consentement')
-    email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
-    is_active = models.BooleanField(default=True, verbose_name='Est Actif')
-    is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
-
-    class Meta:
-        """ définir le nom singulier et pluriel du modèle """
-        verbose_name = 'Utilisateur'
-        verbose_name_plural = 'Utilisateurs'
-
-    # extenssier la gestionnaire d'utilisateur
-    objects = CustomUserManager()
-
-    # USERNAME_FIELD est défini sur 'email' pour l'authentification par e-mail.
-    USERNAME_FIELD = 'email'
-
-    #REQUIRED_FIELDS spécifie les champs supplémentaires requis
-    REQUIRED_FIELDS = [
-            'login',
-            'nom',
-            'prenoms',
-            'organisation',
-            'telephone',
-            'fonction',
-            'consentement',
-        ]
-
-
-    def __str__(self):
-        """ les champs a retourner """
-        return f"{self.nom} - {self.fonction} - {self.organisation}"
 
 
 class Notification(models.Model):

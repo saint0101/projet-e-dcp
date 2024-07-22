@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'compressor', # compression des fichiers statiques CSS et JS
     # 'bootstrap5',
     # 'django_feather',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'base_edcp',
     'public',
     'dashboard',
-    'base_edcp',
+    'connexion',
     'user',
     'enregistrement',
     'demande_auto',
@@ -137,7 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -191,3 +194,9 @@ AUTH_USER_MODEL = 'base_edcp.User'
 ADMIN_SITE_TITLE = "PROJET e-DCP"
 ADMIN_SITE_HEADER = "PROJET e-DCP"
 ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application e-DCP"
+
+"""Utilisé pour l'affichage des formulaires avec boostratp"""
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+LOGIN_REDIRECT_URL = 'dashboard:index'
+LOGOUT_REDIRECT_URL = 'public:index'
