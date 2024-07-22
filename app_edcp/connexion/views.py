@@ -6,13 +6,22 @@ from connexion.forms import UserRegistrationForm
 
 
 
-# Create your views here.
 def index(request):
-    """ Vue index user """
-    return render(request, 'connexion/index.html')
+    """
+    Vue d'index du module de connexion, redirige vers l'url de login.
+    """
+    return redirect('login')
+
 
 
 def signup(request):
+    """
+    Vue de gestion de l'inscription.
+    Affiche le formulaire d'inscription et enregistre l'utilisateur dans la base de données.
+    Si l'enregsitrement est réussi, l'utilisateur est redirigé vers la page de login.
+    En cas d'erreur, les informations sont envoyées au template dans le contexte pour être affichées.
+    """
+    
     context = {}
 
     if request.method == 'POST':
@@ -35,24 +44,3 @@ def signup(request):
 
     return render(request, 'connexion/signup.html', context=context)
 
-
-""" def login(request):
-    context = {}
- """
-
-
-def signup_basic(request):
-    """ Vue inscription d'utilisateur """
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        print(password1, password2)
-
-        if password1 != password2 : 
-            return render(request, 'connexion/signup.html', {'error': 'Les mots de passe ne correspondent pas'})
-        
-        # User.objects.create_user(username = username, password = password1)
-        return HttpResponse(f'Bienvenue {username}')
-
-    return render(request, 'connexion/signup.html')
