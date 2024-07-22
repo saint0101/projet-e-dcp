@@ -9,7 +9,7 @@
   </a>
 
   <ul class="list-unstyled ps-0">
-    {% for elmt in  menu %}
+    {% for elmt in  get_menu %}
       <li class="mb-1">
         {% if elmt.type == 'section' %}
         <p>{{ elmt.text }}</p>
