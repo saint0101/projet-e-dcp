@@ -201,3 +201,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'dashboard:index'
 LOGOUT_REDIRECT_URL = 'public:index'
+
+# Gestion des pages 403
+HANDLER403 = 'dashboard.views.custom_permission_denied_view'

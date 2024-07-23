@@ -7,6 +7,7 @@ from datetime import datetime
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from base_edcp.models import Enregistrement, TypeClient
 from .forms import EnregistrementForm
+from dashboard.mixins import UserHasAccessMixin
 
 # Create your views here.
 
@@ -77,7 +78,36 @@ class EnregListView(ListView):
         return queryset
 
 
-class EnregDetailView(DetailView):
+class EnregDetailView(UserHasAccessMixin, DetailView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_detail.html'
     context_object_name = 'enregistrement'
+
+
+class EnregUpdateView(UserHasAccessMixin, UpdateView):
+    model = Enregistrement
+    template_name = 'enregistrement/enregistrement_update.html'
+    id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    extra_context = {'id_personnephysique': id_personnephysique}
+    # form_class = EnregistrementForm
+    fields = [
+        'typeclient',
+        'raisonsociale',
+        'representant',
+        'secteur',
+        'presentation',
+        'telephone',
+        'email_contact',
+        'site_web',
+        'pays',
+        'ville',
+        'adresse_geo',
+        'adresse_bp',
+        'gmaps_link',
+        'effectif',
+        'type_piece',
+        'num_piece',
+    ]
+
+    def get_success_url(self):
+        return reverse('dashboard:enregistrement:detail', kwargs={'pk': self.object.pk})

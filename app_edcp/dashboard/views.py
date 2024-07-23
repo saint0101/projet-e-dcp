@@ -323,6 +323,12 @@ def index(request):
   return render(request, 'dashboard/index.html', context={'menu': MENU_CLIENT})
 
 
+"""
+Vue qui gère l'affichage de la page 403 en cas de permission refusée
+"""
+def custom_permission_denied_view(request):
+  return render(request, '403.html', context={'message': ''})
+
 """ def index_client(request):
   return render(request, 'dashboard/client/index_c.html', context={'menu': MENU_CLIENT})
 
