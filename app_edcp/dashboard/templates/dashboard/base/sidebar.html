@@ -9,17 +9,17 @@
   </a>
 
   <ul class="list-unstyled ps-0">
-    {% for elmt in  menu %}
+    {% for elmt in  get_menu %}
       <li class="mb-1">
         {% if elmt.type == 'section' %}
         <p>{{ elmt.text }}</p>
         {% endif %}
 
         {% if elmt.type == 'sous-menu' %}
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#{{elmt.id}}-collapse" aria-expanded="false">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#{{elmt.id}}-collapse" aria-expanded="true">
           {{ elmt.text }}
         </button>
-        <div class="collapse" id="{{elmt.id}}-collapse">
+        <div class="collapse show" id="{{elmt.id}}-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             {% for item in elmt.items %}
             <li>

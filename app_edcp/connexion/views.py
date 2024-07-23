@@ -26,6 +26,7 @@ def signup(request):
     Vue pour l'inscription d'un nouvel utilisateur.
     Les utilisateurs doivent confirmer leur e-mail pour activer leur compte.
     """
+
     context = {}
     if request.method == 'POST':
         # Créer une instance de formulaire avec les données POST
@@ -79,6 +80,7 @@ def signup(request):
         context['form'] = user_form
 
     return render(request, 'connexion/signup.html', context=context)
+
 
 print('TEST DE CODE 11 ')
 
