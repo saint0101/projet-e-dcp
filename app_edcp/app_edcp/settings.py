@@ -107,6 +107,7 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
         'PASSWORD': os.environ.get('DB_PASS')
     }
 }"""
+
 # version alternative en cad de développement local sans docker
 DATABASES = {
     'default': {

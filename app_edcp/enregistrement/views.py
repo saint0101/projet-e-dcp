@@ -39,7 +39,8 @@ class EnregCreateView(CreateView):
         'num_piece',
     ]"""
     form_class = EnregistrementForm
-    id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    # id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    id_personnephysique = '1'
     extra_context = {'id_personnephysique': id_personnephysique}
 
     def form_valid(self, form):
@@ -87,7 +88,8 @@ class EnregDetailView(UserHasAccessMixin, DetailView):
 class EnregUpdateView(UserHasAccessMixin, UpdateView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_update.html'
-    id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    # id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    id_personnephysique = '1'
     extra_context = {'id_personnephysique': id_personnephysique}
     # form_class = EnregistrementForm
     fields = [

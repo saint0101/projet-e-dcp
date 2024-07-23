@@ -66,6 +66,7 @@ def signup(request):
             except Exception as e:
                 # Gérer les erreurs d'envoi d'e-mail
                 context['errors'] = str(e)
+                context['message'] = 'Une erreur est survenue lors de l\'envoi de votre e-mail. Veuillez reessayer :' + str(e)
 
             # Afficher le formulaire de connexion
             form = AuthenticationForm()
@@ -81,8 +82,6 @@ def signup(request):
 
     return render(request, 'connexion/signup.html', context=context)
 
-
-print('TEST DE CODE 11 ')
 
 def activate(request, uidb64, token):
     """
