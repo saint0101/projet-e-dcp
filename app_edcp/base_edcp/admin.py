@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
     Définit les pages d'administration pour les utilisateurs.
     """
     ordering = ['id']  # Ordonne les utilisateurs par ID
-    list_display = ['email', 'username', 'organisation', 'consentement']  # Affiche les utilisateurs par e-mail et login
+    list_display = ['nom', 'prenoms', 'email']  # Affiche les utilisateurs par e-mail et login
 
     # Éditer l'utilisateur
     fieldsets = (

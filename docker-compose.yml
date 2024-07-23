@@ -43,5 +43,13 @@ services:
       - POSTGRES_USER=Uroot_edcp # name user of database
       - POSTGRES_PASSWORD=e_dcp@2023#  # password for user of database
 
+      - EMAIL_HOST = 'smtp.office365.com'
+      - EMAIL_PORT = 587
+      - EMAIL_USE_TLS = True
+      - EMAIL_HOST_USER = 'info-apdcp@artci.ci'
+      - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+
+
+
 volumes:
   devedcp-db-data:
