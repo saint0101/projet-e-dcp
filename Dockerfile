@@ -1,14 +1,12 @@
 # Utiliser une image Alpine avec Python
 FROM python:3.12-alpine
 
-
 # Installer les dépendances nécessaires, y compris Git
 RUN apk update && apk add --no-cache \
        git \
        tzdata \
        curl \
        zlib-dev \
-       # libressl-dev \
        readline-dev \
        yaml-dev \
        libxml2-dev \
@@ -22,9 +20,7 @@ RUN apk update && apk add --no-cache \
        nodejs \
        yarn \
        build-base \
-       # postgresql-dev \
        postgresql-client
-       # wkhtmltopdf
 
 # Spécifier le répertoire de travail dans le conteneur
 WORKDIR /app_edcp
@@ -34,6 +30,12 @@ RUN git clone -b dev_edcp_v0.1 https://github.com/saint0101/projet-e-dcp.git .
 
 # Copier les fichiers de l'application
 COPY ./app_edcp /app_edcp
+
+# Copier le fichier entrypoint.sh dans le répertoire de travail
+COPY entrypoint.sh /app_edcp/entrypoint.sh
+
+# Rendre le script d'entrée exécutable
+RUN chmod +x /app_edcp/entrypoint.sh
 
 # Installer les dépendances Python
 RUN pip3 install --trusted-host pypi.python.org -r requirements.django5.txt
@@ -50,7 +52,7 @@ EXPOSE 8088
 # Déclaration d'une variable d'environnement DEV avec une valeur par défaut false
 ARG DEV=false
 
-# Copier le fichier requirements.dev.txt dans le répertoire de travail
+# Copier le fichier requirements.django5.txt dans le répertoire de travail
 COPY requirements.django5.txt /tmp/requirements.dev.txt
 
 # Installer les dépendances de développement si DEV est défini à true
@@ -59,10 +61,13 @@ RUN if [ "$DEV" = "true" ]; then pip install -r /tmp/requirements.dev.txt; fi
 # Installer flake8
 RUN pip install flake8
 
-# Changer l'utilisateur à "django-user"
-RUN adduser \
-        --disabled-password \
-        --no-create-home \
-        django-user
+# Ajouter un utilisateur "django-user"
+RUN adduser --disabled-password --no-create-home django-user
+
+# Donner les permissions appropriées à "django-user"
+RUN chown -R django-user:django-user /app_edcp
 
 USER django-user
+
+# Définir le script d'entrée
+ENTRYPOINT ["/app_edcp/entrypoint.sh"]
