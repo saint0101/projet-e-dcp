@@ -61,6 +61,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
     is_active = models.BooleanField(default=True, verbose_name='Est Actif')
     is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
+    email_verified = models.BooleanField(default=False)  # Utiliser une valeur par défaut pour éviter les valeurs nulles
+
+
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
@@ -76,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     #REQUIRED_FIELDS spécifie les champs supplémentaires requis
     REQUIRED_FIELDS = [
             'username',
-            
+
             """ 'nom',
             'prenoms',
             'organisation',
@@ -88,7 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """ les champs a retourner """
-        return f"{self.nom} - {self.fonction} - {self.organisation}"
+        return self.nom
 
 
 

@@ -25,6 +25,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')), # tableaux de bord client et gestionnaire
     path('connexion/', include('connexion.urls')), # page d'inscription
     path('connexion/', include('django.contrib.auth.urls')), # autres pages de connexion (login, mot de passe oublié etc.) 
+
     # ajouter l'utiisateur
     # path('edcp/user/', include('user.urls')),
 
