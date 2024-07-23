@@ -48,13 +48,14 @@ def signup(request):
                 'uid': uid,
                 'token': token,
             })
-
+            """
             # Debugging
-            print('User id: ', user.pk)
-            print('User: ', user)
-            print('UID (encoded): ', uid)
-            print('Token: ', token)
+            # print('User id: ', user.pk)
+            # print('User: ', user)
+            # print('UID (encoded): ', uid)
+            # print('Token: ', token)
 
+            """
             email_from = settings.EMAIL_HOST_USER  # Adresse e-mail configurée dans settings
             recipient_list = [user.email]
 
@@ -80,7 +81,7 @@ def signup(request):
 
     return render(request, 'connexion/signup.html', context=context)
 
-print('TEST DE CODE 11 ')
+
 
 def activate(request, uidb64, token):
     """
@@ -91,10 +92,10 @@ def activate(request, uidb64, token):
     try:
         # Décoder l'ID utilisateur
         uid = urlsafe_base64_decode(uidb64).decode()
-        print(f'UID Décodé: {uid}')
+        #print(f'UID Décodé: {uid}')
         # Trouver l'utilisateur correspondant
         user = User.objects.get(pk=uid)
-        print('Utilisateur trouvé:', user)
+        #print('Utilisateur trouvé:', user)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
         print('Erreur de décodage ou utilisateur non trouvé:', e)
         user = None
@@ -107,6 +108,6 @@ def activate(request, uidb64, token):
         return redirect('login')
     else:
         # Afficher une page d'erreur si l'activation échoue
-        print('Activation échouée ou utilisateur non valide')
+        #print('Activation échouée ou utilisateur non valide')
         return render(request, 'connexion/activation_invalid.html')
 
