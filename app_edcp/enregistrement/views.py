@@ -1,14 +1,17 @@
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
-from base_edcp.models import Enregistrement
+from base_edcp.models import Enregistrement, TypeClient
+from .forms import EnregistrementForm
 
 # Create your views here.
 
 # user/views.py
+@login_required(login_url=reverse_lazy('login'))
 def index(request):
     """ Vue index demande enregistrenent """
     return render(request, 'enregistrement/index.html')
@@ -16,12 +19,11 @@ def index(request):
 class EnregCreateView(CreateView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_create.html'
-    fields = [
+    """fields = [
         'typeclient',
         'raisonsociale',
         'representant',
         'secteur',
-        'secteur_description',
         'presentation',
         'telephone',
         'email_contact',
@@ -32,7 +34,12 @@ class EnregCreateView(CreateView):
         'adresse_bp',
         'gmaps_link',
         'effectif',
-    ]
+        'type_piece',
+        'num_piece',
+    ]"""
+    form_class = EnregistrementForm
+    id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
+    extra_context = {'id_personnephysique': id_personnephysique}
 
     def form_valid(self, form):
         # Add custom processing here
@@ -53,14 +60,21 @@ class EnregCreateView(CreateView):
 
     def get_success_url(self):
         # Redirect to the detail view of the created object
-        # return reverse('mymodel_detail', kwargs={'pk': self.object.pk})
-        return reverse('dashboard:index')
+        return reverse('dashboard:enregistrement:detail', kwargs={'pk': self.object.pk})
+        # return reverse('dashboard:index')
     
 
 class EnregListView(ListView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_list.html'
     context_object_name = 'enregistrements'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not self.request.user.is_staff:
+            return queryset.filter(user=self.request.user)
+
+        return queryset
 
 
 class EnregDetailView(DetailView):

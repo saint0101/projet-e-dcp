@@ -102,6 +102,19 @@ class TypeClientAdmin(admin.ModelAdmin):
     )
 
 
+class TypePieceAdmin(admin.ModelAdmin):
+    """ definir la page de gestion des types de pièces pour l'administrateur """
+
+    ordering = ['id']  # Ordonne les notifications par ID
+    list_display = ['label', 'description', 'sensible', 'ordre']  # Affiche informatons de la table
+
+    # Éditer le type du client
+    fieldsets = (
+        (None, {
+            'fields': ('label', 'description', 'sensible', 'ordre')
+        }),
+    )
+
 # module Secteur
 class SecteurAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
@@ -242,14 +255,12 @@ class EnregistrementAdmin(admin.ModelAdmin):
     """ Page d'administration pour Enregistrement """
 
     ordering = ['id']  # Ordonne les enregistrements par ID
-    list_display = ['user', 'created_at', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur',
-                    'secteur_description', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
+    list_display = ['user', 'created_at', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
                     'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif', ]
 
     fieldsets = (
         (None, {
-            'fields': ('user', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur',
-                       'secteur_description', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
+            'fields': ('user', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
                        'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif',)
         }),
     )
@@ -361,6 +372,9 @@ admin.site.register(models.Secteur, SecteurAdmin)
 
 # Enregistrer le modèle TypeClientAdmin avec l'interface d'administration
 admin.site.register(models.TypeClient, TypeClientAdmin)
+
+# Enregistrer le modèle TypePieceAdmin avec l'interface d'administration
+admin.site.register(models.TypePiece, TypePieceAdmin)
 
 # Enregistrer le modèle PaysAdmin avec l'interface d'administration
 admin.site.register(models.Pays, PaysAdmin)

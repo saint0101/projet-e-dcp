@@ -99,24 +99,26 @@ class Enregistrement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création')
     # Lien vers le type de client
     typeclient = models.ForeignKey('TypeClient', on_delete=models.CASCADE, null=True, verbose_name='Type de Client')
-    raisonsociale = models.CharField(max_length=100, verbose_name='Nom ou raison Sociale')
-    representant = models.CharField(max_length=100, verbose_name='Représentant légal')
-    rccm = models.CharField(max_length=100, null=True, verbose_name='Numéro RCCM')
+    raisonsociale = models.CharField(max_length=100, verbose_name='Nom ou Raison Sociale', blank=True)
+    representant = models.CharField(max_length=100, verbose_name='Représentant légal', blank=True)
+    rccm = models.CharField(max_length=100, null=True, verbose_name='Numéro RCCM', blank=True)
     # Lien vers le secteur d'activité
     secteur = models.ForeignKey('Secteur', on_delete=models.CASCADE, null=True, verbose_name='Secteur d\'Activité')
-    secteur_description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur')
-    presentation = models.CharField(max_length=255, null=True, verbose_name='Présentation')
+    # secteur_description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur')
+    presentation = models.CharField(max_length=255, null=True, verbose_name='Présentation de l\'activité')
     telephone = models.CharField(max_length=20, null=True, verbose_name='Téléphone')
     email_contact = models.CharField(max_length=100, null=True, verbose_name='Email de Contact')
-    site_web = models.CharField(max_length=100, null=True, verbose_name='Site Web')
+    site_web = models.CharField(max_length=100, null=True, verbose_name='Site Web', blank=True)
     # Lien vers le pays
     pays = models.ForeignKey('Pays', on_delete=models.CASCADE, null=True, verbose_name='Pays')
     ville = models.CharField(max_length=100, null=True, verbose_name='Ville')
     adresse_geo = models.CharField(max_length=100, null=True, verbose_name='Adresse Géographique')
-    adresse_bp = models.CharField(max_length=100, null=True, verbose_name='Boîte Postale')
-    gmaps_link = models.CharField(max_length=255, null=True, verbose_name='Lien Google Maps')
-    effectif = models.IntegerField(null=True, verbose_name='Effectif')
-
+    adresse_bp = models.CharField(max_length=100, null=True, verbose_name='Boîte Postale', blank=True)
+    gmaps_link = models.CharField(max_length=255, null=True, verbose_name='Lien Google Maps', blank=True)
+    effectif = models.IntegerField(null=True, verbose_name='Effectif', blank=True)
+    # Champs personne physique
+    type_piece = models.ForeignKey('TypePiece', null=True, default='', on_delete=models.CASCADE, verbose_name='Type de pièce d\'identité', blank=True)
+    num_piece = models.CharField(max_length=100, null=True, verbose_name='Numéro de la pièce', blank=True)
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
@@ -131,14 +133,30 @@ class Enregistrement(models.Model):
 class TypeClient(models.Model):
     """ Table du type des clients """
     label = models.CharField(max_length=100, verbose_name='Type de Client')
-    description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Client')
-    sensible = models.BooleanField(null=True, verbose_name='Est Sensible')
-    ordre = models.IntegerField(null=True, verbose_name='Ordre d\'Affichage')
+    description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Client', blank=True)
+    sensible = models.BooleanField(null=True, verbose_name='Est Sensible', default=False)
+    ordre = models.IntegerField(null=True, verbose_name='Ordre d\'Affichage', default=0)
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
         verbose_name = 'Type Client'
         verbose_name_plural = 'Types Clients'
+
+    def __str__(self):
+        """ les champs a retourner """
+        return self.label
+    
+class TypePiece(models.Model):
+    """ Table du type de pièces d'identité """
+    label = models.CharField(max_length=100, verbose_name='Type de pièce d\'identité')
+    description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de pièce', blank=True)
+    sensible = models.BooleanField(null=True, verbose_name='Est Sensible', default=False)
+    ordre = models.IntegerField(null=True, verbose_name='Ordre d\'affichage', default=0)
+
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Type de pièce'
+        verbose_name_plural = 'Types de pièces'
 
     def __str__(self):
         """ les champs a retourner """

@@ -2,6 +2,39 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block custom_scripts %}
+  {% comment %} 
+    Le script permet d'afficher dynamiquement certains champs du formulaire en fonction du type de client sélectionné
+    l'ID de la valeur 'Personne physique' est récupéré dans la base de données et envoyé au template dans la variable id_personnephysique du dictionnaire extra_context
+  {% endcomment %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const fieldTypeClient = document.getElementById('id_typeclient');
+      const fieldTypePiece = document.getElementById('id_type_piece').parentElement;
+      const fieldNumPiece = document.getElementById('id_num_piece').parentElement;
+      const fieldRepresentant = document.getElementById('id_representant').parentElement;
+      const fieldEffectif = document.getElementById('id_effectif').parentElement;
+
+      function toggleFields() {
+          const typeClient = fieldTypeClient.value;
+          if (typeClient == {{ id_personnephysique }}) {
+            fieldTypePiece.style.display = 'block' ;
+            fieldNumPiece.style.display = 'block' ;
+            fieldRepresentant.style.display = 'none' ;
+            fieldEffectif.style.display = 'none' ;
+          } else {
+            fieldTypePiece.style.display = 'none' ;
+            fieldNumPiece.style.display = 'none' ;
+            fieldRepresentant.style.display = 'block' ;
+            fieldEffectif.style.display = 'block' ;
+          }
+      }
+
+      fieldTypeClient.addEventListener('change', toggleFields);
+      toggleFields();  // Initial call to set correct fields on load
+  });
+  </script>
+{% endblock %}
 
 {% block header %}
   {% include "../dashboard/base/header.html" %}

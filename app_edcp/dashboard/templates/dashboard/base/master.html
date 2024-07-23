@@ -23,6 +23,8 @@
         <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
     {% endcompress %}
     <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    {% block custom_scripts %}
+    {% endblock %}
 
 </head>
 <body>
