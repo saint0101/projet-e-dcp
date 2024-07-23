@@ -83,10 +83,6 @@ def signup(request):
     return render(request, 'connexion/signup.html', context=context)
 
 
-<<<<<<< HEAD
-=======
-print('TEST DE CODE 11 ')
->>>>>>> origin/dev_edcp_v0.1
 
 def activate(request, uidb64, token):
     """
