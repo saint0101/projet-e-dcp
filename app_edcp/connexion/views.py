@@ -26,6 +26,7 @@ def signup(request):
     Vue pour l'inscription d'un nouvel utilisateur.
     Les utilisateurs doivent confirmer leur e-mail pour activer leur compte.
     """
+
     context = {}
     if request.method == 'POST':
         # Créer une instance de formulaire avec les données POST
@@ -82,6 +83,10 @@ def signup(request):
     return render(request, 'connexion/signup.html', context=context)
 
 
+<<<<<<< HEAD
+=======
+print('TEST DE CODE 11 ')
+>>>>>>> origin/dev_edcp_v0.1
 
 def activate(request, uidb64, token):
     """

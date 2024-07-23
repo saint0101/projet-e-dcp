@@ -1,0 +1,179 @@
+{% extends '../dashboard/base/master.html' %}
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div>
+    <div class="col">
+      <h3 class="text-hint mb-3">Détails de l'organisation</h3>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-4">
+      <div class="card">
+        <div class="card-body">
+          <p>
+            <i class="bi bi-person-circle fw-bold text-secondary x-large">
+            </i>
+            <strong>{{ enregistrement.representant }}</strong><br>
+            <em>{{ enregistrement.user.fonction }}</em>
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-telephone fw-bold text-secondary x-large"></i> {{ enregistrement.telephone }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-envelope-at fw-bold text-secondary x-large"></i> {{ enregistrement.email_contact }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-map fw-bold text-secondary x-large"></i> {{ enregistrement.pays }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-geo-alt fw-bold text-secondary x-large"></i> {{ enregistrement.ville }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-geo fw-bold text-secondary x-large"></i> {{ enregistrement.adresse_geo }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-mailbox fw-bold text-secondary x-large"></i> {{ enregistrement.adresse_bp }}
+          </p>
+          <p class="text-hint">
+            <i class="bi bi-globe fw-bold text-secondary x-large"></i> {{ enregistrement.site_web }}
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-8">
+      <div class="card">
+        <div class="card-body">
+          <p>
+            <i class="bi bi-calendar fw-bold text-secondary x-large"></i>
+            Enregistré le : <strong>{{ enregistrement.created_at }}</strong>
+          </p>
+          <p>
+            <i class="bi bi-person fw-bold text-secondary x-large"></i>
+            Enregistrement effectué par : <a href=""><strong>{{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }}</strong></a>
+          </p>
+        </div>
+      </div>
+  
+      <div class="card">
+        <div class="card-body">
+          
+          <div class="form-group row">
+            <label for="inputSecteur" class="label col-sm-3 col-form-label">Secteur d'activité</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="inputSecteur" 
+                name="inputSecteur"
+                disabled
+                value="{{ enregistrement.secteur }}">
+            </div>
+          </div>
+          
+          <div class="form-group row">
+            <label for="inputRccm" class="label col-sm-3 col-form-label">Numéro RCCM</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="inputRccm" 
+                name="inputRccm"
+                disabled
+                value="{{ enregistrement.rccm }}">
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label for="inputEffectif" class="label col-sm-3 col-form-label">Effectif de l'organisation</label>
+            <div class="col-sm-9">
+              <input 
+                type="number"
+                id="inputEffectif" 
+                name="inputEffectif"
+                disabled
+                value="{{enregistrement.effectif}}">
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label for="textPresentation" class="label col-sm-3 col-form-label">Présentation</label>
+            <div class="col-sm-9">
+              <textarea 
+                rows="5"
+                id="textPresentation" 
+                name="textPresentation"
+                value="{{enregistrement.presentation}}">
+              </textarea>
+            </div>
+          </div>
+  
+          <!-- <div class="form-group row">
+            <label for="inputPays" class="label col-sm-3 col-form-label">Pays</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="inputPays" 
+                name="inputPays"
+                nbInput fullWidth
+                disabled
+                [value]="enregistrement.pays">
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label for="inputVille" class="label col-sm-3 col-form-label">Ville (siège)</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="inputVille" 
+                name="inputVille"
+                nbInput fullWidth
+                disabled
+                [value]="enregistrement.ville">
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label for="inputAdr" class="label col-sm-3 col-form-label">Adresse géographique</label>
+            <div class="col-sm-9">
+              <input 
+                type="text"
+                id="inputAdr" 
+                name="inputAdr"
+                nbInput fullWidth
+                disabled
+                [value]="enregistrement.localisation">
+            </div>
+          </div> -->
+  
+          <div class="form-group row">
+            <div class="offset-sm-3 col-sm-9">
+              <a href="{% url 'dashboard:enregistrement:edit' pk=enregistrement.id %}" class="btn btn-primary py-2 text-light" type="submit">Modifier</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+
+{% endblock content %}

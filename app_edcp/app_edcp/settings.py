@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6y#+$9x4^((t)&smclcdro&3fz55#(tb6mq+!nzfojq)ca9%cm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -78,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dashboard.context_processors.get_menu',
             ],
         },
     },
@@ -202,6 +203,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 LOGIN_REDIRECT_URL = 'dashboard:index'
 LOGOUT_REDIRECT_URL = 'public:index'
 
+
+# Gestion des pages 403
+HANDLER403 = 'dashboard.views.custom_permission_denied_view'
+
+
 # configurez les paramètres du serveur SMTP
 # Qwerty@12345#TAZ
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -210,3 +216,4 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'info-apdcp@artci.ci')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'jeFs3oq-jycjZr%1sYwfu')
+

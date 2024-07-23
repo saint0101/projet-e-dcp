@@ -1,6 +1,7 @@
 # Utiliser une image Alpine avec Python
 FROM python:3.12-alpine
 
+
 # Installer les dépendances nécessaires, y compris Git
 RUN apk update && apk add --no-cache \
        git \

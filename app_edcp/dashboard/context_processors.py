@@ -1,7 +1,3 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
-
 # Create your views here.
 """
 Menu à afficher dans barre latérale (sidebar.html) du tableau de bord pour les utilisateurs de type client.
@@ -25,14 +21,14 @@ MENU_CLIENT = [
         'text' : 'Enregistrer',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:enregistrement:create',
         'disabled': False,
       },
       {
         'text' : 'Mes organisation',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:enregistrement:list',
         'disabled': False, 
       },
     ], 
@@ -183,7 +179,14 @@ MENU_MGR = [
         'text' : 'Toutes les organisation',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:enregistrement:list',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Créer',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:enregistrement:create',
         'disabled': False, 
       },
     ], 
@@ -307,36 +310,16 @@ MENU_MGR = [
 
 
 
-# def get_menu(req)
-
-@login_required(login_url=reverse_lazy('login'))
-def index(request):
+def get_menu(request):
   """
-  Vue qui génère la page de tableau de bord d'un utilisateur
-  Accepte en paramètre la requête HTTP (objet request).
-  Renvoie la page de tableau de bord avec le contexte de menu correspondant à l'utilisateur.
+  Returns the menu for the given request.
+  Parameters:
+    request (HttpRequest): The HTTP request object.
+  Returns:
+    list: The menu for the user.
   """
   user = request.user
-  if user.is_staff :
-    return render(request, 'dashboard/index.html', context={'menu': MENU_MGR})
+  if user.is_authenticated and user.is_staff :
+    return {'get_menu': MENU_MGR} 
   
-  return render(request, 'dashboard/index.html', context={'menu': MENU_CLIENT})
-
-
-
-"""
-Vue qui gère l'affichage de la page 403 en cas de permission refusée
-"""
-def custom_permission_denied_view(request):
-  return render(request, '403.html', context={'message': ''})
-
-
-""" def index_client(request):
-  return render(request, 'dashboard/client/index_c.html', context={'menu': MENU_CLIENT})
-
-
-def index_mgr(request):
-  if not request.user.is_authenticated :
-    return redirect('dashboard:index_client')
-  
-  return render(request, 'dashboard/manager/index_m.html') """
+  return {'get_menu': MENU_CLIENT} 
