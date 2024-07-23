@@ -50,7 +50,7 @@ EXPOSE 8088
 ARG DEV=false
 
 # Copier le fichier requirements.dev.txt dans le répertoire de travail
-COPY requirements.dev.txt /tmp/requirements.dev.txt
+COPY requirements.django5.txt /tmp/requirements.dev.txt
 
 # Installer les dépendances de développement si DEV est défini à true
 RUN if [ "$DEV" = "true" ]; then pip install -r /tmp/requirements.dev.txt; fi
