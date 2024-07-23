@@ -33,6 +33,31 @@ MENU_CLIENT = [
       },
     ], 
   },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignation',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
   
   {
     'text' : 'Demandes d\'autorisation',
@@ -101,31 +126,6 @@ MENU_CLIENT = [
   {
     'text' : 'Notifications',
     'type' : 'section',
-  },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
   },
   
   {
@@ -191,6 +191,31 @@ MENU_MGR = [
       },
     ], 
   },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:list',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
   
   {
     'text' : 'Demandes d\'autorisation',
@@ -259,31 +284,6 @@ MENU_MGR = [
   {
     'text' : 'Notifications',
     'type' : 'section',
-  },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
   },
   
   {

@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'public',
     'dashboard',
     'connexion',
+    'correspondant',
     'user',
     'enregistrement',
     'demande_auto',
-    'correspondant',
+    # ,
 ]
 
 MIDDLEWARE = [
