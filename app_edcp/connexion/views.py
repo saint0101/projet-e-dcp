@@ -67,7 +67,6 @@ def signup(request):
             except Exception as e:
                 # Gérer les erreurs d'envoi d'e-mail
                 context['errors'] = str(e)
-                context['message'] = 'Une erreur est survenue lors de l\'envoi de votre e-mail. Veuillez reessayer :' + str(e)
 
             # Afficher le formulaire de connexion
             form = AuthenticationForm()
@@ -84,10 +83,7 @@ def signup(request):
     return render(request, 'connexion/signup.html', context=context)
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/dev-cheik-correspondants
 def activate(request, uidb64, token):
     """
     Vue pour activer le compte utilisateur via le lien envoyé par e-mail.
