@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
 # }
 
 # configure Database postgresql avecs d'environnement
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST'),
@@ -107,9 +107,10 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS')
     }
-}"""
+}
 
 # version alternative en cad de développement local sans docker
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -120,7 +121,7 @@ DATABASES = {
         'PASSWORD': 'root',
     }
 }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -209,7 +210,6 @@ LOGOUT_REDIRECT_URL = 'public:index'
 # Gestion des pages 403
 HANDLER403 = 'dashboard.views.custom_permission_denied_view'
 
-
 # configurez les paramètres du serveur SMTP
 # Qwerty@12345#TAZ
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -219,4 +219,20 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'info-apdcp@artci.ci')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'jeFs3oq-jycjZr%1sYwfu')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'info-apdcp@artci.ci')
+
+"""
+EMAIL_HOST = "smtp.office365.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.office365.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'info-apdcp@artci.ci'
+EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+DEFAULT_FROM_EMAIL = 'info-apdcp@artci.ci'
+"""
+
 
