@@ -46,7 +46,7 @@ MENU_CLIENT = [
         'text' : 'Désignation',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:correspondant:index',
         'disabled': False, 
       },
       {
@@ -156,6 +156,30 @@ TODO: Prévoir un enregistrement dans la base de données pour les versions futu
 """
 MENU_MGR = [
   {
+    'text' : 'Administration',
+    'type' : 'section',
+  },
+
+    {
+    'text' : 'Listes',
+    'id' : 'listes',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Utilisateurs',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:user:list',
+        'disabled': False, 
+      },
+    ], 
+  },
+
+  
+  {
     'text' : 'Formalités',
     'type' : 'section',
   },
@@ -187,6 +211,13 @@ MENU_MGR = [
         'type' : 'sous-menu-item',
         'icon' : '',
         'url' : 'dashboard:enregistrement:create',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Utilisateurs',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:user:list',
         'disabled': False, 
       },
     ], 

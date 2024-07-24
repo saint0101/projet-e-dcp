@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -50,6 +51,7 @@ class CustomUserManager(BaseUserManager):
     ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
 class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de l'application """
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création', null=True)
     username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
     avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
     nom = models.CharField(max_length=225, verbose_name='Nom')
