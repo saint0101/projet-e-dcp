@@ -3,42 +3,52 @@ version: "3.9"
 # Définition des services pour l'API
 services:
   app_edcp:
+    # Configuration de la construction de l'image
     build:
       context: .  # Chemin du contexte de construction (répertoire courant)
       args:     # creation d'un argument appeler dev avec pour valeur true
         - DEV=true
 
+    # Configuration des ports
     ports:
       - "8088:8088"  # Mapping du port du conteneur sur le port de l'hôte
 
+    # Configuration des volumes
     volumes:
       - ./app_edcp:/app_edcp  # Montage du dossier local './app_edcp' dans le dossier '/app_edcp' du conteneur
 
+    # Commande à exécuter lors du démarrage du conteneur
+    # Correction de la commande avec le nom correct 'manage.py'
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8088"
 
+    # definition des variables d'environnement des acces de la bd
     environment:
       - DB_HOST=db
       - DB_NAME=edcp_db
       - DB_USER=Uroot_edcp
       - DB_PASS=e_dcp@2023#
 
+    # demarrer premierement la bd
     depends_on:
       - db
 
+  # creation du service de base de donnee
   db:
     image: postgres:13-alpine
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=edcp_db
-      - POSTGRES_USER=Uroot_edcp
-      - POSTGRES_PASSWORD=e_dcp@2023#
-      - EMAIL_HOST=smtp.office365.com
-      - EMAIL_PORT=587
-      - EMAIL_USE_TLS=True
-      - EMAIL_HOST_USER=info-apdcp@artci.ci
-      - EMAIL_HOST_PASSWORD=jeFs3oq-jycjZr%1sYwfu
+      - POSTGRES_DB=edcp_db # nom de la bd
+      - POSTGRES_USER=Uroot_edcp # name user of database
+      - POSTGRES_PASSWORD=e_dcp@2023#  # password for user of database
+      - EMAIL_HOST = 'smtp.office365.com'
+      - EMAIL_PORT = 587
+      - EMAIL_USE_TLS = True
+      - EMAIL_HOST_USER = 'info-apdcp@artci.ci'
+      - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+
+
 
 volumes:
   devedcp-db-data:
