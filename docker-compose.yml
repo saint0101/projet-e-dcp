@@ -49,6 +49,5 @@ services:
       - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
 
 
-
 volumes:
   devedcp-db-data:
