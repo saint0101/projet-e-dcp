@@ -15,8 +15,16 @@ class UserRegistrationForm(UserCreationForm):
       'email',
       'nom',
       'prenoms',
-      'telephone', 
+      'telephone',
       'organisation',
       'fonction',
       'avatar',
       )
+
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save(commit=False)
+        user.email_verified = False  # Définir la valeur par défaut lors de l'inscription
+        if commit:
+            user.save()
+        return user

@@ -1,0 +1,9 @@
+{% autoescape off %}
+Bonjour {{ user.username }},
+
+Merci de vous être inscrit sur notre site. Veuillez cliquer sur le lien ci-dessous pour activer votre compte :
+http://{{ domain }}/connexion/activate/{{ uid }}/{{ token }}/
+
+Merci !
+L'équipe du site
+{% endautoescape %}

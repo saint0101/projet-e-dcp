@@ -1,0 +1,18 @@
+{% extends 'dashboard/base/master.html' %}
+{% comment %} {% load static %}
+
+
+{% block header %}
+  {% include "dashboard/base/header.html" %}
+{% endblock %} {% endcomment %}
+
+{% comment %} {% block sidebar %}
+  {% include "./base/sidebar.html" %}
+{% endblock %} {% endcomment %}
+
+{% block content %}
+
+  <h2>Accès refusé</h2>
+  <p>Vous ne pouvez pas afficher cette page</p>
+
+{% endblock content %}

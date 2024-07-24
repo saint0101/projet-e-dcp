@@ -25,17 +25,18 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')), # tableaux de bord client et gestionnaire
     path('connexion/', include('connexion.urls')), # page d'inscription
     path('connexion/', include('django.contrib.auth.urls')), # autres pages de connexion (login, mot de passe oublié etc.) 
+
     # ajouter l'utiisateur
-    path('edcp/user/', include('user.urls')),
+    # path('edcp/user/', include('user.urls')),
 
     # ajouter l'url des demandes d'autorisations
-    path('edcp/demandeauto/', include('demande_auto.urls')),
+    #path('edcp/demandeauto/', include('demande_auto.urls')),
 
     # ajouter l'url enregistrement
-    path('edcp/enregistrement/', include('enregistrement.urls')),
+    #path('edcp/enregistrement/', include('enregistrement.urls')),
 
     # ajouter l'url correspondant
-    path('edcp/correspondant/', include('correspondant.urls')),
+    #path('edcp/correspondant/', include('correspondant.urls')),
 ]
 
 
