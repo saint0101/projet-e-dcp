@@ -33,6 +33,38 @@ MENU_CLIENT = [
       },
     ], 
   },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Nouvelle désignation',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:create',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Satut',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
   
   {
     'text' : 'Demandes d\'autorisation',
@@ -102,31 +134,6 @@ MENU_CLIENT = [
     'text' : 'Notifications',
     'type' : 'section',
   },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
-  },
   
   {
     'text' : 'Violations',
@@ -155,6 +162,30 @@ Menu à afficher dans barre latérale (sidebar.html) du tableau de bord pour les
 TODO: Prévoir un enregistrement dans la base de données pour les versions futures.
 """
 MENU_MGR = [
+  {
+    'text' : 'Administration',
+    'type' : 'section',
+  },
+
+    {
+    'text' : 'Listes',
+    'id' : 'listes',
+    'type' : 'sous-menu',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Utilisateurs',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:user:list',
+        'disabled': False, 
+      },
+    ], 
+  },
+
+  
   {
     'text' : 'Formalités',
     'type' : 'section',
@@ -189,7 +220,39 @@ MENU_MGR = [
         'url' : 'dashboard:enregistrement:create',
         'disabled': False, 
       },
+      {
+        'text' : 'Utilisateurs',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:user:list',
+        'disabled': False, 
+      },
     ], 
+  },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : '',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:list',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
   },
   
   {
@@ -259,31 +322,6 @@ MENU_MGR = [
   {
     'text' : 'Notifications',
     'type' : 'section',
-  },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
   },
   
   {

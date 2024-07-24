@@ -30,6 +30,7 @@ class UserAdmin(BaseUserAdmin):
                     'consentement',
                     'username',
                     'avatar',
+                    'is_dpo',
                 )
             }
         ),
@@ -261,7 +262,7 @@ class EnregistrementAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('user', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
-                       'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif',)
+                       'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif', 'has_dpo')
         }),
     )
 

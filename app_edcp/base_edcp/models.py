@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -50,6 +51,7 @@ class CustomUserManager(BaseUserManager):
     ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
 class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de l'application """
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création', null=True)
     username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
     avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
     nom = models.CharField(max_length=225, verbose_name='Nom')
@@ -62,6 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name='Est Actif')
     is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
     email_verified = models.BooleanField(default=False)  # Utiliser une valeur par défaut pour éviter les valeurs nulles
+    is_dpo = models.BooleanField(default=False) # Est un Correspondant
 
 
 
@@ -91,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """ les champs a retourner """
-        return self.nom
+        return self.nom + ' ' + self.prenoms
 
 
 
@@ -122,6 +125,7 @@ class Enregistrement(models.Model):
     # Champs personne physique
     type_piece = models.ForeignKey('TypePiece', null=True, default='', on_delete=models.CASCADE, verbose_name='Type de pièce d\'identité', blank=True)
     num_piece = models.CharField(max_length=100, null=True, verbose_name='Numéro de la pièce', blank=True)
+    has_dpo = models.BooleanField(verbose_name='A désigné un Correspondant', default=False)
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """

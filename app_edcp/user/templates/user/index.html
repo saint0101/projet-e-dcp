@@ -1,10 +1,16 @@
-{% extends 'user/base.html' %}
+{% extends '../dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
 
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
 
 {% block content %}
 
-        <h1> Bienvenue sur la page d'accueil de l'application des Utilisateurs </h1>
-
 {% endblock content %}
-
 
