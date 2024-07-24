@@ -7,6 +7,7 @@ app_name = 'correspondant'
 urlpatterns = [
     path('', views.index, name='index'),
     path('liste/', views.DPOListView.as_view(), name='list'),
+    path('nouveau/', views.DPOCreateView.as_view(), name='create'),
     path('<int:pk>/', views.DPODetailView.as_view(), name='detail'),
     # path('nouveau/', views.EnregCreateView.as_view(), name='create'),
     # path('liste/', views.EnregListView.as_view(), name='list'),

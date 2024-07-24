@@ -43,7 +43,14 @@ MENU_CLIENT = [
     'disabled': False, 
     'items' : [
       {
-        'text' : 'Désignation',
+        'text' : 'Nouvelle désignation',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:create',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Satut',
         'type' : 'sous-menu-item',
         'icon' : '',
         'url' : 'dashboard:correspondant:index',
