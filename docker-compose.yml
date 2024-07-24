@@ -19,8 +19,8 @@ services:
 
     # Commande à exécuter lors du démarrage du conteneur
     # Correction de la commande avec le nom correct 'manage.py'
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8088"
+    # command: >
+    #  sh -c "python manage.py runserver 0.0.0.0:8088"
 
     # definition des variables d'environnement des acces de la bd
     environment:

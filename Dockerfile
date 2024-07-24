@@ -1,5 +1,3 @@
-
-# Utiliser une image Alpine avec Python
 FROM python:3.12-alpine
 
 
