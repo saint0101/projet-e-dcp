@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="card main-content">
+<div class="card main-content background-accent p-3">
   <div class="card-body">
     <h1 class="text-primary fw-bold py-3">e-DCP</h1>
     <h2 class="h3 mb-3 fw-normal">Créer un compte</h2>
@@ -34,12 +34,10 @@
 
       <form method="POST">
         {% csrf_token %}
+        {% crispy form %}
+        {% comment %} {{ form|crispy }} {% endcomment %}
 
-        {{ form|crispy }}
-
-    
-        <button class="btn btn-primary py-2 text-light" type="submit">S'inscrire</button>
-        
+        <button class="btn btn-primary text-light px-5" type="submit">S'inscrire</button>
       </form>
     </main>
 

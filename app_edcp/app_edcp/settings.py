@@ -201,6 +201,7 @@ ADMIN_SITE_HEADER = "PROJET e-DCP"
 ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application e-DCP"
 
 """Utilisé pour l'affichage des formulaires avec boostratp"""
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'dashboard:index'

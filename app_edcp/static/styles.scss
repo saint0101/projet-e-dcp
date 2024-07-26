@@ -21,6 +21,10 @@
   font-size: 1.1rem !important;
 }
 
+a{
+  text-decoration: none;
+}
+
 .btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info{
   --bs-btn-color: #ffffff;
   --bs-btn-hover-color: #ffffff;
@@ -28,4 +32,17 @@
 
 .btn-outline-primary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info{
   --bs-btn-hover-color: #ffffff;
+}
+
+.background-accent{
+  background-color: #F4F2F0;
+}
+
+.asteriskField{
+  color: $danger;
+  margin-left: 2px;
+}
+
+.form-floating label{
+  color: $secondary-text-emphasis;
 }
