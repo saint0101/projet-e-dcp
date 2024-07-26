@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # 'django_feather',
     'crispy_forms',
     'crispy_bootstrap5',
+    'formtools',
     'base_edcp',
     'public',
     'dashboard',

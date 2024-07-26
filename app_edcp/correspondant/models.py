@@ -53,9 +53,10 @@ class Correspondant(models.Model):
   """Correspondant à la protection des données"""
   # user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Compte utilisateur')
   user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Compte utilisateur')
+  created_by = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Crée par', null=True, blank=True, related_name='created')
   organisation = models.ForeignKey(Enregistrement, on_delete=models.CASCADE, verbose_name='Organisation')
   created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de désignation')
-  type_dpo = models.ForeignKey(TypeDPO, on_delete=models.CASCADE, verbose_name='Type de Correspondant')
+  type_dpo = models.ForeignKey(TypeDPO, on_delete=models.CASCADE, verbose_name='Type de Correspondant', null=True, blank=True,)
   qualifications = models.ForeignKey(QualificationsDPO, null=True, blank=True, on_delete=models.CASCADE, verbose_name='Qualifications du Correspondant')
   exercice_activite = models.ForeignKey(ExerciceActivite, null=True, blank=True, on_delete=models.CASCADE, verbose_name='Exercice de l\'activité')
   moyens_materiels =models.CharField(max_length=255, null=True, blank=True, verbose_name='Moyens matériels mis à la disposition du Correspondant')
