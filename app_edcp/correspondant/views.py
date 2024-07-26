@@ -2,6 +2,7 @@ from multiprocessing import context
 from traceback import format_list
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.db.models import Q
 from django.conf import settings
@@ -29,9 +30,24 @@ def index(request):
     return render(request, 'correspondant/index.html', context=context)
 
 
+def check_email(email):
+    if User.objects.filter(email=email).exists():
+        user=User.objects.get(email=email)
+        return JsonResponse({'email_exists': True}, {'is_dpo': user.is_dpo})
+
+    print(f'email not found : {email}')
+    return JsonResponse({'email_exists': False})
+
+
 def designate(request, org):
     context = {}
     organisation = Enregistrement.objects.get(id=org)
+
+    # if request.is_ajax():
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        email = request.GET.get('email')
+        print(f'Ajax request received {email}')
+        return check_email(email)
 
     if request.method == 'POST':
         form_page1 = DPOFormPage1(request.POST)
