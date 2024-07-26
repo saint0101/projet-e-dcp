@@ -10,3 +10,11 @@ body {
 #header-nav-public{
   background-color: #FFFFFF;
 }
+
+.public-hero, .footer-public {
+  background-color: #F4F2F0;
+}
+
+.icon-home{
+  font-size: 32px;
+}

@@ -1,0 +1,32 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    
+    {% block title %}
+        <title>Plateforme e-DCP</title>
+    {% endblock %}
+
+    {% comment %} {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %} {% endcomment %}
+
+    {% compress css %}
+      {% comment %}<link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen"> {% endcomment %}      
+      <link type="text/x-scss" href="{% static 'styles.scss' %}" rel="stylesheet" media="screen">
+    {% endcompress %}
+
+    {% block styles %}
+    {% endblock %}
+
+</head>
+<body>
+
+  {% block layout %}
+  {% endblock %}
+
+</body>
+</html>

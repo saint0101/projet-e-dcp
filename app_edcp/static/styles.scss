@@ -1,0 +1,31 @@
+
+@import "./theme-apdcp.scss";
+
+.large{
+  font-size: large;
+}
+
+.larger{
+  font-size: larger;
+}
+
+.x-large{
+  font-size: x-large;
+}
+
+.xx-larg{
+  font-size: xx-large;
+}
+
+.fs-6{
+  font-size: 1.1rem !important;
+}
+
+.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info{
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+}
+
+.btn-outline-primary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info{
+  --bs-btn-hover-color: #ffffff;
+}
