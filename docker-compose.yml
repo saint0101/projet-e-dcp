@@ -19,8 +19,8 @@ services:
 
     # Commande à exécuter lors du démarrage du conteneur
     # Correction de la commande avec le nom correct 'manage.py'
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8088"
+    # command: >
+    #  sh -c "python manage.py runserver 0.0.0.0:8088"
 
     # definition des variables d'environnement des acces de la bd
     environment:
@@ -42,7 +42,6 @@ services:
       - POSTGRES_DB=edcp_db # nom de la bd
       - POSTGRES_USER=Uroot_edcp # name user of database
       - POSTGRES_PASSWORD=e_dcp@2023#  # password for user of database
-
       - EMAIL_HOST = 'smtp.office365.com'
       - EMAIL_PORT = 587
       - EMAIL_USE_TLS = True

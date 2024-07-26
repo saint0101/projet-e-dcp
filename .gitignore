@@ -37,6 +37,15 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Ignorer les fichiers de drafts
+drafts.txt
+
+# Ignorer les scripts d'entrypoint
+entrypoint.sh
+
+# Ignorer les fichiers de requirements de développement
+requirements.dev.txt
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
