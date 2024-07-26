@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
 # }
 
 # configure Database postgresql avecs d'environnement
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST'),
@@ -108,10 +108,10 @@ WSGI_APPLICATION = 'app_edcp.wsgi.application'
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS')
     }
-}"""
+}
 
 # version alternative en cad de développement local sans docker
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
@@ -120,7 +120,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
     }
-}
+}"""
 
 
 # Password validation
