@@ -24,9 +24,11 @@ body{
   z-index: 2;
 }
 
-.form-control{
+/*.form-control{
   border: none;
-}
+  border: 2px solid rgba(0, 0, 0, 0.01);
+  background-color: #efefef; 
+} */
 
 .form-signin input[type="email"] {
   margin-bottom: -1px;
@@ -38,4 +40,29 @@ body{
   margin-bottom: 10px;
   /* border-top-left-radius: 0;
   border-top-right-radius: 0; */
+}
+
+#password-strength, #password-match  {
+  font-weight: bold;
+  font-size: .9rem;
+}
+
+#password-strength.very-weak {
+  color: #ee0813;
+}
+
+#password-strength.weak {
+  color: orange;
+}
+
+#password-strength.moderate {
+  color: #F7D117;
+}
+
+#password-strength.strong {
+  color: lightgreen;
+}
+
+#password-strength.very-strong {
+  color: green;
 }

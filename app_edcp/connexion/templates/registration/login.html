@@ -37,8 +37,8 @@
       <form method="POST">
         {% csrf_token %}
 
-        {% comment %} {{ form|crispy }} {% endcomment %}
-        {% crispy form %}
+        {{ form|crispy }}
+        {% comment %} {% crispy form %} {% endcomment %}
 
         <button class="btn btn-primary m-auto px-5 text-light" type="submit">Se connecter</button>
         

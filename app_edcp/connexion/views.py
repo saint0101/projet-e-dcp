@@ -75,6 +75,7 @@ def signup(request):
             return render(request, 'registration/login.html', context=context)
         else:
             # Afficher les erreurs de formulaire
+            context['form'] = user_form
             context['errors'] = user_form.errors
     else:
         # Afficher le formulaire d'inscription

@@ -38,6 +38,7 @@ a{
   background-color: #F4F2F0;
 }
 
+// champs obligatoires des formulaires
 .asteriskField{
   color: $danger;
   margin-left: 2px;
@@ -45,4 +46,9 @@ a{
 
 .form-floating label{
   color: $secondary-text-emphasis;
+}
+
+.form-label{
+  color: $secondary-text-emphasis;
+  font-size: .8rem;
 }

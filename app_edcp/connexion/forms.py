@@ -15,6 +15,7 @@ class UserRegistrationForm(UserCreationForm):
 
   class Meta:
     model = User
+    # form_template_name = 'forms/form_floating_label.html'
     fields = (
       'email',
       'nom',
@@ -24,14 +25,23 @@ class UserRegistrationForm(UserCreationForm):
       'fonction',
       'avatar',
       )
+  def save(self, commit=True):
+    user = super(UserRegistrationForm, self).save(commit=False)
+    print(f'User : {user.email}')
+    user.email_verified = False  # Définir la valeur par défaut lors de l'inscription
+    if commit:
+      user.save()
+    return user
   
-  def __init__(self, *args, **kwargs):
-    super(UserRegistrationForm, self).__init__(*args, **kwargs)
-    self.helper = FormHelper(self)
+
+  # Mise en forme du formulaire avec Formtools
+  """ def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self.helper = FormHelper()
     self.helper.layout = Layout(
-      
+      # Application du style label flottant de Bootstrap
       FloatingField(
-         'email',
+        'email',
         'nom',
         'prenoms',
         'telephone',
@@ -41,12 +51,6 @@ class UserRegistrationForm(UserCreationForm):
         'password1',
         'password2',
       ),
-      # Submit('submit', 'Submit', css_class='button white'),
-    )
-
-    def save(self, commit=True):
-      user = super(UserRegistrationForm, self).save(commit=False)
-      user.email_verified = False  # Définir la valeur par défaut lors de l'inscription
-      if commit:
-        user.save()
-      return user
+      # Possibilité de définir le bouton d'envoi
+      Submit('submit', 'S\'inscrire', css_class='btn btn-primary px-5'),
+    ) """
