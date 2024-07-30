@@ -9,17 +9,16 @@ from base_edcp import models
 
 @login_required(login_url=reverse_lazy('login'))
 def index(request):
-
-  Vue qui génère la page de tableau de bord d'un utilisateur
-  Accepte en paramètre la requête HTTP (objet request).
-  Renvoie la page de tableau de bord avec le contexte de menu correspondant à l'utilisateur.
-
+  """
+    Vue qui génère la page de tableau de bord d'un utilisateur
+    Accepte en paramètre la requête HTTP (objet request).
+    Renvoie la page de tableau de bord avec le contexte de menu correspondant à l'utilisateur.
+  """
   user = request.user
 
   return render(request, 'dashboard/index.html')
 
 
-"""
 @login_required(login_url=reverse_lazy('login'))
 def index(request):
     """
@@ -48,10 +47,9 @@ def index(request):
     return render(request, 'dashboard/index.html', context=context)
 
 
-
-"""
-Vue qui gère l'affichage de la page 403 en cas de permission refusée
-"""
 def custom_permission_denied_view(request):
+  """
+  Vue qui gère l'affichage de la page 403 en cas de permission refusée
+  """
   return render(request, '403.html', context={'message': ''})
 
