@@ -32,8 +32,15 @@ def index(request):
 
 def check_email(email):
     if User.objects.filter(email=email).exists():
+        print(f'email found : {email}')
         user=User.objects.get(email=email)
-        return JsonResponse({'email_exists': True}, {'is_dpo': user.is_dpo})
+        print(f'user : {user}')
+        print(f'is_dpo : {user.is_dpo}')
+
+        return JsonResponse({
+            'email_exists': True, 
+            'is_dpo': user.is_dpo
+            })
 
     print(f'email not found : {email}')
     return JsonResponse({'email_exists': False})
@@ -47,6 +54,7 @@ def designate(request, org):
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         email = request.GET.get('email')
         print(f'Ajax request received {email}')
+        print(check_email(email))
         return check_email(email)
 
     if request.method == 'POST':

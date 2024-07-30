@@ -2,51 +2,44 @@
 {% load static %}
 
 
-{% block header %}
-  {% include "../dashboard/base/header.html" %}
-{% endblock %}
-
-{% block breadcrumbs %}
-{% endblock %}
-
 {% block content %}
 
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col">
-    <h3 class="text-hint mb-3">Enregistrements effectués</h3>
-  <div class="card">
-    <div class="card-body">
-      {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
-      <div class="card-text">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Utilisateur</th>
-              <th scope="col">Date</th>
-              <th scope="col">Raison sociale</th>
-              <th scope="col">Type</th>
-              <th scope="col">Secteur</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for enregistrement in enregistrements %}
+    <div class="card custom-card">
+      <div class="card-body">
+        {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+        <h3 class="card-title mb-5 mt-3">Enregistrements effectués</h3>
+        <div class="card-text">
+          <table class="table table-striped table-hover">
+            <thead>
               <tr>
-                {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
-                <td> <a href="{% url 'dashboard:enregistrement:detail' pk=enregistrement.id %}">{{ enregistrement.id }}</a> </td>
-                <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td>
-                <td> {{ enregistrement.created_at }} </td>
-                <td> {{ enregistrement.raisonsociale }} </td>
-                <td> {{ enregistrement.typeclient }} </td>
-                <td> {{ enregistrement.secteur }} </td>
+                <th scope="col">#</th>
+                <th scope="col">Raison sociale</th>
+                {% comment %} <th scope="col">Utilisateur</th> {% endcomment %}
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Secteur</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for enregistrement in enregistrements %}
+                <tr>
+                  {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
+                  <td> {{ enregistrement.id }} </td>
+                  <td> <a href="{% url 'dashboard:enregistrement:detail' pk=enregistrement.id %}">{{ enregistrement.raisonsociale }} </a> </td>
+                  {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
+                  <td> {{ enregistrement.created_at }} </td>
+                  <td> {{ enregistrement.typeclient }} </td>
+                  <td> {{ enregistrement.secteur }} </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
   </div>
   {% comment %} <div class="col">
     

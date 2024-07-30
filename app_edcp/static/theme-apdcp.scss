@@ -20,12 +20,17 @@ $success: #339966;
 $info: #0073D1 ;
 $warning: #F7D117;
 $danger: #ee0813;
+$custom-light: #8f9bb3;
 
 
 //===================== Textes
 $font-family-base: 'Open Sans', sans-serif;
 
-
+@font-face {
+  font-family: 'Bootstrap-icons';
+  src: url('./bootstrap-icons/font/fonts/bootstrap-icons.woff');
+  src: url('./bootstrap-icons/font/fonts/bootstrap-icons.woff2');
+}
 
 
 

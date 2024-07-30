@@ -1,6 +1,6 @@
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -18,7 +18,7 @@ from django.conf import settings
 def index(request):
     """ Vue index pour demander un enregistrement """
     # Rendu du template 'index.html' pour la vue d'accueil
-    return render(request, 'enregistrement/index.html')
+    return redirect('dashboard:enregistrement:list')
 
 
 def send_notification(enregistrement):
