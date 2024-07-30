@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<div class="card main-content">
+<div class="card main-content background-accent p-3">
   <div class="card-body">
     <h1 class="text-primary fw-bold py-3">e-DCP</h1>
     {% if message %}
@@ -38,9 +38,9 @@
         {% csrf_token %}
 
         {{ form|crispy }}
+        {% comment %} {% crispy form %} {% endcomment %}
 
-    
-        <button class="btn btn-primary m-auto py-2 text-light" type="submit">Se connecter</button>
+        <button class="btn btn-primary m-auto px-5 text-light" type="submit">Se connecter</button>
         
       </form>
     </main>

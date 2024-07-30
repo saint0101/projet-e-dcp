@@ -13,7 +13,7 @@ MENU_CLIENT = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'pencil-square',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -38,7 +38,7 @@ MENU_CLIENT = [
     'text' : 'Correspondants',
     'type' : 'sous-menu',
     'id' : 'correspondants',
-    'icon' : '',
+    'icon' : 'file-earmark-person',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -63,7 +63,7 @@ MENU_CLIENT = [
     'text' : 'Demandes d\'autorisation',
     'id' : 'demande-auto',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'file-earmark-text',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -95,7 +95,7 @@ MENU_CLIENT = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'journal-text',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -164,7 +164,7 @@ MENU_MGR = [
     'text' : 'Listes',
     'id' : 'listes',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'list-nested',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -177,7 +177,6 @@ MENU_MGR = [
       },
     ], 
   },
-
   
   {
     'text' : 'Formalités',
@@ -188,7 +187,7 @@ MENU_MGR = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'pencil-square',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -213,13 +212,6 @@ MENU_MGR = [
         'url' : 'dashboard:enregistrement:create',
         'disabled': False, 
       },
-      {
-        'text' : 'Utilisateurs',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:user:list',
-        'disabled': False, 
-      },
     ], 
   },
 
@@ -227,7 +219,7 @@ MENU_MGR = [
     'text' : 'Correspondants',
     'type' : 'sous-menu',
     'id' : 'correspondants',
-    'icon' : '',
+    'icon' : 'file-earmark-person',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -252,7 +244,7 @@ MENU_MGR = [
     'text' : 'Demandes d\'autorisation',
     'id' : 'demande-auto',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'file-earmark-text',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -284,7 +276,7 @@ MENU_MGR = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'journal-text',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [

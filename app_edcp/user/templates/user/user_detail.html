@@ -15,33 +15,33 @@
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
-    <h3 class="text-hint mb-3">Détails de l'utilisateur</h3>
+    
     <div class="row">
       <div class="col-6">
-        <div class="card">
+        <div class="card custom-card">
           <div class="card-body">
-  
+            <h3 class="card-title mb-3">Détails de l'utilisateur</h3>
             <p>
-              <i class="bi bi-person-circle fw-bold text-secondary x-large">
+              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
               </i>
               <a href="">
                 <strong>{{ user }}</strong>
               </a>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="border: none;"> 
-                  <i class="bi bi-telephone text-secondary"></i> {{ user.telephone }} 
+                <li class="list-group-item"> 
+                  <i class="bi bi-telephone custom-text-light"></i> {{ user.telephone }} 
                 </li>
-                <li class="list-group-item" style="border: none;"> 
-                  <i class="bi bi-envelope-at text-secondary"></i> {{ user.email }} 
+                <li class="list-group-item"> 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.email }} 
                 </li>
-                <li class="list-group-item" style="border: none;"> 
-                  <i class="bi bi-calendar3 text-secondary"></i> Inscrit le {{ user.created_at }} 
+                <li class="list-group-item" > 
+                  <i class="bi bi-calendar3 custom-text-light"></i> Inscrit le {{ user.created_at }} 
                 </li>
-                <li class="list-group-item" style="border: none;"> 
-                  <i class="bi bi-envelope-at text-secondary"></i> {{ user.fonction }} 
+                <li class="list-group-item" > 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.fonction }} 
                 </li>
-                <li class="list-group-item" style="border: none;"> 
-                  <i class="bi bi-envelope-at text-secondary"></i> {{ user.organisation }} 
+                <li class="list-group-item" > 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.organisation }} 
                 </li>
               </ul>
             </p>

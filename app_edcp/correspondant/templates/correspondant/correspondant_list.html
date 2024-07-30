@@ -2,33 +2,23 @@
 {% load static %}
 
 
-{% block header %}
-  {% include "../dashboard/base/header.html" %}
-{% endblock %}
-
-{% block sidebar %}
-  {% include "../dashboard/base/sidebar.html" %}
-{% endblock %}
-
-{% block breadcrumbs %}
-  
-{% endblock %}
-
 {% block content %}
-
   
   <div class="row mx-3 my-3">
     <div class="col">
-      <div class="card p-4">
-        <h3 class="text-hint mb-3">Correspondants désignés</h3>
+      <div class="card custom-card p-4">
+        
         <div class="card-body">
+          <h3 class="card-title mb-4">Correspondants désignés</h3>
           {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
           <div class="card-text">
             <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Nom ou Raison sociale</th>
-                  <th scope="col">Correspondant</th>
+                  <th scope="col">Organisation</th>
+                  <th scope="col">Nom du Correspondant</th>
+                  <th scope="col">Adresse email</th>
+                  <th scope="col">Téléphone</th>
                   <th scope="col">Date de désignation</th>
                   <th scope="col">Actif</th>
                   <th scope="col">Approuvé</th>
@@ -44,10 +34,12 @@
                       </a>
                     </td>
                     <td> 
-                      <a href="">
+                      <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">
                       {{ correspondant.user }} 
                       </a>
-                    </td>
+                    </td> 
+                    <td> {{ correspondant.user.email }} </td>
+                    <td> {{ correspondant.user.telephone }} </td>
                     <td> {{ correspondant.created_at }} </td>
                     <td> 
                       {% if correspondant.is_active %}

@@ -1,18 +1,23 @@
 {% comment %} {% load icon %} {% endcomment %}
 {% if request.user.is_authenticated and request.user.is_staff %}
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
+  <nav id="header" class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark shadow-lg" aria-label="Offcanvas navbar large">
 {% else %}
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" aria-label="Offcanvas navbar large">
+  <nav id="header" class="navbar navbar-expand-lg navbar-light sticky-top bg-light shadow-lg" aria-label="Offcanvas navbar large">
 {% endif %}
 
   <div class="container">
-    <a class="navbar-brand" href="#">e-DCP</a>
+    <a class="navbar-brand fw-bold text-primary fs-3" href="#">
+      e-DCP &nbsp;
+      {% if request.user.is_authenticated and request.user.is_staff %}
+       <span class="fs-6 fw-normal">Manager</span>
+      {% endif %}
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbar2Label">e-DCP</h5>
+        <h5 class="offcanvas-title fw-bold text-primary" id="offcanvasNavbar2Label">e-DCP</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
@@ -21,14 +26,14 @@
             <input type="search" class="form-control" placeholder="Recherche..." aria-label="Recherche">
           </form>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#"> <i class="bi bi-card-list x-large fw-bold text-secondary"></i></a>
+            <a class="nav-link active" aria-current="page" href="#"> <i class="bi bi-card-list x-large fw-bold header-menu-icon"></i></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bell x-large fw-bold text-secondary"></i></a>
+            <a class="nav-link" href="#"><i class="bi bi-bell x-large fw-bold header-menu-icon"></i></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle fw-bold text-secondary x-large"></i>
+              <i class="bi bi-person-circle fw-bold header-menu-icon x-large"></i>
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item text-primary" href="#">{{ request.user.nom }}</a></li>

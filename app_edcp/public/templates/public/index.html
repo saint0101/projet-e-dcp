@@ -7,9 +7,9 @@
   <!-- HERO -->
 
   <div class="px-4 mb-5 mt-n5 pt-5 text-center border-bottom public-hero container-fluid">
-    <h1 class="mt-5">Bienvenue sur la plateforme e-DCP</h1>
+    <h1 class="fw-bold text-primary">Bienvenue sur la plateforme e-DCP</h1>
     <div class="col-lg-6 mx-auto">
-      <p class="mb-4">
+      <p class="mb-4 fs-6 text-body-secondary">
         Simplifiez votre vie en effectuant facilement vos enregistrement et procédures de formalités 
         préalables depuis le confort de votre organisme ou domicile. Que vous ayez besoin de renouveler 
         un document, de soumettre une demande ou de vérifier le statut de vos dossiers, nous sommes là 
@@ -19,9 +19,9 @@
       </p>
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
         <!-- <button type="button" class="btn btn-primary text-light btn-lg px-4 me-sm-3">S'enregistrer</button> -->
-        <a href="{% url 'connexion:signup' %}" status="primary" class="mx-3">S'inscrire</a>
+        <a href="{% url 'connexion:signup' %}" class="btn btn-primary mx-3">S'inscrire</a>
         <!-- <button type="button" class="btn btn-outline-secondary btn-lg px-4">Déjà enregistré ? Connectez-vous</button> -->
-        <a href="{% url 'login' %}" status="success" class="mx-3">Déjà inscrit ? Connectez-vous</a>
+        <a href="{% url 'login' %}" status="success" class="btn btn-success mx-3">Déjà inscrit ? Connectez-vous</a>
       </div>
     </div>
     <div class="overflow-hidden" style="max-height: 30vh;">
@@ -37,48 +37,44 @@
     <!-- <h2 class="pb-2 border-bottom">Hanging icons</h2> -->
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
       <div class="col d-flex align-items-start">
-        <div class="icon-square d-inline-flex align-items-center justify-content-center me-3">
-          <i class="bi bi-telephone"></i>
+        <div class="d-inline-flex align-items-center justify-content-center me-3">
+          <i class="bi bi-journal-bookmark text-primary icon-home"></i>
         </div>
-        
         <div>
-          <h3 class="fs-2">Présentation et guide d'utilisation</h3>
-          <p>Bienvenue dans l’application e-DCP !
+          <h3 class="fw-bold text-primary">Présentation et guide d'utilisation</h3>
+          <p class="text-secondary">Bienvenue dans l’application e-DCP !
             Simplifiez vos formalités d’enregistrement et de demandes d’autorisation.
             Découvrez notre application conçue pour faciliter vos démarches.
             Que vous soyez une personne physique ou une organisation, notre plateforme intuitive vous 
             guide à chaque étape du processus.
           </p>
-          <button status="primary" class="mx-3" routerLink="/guides">En savoir plus</button>
+          <a class="btn btn-outline-primary mx-3" href="{% url 'public:guides' %}">En savoir plus</a>
         </div>
       </div>
 
       <div class="col d-flex align-items-start">
-        <div class="icon-square d-inline-flex align-items-center justify-content-center me-3">
-          <i class="bi bi-telephone"></i>
+        <div class="d-inline-flex align-items-center justify-content-center me-3">
+          <i class="bi bi-patch-question text-primary icon-home"></i>
         </div>
-
         <div>
-          <h3 class="fs-2">Foire Aux Questions<br></h3>
-
-          <p>Avez-vous des questions ? Nous avons les réponses !
+          <h3 class="fw-bold text-primary">Foire Aux Questions<br></h3>
+          <p class="text-secondary">Avez-vous des questions ? Nous avons les réponses !
             Explorez notre foire aux questions pour obtenir des informations détaillées sur nos services.            
           </p>        
-          <a status="primary" href="https://www.autoritedeprotection.ci/faqdcp/" target="_blank" class="mx-3">En savoir plus</a>
+          <a class="btn btn-outline-primary mx-3" href="https://www.autoritedeprotection.ci/faqdcp/">En savoir plus</a>
         </div>
       </div>
 
       <div class="col d-flex align-items-start">
-        <div class="icon-square d-inline-flex align-items-center justify-content-center me-3">
-          <i class="bi bi-telephone"></i>
+        <div class="d-inline-flex align-items-center justify-content-center me-3">
+          <i class="bi bi-person-check text-primary icon-home"></i>
         </div>
-
         <div>
-          <h3 class="fs-2">Contacts, aide et assistance</h3>
-          <p>L’équipe de l’Autorité de protection se tient disponible pour répondre à toutes vos préoccupations.
+          <h3 class="fw-bold text-primary">Contacts, aide et assistance</h3>
+          <p class="text-secondary">L’équipe de l’Autorité de protection se tient disponible pour répondre à toutes vos préoccupations.
             Pour ce faire, veuillez bien nous contacter à l’adresse mail __________ ou appelez notre ligne d’assistance au ________.            
           </p>
-          <button status="primary" class="mx-3">En savoir plus</button>
+          <a class="btn btn-outline-primary mx-3" href="{% url 'public:contacts' %}">En savoir plus</a>
         </div>
       </div>
     </div>

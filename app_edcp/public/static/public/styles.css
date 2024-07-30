@@ -10,3 +10,15 @@ body {
 #header-nav-public{
   background-color: #FFFFFF;
 }
+
+.nav-link{
+  font-size: .9rem;
+}
+
+.public-hero, .footer-public {
+  background-color: #F4F2F0;
+}
+
+.icon-home{
+  font-size: 32px;
+}
