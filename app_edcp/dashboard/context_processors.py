@@ -164,7 +164,7 @@ MENU_MGR = [
     'text' : 'Listes',
     'id' : 'listes',
     'type' : 'sous-menu',
-    'icon' : 'list-columns',
+    'icon' : 'list-nested',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -210,13 +210,6 @@ MENU_MGR = [
         'type' : 'sous-menu-item',
         'icon' : '',
         'url' : 'dashboard:enregistrement:create',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Utilisateurs',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:user:list',
         'disabled': False, 
       },
     ], 

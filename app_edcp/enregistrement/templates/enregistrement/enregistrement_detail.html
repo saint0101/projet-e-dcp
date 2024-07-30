@@ -28,7 +28,7 @@
           <p class="">
             <i class="bi bi-telephone fw-bold custom-text-light  x-large"></i> &emsp; {{ enregistrement.telephone }}
           </p>
-          <p class="text-hint">
+          <p class="">
             <i class="bi bi-envelope-at fw-bold custom-text-light  x-large"></i> &emsp; {{ enregistrement.email_contact }}
           </p>
           <p class="">
@@ -59,7 +59,7 @@
           </p>
           <p>
             <i class="bi bi-person fw-bold custom-text-light x-large"></i> &emsp;
-            Enregistrement effectué par : <a href=""><strong>{{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }}</strong></a>
+            Enregistrement effectué par : <a href="{% url 'dashboard:user:detail' pk=user.id %}"><strong>{{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }}</strong></a>
           </p>
         </div>
       </div>
