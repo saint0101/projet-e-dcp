@@ -1,0 +1,49 @@
+{% extends '../dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  <div class="col-6">
+    <h3 class="text-hint mb-3">Désigner un correspondant</h3>
+    {{ organisation }}
+    <div class="card">
+      <div class="card-body">
+        <div class="card-text">
+
+          {% for error in errors.values %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
+          {% endfor %}
+          
+          <form method="post">
+            {% csrf_token %}
+            {{ form_page2 | crispy }}
+            <button class="btn btn-primary py-2 text-light" type="submit">Envoyer</button>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+
+{% endblock content %}

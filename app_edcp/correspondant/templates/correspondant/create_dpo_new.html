@@ -1,0 +1,64 @@
+{% extends '../dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  <div class="col-6">
+    <h3 class="text-hint mb-3">Désigner un correspondant</h3>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-text">
+          
+          <form method="post">
+            {% csrf_token %}
+
+          </form>
+
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Compte utilisateur</a>
+              {{ is_first_step }}
+              {{ dpo_form }}
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Informations sur le correspondant</a>
+            </li>
+          </ul>
+          {% if is_first_step %}
+            <form method="post">
+              {% csrf_token %}
+              {{ user_form|crispy }}
+              <input type="hidden" value="True" id="is_first_step" name="is_first_step">
+              <button class="btn btn-primary py-2 text-light" type="submit">Suivant</button>
+            </form>
+          {% else %}
+            <form method="post">
+              {% csrf_token %}
+              {{ dpo_form|crispy }}
+              <button class="btn btn-primary py-2 text-light" type="submit">Envoyer</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+
+{% endblock content %}

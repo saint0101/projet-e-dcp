@@ -7,7 +7,11 @@ app_name = 'correspondant'
 urlpatterns = [
     path('', views.index, name='index'),
     path('liste/', views.DPOListView.as_view(), name='list'),
-    path('nouveau/', views.DPOCreateView.as_view(), name='create'),
+    # path('nouveau/', views.DPOCreateView.as_view(), name='nouveau'),
+    path('nouveau/', views.createDPO, name='nouveau'),
+    path('designation/', views.CreateDPOWizardView.as_view(), name='create'),
+    path('designation/org=<int:org>/', views.designate, name='designation'),
+    path('edit/<int:pk>/', views.DPOUpdateView.as_view(), name='edit'),
     path('<int:pk>/', views.DPODetailView.as_view(), name='detail'),
     # path('nouveau/', views.EnregCreateView.as_view(), name='create'),
     # path('liste/', views.EnregListView.as_view(), name='list'),
