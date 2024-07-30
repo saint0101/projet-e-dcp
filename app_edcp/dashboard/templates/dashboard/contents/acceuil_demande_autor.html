@@ -1,0 +1,51 @@
+{% load static %}
+
+{% block content %}
+
+        <div class="container mt-5">
+            <div class="row">
+                {% for type in types_demandes %}
+                    <div class="col-md-6 mb-3">
+                        <div class="row g-0 bg-body-secondary position-relative type-block">
+                            <div class="col-4 mb-md-0 p-2">
+                                {% if type.label == 'autorisation_prealable' %}
+                                    <img src="{% static 'dashboard/images/autorisation_prealable.png' %}" class="icon-image w-100" alt="Image pour Autorisation Préalable">
+                                {% elif type.label == 'biometrie' %}
+                                    <img src="{% static 'dashboard/images/biometrie.png' %}" class="icon-image w-100" alt="Image pour Biométrie">
+                                {% elif type.label == 'videosurveillance' %}
+                                    <img src="{% static 'dashboard/images/videosurveillance.png' %}" class="icon-image w-100" alt="Image pour Vidéosurveillance">
+                                {% elif type.label == 'transfert_donnees_hors_espace_cdeao' %}
+                                    <img src="{% static 'dashboard/images/transfert_donnees_hors_espace_cdeao.png' %}" class="icon-image w-100" alt="Image pour Transfert de Données Hors Espace CEDEAO">
+                                {% elif type.label == 'notification_violation_donnees_personnelles' %}
+                                    <img src="{% static 'dashboard/images/notification_violation_donnees_personnelles.png' %}" class="icon-image w-100" alt="Image pour Notification de Violation des Données Personnelles">
+                                {% elif type.label == 'violation_conformite' %}
+                                    <img src="{% static 'dashboard/images/violation_conformite.png' %}" class="icon-image w-100" alt="Image pour Violation de Conformité">
+                                {% elif type.label == 'analyse_impact_protection_donnees_personnelles' %}
+                                    <img src="{% static 'dashboard/images/analyse_impact_protection_donnees_personnelles.png' %}" class="icon-image w-100" alt="Image pour Analyse d'Impact sur la Protection des Données Personnelles">
+                                {% elif type.label == 'mise_en_conformite' %}
+                                    <img src="{% static 'dashboard/images/mise_en_conformite.png' %}" class="icon-image w-100" alt="Image pour Mise en Conformité">
+                                {% elif type.label == 'declaration_normale' %}
+                                    <img src="{% static 'dashboard/images/declaration_normale.png' %}" class="icon-image w-100" alt="Image pour Déclaration Normale">
+                                {% elif type.label == 'agreement' %}
+                                    <img src="{% static 'dashboard/images/agreement.png' %}" class="icon-image w-100" alt="Image pour Accord">
+                                {% elif type.label == 'attestation_conformite' %}
+                                    <img src="{% static 'dashboard/images/attestation_conformite.png' %}" class="icon-image w-100" alt="Image pour Attestation de Conformité">
+                                {% elif type.label == 'geolocalisation' %}
+                                    <img src="{% static 'dashboard/images/geolocalisation.png' %}" class="icon-image w-100" alt="Image pour Géolocalisation">
+                                {% endif %}
+                            </div>
+
+                            <div class="col-8 p-2 text-start d-flex flex-column justify-content-between">
+                                <h5 class="mb-2 font-weight-bold">{{ type.get_label_display }}</h5> <!-- Titre en gras -->
+                                <p class="mb-2 text-justify">{{ type.description }}</p> <!-- Texte justifié -->
+                                <a href="#" class="stretched-link mt-0">En savoir plus</a> <!-- Réduire l'espace au-dessus -->
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Aucun type d'autorisation disponible.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+{% endblock content %}

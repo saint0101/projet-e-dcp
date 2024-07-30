@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from base_edcp import models
 
 
-# modeule enregistreprement d'un utilisateur
+# module enregistreprement d'un utilisateur
+@admin.register(models.User)
 class UserAdmin(BaseUserAdmin):
     """
     Définit les pages d'administration pour les utilisateurs.
@@ -71,8 +72,7 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
-
-
+@admin.register(models.Role)
 class RoleAdmin(admin.ModelAdmin):
     """ Definir la table Role dans l'espace admin """
 
@@ -87,8 +87,8 @@ class RoleAdmin(admin.ModelAdmin):
     )
 
 
-
 # module TypeClient
+@admin.register(models.TypeClient)
 class TypeClientAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
@@ -102,7 +102,7 @@ class TypeClientAdmin(admin.ModelAdmin):
         }),
     )
 
-
+@admin.register(models.TypePiece)
 class TypePieceAdmin(admin.ModelAdmin):
     """ definir la page de gestion des types de pièces pour l'administrateur """
 
@@ -116,7 +116,9 @@ class TypePieceAdmin(admin.ModelAdmin):
         }),
     )
 
+
 # module Secteur
+@admin.register(models.Secteur)
 class SecteurAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
@@ -132,6 +134,7 @@ class SecteurAdmin(admin.ModelAdmin):
 
 
 # module Pays
+@admin.register(models.Pays)
 class PaysAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
@@ -147,6 +150,7 @@ class PaysAdmin(admin.ModelAdmin):
 
 
 # module CasExemption
+@admin.register(models.CasExemption)
 class CasExemptionAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
@@ -162,11 +166,13 @@ class CasExemptionAdmin(admin.ModelAdmin):
 
 
 # module CategorieDCP
+@admin.register(models.CategorieDCP)
 class CategorieDCPAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les notifications par ID
     list_display = ['categoriedcp']  # Affiche informatons de la table
+    search_fields = ('categorie',)
 
     # Éditer le champ CategorieDCPAdmin
     fieldsets = (
@@ -177,6 +183,7 @@ class CategorieDCPAdmin(admin.ModelAdmin):
 
 
 # module CategorieTrait
+@admin.register(models.CategorieTrait)
 class CategorieTraitAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
@@ -191,12 +198,21 @@ class CategorieTraitAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(models.DemandeAuto)
+class DemandeAutoAdmin(admin.ModelAdmin):
+    list_display = ('user', 'organisation_id', 'organisation_name', 'consent_dcp', 'consent_docs', 'summary', 'traitement_sensible', 'finalite', 'legitimite', 'status', 'type_demande')
+    search_fields = ('organisation_name', 'summary')
+    list_filter = ('finalite', 'legitimite', 'status', 'type_demande')
+
+
 # module Fonction
+@admin.register(models.Fonction)
 class FonctionAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les fonction par ID
     list_display = ['fonction']  # Affiche informatons de la table
+    search_fields = ('fonction',)
 
     # Éditer le champ CategorieTraitAdmin
     fieldsets = (
@@ -207,12 +223,13 @@ class FonctionAdmin(admin.ModelAdmin):
 
 
 # module Finalite
+@admin.register(models.Finalite)
 class FinaliteAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les fonction par ID
-    list_display = ['label', 'sensible', 'ordre']  # Affiche informatons de la table
-
+    list_display = ['label', 'description']  # Affiche informatons de la
+    search_fields = ('label',)
     # Éditer le champ FinaliteAdmin
     fieldsets = (
         (None, {
@@ -221,12 +238,14 @@ class FinaliteAdmin(admin.ModelAdmin):
     )
 
 
-# module FondJuridique
+# module
+@admin.register(models.FondJuridique)
 class FondJuridiqueAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les fonction par ID
     list_display = ['label', 'description',]  # Affiche informatons de la table
+    search_fields = ('label',)
 
     # Éditer le champ FinaliteAdmin
     fieldsets = (
@@ -237,11 +256,13 @@ class FondJuridiqueAdmin(admin.ModelAdmin):
 
 
 # module notificaton
+@admin.register(models.Notification)
 class NotificationAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les notifications par ID
     list_display = ['user', 'message', 'created_at', 'is_read']  # Affiche les utilisateurs par user et message
+    search_fields = ('user__username', 'message')
 
     # Éditer l'utilisateur
     fieldsets = (
@@ -252,6 +273,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 
 # module Enregistrement
+@admin.register(models.Enregistrement)
 class EnregistrementAdmin(admin.ModelAdmin):
     """ Page d'administration pour Enregistrement """
 
@@ -268,11 +290,13 @@ class EnregistrementAdmin(admin.ModelAdmin):
 
 
 # module Autorisation
+@admin.register(models.Autorisation)
 class AutorisationAdmin(admin.ModelAdmin):
     """ definir la page de l'administrateur """
 
     ordering = ['id']  # Ordonne les notifications par ID
     list_display = ['enregistrement', 'numero_autorisation', 'created_at']  # Affiche informatons de la table
+    search_fields = ('enregistrement', 'numero_autorisation')
 
     # Éditer le type du client
     fieldsets = (
@@ -281,9 +305,7 @@ class AutorisationAdmin(admin.ModelAdmin):
         }),
     )
 
-
-
-
+@admin.register(models.SousFinalite)
 class SousFinaliteAdmin(admin.ModelAdmin):
     """ Definir la table sous finalite dans l'espace admin """
 
@@ -298,12 +320,13 @@ class SousFinaliteAdmin(admin.ModelAdmin):
     )
 
 
-
+@admin.register(models.PersConcernee)
 class PersConcerneeAdmin(admin.ModelAdmin):
     """ Definir la table Role dans l'espace admin """
 
     ordering = ['id']  # Ordonne les personne concernee par ID
     list_display = ['label', 'sensible', 'ordre']  # Affiche informatons de la table
+    search_fields = ('label',)
 
     # Éditer le type des personne concernee
     fieldsets = (
@@ -312,12 +335,13 @@ class PersConcerneeAdmin(admin.ModelAdmin):
         }),
     )
 
-
+@admin.register(models.Habilitation)
 class HabilitationAdmin(admin.ModelAdmin):
     """ Definir la table Habilitation dans l'espace admin """
 
     ordering = ['id']  # Ordonne les Habilitation par ID
     list_display = ['role', 'fonction', 'created']  # Affiche informatons de la table
+    search_fields = ('role', 'fonction')
 
     # Éditer le type des Habilitation
     fieldsets = (
@@ -327,11 +351,13 @@ class HabilitationAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(models.JournalTransaction)
 class JournalTransactionAdmin(admin.ModelAdmin):
     """ Definir la table JournalTransaction dans l'espace admin """
 
     ordering = ['id']  # Ordonne les JournalTransaction par ID
     list_display = ['transaction', 'cible', 'created', 'user']  # Affiche informatons de la table
+    search_fields = ('transaction', 'cible')
 
     # Éditer le type des JournalTransaction
     fieldsets = (
@@ -341,67 +367,77 @@ class JournalTransactionAdmin(admin.ModelAdmin):
     )
 
 
-# Enregistrer le modèle Habilitation avec l'interface d'administration
-admin.site.register(models.JournalTransaction, JournalTransactionAdmin)
-
-# Enregistrer le modèle Habilitation avec l'interface d'administration
-admin.site.register(models.Habilitation, HabilitationAdmin)
-
-# Enregistrer le modèle PersConcernee avec l'interface d'administration
-admin.site.register(models.PersConcernee, PersConcerneeAdmin)
-
-# Enregistrer le modèle role avec l'interface d'administration
-admin.site.register(models.Role, RoleAdmin)
-
-# Enregistrer le modèle sous finalite avec l'interface d'administration
-admin.site.register(models.SousFinalite, SousFinaliteAdmin)
-
-# Enregistrer le modèle CustomUser avec l'interface d'administration
-admin.site.register(models.User, UserAdmin)
-
-# Enregistrer le modèle Autorisation avec l'interface d'administration
-admin.site.register(models.Autorisation, AutorisationAdmin)
-
-# Enregistrer le modèle RegistrationAdmin avec l'interface d'administration
-admin.site.register(models.Enregistrement, EnregistrementAdmin)
-
-# Enregistrer le modèle CustomUser avec l'interface d'administration
-admin.site.register(models.Notification, NotificationAdmin)
-
-# Enregistrer le modèle SecteurAdmin avec l'interface d'administration
-admin.site.register(models.Secteur, SecteurAdmin)
-
-# Enregistrer le modèle TypeClientAdmin avec l'interface d'administration
-admin.site.register(models.TypeClient, TypeClientAdmin)
-
-# Enregistrer le modèle TypePieceAdmin avec l'interface d'administration
-admin.site.register(models.TypePiece, TypePieceAdmin)
-
-# Enregistrer le modèle PaysAdmin avec l'interface d'administration
-admin.site.register(models.Pays, PaysAdmin)
-
-# Enregistrer le modèle CasExemptionAdmin avec l'interface d'administration
-admin.site.register(models.CasExemption, CasExemptionAdmin)
-
-# Enregistrer le modèle CategorieDCPAdmin avec l'interface d'administration
-admin.site.register(models.CategorieDCP, CategorieDCPAdmin)
-
-# Enregistrer le modèle CategorieTraitAdmin avec l'interface d'administration
-admin.site.register(models.CategorieTrait, CategorieTraitAdmin)
-
-# Enregistrer le modèle FonctionAdmin avec l'interface d'administration
-admin.site.register(models.Fonction, FonctionAdmin)
-
-# Enregistrer le modèle FinaliteAdmin avec l'interface d'administration
-admin.site.register(models.Finalite, FinaliteAdmin)
-
-# Enregistrer le modèle FondJuridiqueAdmin avec l'interface d'administration
-admin.site.register(models.FondJuridique, FondJuridiqueAdmin)
 
 
-# Modifiez le titre de la page d'administration
-admin.site.site_title = getattr(settings, 'ADMIN_SITE_TITLE', 'Django administration')
-# Modifiez le titre affiché en haut de chaque page d'administration
-admin.site.site_header = getattr(settings, 'ADMIN_SITE_HEADER', 'Django administration')
-# Modifiez le texte affiché en haut de l'index du site d'administration
-admin.site.index_title = getattr(settings, 'ADMIN_INDEX_TITLE', 'Site administration')
+@admin.register(models.Legitimite)
+class LegitimiteAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.ModeRecueilConsent)
+class ModeRecueilConsentAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.Transfert)
+class TransfertAdmin(admin.ModelAdmin):
+    list_display = ('pays', 'destinataire', 'mode', 'type_destinataire')
+    search_fields = ('pays', 'destinataire')
+    list_filter = ('pays',)
+
+
+@admin.register(models.Donnee)
+class DonneeAdmin(admin.ModelAdmin):
+    list_display = ('label', 'sensible', 'duree_conservation')
+    search_fields = ('label',)
+
+@admin.register(models.DonneeTraitee)
+class DonneeTraiteeAdmin(admin.ModelAdmin):
+    list_display = ('label', 'sensible', 'duree_conservation', 'id_categorie')
+    search_fields = ('label',)
+    filter_horizontal = ('donnees',)
+
+@admin.register(models.Interco)
+class IntercoAdmin(admin.ModelAdmin):
+    list_display = ('destinataire', 'mode', 'description')
+    search_fields = ('destinataire',)
+
+@admin.register(models.SupportCollecte)
+class SupportCollecteAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.Authentication)
+class AuthenticationAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.Backup)
+class BackupAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.Hebergement)
+class HebergementAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.SecuritePhysique)
+class SecuritePhysiqueAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.Securite)
+class SecuriteAdmin(admin.ModelAdmin):
+    list_display = ('__str__',)
+    filter_horizontal = ('supports_collecte', 'authentications', 'backups', 'hebergement', 'protect_physique')
+
+@admin.register(models.Status)
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('label', 'description')
+    search_fields = ('label',)
+
+@admin.register(models.TypeDemandeAutorisation)
+class TypeDemandeAutorisationAdmin(admin.ModelAdmin):
+    list_display = ('label',)
+    search_fields = ('label',)

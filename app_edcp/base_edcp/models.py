@@ -11,14 +11,14 @@ from django.contrib.auth.models import (
 # Gestionnaire personnalisé pour le modèle d'utilisateur
     ## - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
 class CustomUserManager(BaseUserManager):
-    """Gestionnaire pour les utilisateurs"""
+    """Manager pour le modèle User"""
 
     # Méthode pour créer un utilisateur
     def create_user(self, email, password=None, **extra_fields):
-        """Crée, enregistre et retourne un nouvel utilisateur."""
+        """Créer et retourner un utilisateur avec un email et un mot de passe"""
         # verifier si l'email est fourni
         if not email:
-            raise ValueError("L'utilisateur doit avoire une adresse email.")
+            raise ValueError("L'adresse email doit être fournie.")
         # Crée une instance du modèle utilisateur
         user = self.model(email=self.normalize_email(email), **extra_fields)
         # Définit le mot de passe de l'utilisateur
@@ -31,16 +31,16 @@ class CustomUserManager(BaseUserManager):
 
     # Méthode pour créer un superutilisateur
     def create_superuser(self, email, password=None, **extra_fields):
-        """Crée et enregistre un superutilisateur avec les informations fournies."""
+        """Créer et retourner un super utilisateur avec un email et un mot de passe"""
         # Assurer que l'utilisateur est un membre du personnel et un superutilisateur
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
         # Vérification des droits de superutilisateur
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Les superutilisateurs doivent avoir is_staff=True.')
+            raise ValueError('Les super utilisateurs doivent avoir is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Les superutilisateurs doivent avoir is_superuser=True.')
+            raise ValueError('Les super utilisateurs doivent avoir is_superuser=True.')
 
         # Création de l'utilisateur avec les droits de superutilisateur
         return self.create_user(email, password, **extra_fields)
@@ -63,8 +63,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
     is_active = models.BooleanField(default=True, verbose_name='Est Actif')
     is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
-    email_verified = models.BooleanField(default=False)  # Utiliser une valeur par défaut pour éviter les valeurs nulles
-    is_dpo = models.BooleanField(default=False) # Est un Correspondant
+    email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
+    is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
 
 
 
@@ -95,7 +95,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """ les champs a retourner """
         return self.nom + ' ' + self.prenoms
-
 
 
 class Enregistrement(models.Model):
@@ -152,7 +151,7 @@ class TypeClient(models.Model):
     def __str__(self):
         """ les champs a retourner """
         return self.label
-    
+
 class TypePiece(models.Model):
     """ Table du type de pièces d'identité """
     label = models.CharField(max_length=100, verbose_name='Type de pièce d\'identité')
@@ -222,32 +221,255 @@ class CategorieTrait(models.Model):
         return self.categorie
 
 
+# Modèle pour représenter une finalité
 class Finalite(models.Model):
     """ Table finalite """
-    label = models.CharField(max_length=100)
-    sensible = models.CharField(max_length=100)
-    ordre = models.IntegerField()
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
 
     def __str__(self):
-        """ les champs a retourner """
-        return f"La finalié {self.label} a pour {self.sensible}"
+        return self.label
 
 
+# Modèle pour représenter une sous-finalité liée à une finalité
 class SousFinalite(models.Model):
     """ Table des sous finalités """
-    label = models.CharField(max_length=100)
-    sensible = models.BooleanField()
-    ordre = models.IntegerField()
-    finalite = models.ForeignKey('Finalite', on_delete=models.CASCADE)
+    finalite = models.ForeignKey('Finalite', related_name='sous_finalites', on_delete=models.CASCADE, verbose_name="Finalité")
+    label = models.CharField(max_length=255, verbose_name="Label")
+    sensible = models.BooleanField(default=False, verbose_name="Sensible")
+    ordre = models.IntegerField(default=0, verbose_name="Ordre")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
 
     def __str__(self):
         """ les champs à retourner """
-        return f"La finalié {self.label} a pour {self.sensible} lié à l'id de la sous finalité {self.finalite}"
+        return f"{self.label} ({self.finalite.label})"
+
+
+# Modèle pour représenter une légitimité
+class Legitimite(models.Model):
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter un mode de recueil de consentement
+class ModeRecueilConsent(models.Model):
+    """ Table de recueil des concentement"""
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter un transfert de données
+class Transfert(models.Model):
+    """ Table des transferts de donnees """
+    pays = models.CharField(max_length=255, verbose_name="Pays")
+    destinataire = models.CharField(max_length=255, verbose_name="Destinataire")
+    mode = models.CharField(max_length=255, verbose_name="Mode")
+    type_destinataire = models.CharField(max_length=255, verbose_name="Type de Destinataire")
+
+    def __str__(self):
+        return f"{self.destinataire} ({self.pays})"
+
+
+# Modèle pour représenter une personne concernée
+class PersConcernee(models.Model):
+    """ Table des personnes concernees """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    sensible = models.BooleanField(default=False, verbose_name="Sensible")
+    ordre = models.IntegerField(default=0, verbose_name="Ordre")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Personne Concernée'
+        verbose_name_plural = 'Personnes Concernées'
+
+    def __str__(self):
+        """ les champs à retourner """
+        return f"{self.label}"
+
+
+# Représente les types de données individuelles collectées.
+# Par exemple, cela peut inclure des informations comme les noms, les adresses, etc.
+class Donnee(models.Model):
+
+    """ Modèle pour représenter une donnée individuelle """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    sensible = models.BooleanField(default=False, verbose_name="Sensible")
+    duree_conservation = models.CharField(max_length=255, blank=True, null=True, verbose_name="Durée de Conservation")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Représente des ensembles de données traitées, qui peuvent inclure plusieurs types de données individuelles.
+# Cela permet de grouper les données traitées en catégories pour la demande d’autorisation.
+class DonneeTraitee(models.Model):
+    """ Modèle pour représenter un ensemble de données traitées """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    sensible = models.BooleanField(default=False, verbose_name="Sensible")
+    duree_conservation = models.CharField(max_length=255, blank=True, null=True, verbose_name="Durée de Conservation")
+    donnees = models.ManyToManyField('Donnee', related_name='donnees_traitees', verbose_name="Données")
+    id_categorie = models.CharField(max_length=255, blank=True, null=True, verbose_name="ID Catégorie")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter une interconnexion de données
+class Interco(models.Model):
+    """ Modèle pour représenter une interconnexion de données """
+    destinataire = models.CharField(max_length=255, verbose_name="Destinataire")
+    mode = models.CharField(max_length=255, blank=True, null=True, verbose_name="Mode")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.destinataire}"
+
+
+# Modèle pour représenter un support de collecte de données
+class SupportCollecte(models.Model):
+    """ Modèle pour représenter un support de collecte de données """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter une méthode d'authentification
+class Authentication(models.Model):
+    """ Modèle pour représenter une méthode d'authentification """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Décrit les méthodes de sauvegarde des données
+class Backup(models.Model):
+    """ Modèle pour représenter une méthode de sauvegarde des données """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Spécifie les modes d’hébergement des données (par exemple, sur site ou dans le cloud).
+class Hebergement(models.Model):
+    """ Modèle pour représenter un mode d'hébergement des données """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter une protection physique des données
+class SecuritePhysique(models.Model):
+    """ Modèle pour représenter une protection physique des données """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour regrouper les mesures de sécurité des données
+class Securite(models.Model):
+    """
+    Modèle pour regrouper les mesures de sécurité des données
+    Les relations ManyToManyField dans le modèle Securite permettent de gérer efficacement
+        les multiples relations entre les mesures de sécurité et les différents aspects de la sécurité des données.
+    """
+    supports_collecte = models.ManyToManyField('SupportCollecte', related_name='securite_supports', verbose_name="Supports de Collecte")
+    authentications = models.ManyToManyField('Authentication', related_name='securite_auth', verbose_name="Authentification")
+    backups = models.ManyToManyField('Backup', related_name='securite_backup', verbose_name="Backup")
+    hebergement = models.ManyToManyField('Hebergement', related_name='securite_hebergement', verbose_name="Hébergement")
+    protect_physique = models.ManyToManyField('SecuritePhysique', related_name='securite_protect', verbose_name="Protection Physique")
+
+    def __str__(self):
+        return "Sécurité"
+
+
+# Modèle pour représenter le statut de la demande
+class Status(models.Model):
+    """ Modèle pour représenter le statut de la demande """
+    label = models.CharField(max_length=255, verbose_name="Label")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return f"{self.label}"
+
+
+# Modèle pour représenter un type de demande d'autorisation
+class TypeDemandeAutorisation(models.Model):
+    TYPE_CHOICES = [
+        ('autorisation_prealable', 'Autorisation Préalable'),
+        ('biometrie', 'Biométrie'),
+        ('videosurveillance', 'Vidéosurveillance'),
+        ('transfert_donnees_hors_espace_cdeao', 'Transfert de Données Hors Espace CEDEAO'),
+        ('notification_violation_donnees_personnelles', 'Notification de Violation des Données Personnelles'),
+        ('violation_conformite', 'Violation de la Conformité'),
+        ('analyse_impact_protection_donnees_personnelles', 'Analyse d’Impact sur la Protection des Données Personnelles'),
+        ('mise_en_conformite', 'Mise en Conformité'),
+        ('declaration_normale', 'Déclaration Normale'),
+        ('agreement', 'Agrément'),
+        ('attestation_conformite', 'Attestation Conformité'),
+        ('geolocalisation', 'Géolocalisation'),
+    ]
+
+    label = models.CharField(max_length=255, choices=TYPE_CHOICES, unique=True, verbose_name="Type de Demande d'Autorisation")
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+
+    def __str__(self):
+        return self.get_label_display() # a méthode get_label_display(), ou en utilisant les valeurs de TYPE_CHOICES directement :
+        # return dict(self.TYPE_CHOICES).get(self.label)
+
+
+# Modèle principal pour représenter la demande d'autorisation
+class DemandeAuto(models.Model):
+    """ Modèle pour représenter un exemple de données liées a la demande d'autorisation """
+    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Utilisateur")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création')
+    organisation_id = models.CharField(max_length=255, verbose_name='ID de l\'Organisation')
+    organisation_name = models.CharField(max_length=255, verbose_name='Nom de l\'Organisation')
+    organisation_phone = models.CharField(max_length=255, verbose_name='Téléphone de l\'Organisation')
+    consent_dcp = models.BooleanField(default=False, verbose_name='Consentement DCP')
+    consent_docs = models.BooleanField(default=False, verbose_name='Consentement Documents')
+    summary = models.TextField(blank=True, null=True, verbose_name='Résumé')
+    traitement_sensible = models.BooleanField(default=False, verbose_name='Traitement Sensible')
+    procedure_droit_persones = models.TextField(blank=True, null=True, verbose_name='Procédure Droit des Personnes')
+    finalite = models.ForeignKey('Finalite', on_delete=models.CASCADE, verbose_name='Finalité')
+    legitimite = models.ForeignKey('Legitimite', on_delete=models.CASCADE, verbose_name='Légitimité')
+    modes_recueil_consent = models.ManyToManyField('ModeRecueilConsent', verbose_name='Modes de Recueil de Consentement')
+    personnes_concernees = models.ManyToManyField('PersConcernee', verbose_name='Personnes Concernées')
+    transferts = models.ManyToManyField('Transfert', verbose_name='Transferts')
+    donnees_traitees = models.ManyToManyField('DonneeTraitee', verbose_name='Données Traitées')
+    interco = models.ManyToManyField('Interco', verbose_name='Interconnexions')
+    securite = models.ForeignKey('Securite', on_delete=models.CASCADE, verbose_name='Sécurité')
+    status = models.ForeignKey('Status', on_delete=models.CASCADE, verbose_name='Statut')
+    type_demande = models.ForeignKey('TypeDemandeAutorisation', on_delete=models.CASCADE, verbose_name="Type de Demande d'Autorisation")
+
+    class Meta:
+        verbose_name = 'Exemple de Modèle'
+        verbose_name_plural = 'Exemples de Modèles'
+
+    def __str__(self):
+        return f"ID: {self.id} - Utilisateur: {self.user.username}"
 
 
 class Fonction(models.Model):
     """ Table Fonction """
-    fonction = models.CharField(max_length=100)
+    fonction = models.CharField(max_length=100, verbose_name='Fonction')
 
     def __str__(self):
         """ les champs à retourner """
@@ -258,7 +480,7 @@ class Habilitation(models.Model):
     """ Table de gestion des habilisattions"""
     role = models.ForeignKey('Role', on_delete=models.CASCADE)
     fonction = models.ForeignKey('Fonction', on_delete=models.CASCADE)
-    created = models.DateField()
+    created = models.DateField(verbose_name='Date de Création')
 
     def __str__(self):
         """ les champs à retourner """
@@ -268,7 +490,7 @@ class Habilitation(models.Model):
 class FondJuridique(models.Model):
     """ Table Fond juridique """
     label = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(verbose_name='Description')
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
@@ -280,34 +502,17 @@ class FondJuridique(models.Model):
         return self.label
 
 
+# Modèle pour représenter un rôle
 class Role(models.Model):
-    """ Table des roles """
-    role = models.CharField(max_length=100)
+    """ odèle pour représenter un rôle """
+    role = models.CharField(max_length=100, verbose_name="Rôle")
 
     def __str__(self):
-        """ le champs a retourner """
         return self.role
-
-
-class PersConcernee(models.Model):
-    """ Table des personnes concernees """
-    label = models.CharField(max_length=100, null=True)
-    sensible = models.BooleanField()
-    ordre = models.IntegerField()
-
-    class Meta:
-        """ définir le nom singulier et pluriel du modèle """
-        verbose_name = 'Personne Concernée'
-        verbose_name_plural = 'Personnes Concernées'
-
-    def __str__(self):
-        """ les champs à retourner """
-        return f"La finalié {self.label} a pour {self.sensible}"
-
 
 class Notification(models.Model):
     """ Table notification """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', verbose_name='Utilisateur') # Référence à l'utilisateur recevant la notification
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='notifications', verbose_name='Utilisateur') # Référence à l'utilisateur recevant la notification
     message = models.TextField() # message de notification
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date et heure de création')  # Date et heure de création de la notification
     is_read = models.BooleanField(default=False, verbose_name='Est lu')    # Indique si la notification a été lue
@@ -317,12 +522,10 @@ class Notification(models.Model):
         return f'Notification pour {self.user} - {self.message}'
 
 
-
 class Autorisation(models.Model):
-    enregistrement = models.ForeignKey(Enregistrement, related_name='autorisations', on_delete=models.CASCADE)
+    enregistrement = models.ForeignKey('Enregistrement', related_name='autorisations', on_delete=models.CASCADE)
     numero_autorisation = models.CharField(max_length=20)  # Format : YYYY-NNNN
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"Autorisation {self.numero_autorisation} pour {self.enregistrement}"
