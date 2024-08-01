@@ -12,6 +12,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+!app_edcp/static/toastr/build
 develop-eggs/
 dist/
 !app_edcp/static/bootstrap/dist

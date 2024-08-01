@@ -1,9 +1,11 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit
 from crispy_bootstrap5.bootstrap5 import FloatingField
 
 from base_edcp.models import User
+from base_edcp import validators
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -12,6 +14,10 @@ class UserRegistrationForm(UserCreationForm):
   Hérite de la classe Django UserCreationForm.
   Spécifie les champs utilisés dans le formulaire.
   """
+  # email = forms.EmailField(validators=[validate_unique_email])
+  nom = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield])
+  prenoms = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield])
+  telephone = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_phone_number], required=False)
 
   class Meta:
     model = User

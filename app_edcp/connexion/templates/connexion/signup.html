@@ -83,9 +83,9 @@
 <div class="card main-content background-accent p-3">
   <div class="card-body">
     <h1 class="text-primary fw-bold py-3">e-DCP</h1>
-    <h2 class="h3 mb-3 fw-normal">Créer un compte</h2>
+    <h2 class="h3 mb-3 fw-bold custom-text-light">Créer un compte</h2>
     {% comment %} <h1 id="title" class="title">Inscription</h1> {% endcomment %}
-    <p class="mt-4">
+    <p class="mt-4 custom-text-light">
       <strong class="text-success">Information : </strong>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
@@ -94,9 +94,6 @@
     </p>
     
     {% comment %} {{ form.as_p }} {% endcomment %}
-
-
-
     <main class="form-signin w-100 m-auto">
       
         {% if errors %}
@@ -107,7 +104,7 @@
           </ul>
         {% endif %}
 
-      <form method="POST">
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% comment %} {% crispy form %} {% endcomment %}
         {{ form|crispy }}

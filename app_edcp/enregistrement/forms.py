@@ -10,7 +10,6 @@ class EnregistrementForm(forms.ModelForm):
         'rccm',
         'representant',
         'secteur',
-        'presentation',
         'telephone',
         'email_contact',
         'site_web',
@@ -20,8 +19,11 @@ class EnregistrementForm(forms.ModelForm):
         'gmaps_link',
         'adresse_bp',
         'effectif',
+        'presentation',
         'type_piece',
         'num_piece',
+        'file_piece',
+        'file_rccm',
     ]
     widgets = {
       'type-piece': forms.RadioSelect()

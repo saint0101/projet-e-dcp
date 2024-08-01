@@ -16,6 +16,7 @@ gunicorn==22.0.0
 libsass==0.23.0
 mccabe==0.6.1
 packaging==24.1
+pillow==10.4.0
 psycopg2-binary==2.9.9
 pycodestyle==2.7.0
 pyflakes==2.3.1

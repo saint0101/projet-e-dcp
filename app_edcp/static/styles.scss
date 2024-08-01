@@ -82,3 +82,41 @@ table td{
   color: $secondary-text-emphasis !important;
   cursor: pointer;
 }
+
+/********************** TOASTR **********************/
+#toast-container > div{
+  width: 400px;
+  padding: 25px 25px 25px 50px;
+  border-radius: 5px;
+  opacity: 1;
+  color: rgba($color: #ffffff, $alpha: 0.8);
+  box-shadow: 0 0 10px 0px rgba($color: #000000, $alpha: 0.2);
+  font-size: 1rem;
+  font-weight: 400;
+  border: none;
+}
+
+#toast-container > div:hover {
+  box-shadow: 0 0 20px 0px rgba($color: #000000, $alpha: 0.4);
+  /* box-shadow: 0 0 12px #000; */
+  opacity: 1;
+  color: rgba($color: #ffffff, $alpha: 1);
+  font-weight: 600;
+  border: none;
+}
+
+.toast-success {
+  background-color: $success;
+}
+
+.toast-info{
+  background-color: $info;
+}
+
+.toast-warning{
+  background-color: $warning;
+}
+
+.toast-error{
+  background-color: $danger;
+}

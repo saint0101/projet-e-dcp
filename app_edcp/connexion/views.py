@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm
@@ -21,6 +22,16 @@ def index(request):
     return redirect('login')
 # views.py
 
+
+def signup_landing(request, messages=None):
+    """
+    Page de landing après l'inscription d'un nouvel utilisateur.
+    Les utilisateurs doivent confirmer leur e-mail pour activer leur compte.
+    """
+
+    return render(request, 'connexion/signup_landing.html', context={'messages': messages})
+
+
 def signup(request):
     """
     Vue pour l'inscription d'un nouvel utilisateur.
@@ -28,9 +39,13 @@ def signup(request):
     """
 
     context = {}
+    # si le formulaire a été soumis
     if request.method == 'POST':
-        # Créer une instance de formulaire avec les données POST
-        user_form = UserRegistrationForm(request.POST)
+        # Créer une instance de formulaire avec les données POST et en incluant les fichiers joints
+        user_form = UserRegistrationForm(request.POST, request.FILES)
+        # print(f'Uploaded files : {request.FILES['avatar']}')
+        
+        # si le formulaire est valid
         if user_form.is_valid():
             # Créer l'utilisateur mais ne pas l'activer encore
             user = user_form.save(commit=False)
@@ -63,20 +78,33 @@ def signup(request):
             try:
                 # Envoyer l'e-mail de confirmation
                 send_mail(mail_subject, message, email_from, recipient_list)
-                context['message'] = 'Un e-mail de confirmation a été envoyé à votre adresse e-mail.'
+                context['message'] = {
+                    'success': True,
+                    'message': 'Merci pour votre inscription ! \n Un email vous a été envoyé. Veuillez cliquer sur le lien de vérification afin d\'activer votre compte. Pensez également à vérifier le dossier SPAM si vous ne le retrouvez pas.'
+                }
+            
             except Exception as e:
                 # Gérer les erreurs d'envoi d'e-mail
                 context['errors'] = str(e)
-                context['message'] = 'Une erreur est survenue lors de l\'envoi de votre e-mail. Veuillez reessayer :' + str(e)
+                message = 'Une erreur est survenue lors de l\'envoi de l\'e-mail. Veuillez reessayer : \n' + str(e)
+                context['message'] = {
+                    'success': False,
+                    'message': message
+                }
 
             # Afficher le formulaire de connexion
-            form = AuthenticationForm()
-            context['form'] = form
-            return render(request, 'registration/login.html', context=context)
+            # login_form = AuthenticationForm()
+            # context['form'] = login_form
+            return render(request, 'connexion/signup_landing.html', context=context) # Affichage de la page de landing avec les messages de succès ou d'erreur
+            # return redirect('login')
+        
+        # si le formulaire est invalide
         else:
             # Afficher les erreurs de formulaire
             context['form'] = user_form
             context['errors'] = user_form.errors
+
+    # si le formulaire n'a pas encore été soumis (première ouverture de la page)
     else:
         # Afficher le formulaire d'inscription
         user_form = UserRegistrationForm()

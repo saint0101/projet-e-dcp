@@ -1,5 +1,6 @@
 {% extends '../dashboard/base/master.html' %}
 {% load static %}
+{% load breadcrumbs %}
 
 
 {% block content %}
@@ -46,6 +47,21 @@
           <p class="">
             <i class="bi bi-globe fw-bold custom-text-light x-large"></i> &emsp; {{ enregistrement.site_web }}
           </p>
+        </div>
+      </div>
+      
+      <div class="card custom-card mt-4">
+        <div class="card-header custom-text-light">
+          Justificatifs
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              Copie du Registre du Commerce : <a href="{{ enregistrement.file_piece.url }}"> {{ enregistrement.file_piece.name | get_filename }} </a>
+            </li>
+            <li class="list-group-item">Document 2</li>
+            <li class="list-group-item">Document 3</li>
+          </ul>
         </div>
       </div>
     </div>

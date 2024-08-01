@@ -62,6 +62,7 @@ Créez un super utilisateur pour accéder à l'interface d'administration de Dja
 ```
 
 ### 6. Lancer l'exécuption de l'application
+
 Utiliser docker compose up pour démarrer tous les conteneurs en une fois :
 
 ```bash
@@ -74,7 +75,7 @@ Ou passer par la commande runserver de Django pour un affichage de l'output dans
     docker-compose run --rm app_edcp sh -c "python manage.py runserver"
 ```
 
-# Travailler sur le projet
+## Travailler sur le projet
 
 ### 1. Se déplacer dans le dossier du projet
 

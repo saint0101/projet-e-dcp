@@ -19,8 +19,8 @@ services:
 
     # Commande à exécuter lors du démarrage du conteneur
     # Correction de la commande avec le nom correct 'manage.py'
-    # command: >
-    #  sh -c "python manage.py runserver 0.0.0.0:8088"
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8088"
 
     # definition des variables d'environnement des acces de la bd
     environment:
@@ -30,12 +30,16 @@ services:
       - DB_PASS=e_dcp@2023#
 
     # demarrer premierement la bd
-    depends_on:
-      - db
+    # depends_on:
+    #  - db
 
   # creation du service de base de donnee
   db:
     image: postgres:13-alpine
+    # Configuration des ports
+    ports:
+      - "5436:5432"  # Mapping du port du conteneur sur le port de l'hôte
+
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
     environment:
@@ -47,7 +51,6 @@ services:
       - EMAIL_USE_TLS = True
       - EMAIL_HOST_USER = 'info-apdcp@artci.ci'
       - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
-
 
 
 volumes:
