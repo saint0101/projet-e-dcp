@@ -1,0 +1,84 @@
+
+@import "./theme-apdcp.scss";
+
+/********************** UTILS **********************/
+
+.large{
+  font-size: large;
+}
+
+.larger{
+  font-size: larger;
+}
+
+.x-large{
+  font-size: x-large;
+}
+
+.xx-larg{
+  font-size: xx-large;
+}
+
+.fs-6{
+  font-size: 1.1rem !important;
+}
+
+.background-accent{
+  background-color: #F4F2F0;
+}
+
+.custom-text-light{
+  color: $custom-light !important;
+}
+
+.custom-bg-light{
+  background-color: $custom-light !important;
+}
+
+/********************** LINKS **********************/
+
+a{
+  text-decoration: none;
+}
+
+/********************** BUTTONS **********************/
+
+.btn-primary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-secondary{
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-active-color: #ffffff;
+}
+
+.btn-outline-primary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning, .btn-outline-info{
+  --bs-btn-hover-color: #ffffff;
+  --bs-btn-active-color: #ffffff;
+}
+
+/********************** FORMS **********************/
+
+// champs obligatoires des formulaires
+.asteriskField{
+  color: $danger;
+  margin-left: 2px;
+}
+
+.form-floating label{
+  color: $secondary-text-emphasis;
+}
+
+.form-label{
+  color: $secondary-text-emphasis;
+  font-size: .9rem;
+}
+
+/********************** TABLES **********************/
+
+table th{
+  font-weight: normal;
+  color: $custom-light !important;
+}
+
+table td{
+  color: $secondary-text-emphasis !important;
+  cursor: pointer;
+}

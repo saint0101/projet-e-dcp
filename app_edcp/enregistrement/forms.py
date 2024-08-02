@@ -7,6 +7,7 @@ class EnregistrementForm(forms.ModelForm):
     fields = [
         'typeclient',
         'raisonsociale',
+        'rccm',
         'representant',
         'secteur',
         'presentation',

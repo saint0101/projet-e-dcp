@@ -1,0 +1,48 @@
+{% extends '../dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  <div class="col-6">
+    <h3 class="text-hint mb-3">Désigner un correspondant</h3>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-text">
+          
+          <form method="post">
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {% for form in wizard.form.forms %}
+                    {{ form|crispy }}
+                {% endfor %}
+            {% else %}
+                {{ wizard.form|crispy }}
+            {% endif %}
+            <button class="btn btn-primary py-2 text-light" type="submit">Suivant</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+
+{% endblock content %}

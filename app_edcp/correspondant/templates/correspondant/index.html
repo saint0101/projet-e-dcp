@@ -1,10 +1,118 @@
-{% extends 'correspondant/base.html' %}
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
 
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include "../dashboard/base/sidebar.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  
+{% endblock %}
 
 {% block content %}
 
-        <h1> Bienvenue sur la page d'accueil des Correspondants </h1>
+  
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Correspondants désignés</h3>
+          {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+          <div class="card-text">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Nom ou Raison sociale</th>
+                  <th scope="col">Correspondant</th>
+                  <th scope="col">Date de désignation</th>
+                  <th scope="col">Actif</th>
+                  <th scope="col">Approuvé</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for correspondant in correspondants %}
+                  <tr>
+                    <td> 
+                      <a href="{% url 'dashboard:enregistrement:detail' pk=correspondant.organisation.id %}">
+                        {{ correspondant.organisation }} 
+                      </a>
+                    </td>
+                    <td> 
+                      <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">
+                        {{ correspondant.user }} 
+                      </a>
+                    </td>
+                    <td> {{ correspondant.created_at }} </td>
+                    <td> 
+                      {% if correspondant.is_active %}
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                      {% else %}
+                        <i class="bi bi-x-circle-fill text-danger"></i>
+                      {% endif %} 
+                    </td>
+                    <td>  
+                      {% if correspondant.is_approved %}
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                      {% else %}
+                        <i class="bi bi-x-circle-fill text-danger"></i>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Nouvelle désignation</h3>
+          {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+          <div class="card-text">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Nom ou Raison sociale</th>
+                  <th scope="col">Enregistrée par</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Correspondant</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for organisation in orgs_without_dpo %}
+                  <tr>
+                    <td> 
+                      <a href="{% url 'dashboard:enregistrement:detail' pk=organisation.id %}">
+                        {{ organisation }} 
+                      </a>
+                    </td>
+                    <td> {{ organisation.user }} </td>
+                    <td> {{ organisation.created_at }} </td>
+                    <td> 
+                      <a href="{% url 'dashboard:correspondant:designation' org=organisation.id %}" class="btn btn-success py-2 text-light">Désigner</button> 
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
 {% endblock content %}
-
-

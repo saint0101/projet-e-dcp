@@ -1,0 +1,64 @@
+{% extends '../dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block header %}
+  {% include "../dashboard/base/header.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col-12">
+    
+    <div class="row">
+      <div class="col-6">
+        <div class="card custom-card">
+          <div class="card-body">
+            <h3 class="card-title mb-3">Détails de l'utilisateur</h3>
+            <p>
+              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
+              </i>
+              <a href="">
+                <strong>{{ user }}</strong>
+              </a>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"> 
+                  <i class="bi bi-telephone custom-text-light"></i> {{ user.telephone }} 
+                </li>
+                <li class="list-group-item"> 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.email }} 
+                </li>
+                <li class="list-group-item" > 
+                  <i class="bi bi-calendar3 custom-text-light"></i> Inscrit le {{ user.created_at }} 
+                </li>
+                <li class="list-group-item" > 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.fonction }} 
+                </li>
+                <li class="list-group-item" > 
+                  <i class="bi bi-envelope-at custom-text-light"></i> {{ user.organisation }} 
+                </li>
+              </ul>
+            </p>
+      
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+  
+  
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+{% endblock content %}

@@ -1,40 +1,37 @@
+{% extends 'base.html' %}
+
 {% load compress %}
 {% load static %}
 {% comment %} {% load icon %} {% endcomment %}
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    
-    {% block title %}
-        <title>Plateforme e-DCP</title>
-    {% endblock %}
-
-    {% comment %} {% load bootstrap5 %}
+{% comment %} {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %} {% endcomment %}
 
-    
-    {% compress css %}
-        {% comment %}       <link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen">
-        {% endcomment %}      
-        <link type="text/x-scss" href="{% static 'theme-apdcp.scss' %}" rel="stylesheet" media="screen">
-        <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
-    {% endcompress %}
-    <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-    {% block custom_scripts %}
-    {% endblock %}
+{% block title %}
+    <title>Plateforme e-DCP</title>
+{% endblock %}
 
-</head>
-<body>
+{% block styles %}
+    {% compress css %}
+        <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
+        <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+
+    {% endcompress %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}
+
+{% block custom_scripts %}
+{% endblock %}
+
+{% block layout %}
     {% block header %}
+        {% include "./header.html" %}
     {% endblock %}
 
     <main class="d-flex flex-nowrap">
-{% comment %}         {% block sidebar %}
-        {% endblock %} {% endcomment %}
-
         {% block sidebar %}
             {% include "./sidebar.html" %}
         {% endblock %}
@@ -42,10 +39,13 @@
         {% block breadcrumbs %}
         {% endblock %}
 
-        {% block content %}
-        {% endblock %}
+        <div class="container p-4" id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
-    
-  {% include "./footer.html" %}
-</body>
-</html>
+    {% include "./footer.html" %}
+{% endblock %}
+
+
+

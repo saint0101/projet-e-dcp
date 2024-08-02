@@ -1,7 +1,9 @@
-
-# Utiliser une image Alpine avec Python
 FROM python:3.12-alpine
 
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.20/main" > /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/v3.20/community" >> /etc/apk/repositories && \
+    echo "http://dl-3.alpinelinux.org/alpine/v3.20/main" >> /etc/apk/repositories && \
+    echo "http://dl-3.alpinelinux.org/alpine/v3.20/community" >> /etc/apk/repositories
 
 # Installer les dépendances nécessaires, y compris Git
 RUN apk update && apk add --no-cache \

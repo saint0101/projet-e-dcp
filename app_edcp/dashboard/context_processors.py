@@ -13,7 +13,7 @@ MENU_CLIENT = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'pencil-square',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -33,12 +33,37 @@ MENU_CLIENT = [
       },
     ], 
   },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : 'file-earmark-person',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
   
   {
     'text' : 'Demandes d\'autorisation',
     'id' : 'demande-auto',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'file-earmark-text',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -70,7 +95,7 @@ MENU_CLIENT = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'journal-text',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -101,31 +126,6 @@ MENU_CLIENT = [
   {
     'text' : 'Notifications',
     'type' : 'section',
-  },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
   },
   
   {
@@ -156,6 +156,29 @@ TODO: Prévoir un enregistrement dans la base de données pour les versions futu
 """
 MENU_MGR = [
   {
+    'text' : 'Administration',
+    'type' : 'section',
+  },
+
+    {
+    'text' : 'Listes',
+    'id' : 'listes',
+    'type' : 'sous-menu',
+    'icon' : 'list-nested',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Utilisateurs',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:user:list',
+        'disabled': False, 
+      },
+    ], 
+  },
+  
+  {
     'text' : 'Formalités',
     'type' : 'section',
   },
@@ -164,7 +187,7 @@ MENU_MGR = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'pencil-square',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -191,12 +214,37 @@ MENU_MGR = [
       },
     ], 
   },
+
+  {
+    'text' : 'Correspondants',
+    'type' : 'sous-menu',
+    'id' : 'correspondants',
+    'icon' : 'file-earmark-person',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Désignations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:correspondant:list',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Informations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+    ],
+  },
   
   {
     'text' : 'Demandes d\'autorisation',
     'id' : 'demande-auto',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'file-earmark-text',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -228,7 +276,7 @@ MENU_MGR = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : '',
+    'icon' : 'journal-text',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -259,31 +307,6 @@ MENU_MGR = [
   {
     'text' : 'Notifications',
     'type' : 'section',
-  },
-
-  {
-    'text' : 'Correspondants',
-    'type' : 'sous-menu',
-    'id' : 'correspondants',
-    'icon' : '',
-    'url' : '',
-    'disabled': False, 
-    'items' : [
-      {
-        'text' : 'Désignation',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-      {
-        'text' : 'Informations',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False, 
-      },
-    ],
   },
   
   {

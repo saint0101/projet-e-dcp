@@ -1,0 +1,89 @@
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
+
+
+{% block content %}
+
+  
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col-12">
+    <div class="col">
+      <h3 class="text-hint mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div class="card custom-card mb-4">
+          <div class="card-header custom-text-light">
+            Correspondant
+          </div>
+          <div class="card-body">
+            <p>
+              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
+              </i>
+              <a href="">
+                <strong>{{ correspondant.user }}</strong>
+              </a>
+              <ul class="list-group list-group-flush dpo-infos-list">
+                <li class="list-group-item"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
+                <li class="list-group-item" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.user.telephone }} </li>
+                <li class="list-group-item"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.user.email }} </li>
+              </ul>
+            </p>
+          </div>
+        </div>
+
+        <div class="card custom-card">
+          <div class="card-header custom-text-light">
+            Organisation
+          </div>
+          <div class="card-body">
+            {% with correspondant.organisation as org %}
+              <p>
+                <i class="bi bi-building fw-bold text-secondary x-large">
+                </i>
+                <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
+                  <strong>{{ org }}</strong>
+                </a>
+                {% comment %} <i class="bi bi-telephone text-secondary"></i> {{ org.telephone }} <br>
+                <i class="bi bi-envelope-at text-secondary"></i> {{ org.email_contact }} <br> {% endcomment %}
+                <ul class="list-group list-group-flush dpo-infos-list">
+                  <li class="list-group-item"> <i class="bi bi-telephone custom-text-light"></i> &emsp; {{ org.telephone }} </li>
+                  <li class="list-group-item"> <i class="bi bi-envelope-at custom-text-light"></i> &emsp; {{ org.email_contact }} </li>
+                  <li class="list-group-item"> <i class="bi bi-geo-alt custom-text-light"></i> &emsp; {{ org.ville }} </li>
+                  <li class="list-group-item"> <i class="bi bi-geo custom-text-light"></i> &emsp; {{ org.adresse_geo }} </li>
+                  <li class="list-group-item"> <i class="bi bi-mailbox custom-text-light"></i> &emsp; {{ org.adresse_bp }} </li>
+                </ul>
+              </p>
+            {% endwith %}
+      
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-6">
+        <div class="card custom-card">
+          <div class="card-header custom-text-light">
+            Justificatifs
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Document 1</li>
+              <li class="list-group-item">Document 2</li>
+              <li class="list-group-item">Document 3</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+  
+{% endblock content %}

@@ -36,21 +36,23 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    # 'livereload', # rechargement automatique de la page web en cas de changement sur les fichiers
+    'livereload', # rechargement automatique de la page web en cas de changement sur les fichiers
     'django.contrib.staticfiles',
     'compressor', # compression des fichiers statiques CSS et JS
     # 'bootstrap5',
     # 'django_feather',
     'crispy_forms',
     'crispy_bootstrap5',
+    'formtools',
     'base_edcp',
     'public',
     'dashboard',
     'connexion',
+    'correspondant',
     'user',
     'enregistrement',
     'demande_auto',
-    'correspondant',
+    # ,
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'livereload.middleware.LiveReloadScript',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'app_edcp.urls'
@@ -107,8 +109,10 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASS')
     }
 }
+
 # version alternative en cad de développement local sans docker
-""" DATABASES = {
+"""
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
@@ -198,15 +202,14 @@ ADMIN_SITE_HEADER = "PROJET e-DCP"
 ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application e-DCP"
 
 """Utilisé pour l'affichage des formulaires avec boostratp"""
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'dashboard:index'
 LOGOUT_REDIRECT_URL = 'public:index'
 
-
 # Gestion des pages 403
 HANDLER403 = 'dashboard.views.custom_permission_denied_view'
-
 
 # configurez les paramètres du serveur SMTP
 # Qwerty@12345#TAZ
@@ -217,4 +220,26 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'info-apdcp@artci.ci')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'jeFs3oq-jycjZr%1sYwfu')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'info-apdcp@artci.ci')
+
+"""
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'info-apdcp@artci.ci'
+EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.office365.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'info-apdcp@artci.ci'
+EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+DEFAULT_FROM_EMAIL = 'info-apdcp@artci.ci'
+"""
+
 

@@ -7,4 +7,6 @@ app_name = 'dashboard'
 urlpatterns = [
     path('', views.index, name='index'),
     path('enregistrement/', include('enregistrement.urls')),
+    path('correspondant/', include('correspondant.urls')),
+    path('user/', include('user.urls')),
 ]
