@@ -42,8 +42,7 @@ services:
 
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
-    ports:
-      - "5436:5432"
+
     networks:
       - default
     environment:

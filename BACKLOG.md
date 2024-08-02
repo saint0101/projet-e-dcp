@@ -5,6 +5,16 @@
 - Ajouter/configurer les validateurs (backend)
 - Ajouter les validateurs côté client (JavaScript)
 
+## Inscription
+
+- Ajouter le recueil du consentement
+- Insérer l'email de l'utilisateur dans le message de confirmation après l'inscription (connexion -> views.py). Penser à masquer les caractères par des **
+
+## Enregistrement
+
+- Ajouter la prise en charge des fichiers à joindre
+- Mettre à jour l'affichage dynamique des champs avec les nouveaux champs (copie RCCM, type de pièce)
+
 ## Désignation du Correspondant
 
 - Ajouter la possibilité pour l'utilisateur de liéer son propre compte s'il est déjà le Correspondant
