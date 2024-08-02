@@ -1,8 +1,21 @@
+<!-- Page d'accueil du tableau de bord -->
 {% extends 'dashboard/base/master.html' %}
 {% load static %}
 
 
 {% block content %}
+
+<!-- Affichage des notifications via Toastr -->
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <script>toastr.{{ message.tags }}('{{ message }}')</script>
+      {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<!-- Bloc enregistrement -->
 <div class="row my-4">
   <div class="col">
     <div class="card custom-card">
@@ -15,12 +28,13 @@
           nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
           reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
         </p>
-        <a href="{% url 'dashboard:enregistrement:index' %}" class="btn btn-danger">Démarrer</a>
+        <a href="{% url 'dashboard:enregistrement:create' %}" class="btn btn-danger">Démarrer</a>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Bloc Correspondants -->
 <div class="row my-4">
   <div class="col-6">
     <div class="card custom-card">
@@ -35,6 +49,7 @@
     </div>
   </div>
 
+  <!-- Bloc Autorisations -->
   <div class="col-6">
     <div class="card custom-card">
       <div class="card-body">

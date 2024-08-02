@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Create your views here.
 
@@ -14,14 +15,16 @@ def index(request):
   """
   user = request.user
 
+  messages.success(request, f'Bienvenue {user} !') # message d'accueil. Utilise le framework de messages de Django.
+
   return render(request, 'dashboard/index.html')
 
 
-
-"""
-Vue qui gère l'affichage de la page 403 en cas de permission refusée
-"""
 def custom_permission_denied_view(request):
+  """
+  Vue qui gère l'affichage de la page 403 en cas de permission refusée.
+  Renvoie la page 403.
+  """
   return render(request, '403.html', context={'message': ''})
 
 

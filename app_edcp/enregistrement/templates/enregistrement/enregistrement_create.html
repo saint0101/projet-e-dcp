@@ -49,7 +49,14 @@
       <div class="card-body">
         <h3 class="card-title mb-5 mt-3">Enregistrer une organisation</h3>
         <div class="card-text">
-          <form method="POST">
+          <p class="custom-text-light mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          </p>
+          <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn btn-primary py-2 text-light" type="submit">Envoyer</button>

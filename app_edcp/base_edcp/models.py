@@ -28,7 +28,6 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
-
     # Méthode pour créer un superutilisateur
     def create_superuser(self, email, password=None, **extra_fields):
         """Créer et retourner un super utilisateur avec un email et un mot de passe"""
@@ -53,7 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de l'application """
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création', null=True)
     username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
-    avatar = models.FileField(upload_to='avatars/', max_length=255, null=True, blank=True, verbose_name='Avatar')
+    avatar = models.ImageField(upload_to='avatars', max_length=255, null=True, blank=True, verbose_name='Avatar')
     nom = models.CharField(max_length=225, verbose_name='Nom')
     prenoms = models.CharField(max_length=255, verbose_name='Prénoms')
     organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation')
@@ -66,13 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
     is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
 
-
-
-    class Meta:
-        """ définir le nom singulier et pluriel du modèle """
-        verbose_name = 'Utilisateur'
-        verbose_name_plural = 'Utilisateurs'
-
     # extenssier la gestionnaire d'utilisateur
     objects = CustomUserManager()
 
@@ -84,12 +76,15 @@ class User(AbstractBaseUser, PermissionsMixin):
             'username',
             'nom',
             'prenoms',
-
         ]
-
+    
+    class Meta:
+        """ définir le nom singulier et pluriel du modèle """
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
 
     def __str__(self):
-        """ les champs a retourner """
+        """ les champs a retourner pour l'affichage d'un objet USER"""
         return self.nom + ' ' + self.prenoms
 
 
@@ -106,21 +101,25 @@ class Enregistrement(models.Model):
     # Lien vers le secteur d'activité
     secteur = models.ForeignKey('Secteur', on_delete=models.CASCADE, null=True, verbose_name='Secteur d\'Activité')
     # secteur_description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur')
-    presentation = models.CharField(max_length=255, null=True, verbose_name='Présentation de l\'activité')
     telephone = models.CharField(max_length=20, null=True, verbose_name='Téléphone')
     email_contact = models.CharField(max_length=100, null=True, verbose_name='Email de Contact')
-    site_web = models.CharField(max_length=100, null=True, verbose_name='Site Web', blank=True)
+    site_web = models.URLField(max_length=100, null=True, verbose_name='Site Web', blank=True)
     # Lien vers le pays
     pays = models.ForeignKey('Pays', on_delete=models.CASCADE, null=True, verbose_name='Pays')
     ville = models.CharField(max_length=100, null=True, verbose_name='Ville')
     adresse_geo = models.CharField(max_length=100, null=True, verbose_name='Adresse Géographique')
     adresse_bp = models.CharField(max_length=100, null=True, verbose_name='Boîte Postale', blank=True)
-    gmaps_link = models.CharField(max_length=255, null=True, verbose_name='Lien Google Maps', blank=True)
+    gmaps_link = models.URLField(max_length=255, null=True, verbose_name='Lien Google Maps', blank=True)
     effectif = models.IntegerField(null=True, verbose_name='Effectif', blank=True)
+    presentation = models.TextField(max_length=255, null=True, verbose_name='Présentation de l\'activité')
     # Champs personne physique
     type_piece = models.ForeignKey('TypePiece', null=True, default='', on_delete=models.CASCADE, verbose_name='Type de pièce d\'identité', blank=True)
     num_piece = models.CharField(max_length=100, null=True, verbose_name='Numéro de la pièce', blank=True)
     has_dpo = models.BooleanField(verbose_name='A désigné un Correspondant', default=False)
+    # Fichiers (pièces justificatives)
+    file_piece = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Pièce d\'identité')
+    file_rccm = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Copie du Registre du Commerce')
+    file_mandat = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Mandat de représentation', help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """

@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('experiences', models.TextField(blank=True, null=True, verbose_name='Experiences et diplômes')),
                 ('is_active', models.BooleanField(default=True, verbose_name='Actif')),
                 ('is_approved', models.BooleanField(default=False, verbose_name='Approuvé')),
-                ('created_by', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='correspondant_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Crée par')),
+                ('created_by', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='created', to=settings.AUTH_USER_MODEL, verbose_name='Crée par')),
                 ('exercice_activite', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='correspondant.exerciceactivite', verbose_name="Exercice de l'activité")),
                 ('organisation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='base_edcp.enregistrement', verbose_name='Organisation')),
                 ('qualifications', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='correspondant.qualificationsdpo', verbose_name='Qualifications du Correspondant')),

@@ -6,7 +6,7 @@
 {% endif %}
 
   <div class="container">
-    <a class="navbar-brand fw-bold text-primary fs-3" href="#">
+    <a class="navbar-brand fw-bold text-primary fs-3" href="{% url 'public:index' %}">
       e-DCP &nbsp;
       {% if request.user.is_authenticated and request.user.is_staff %}
        <span class="fs-6 fw-normal">Manager</span>

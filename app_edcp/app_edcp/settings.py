@@ -127,7 +127,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+""" AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -140,7 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-]
+] """
 
 
 # Internationalization
@@ -174,9 +174,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # other finders..
-    'compressor.finders.CompressorFinder',
+    'compressor.finders.CompressorFinder', 
 )
 
+"""
+Utilisé pour la compilation des fichiers Sass en CSS
+"""
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
@@ -194,11 +197,11 @@ Cela signifie que vous avez un modèle d'utilisateur personnalisé nommé User s
 AUTH_USER_MODEL = 'base_edcp.User'
 
 """
-    Modifiez les informations de la page d'administration
+Modifiez les informations de la page d'administration
 """
 # Personnalisation de l'administration
-ADMIN_SITE_TITLE = "PROJET e-DCP"
-ADMIN_SITE_HEADER = "PROJET e-DCP"
+ADMIN_SITE_TITLE = "Plateforme e-DCP"
+ADMIN_SITE_HEADER = "Plateforme e-DCP"
 ADMIN_INDEX_TITLE = "Bienvenue sur le portail d'administration de l'application e-DCP"
 
 """Utilisé pour l'affichage des formulaires avec boostratp"""
@@ -221,25 +224,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'info-apdcp@artci.ci')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'jeFs3oq-jycjZr%1sYwfu')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'info-apdcp@artci.ci')
 
-"""
-# settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'info-apdcp@artci.ci'
-EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
-
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.office365.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'info-apdcp@artci.ci'
-EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
-DEFAULT_FROM_EMAIL = 'info-apdcp@artci.ci'
-"""
-
+MEDIA_URL = '/uploads/' # URL utilisée pour l'accès aux fichiers. Doit être ajoutée à la liste des URLs
+MEDIA_ROOT = BASE_DIR / 'uploads' # Répertoire de stockage des fichiers
 
