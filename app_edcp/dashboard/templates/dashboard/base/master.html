@@ -6,7 +6,7 @@
 {% comment %} {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %} {% endcomment %}
-    
+
 {% block title %}
     <title>Plateforme e-DCP</title>
 {% endblock %}
@@ -14,6 +14,8 @@
 {% block styles %}
     {% compress css %}
         <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
+        <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+
     {% endcompress %}
 {% endblock %}
 

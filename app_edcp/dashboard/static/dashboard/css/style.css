@@ -1,0 +1,61 @@
+.w-100 {
+  width: 50% !important;
+}
+
+.icon-image {
+  max-width: 100%; /* Assure que l'image s'ajuste à la colonne */
+  height: auto; /* Conserve les proportions de l'image */
+}
+
+.type-block {
+  height: auto; /* Ajuste la hauteur automatiquement */
+  display: flex;
+}
+
+.type-block .col-8 {
+  padding: 1rem; /* Réduit le padding pour ajuster l'espace */
+}
+
+.type-block h5 {
+  font-size: 1.25rem; /* Taille de la police pour le titre */
+  margin-bottom: 0.5rem; /* Réduit l'espace sous le titre */
+}
+
+.type-block p {
+  font-size: 0.875rem; /* Taille de la police pour la description */
+  margin-bottom: 0.5rem; /* Réduit l'espace sous le paragraphe */
+}
+
+.type-block a {
+  margin-top: -5px; /* Réduit l'espace au-dessus du lien */
+}
+
+.icon-image {
+  max-width: 100%; /* Assure que l'image s'ajuste à la colonne */
+  height: auto; /* Conserve les proportions de l'image */
+}
+
+.type-block {
+  height: auto; /* Ajuste la hauteur automatiquement */
+  display: flex;
+}
+
+.type-block .col-8 {
+  padding: 1rem; /* Réduit le padding pour ajuster l'espace */
+}
+
+.type-block h5 {
+  font-size: 1.25rem; /* Taille de la police pour le titre */
+  margin-bottom: 0.5rem; /* Réduit l'espace sous le titre */
+  font-weight: bold; /* Met le titre en gras */
+}
+
+.type-block p {
+  font-size: 0.875rem; /* Taille de la police pour la description */
+  margin-bottom: 0.5rem; /* Réduit l'espace sous le paragraphe */
+  text-align: justify; /* Justifie le texte */
+}
+
+.type-block a {
+  margin-top: 0; /* Réduit l'espace au-dessus du lien */
+}

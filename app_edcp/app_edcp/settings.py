@@ -111,7 +111,8 @@ DATABASES = {
 }
 
 # version alternative en cad de développement local sans docker
-"""DATABASES = {
+"""
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
@@ -120,8 +121,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
     }
-}"""
-
+}
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -210,10 +211,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 LOGIN_REDIRECT_URL = 'dashboard:index'
 LOGOUT_REDIRECT_URL = 'public:index'
 
-
 # Gestion des pages 403
 HANDLER403 = 'dashboard.views.custom_permission_denied_view'
-
 
 # configurez les paramètres du serveur SMTP
 # Qwerty@12345#TAZ
@@ -221,11 +220,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.office365.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'info-apdcp@artci.ci')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'jeFs3oq-jycjZr%1sYwfu')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'info-apdcp@artci.ci')
 
 MEDIA_URL = '/uploads/' # URL utilisée pour l'accès aux fichiers. Doit être ajoutée à la liste des URLs
 MEDIA_ROOT = BASE_DIR / 'uploads' # Répertoire de stockage des fichiers
+

@@ -102,26 +102,7 @@ class EnregDetailView(UserHasAccessMixin, DetailView):
 class EnregUpdateView(UserHasAccessMixin, UpdateView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_update.html'
-
-    # form_class = EnregistrementForm
-    fields = [
-        'typeclient',
-        'raisonsociale',
-        'representant',
-        'secteur',
-        'presentation',
-        'telephone',
-        'email_contact',
-        'site_web',
-        'pays',
-        'ville',
-        'adresse_geo',
-        'adresse_bp',
-        'gmaps_link',
-        'effectif',
-        'type_piece',
-        'num_piece',
-    ]
+    form_class = EnregistrementForm
 
     def get_context_data(self, **kwargs):
         """ Ajoute des données supplémentaires au contexte du template """
