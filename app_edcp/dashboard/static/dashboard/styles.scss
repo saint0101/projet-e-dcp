@@ -172,7 +172,7 @@
   background-color: #EAEEF4;
 }
 
-/******************** Index *********************/
+/******************** Dashboard Index *********************/
 .custom-card{
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
   border: none;
@@ -194,6 +194,18 @@
 
 .custom-card .card-text{
   color: var(--bs-secondary-color);
+}
+
+.dashboard-large-icon{
+  font-size: 5rem;
+}
+
+.dashboard-icon{
+  font-size: 3.5rem;
+}
+
+.row .card-body{
+  padding: 15px 30px 15px 0px;
 }
 
 /******************** Enregistrement *********************/

@@ -13,7 +13,7 @@ MENU_CLIENT = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : 'pencil-square',
+    'icon' : 'building',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -95,7 +95,7 @@ MENU_CLIENT = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : 'journal-text',
+    'icon' : 'patch-check',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -187,7 +187,7 @@ MENU_MGR = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : 'pencil-square',
+    'icon' : 'building',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -276,7 +276,7 @@ MENU_MGR = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : 'journal-text',
+    'icon' : 'patch-check',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
