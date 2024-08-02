@@ -1,30 +1,26 @@
 <div id="sidebar" class="flex-shrink-0 p-3" style="width: 280px;">
-  <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+  {% comment %} <a href="/" class="d-flex align-items-center pb-3 mb-3 border-bottom text-secondary">
+      <i class="bi bi-house-door"></i> &nbsp; <span class="">Tableau de bord</span>
+  </a> {% endcomment %}
 
-    {% if request.user.is_authenticated and request.user.is_staff %}
-      <span class="fw-semibold">Tableau de bord - Manager</span>
-    {% else %}
-      <span class="fw-semibold">Tableau de bord - Client</span>
-    {% endif %}
-  </a>
-
-  <ul class="list-unstyled ps-0">
+  <ul class="list-unstyled ps-0 mt-3">
     {% for elmt in  get_menu %}
-      <li class="mb-1">
+      <li class="mt-3 menu-elmt">
         {% if elmt.type == 'section' %}
         <p>{{ elmt.text }}</p>
         {% endif %}
 
         {% if elmt.type == 'sous-menu' %}
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#{{elmt.id}}-collapse" aria-expanded="true">
-          {{ elmt.text }}
+          <i class="bi bi-{{elmt.icon}} me-2"></i>
+          <span class="sous-menu">{{elmt.text}}</span>
         </button>
         <div class="collapse show" id="{{elmt.id}}-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             {% for item in elmt.items %}
             <li>
               <a href={% url item.url %} class="link-body-emphasis d-inline-flex text-decoration-none rounded">
-                {{ item.text }}
+                <span class="sous-menu-item"> {{ item.text }} </span>
               </a>
             </li>
             {% endfor %}

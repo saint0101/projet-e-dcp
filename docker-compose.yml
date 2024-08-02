@@ -19,8 +19,8 @@ services:
 
     # Commande à exécuter lors du démarrage du conteneur
     # Correction de la commande avec le nom correct 'manage.py'
-    # command: >
-    #  sh -c "python manage.py runserver 0.0.0.0:8088"
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8088"
 
     # definition des variables d'environnement des acces de la bd
     environment:
@@ -38,8 +38,12 @@ services:
     image: postgres:13-alpine
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    networks:
+      - default
     environment:
-      - POSTGRES_DB=edcp_db # nom de la bd
+      - POSTGRES_DB=edcp_db # nom de la bd 7B5e.kZc4d6!Dq
       - POSTGRES_USER=Uroot_edcp # name user of database
       - POSTGRES_PASSWORD=e_dcp@2023#  # password for user of database
       - EMAIL_HOST = 'smtp.office365.com'
@@ -48,7 +52,18 @@ services:
       - EMAIL_HOST_USER = 'info-apdcp@artci.ci'
       - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
 
-
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8880:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin_projet_edcp@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin_edcp@1234#.
+    depends_on:
+      - db
 
 volumes:
   devedcp-db-data:
+
+networks:
+  default:

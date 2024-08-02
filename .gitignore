@@ -1,3 +1,6 @@
+# Fichiers de cache CSS
+app_edcp/staticfiles/CACHE
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -11,6 +14,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+!app_edcp/static/bootstrap/dist
 downloads/
 eggs/
 .eggs/

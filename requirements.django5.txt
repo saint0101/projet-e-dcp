@@ -6,6 +6,7 @@ django-appconf==1.0.6
 django-bootstrap-v5==1.0.11
 django-crispy-forms==2.3
 django-feather==0.3.0
+django-formtools==2.5.1
 django-libsass==0.9
 django-livereload-server==0.5.1
 django_compressor==4.5
@@ -24,3 +25,4 @@ rjsmin==1.2.2
 soupsieve==2.5
 sqlparse==0.5.0
 tornado==6.4.1
+django-formtools

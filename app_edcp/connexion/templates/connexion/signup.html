@@ -1,13 +1,86 @@
 {% extends 'connexion/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block title %}
     <title>Créer un compte</title>
 {% endblock %}
 
+{% block scripts %}
+  <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script>
+{% endblock %}
+
+{% block custom_scripts %}
+<script>
+  $(document).ready(function() {
+    // Select the password field by its name attribute
+    var passwordField = $('input[name="password1"]');
+    var confirmPassword = $('input[name="password2"]');
+    var btnSubmit = $('#btn-submit');
+    // Create the password strength indicator element
+    var strengthIndicator = $('<div id="password-strength" class="mt-2"></div>');
+    var passwordMatch = $('<div id="password-match" class="mt-2 text-danger"></div>');
+    // Append the strength indicator after the password field
+    passwordField.after(strengthIndicator);
+    confirmPassword.after(passwordMatch);
+
+    passwordField.on('input', function() {
+      var password = $(this).val();
+      var strength = calculatePasswordStrength(password);
+      strengthIndicator.text('Force du mot de passe : ' + strength.text).attr('class', strength.class);
+    });
+
+    confirmPassword.on('input', function(){
+      var password1 = passwordField.val();
+      var password2 = confirmPassword.val();
+      if(password1 != password2){
+        passwordMatch.text('Les mots de passe ne correspondent pas.');
+        btnSubmit.prop('disabled', true);
+      }
+      else{
+        passwordMatch.text('');
+        btnSubmit.prop('disabled', false);
+      }
+    });
+
+    function calculatePasswordStrength(password) {
+      var strength = 0;
+      if (password.length >= 6) {
+          strength += 1;
+      }
+      if (password.match(/[A-Z]/)) {
+          strength += 1;
+      }
+      if (password.match(/[a-z]/)) {
+          strength += 1;
+      }
+      if (password.match(/[0-9]/)) {
+          strength += 1;
+      }
+      if (password.match(/[\W_]/)) {
+          strength += 1;
+      }
+      switch (strength) {
+        case 0:
+        case 1:
+            return { text: 'Très faible', class: 'very-weak' };
+        case 2:
+            return { text: 'Faible', class: 'weak' };
+        case 3:
+            return { text: 'Moyenne', class: 'moderate' };
+        case 4:
+            return { text: 'Forte', class: 'strong' };
+        case 5:
+            return { text: 'Très forte', class: 'very-strong' };
+      }
+    }
+  });
+</script>
+{% endblock %}
+
 {% block content %}
 
-<div class="card main-content">
+<div class="card main-content background-accent p-3">
   <div class="card-body">
     <h1 class="text-primary fw-bold py-3">e-DCP</h1>
     <h2 class="h3 mb-3 fw-normal">Créer un compte</h2>
@@ -25,21 +98,33 @@
 
 
     <main class="form-signin w-100 m-auto">
-
-      {% for error in errors.values %}
-        <div class="alert alert-danger" role="alert">
-          {{ error }}
-        </div>
-      {% endfor %}
+      
+        {% if errors %}
+          <ul class="alert alert-danger" role="alert">
+            {% for error in errors.values %}
+              {{ error }}
+            {% endfor %}
+          </ul>
+        {% endif %}
 
       <form method="POST">
         {% csrf_token %}
-
+        {% comment %} {% crispy form %} {% endcomment %}
         {{ form|crispy }}
-
-    
-        <button class="btn btn-primary py-2 text-light" type="submit">S'inscrire</button>
         
+        {% comment %} {% for field in form %}
+          <div class="fieldWrapper">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+              <p class="help" id="{{ field.auto_id }}_helptext">
+                {{ field.help_text|safe }}
+              </p>
+            {% endif %}
+          </div>
+        {% endfor %} {% endcomment %}
+        {% comment %} <div id="password-strength" class="mt-2"></div> {% endcomment %}
+        <button id="btn-submit" class="btn btn-primary text-light px-5" type="submit">S'inscrire</button>
       </form>
     </main>
 

@@ -1,33 +1,23 @@
+{% extends 'base.html' %}
+
 {% load compress %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    
-    {% block title %}
-        <title>Espace utilisateur e-DCP</title>
+{% block title %}
+    <title>Accueil | Plateforme e-DCP</title>
+{% endblock %}
+
+{% block styles %}
+    {% compress css %}
+        <link type="text/x-scss" href="{% static 'public/styles.css' %}" rel="stylesheet" >
+    {% endcompress %}
+{% endblock %}
+
+{% block layout %}
+    {% include "./header.html" %}
+
+    {% block content %}
     {% endblock %}
 
-    {% comment %} {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %} {% endcomment %}
-
-    
-    {% compress css %}
-{% comment %}       <link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen">
- {% endcomment %}      <link type="text/x-scss" href="{% static 'theme-apdcp.scss' %}" rel="stylesheet" media="screen">
-    {% endcompress %}
-
-    <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
-</head>
-<body>
-  {% include "./header.html" %}
-
-  {% block content %}
-  {% endblock %}
-
-  {% include "./footer.html" %}
-</body>
-</html>
+    {% include "./footer.html" %}
+{% endblock %}
