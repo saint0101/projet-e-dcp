@@ -82,13 +82,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     #REQUIRED_FIELDS spécifie les champs supplémentaires requis
     REQUIRED_FIELDS = [
             'username',
-
-            """ 'nom',
+            'nom',
             'prenoms',
-            'organisation',
-            'telephone',
-            'fonction',
-            'consentement', """
+
         ]
 
 

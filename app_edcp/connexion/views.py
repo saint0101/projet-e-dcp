@@ -30,7 +30,6 @@ def signup(request):
     Vue pour l'inscription d'un nouvel utilisateur.
     Les utilisateurs doivent confirmer leur e-mail pour activer leur compte.
     """
-
     context = {}
     if request.method == 'POST':
         # Créer une instance de formulaire avec les données POST
@@ -55,24 +54,22 @@ def signup(request):
             })
 
             """
-            # Debugging
-            print('User id: ', user.pk)
-            print('User: ', user)
-            print('UID (encoded): ', uid)
-            print('Token: ', token)
+                # Debugging
+                print('User id: ', user.pk)
+                print('User: ', user)
+                print('UID (encoded): ', uid)
+                print('Token: ', token)
             """
-
             email_from = settings.EMAIL_HOST_USER  # Adresse e-mail configurée dans settings
             recipient_list = [user.email]
             try:
                 # Envoyer l'e-mail de confirmation
                 send_mail(mail_subject, message, email_from, recipient_list, fail_silently=False)
+                logger.info("Email de confirmation envoyé avec succès.")
                 context['message'] = 'Un e-mail de confirmation a été envoyé à votre adresse e-mail.'
             except Exception as e:
-                print('Test mail 0004441')
-                # Gérer les erreurs d'envoi d'e-mail
                 context['errors'] = str(e)
-                logger.error('Erreur lors de l\'envoi de l\'e-mail: %s', e)
+                logger.error(f"Erreur lors de l'envoi de l'email: {e}")
 
             # Afficher le formulaire de connexion
             form = AuthenticationForm()
@@ -94,12 +91,10 @@ def activate(request, uidb64, token):
     """
     Vue pour activer le compte utilisateur via le lien envoyé par e-mail.
     """
-    # print(f'Activation demandé avec UID: {uidb64} et Token: {token}')
-
     try:
         # Décoder l'ID utilisateur
         uid = urlsafe_base64_decode(uidb64).decode()
-        print(f'UID Décodé: {uid}')
+
         # Trouver l'utilisateur correspondant
         user = User.objects.get(pk=uid)
         print('Utilisateur trouvé:', user)
@@ -111,7 +106,6 @@ def activate(request, uidb64, token):
         # Activer l'utilisateur si le jeton est valide
         user.is_active = True
         user.save()
-        #print('Utilisateur activé:', user)
         return redirect('login')
     else:
         # Afficher une page d'erreur si l'activation échoue

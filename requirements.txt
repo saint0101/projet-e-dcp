@@ -25,3 +25,4 @@ rjsmin==1.2.2
 soupsieve==2.5
 sqlparse==0.5.0
 tornado==6.4.1
+django-formtools
