@@ -11,7 +11,7 @@ from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 from formtools.wizard.views import SessionWizardView
 from .models import Correspondant
-from .forms import DPOFormPage1
+from .forms import DPOFormPage1, UserIsDPOForm
 from base_edcp.models import User, Enregistrement
 from connexion.forms import UserRegistrationForm
 
@@ -93,31 +93,24 @@ def designate(request, org):
     # si le formulaire de création de compte utilisateur a été soumis
     if request.method == 'POST':
         form_page1 = DPOFormPage1(request.POST) # récupération des données du formulaire
-        
-        # si le formulaire est valide
-        if form_page1.is_valid(): 
-            """ new_user = User() # création du compte utilisateur
-            new_user.nom = form_page1.cleaned_data['nom']
-            new_user.prenoms = form_page1.cleaned_data['prenoms']
-            new_user.telephone = form_page1.cleaned_data['telephone']
-            new_user.email = form_page1.cleaned_data['email']
-            # à remplacer par l'ajout d'une méthode random pour le mot de passe.
-            new_user.password = 'pbkdf2_sha256$600000$aM8OOxx8RVXcAA8ISDbNC5$CgJsb4SLOpQgiw8SEGEsO27PR07iW8YSL2kwA6ZVV8o='
-            new_user.is_dpo = True
-            new_user.is_active = True 
-            new_user.email_verified = False
-            new_user.save()
+        form_user_is_dpo = UserIsDPOForm(request.POST)
 
-            user = User.objects.get(email=form_page1.cleaned_data['email']) # récupère le user nouvellement créé pour le lier à la table DPO
-             """
-            
+        # si le formulaire de choix a été soumis et est valide,
+        # l'utilisateur courant fait donc une auto-désignation
+        # le DPO est alors créé avec pour user l'utilisateur courant
+        if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
+            dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user) # création du DPO
+            Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
+
+            return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
+        
+        # si le formulaire de création de compte a été soumis et est valide,
+        # l'utilisateur courant désigne quelqu'un d'autre comme DPO.
+        # le DPO est alors enregistré avec le compte nouvellement créé
+        elif 'submit_designation_form' in request.POST and form_page1.is_valid(): 
             user = create_new_user(form_page1.cleaned_data) # appel de la fonction de création d'un nouvel utilisateur
             # si l'utilisateur a bien été créé
             if user:
-                # dpo = Correspondant()
-                # dpo.user = user
-                # dpo.organisation = organisation
-                # dpo.save()
                 dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user) # création du DPO
                 Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
 
@@ -127,19 +120,23 @@ def designate(request, org):
             else:
                 context['errors'] = 'Une erreur est survenue lors de la creation du Correspondant.'
                 context['form_page1'] = form_page1
+                context['form_user_is_dpo'] = form_user_is_dpo
                 return render(request, 'correspondant/designation.html', context=context)
         
         # si le formulaire de création d'utilisateur n'est pas valide
         else:
             context['errors'] = form_page1.errors # ajout des erreurs du formulaire au contexte
             context['form_page1'] = form_page1 # ajout du formulaire au contexte
+            context['form_user_is_dpo'] = UserIsDPOForm(initial={'user_is_dpo': False}) # ajout du formulaire au contexte
     
     # si le formulaire de création de compte utilisateur n'a pas encore été soumis (la page vient d'être ouverte)
     else:
         form_page1 = DPOFormPage1() # initialisation du formulaire
+        form_user_is_dpo = UserIsDPOForm() # initialisation du formulaire
 
         context['organisation'] = organisation # ajout de l'organisation au contexte
         context['form_page1'] = form_page1 # ajout du formulaire au contexte
+        context['form_user_is_dpo'] = form_user_is_dpo # ajout du formulaire au contexte
 
     return render(request, 'correspondant/designation.html', context=context) # renvoi de la vue
 

@@ -204,7 +204,7 @@
   font-size: 3.5rem;
 }
 
-.row .card-body{
+.row > .card-body{
   padding: 15px 30px 15px 0px;
 }
 
@@ -216,4 +216,8 @@
 .dpo-infos-list li{
   padding: 0;
   border: none;
+}
+
+#div_id_user_is_dpo legend{
+  font-weight: 600;
 }

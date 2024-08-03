@@ -3,7 +3,7 @@
 import re
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
-from django.contrib.auth.models import User
+from base_edcp.models import User
 
 
 def validate_unique_email(value):

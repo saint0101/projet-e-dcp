@@ -49,27 +49,20 @@ class ExerciceActivite(models.Model):
 class Correspondant(models.Model):
     """
     Correspondant à la protection des données
-
-    Lettre de désignation
-    Lettre d'acceptation du correspondant
-    Attestation de travail
-    Casier judiciaire (moins de 3 mois)
-    Certificat de nationalité
-    CV
-  """
-    user = models.OneToOneField(
+    """
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Compte utilisateur',
-        related_name='correspondant_user'
+        related_name='correspondant_profiles'
     )
-    created_by = models.OneToOneField(
+    created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Crée par',
         null=True,
         blank=True,
-        related_name='correspondant_created_by'
+        related_name='has_created'
     )
     organisation = models.ForeignKey(
         Enregistrement,
@@ -126,6 +119,15 @@ class Correspondant(models.Model):
         default=False,
         verbose_name='Approuvé'
     )
+
+    """
+    Lettre de désignation
+    Lettre d'acceptation du correspondant
+    Attestation de travail
+    Casier judiciaire (moins de 3 mois)
+    Certificat de nationalité
+    CV
+    """
 
     class Meta:
         verbose_name = 'Correspondant à la protection des données'

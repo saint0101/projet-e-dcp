@@ -2,6 +2,15 @@ from django import forms
 from .models import Correspondant
 from connexion.forms import UserRegistrationForm
 from base_edcp.models import User, Enregistrement
+from base_edcp import validators
+
+
+class UserIsDPOForm(forms.Form):
+  """
+  Formulaire permettant à l'utilisateur de choisir s'il est lui-même le DPO (auto-désignation)
+  ou de créer un autre compte pour le DPO
+  """
+  user_is_dpo = forms.ChoiceField(label='Êtes-vous le correspondant ?', widget=forms.RadioSelect, choices=((True, 'Oui, je suis le Correspondant désigné'), (False, 'Non, je crée un compte pour le Correspondant')), initial=True, required=False)
 
 
 class DPOFormPage1(forms.Form):
@@ -12,7 +21,9 @@ class DPOFormPage1(forms.Form):
   """
   # user = User()
   # organisation = forms.ModelChoiceField(label='Organisation', queryset=Enregistrement.objects.none())
-  email = forms.EmailField(label='Email')
+  # user_is_dpo = forms.ChoiceField(label='Êtes-vous le correspondant ?', widget=forms.RadioSelect, choices=((True, 'Oui, je suis le Correspondant désigné'), (False, 'Non, je crée un compte pour le Correspondant')), initial=False)
+  
+  email = forms.EmailField(label='Email', validators=[validators.validate_unique_email])
   nom = forms.CharField(label='Nom', max_length=100, strip=True)
   prenoms = forms.CharField(label='Prénoms', max_length=100, strip=True)
   telephone = forms.CharField(label='Téléphone', max_length=100, strip=True)
