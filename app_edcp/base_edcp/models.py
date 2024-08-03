@@ -92,6 +92,7 @@ class Enregistrement(models.Model):
     """ Table enregistrement """
     # Lien vers l'utilisateur
     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Utilisateur')
+    # correspondant = models.ForeignKey('correspondant.Correspondant', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Correspondant')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création')
     # Lien vers le type de client
     typeclient = models.ForeignKey('TypeClient', on_delete=models.CASCADE, null=True, verbose_name='Type de Client')

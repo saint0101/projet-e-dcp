@@ -67,7 +67,8 @@ class Correspondant(models.Model):
     organisation = models.ForeignKey(
         Enregistrement,
         on_delete=models.CASCADE,
-        verbose_name='Organisation'
+        verbose_name='Organisation',
+        related_name='correspondants'
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

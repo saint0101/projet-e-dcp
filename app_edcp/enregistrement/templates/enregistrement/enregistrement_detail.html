@@ -79,6 +79,10 @@
             <i class="bi bi-person fw-bold custom-text-light x-large"></i> &emsp;
             Enregistrement effectué par : <a href="{% url 'dashboard:user:detail' pk=user.id %}"><strong>{{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }}</strong></a>
           </p>
+          <p>
+            <i class="bi bi-person-fill fw-bold custom-text-light x-large"></i> &emsp;
+            Correspondant : <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}"><strong>{{ correspondant }}</strong></a>
+          </p>
         </div>
       </div>
   

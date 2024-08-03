@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from base_edcp.models import Enregistrement, TypeClient
+from correspondant.models import Correspondant
 from .forms import EnregistrementForm
 from dashboard.mixins import UserHasAccessMixin
 
@@ -98,6 +99,18 @@ class EnregDetailView(UserHasAccessMixin, DetailView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_detail.html'
     context_object_name = 'enregistrement'
+
+    def get_context_data(self, **kwargs):
+        """ Ajoute des données supplémentaires au contexte du template """
+        context = super().get_context_data(**kwargs)
+        # Recherche de l'objet TypeClient avec le label "Personne physique"
+        org_id = super().get_object().pk
+        correspondant = Correspondant.objects.filter(organisation=org_id).first()
+        print('correspondant : ', correspondant)
+        # Ajoute l'ID de cet objet au contexte (ou None si non trouvé)
+        context['correspondant'] = correspondant
+        return context
+
 
 class EnregUpdateView(UserHasAccessMixin, UpdateView):
     model = Enregistrement
