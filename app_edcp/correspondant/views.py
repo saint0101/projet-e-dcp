@@ -144,6 +144,7 @@ def designate(request, org):
 class DPOUpdateView(UpdateView):
     model = Correspondant
     fields = [
+        'is_active',
         'qualifications', 
         'exercice_activite', 
         'moyens_materiels', 
@@ -156,6 +157,7 @@ class DPOUpdateView(UpdateView):
         'file_certificat_nationalite',
         'file_cv',
     ]
+    
     template_name = 'correspondant/correspondant_edit.html'
     context_object_name = 'correspondant'
 

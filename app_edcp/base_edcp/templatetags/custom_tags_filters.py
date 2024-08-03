@@ -62,4 +62,8 @@ def get_file_fields(instance):
 
 @register.filter
 def attr(obj, attr_name):
+    """
+    Renvoie la valeur du champ attr_name de l'objet.
+    Utilisé pour l'affichage dynamique des fichiers justificatifs
+    """
     return getattr(obj, attr_name, None)

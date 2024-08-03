@@ -1,5 +1,6 @@
 {% extends 'dashboard/base/master.html' %}
 {% load static %}
+{% load custom_tags_filters %}
 
 
 {% block content %}
@@ -8,9 +9,42 @@
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
-    <div class="col">
-      <h3 class="text-hint mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
+    <h3 class="text-hint mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
+    
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card custom-card">
+          <div class="card-body">
+            <span class="badge text-bg-light custom-text-light me-2">
+              {% if correspondant.is_active %}
+                <i class="bi bi-check-circle-fill"></i> Actif
+              {% endif %}
+
+              {% if not correspondant.is_active %}
+                <i class="bi bi-x-circle-fill"></i> Inactif
+              {% endif %}
+            </span>
+
+            <span class="badge text-bg-light custom-text-light me-2">
+              {% if correspondant.is_approved %}
+                <i class="bi bi-shield-check"></i> Approuvé
+              {% endif %}
+
+              {% if not correspondant.is_approved %}
+                <i class="bi bi-exclamation-circle-fill"></i> En attente d'approbation
+              {% endif %}
+            </span>
+
+            <a href="{% url 'dashboard:correspondant:edit' pk=correspondant.id %}" class="btn btn-success me-2">Modifier</a>
+            {% comment %} <form method="POST" style="display: inline;">
+              {% csrf_token %}
+              <button class="btn btn-danger me-2">Désactiver</button>
+            </form> {% endcomment %}
+          </div>
+        </div>
+      </div>
     </div>
+
     <div class="row">
       <div class="col-6">
         <div class="card custom-card mb-4">
@@ -68,9 +102,12 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Document 1</li>
-              <li class="list-group-item">Document 2</li>
-              <li class="list-group-item">Document 3</li>
+              {% for file_field in correspondant|get_file_fields %}
+                <li class="list-group-item">
+                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                    {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                </li>
+              {% endfor %}
             </ul>
           </div>
         </div>

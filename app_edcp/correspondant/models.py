@@ -123,38 +123,38 @@ class Correspondant(models.Model):
     file_lettre_designation = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='Lettre de désignation')
     
     file_lettre_acceptation = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='Lettre d\'acceptation')
     
     file_attestation_travail = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='Attestation de travail')
     
     file_casier_judiciaire = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='Casier judiciaire',
        help_text='datant de moins de 3 mois')
     
     file_certificat_nationalite = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='Certificat de nationalité')
     
     file_cv = models.FileField(
        null=True, 
        blank=True, 
-       upload_to='correspondant/docs', 
+       upload_to='docs/correspondant', 
        verbose_name='CV')
 
     class Meta:

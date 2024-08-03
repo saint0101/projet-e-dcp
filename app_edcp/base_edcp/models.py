@@ -117,9 +117,9 @@ class Enregistrement(models.Model):
     num_piece = models.CharField(max_length=100, null=True, verbose_name='Numéro de la pièce', blank=True)
     has_dpo = models.BooleanField(verbose_name='A désigné un Correspondant', default=False)
     # Fichiers (pièces justificatives)
-    file_piece = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Pièce d\'identité')
-    file_rccm = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Copie du Registre du Commerce')
-    file_mandat = models.FileField(null=True, blank=True, upload_to='enregistrement/docs', verbose_name='Mandat de représentation', help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
+    file_piece = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Pièce d\'identité')
+    file_rccm = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Copie du Registre du Commerce')
+    file_mandat = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Mandat de représentation', help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
