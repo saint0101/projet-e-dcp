@@ -31,6 +31,8 @@
 - Déplacer la fonction d'envoi de mail dans un base-edcp
 - Envoyer le mot de passe du DPO dans l'email avec le lien de réinitialisation
 - ajouter les vues d'approbation, suppression, désactivation du DPO par le gestionnaire et l'utilisateur
+- ajouter les help_text sur le formulaire de choix
+- ajouter les notifications toast
 
 ## Paramètres
 

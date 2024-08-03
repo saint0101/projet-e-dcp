@@ -56,11 +56,12 @@
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              Copie du Registre du Commerce : <a href="{{ enregistrement.file_piece.url }}"> {{ enregistrement.file_piece.name | get_filename }} </a>
-            </li>
-            <li class="list-group-item">Document 2</li>
-            <li class="list-group-item">Document 3</li>
+            {% for file_field in enregistrement|get_file_fields %}
+              <li class="list-group-item">
+                <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                  {{ enregistrement|attr:file_field.name|get_fileinfos|safe }}
+              </li>
+            {% endfor %}
           </ul>
         </div>
       </div>

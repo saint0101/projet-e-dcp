@@ -12,7 +12,7 @@
         <h3 class="card-title mt-3">Informations sur le correspondant</h3>
         <h5 class="mb-5 custom-text-light">
           <i class="bi bi-building"></i> &emsp; 
-          Organisation : <a href="">{{ organisation }}</a>
+          Organisation : <a href="{% url 'dashboard:enregistrement:detail' pk=correspondant.organisation.id %}">{{ correspondant.organisation }}</a>
         </h5>
         <div class="card-text">
           

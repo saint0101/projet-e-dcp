@@ -143,8 +143,21 @@ def designate(request, org):
 
 class DPOUpdateView(UpdateView):
     model = Correspondant
-    fields = ['qualifications', 'exercice_activite', 'moyens_materiels', 'moyens_humains', 'experiences']
+    fields = [
+        'qualifications', 
+        'exercice_activite', 
+        'moyens_materiels', 
+        'moyens_humains', 
+        'experiences',
+        'file_lettre_designation',
+        'file_lettre_acceptation',
+        'file_attestation_travail',
+        'file_casier_judiciaire',
+        'file_certificat_nationalite',
+        'file_cv',
+    ]
     template_name = 'correspondant/correspondant_edit.html'
+    context_object_name = 'correspondant'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

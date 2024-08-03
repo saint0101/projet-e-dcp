@@ -6,6 +6,7 @@ Utilise la fonction split() avec comme séparateur ' / '.
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.db.models import FileField
 
 register = template.Library()
 
@@ -30,4 +31,35 @@ def get_filename(value):
     Utilisé pour l'affichage des noms de fichiers à partir du chemin fournit en entrée
     Split la chaîne en paramètre et renvoie la dernière occurence (correspondant au nom du fichier)
     """
-    return value.split('/')[-1]
+    if value:
+        return value.split('/')[-1]
+    
+    return ''
+
+
+@register.filter
+def get_fileinfos(value):
+    """
+    Affiche l'URL et le nom du fichier sous forme de lien
+    Le nom du fichier est le dernier élément du path
+    """
+    if value :
+        fileurl = value.url
+        filename = value.name.split('/')[-1]
+        return f'<a href="{fileurl}">{filename}</a>'
+    
+    return '<a href="#">Vide</a>'
+
+
+@register.filter
+def get_file_fields(instance):
+    """
+    Retourne la liste des champs FileField de l'instance.
+    Utilisé pour l'affichage des fichiers justificatifs
+    """
+    return [field for field in instance._meta.get_fields() if isinstance(field, FileField)]
+
+
+@register.filter
+def attr(obj, attr_name):
+    return getattr(obj, attr_name, None)
