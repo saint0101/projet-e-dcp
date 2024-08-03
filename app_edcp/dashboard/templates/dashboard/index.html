@@ -5,16 +5,6 @@
 
 {% block content %}
 
-<!-- Affichage des notifications via Toastr -->
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <script>toastr.{{ message.tags }}('{{ message }}')</script>
-      {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-    {% endfor %}
-  </ul>
-{% endif %}
-
 <!-- Bloc enregistrement -->
 <div class="row my-4">
   <div class="col">

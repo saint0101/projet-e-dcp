@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.db.models import Q
 from django.conf import settings
+from django.contrib import messages
 import os
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
@@ -28,6 +29,26 @@ def index(request):
     }
 
     return render(request, 'correspondant/index.html', context=context)
+
+
+def approve(request, pk, approve):
+    """ Vue d'approbation de correspondant """
+    context = {}
+    correspondant = Correspondant.objects.get(id=pk)
+    if request.user.is_staff: 
+        if approve == 1 :
+            correspondant.is_approved = True
+        
+        if approve == 0 :
+            correspondant.is_approved = False
+
+        correspondant.save()
+    
+    else :
+        messages.error(request, 'Vous n\'avez pas les droits pour effectuer cette action')
+
+    context['correspondant'] = correspondant
+    return render(request, 'correspondant/correspondant_detail.html', context=context)
 
 
 def check_email(email):

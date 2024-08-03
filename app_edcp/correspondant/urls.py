@@ -10,6 +10,7 @@ urlpatterns = [
     path('designation/org=<int:org>/', views.designate, name='designation'),
     path('edit/<int:pk>/', views.DPOUpdateView.as_view(), name='edit'),
     path('edit/<int:pk>/<str:is_new>/', views.DPOUpdateView.as_view(), name='edit'),
+    path('appr/<int:pk>/<int:approve>/', views.approve, name='approve'),
     path('<int:pk>/', views.DPODetailView.as_view(), name='detail'),
     # path('nouveau/', views.EnregCreateView.as_view(), name='create'),
     # path('nouveau/', views.DPOCreateView.as_view(), name='nouveau'),
