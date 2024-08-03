@@ -33,6 +33,7 @@
 - ajouter les vues d'approbation, suppression, désactivation du DPO par le gestionnaire et l'utilisateur
 - ajouter les help_text sur le formulaire de choix
 - ajouter les notifications toast
+- ajouter un champ Correspondant au model Enregistrement
 
 ## Paramètres
 

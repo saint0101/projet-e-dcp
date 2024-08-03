@@ -1,0 +1,122 @@
+<!-- Page d'accueil du tableau de bord -->
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="row mb-4">
+  <div class="col-5">
+    <div class="card custom-card custom-card-dark">
+      <div class="card-header custom-text-light">
+        Organisations enregistrées
+      </div>
+      <div class="card-body">
+        <table class="table table-hover table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Date d'enregitrement</th>
+              <th scope="col">Enregistré par</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for organisation in organisations %}
+              <tr>
+                <td> <a href=""> {{ organisation|truncatechars_html:50 }}</a> </td>
+                <td> {{ organisation.created_at|date:"SHORT_DATE_FORMAT" }} </td>
+                <td> <a href="{% url 'dashboard:user:detail' pk=user.id %}" class="link-secondary"> {{ organisation.user|truncatechars_html:50 }} </a></td>
+                {% comment %} <td> {{ user.email|truncatechars_html:40 }} </td> {% endcomment %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'dashboard:enregistrement:list' %}" class="btn btn-sm btn-outline-primary">Tout afficher</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-7">
+    <div class="card custom-card custom-card-dark">
+      <div class="card-header custom-text-light">
+        Correspondants désignés
+      </div>
+      <div class="card-body">
+        <table class="table table-hover table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Organisation</th>
+              <th scope="col">Date de désignation</th>
+              <th scope="col">Approuvé</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for correspondant in correspondants %}
+              <tr>
+                <td> <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}"> {{ correspondant.user|truncatechars_html:50 }}</a> </td>
+                <td> <a href="{% url 'dashboard:user:detail' pk=user.id %}" class="link-secondary"> {{ correspondant.organisation|truncatechars_html:50 }} </a></td>
+                <td> {{ correspondant.created_at|date:"SHORT_DATE_FORMAT" }} </td>
+                <td>
+                  {% if correspondant.is_approved %}
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  {% else %}
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  {% endif %}
+                </td>
+                {% comment %} <td> {{ user.email|truncatechars_html:40 }} </td> {% endcomment %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'dashboard:correspondant:list' %}" class="btn btn-sm btn-outline-primary">Tout afficher</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col">
+    <div class="card custom-card custom-card-dark">
+      <div class="card-header custom-text-light">
+        Utilisateurs inscrits
+      </div>
+      <div class="card-body">
+        <table class="table table-hover table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Email</th>
+              <th scope="col">Téléphone</th>
+              <th scope="col">Date de d'inscription</th>
+              <th scope="col">Vérifié</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr>
+                <td> <a href="{% url 'dashboard:user:detail' pk=user.id %}"> {{ user|truncatechars_html:50 }}</a> </td>
+                <td> {{ user.email|truncatechars_html:50  }} </td>
+                <td> {{ user.telephone|truncatechars_html:50  }} </td>
+                <td> {{ user.created_at|date:"SHORT_DATE_FORMAT" }} </td>
+                <td>
+                  {% if user.email_verified %}
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                  {% else %}
+                    <i class="bi bi-x-circle-fill text-danger"></i>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <a href="{% url 'dashboard:user:list' %}" class="btn btn-sm btn-outline-primary">Tout afficher</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

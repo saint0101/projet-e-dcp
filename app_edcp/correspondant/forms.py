@@ -10,7 +10,18 @@ class UserIsDPOForm(forms.Form):
   Formulaire permettant à l'utilisateur de choisir s'il est lui-même le DPO (auto-désignation)
   ou de créer un autre compte pour le DPO
   """
-  user_is_dpo = forms.ChoiceField(label='Êtes-vous le correspondant ?', widget=forms.RadioSelect, choices=((True, 'Oui, je suis le Correspondant désigné'), (False, 'Non, je crée un compte pour le Correspondant')), initial=True, required=False)
+  user_is_dpo = forms.ChoiceField(
+    label='Êtes-vous le correspondant ?', 
+    widget=forms.RadioSelect, 
+    choices=(
+      (True, 'Oui, je suis le Correspondant désigné'), 
+      (False, 'Non, je crée un compte pour le Correspondant'),
+      ), 
+    initial=True, 
+    required=False,
+    help_text='''Si vous chosissez "Oui", votre compte utilisateur sera associé à l\'organisation en tant que Correspondant. <br>
+                Si vous chosissez plutôt "Non", vous créerez un compte utilisateur pour le Correspondant à l'étape suivante. Il devra activer son compte en cliquant sur le lien reçu par email.''',
+  )
 
 
 class DPOFormPage1(forms.Form):

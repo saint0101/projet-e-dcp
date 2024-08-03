@@ -36,8 +36,8 @@
               <i class="bi bi-person-circle fw-bold header-menu-icon x-large"></i>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item text-primary" href="#">{{ request.user.nom }}</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item text-primary">{{ request.user }}</a></li>
+              <li><a class="dropdown-item" href="{% url 'dashboard:user:edit' pk=request.user.id %}">Modifier le profil</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>

@@ -71,7 +71,16 @@ a{
   font-size: .9rem;
 }
 
+.form-text{
+  color: $custom-light;
+  margin-top: 0.5rem;
+}
+
 /********************** TABLES **********************/
+
+table{
+  font-size: 0.9rem;
+}
 
 table th{
   font-weight: normal;
@@ -79,8 +88,46 @@ table th{
 }
 
 table td{
-  color: $secondary-text-emphasis !important;
   cursor: pointer;
+}
+
+table.table-dark{
+  padding: 1rem;
+  border-radius: 7px;
+}
+
+/********************** CARDS **********************/
+
+.custom-card{
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+  border: none;
+  /* padding: .5rem 1rem; */
+}
+
+.custom-card .card-header{
+  border: none;
+}
+
+.custom-card-dark .card-header{
+  background-color: rgba($color: #ffffff, $alpha: 0.1);
+}
+
+
+.custom-card .card-body{
+  padding: 2rem;
+}
+
+.custom-card .card-title{
+  font-weight: 600;
+  color: #8f9bb3;
+}
+
+.custom-card .card-text{
+  color: var(--bs-secondary-color);
+}
+
+.custom-card-dark{
+  background-color: $custom-dark;
 }
 
 /********************** TOASTR **********************/

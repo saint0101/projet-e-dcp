@@ -38,17 +38,20 @@ def approve(request, pk, approve):
     if request.user.is_staff: 
         if approve == 1 :
             correspondant.is_approved = True
+            messages.success(request, 'Correspondant approuvé.')
         
         if approve == 0 :
             correspondant.is_approved = False
+            messages.success(request, 'Approbation retirée.')
 
         correspondant.save()
     
     else :
-        messages.error(request, 'Vous n\'avez pas les droits pour effectuer cette action')
+        messages.error(request, 'Vous n\'avez pas les droits pour effectuer cette action.')
 
     context['correspondant'] = correspondant
-    return render(request, 'correspondant/correspondant_detail.html', context=context)
+    # return render(request, 'correspondant/correspondant_detail.html', context=context)
+    return redirect('dashboard:correspondant:detail', pk=correspondant.id)
 
 
 def check_email(email):
