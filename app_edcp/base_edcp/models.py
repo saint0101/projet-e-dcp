@@ -52,18 +52,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de l'application """
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création', null=True)
     username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
-    avatar = models.ImageField(upload_to='avatars', max_length=255, null=True, blank=True, verbose_name='Avatar')
+    avatar = models.ImageField(upload_to='avatars', max_length=255, null=True, blank=True, verbose_name='Avatar', help_text='Photo de profil (facultative)')
     nom = models.CharField(max_length=225, verbose_name='Nom')
     prenoms = models.CharField(max_length=255, verbose_name='Prénoms')
     organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation')
     telephone = models.CharField(max_length=100, null=True, blank=True, verbose_name='Téléphone')
     fonction = models.CharField(max_length=255, null=True, blank=True, verbose_name='Fonction')
-    consentement = models.CharField(max_length=255, null=True, blank=True, verbose_name='Consentement')
     email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
     is_active = models.BooleanField(default=True, verbose_name='Est Actif')
     is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
     is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
+    
+    consentement = models.BooleanField(
+        default=False,
+        verbose_name='Je donne mon consentement', 
+        help_text='''Veuillez cocher cette case pour donner votre consentement : 
+        les données soumises via ce formulaire seront utilisées pour la création 
+        et pour l'accomplissement de vos formalités sur la plateforme e-DCP. 
+        Vos données ne seront traitées que par les agents habilités de l'Autorité de Protection.
+        Vous pouvez à tous moments exercer vos droits exercer à l'adresse ..... ''')
 
     # extenssier la gestionnaire d'utilisateur
     objects = CustomUserManager()

@@ -97,11 +97,14 @@
     <main class="form-signin w-100 m-auto">
       
         {% if errors %}
-          <ul class="alert alert-danger" role="alert">
+          {% comment %} <ul class="alert alert-danger" role="alert">
             {% for error in errors.values %}
               {{ error }}
             {% endfor %}
-          </ul>
+          </ul> {% endcomment %}
+          <div class="alert alert-danger" role="alert">
+            Le formulaire contient des erreurs. Veuillez réessayer.
+          </div>
         {% endif %}
 
       <form method="POST" enctype="multipart/form-data">

@@ -1,0 +1,9 @@
+{% autoescape off %}
+Bonjour {{ correspondant }},
+
+Vous avez été désigné par {{ correspondant.created_by }} comme Correspondant à la protection des données de l'organiation {{ correspondant.organisation }}.
+Vous pouvez cliquer sur <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">ce lien</a> pour afficher les détails.
+
+Merci !
+L'Autorité de Protection
+{% endautoescape %}

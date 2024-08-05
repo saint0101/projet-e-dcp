@@ -3,6 +3,8 @@
 ## Sécurité
 
 - Réactiver les règles de validation des mots de passe dans settings.py avant la mise en production
+- implémenter les groupes et le système de permissions
+- vérifier les expressions régulières utilisées pour la validation des champs : <https://docs.python.org/fr/3/howto/regex.html>
 
 ## Divers
 

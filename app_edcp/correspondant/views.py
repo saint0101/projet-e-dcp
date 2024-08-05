@@ -15,6 +15,7 @@ from .models import Correspondant
 from .forms import DPOFormPage1, UserIsDPOForm
 from base_edcp.models import User, Enregistrement
 from connexion.forms import UserRegistrationForm
+from base_edcp.emails import MAIL_CONTENTS, send_email
 
 # Create your views here.
 
@@ -120,23 +121,32 @@ def designate(request, org):
         form_user_is_dpo = UserIsDPOForm(request.POST)
 
         # si le formulaire de choix a été soumis et est valide,
-        # l'utilisateur courant fait donc une auto-désignation
-        # le DPO est alors créé avec pour user l'utilisateur courant
+        #    l'utilisateur courant fait donc une auto-désignation
+        #    le DPO est alors créé avec pour user l'utilisateur courant
         if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
             dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
-
+            
             return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
         
         # si le formulaire de création de compte a été soumis et est valide,
-        # l'utilisateur courant désigne quelqu'un d'autre comme DPO.
-        # le DPO est alors enregistré avec le compte nouvellement créé
+        #    l'utilisateur courant désigne quelqu'un d'autre comme DPO.
+        #    le DPO est alors enregistré avec le compte nouvellement créé
         elif 'submit_designation_form' in request.POST and form_page1.is_valid(): 
             user = create_new_user(form_page1.cleaned_data) # appel de la fonction de création d'un nouvel utilisateur
             # si l'utilisateur a bien été créé
             if user:
                 dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user) # création du DPO
                 Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
+
+                print(f'DPO {dpo} created')
+                messages.success(request, 'Le Correspondant a bien été enregistré.')
+
+                mail_context = {
+                    'correspondant': dpo,
+                }
+                print('sending email')
+                send_email(request, MAIL_CONTENTS['correspondant_designation_client'], [dpo.user.email, request.user.email], mail_context)
 
                 return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
 

@@ -5,6 +5,10 @@ from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 from base_edcp.models import User
 
+# Documentation pour les expressions régulières :
+# https://docs.python.org/fr/3/howto/regex.html
+
+
 
 def validate_unique_email(value):
   """
@@ -33,8 +37,20 @@ def validate_charfield(value):
     raise ValidationError("Le texte doit avoir une longueur maximum de 100 caractères.")
 
   if len(value)  < 2:
-    raise ValidationError("Le texte est trop court.")
-    
+    raise ValidationError("Le texte est trop court.")  
+  
+
+def validate_no_special_chars(value):
+   """
+   Validationd des champs textuels :
+   - vérifier que le champ ne contient pas de caractères spéciaux
+   - à l'exception des tirets, virgules, points
+   """
+   if re.search(r"[^\w\s,\'\-.]", value):
+      raise ValidationError(
+          'Le texte saisi contient des caractères interdits. Seuls les ".", "," et "-" sont autorisés.',
+          params={'value': value},
+      )
 
 def validate_phone_number(value):
   """
@@ -61,3 +77,12 @@ def validate_image_size(value):
         w, h = get_image_dimensions(value)
     except AttributeError:
         raise ValidationError("Le fichier téléchargé n'est pas une image.")
+
+
+def validate_required_boolfield(value):
+  """
+  Validation des champs booleens :
+  - doit être renseigné
+  """
+  if not value:
+    raise ValidationError("Ce champ est nécessaire pour le traitement de votre demande.")

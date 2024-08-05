@@ -19,11 +19,14 @@
     {% comment %} <h1 id="title" class="title">Inscription</h1> {% endcomment %}
     <p class="mt-4 custom-text-light">
       Connectez-vous avec votre adresse email.<br>
-      Identifiants de test : <br>
+      Si vous venez d'effectuer votre inscription, 
+      assurez-vous d'activer votre compte en cliquant 
+      sur le lien de vérification reçu par email.
+      {% comment %} Identifiants de test : <br>
       <ul>
         <li><small>admin@mail.com / admin</small></li>
         <li><small>guest@mail.com / @dmin09MP</small></li>
-      </ul>  
+      </ul> {% endcomment %}  
     </p>
 
     <main class="form-signin w-100 m-auto">
@@ -32,6 +35,12 @@
         <div class="alert alert-danger" role="alert">
           {{ error }}
         </div>
+      {% endfor %}
+
+      {% for message in messages %}
+      <div class="alert alert-{{message.tags}}" role="alert">
+        {{ message }}
+      </div>
       {% endfor %}
 
       <form method="POST">

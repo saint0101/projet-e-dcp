@@ -1,3 +1,4 @@
+from email import message
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -10,6 +11,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 import logging
 
@@ -50,6 +52,7 @@ def signup(request):
         
         # si le formulaire est valid
         if user_form.is_valid():
+
             # Créer l'utilisateur mais ne pas l'activer encore
             user = user_form.save(commit=False)
             user.is_active = False  # L'utilisateur doit confirmer son e-mail avant activation
@@ -135,8 +138,15 @@ def activate(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         # Activer l'utilisateur si le jeton est valide
         user.is_active = True
+        user.email_verified = True
         user.save()
+        
+        messages.success(request, 'Votre compte a été activé. Vous pouvez à présent vous connecter au tableau de bord')
         return redirect('login')
+        """ form = AuthenticationForm()
+        message = 'Votre compte a été activé. Vous pouvez à présent vous connecter au tableau de bord'
+        context = {'form': form, 'message': message}
+        return render(request, 'registration/login.html', context=context) """
     else:
         # Afficher une page d'erreur si l'activation échoue
         logger.error('Activation échouée ou utilisateur non valide')
