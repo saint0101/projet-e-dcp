@@ -81,7 +81,15 @@
           </p>
           <p>
             <i class="bi bi-person-fill fw-bold custom-text-light x-large"></i> &emsp;
-            Correspondant : <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}"><strong>{{ correspondant }}</strong></a>
+            Correspondant : 
+            {% if correspondant %}
+              <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}"><strong>{{ correspondant }}</strong></a>
+            {% elif not correspondant and not request.user.is_staff %}
+              <a href="{% url 'dashboard:correspondant:designation' org=enregistrement.id %}">Désigner un correspondant</a>
+            {% else %}
+              Pas encore désigné.
+            {% endif %}
+            
           </p>
         </div>
       </div>

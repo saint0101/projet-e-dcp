@@ -3,7 +3,7 @@
 import re
 from django.core.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
-from base_edcp.models import User
+
 
 # Documentation pour les expressions régulières :
 # https://docs.python.org/fr/3/howto/regex.html
@@ -11,6 +11,7 @@ from base_edcp.models import User
 
 
 def validate_unique_email(value):
+  from base_edcp.models import User
   """
   Validation de l'adresse email :
   - ne doit pas être déjà utilisée
@@ -57,7 +58,7 @@ def validate_phone_number(value):
   Validation du numéro de téléphone :
   - doit être au format (+)XXXXXXXXXXX
   """
-  phone_regex = re.compile(r'^\+?1?\d{9,16}$')
+  phone_regex = re.compile(r'^\+?1?\d{6,16}$')
   if not phone_regex.match(value):
     raise ValidationError("Le numéro de téléphone doit être au format: '+999999999'. Jusqu'à 16 chiffres autorisés.")
   
@@ -70,13 +71,24 @@ def validate_image_size(value):
     """
     max_size_kb = 1024  # Example: 1 MB limit
     if value.size > max_size_kb * 1024:
-        raise ValidationError(f"Le fichier dépasse la taille maximale de {max_size_kb} KB.")
+        raise ValidationError(f"Le fichier dépasse la taille maximale de {max_size_kb} Mb.")
     
     # Check if the uploaded file is an image
     try:
         w, h = get_image_dimensions(value)
     except AttributeError:
         raise ValidationError("Le fichier téléchargé n'est pas une image.")
+    
+
+def validate_files(value):
+  """
+  Validation des fichiers :
+  - doit avoir une taille max : 10 Mb
+  - doit avoir une extension correcte.
+  """
+  max_size_mb = 8  # Example: 8 MB limit
+  if value.size > max_size_mb * 1024 * 1024:
+    raise ValidationError(f"Le fichier dépasse la taille maximale de {max_size_mb} KB.")
 
 
 def validate_required_boolfield(value):
@@ -86,3 +98,16 @@ def validate_required_boolfield(value):
   """
   if not value:
     raise ValidationError("Ce champ est nécessaire pour le traitement de votre demande.")
+  
+
+def validate_rccm_idu(value):
+  from base_edcp.models import Enregistrement
+  """
+  Validation du champ RCCM :
+  - doit contenir XX chiffres
+  """
+  if Enregistrement.objects.filter(rccm=value).exists():
+    raise ValidationError("Ce numéro RCCM est déjà utilisé.")
+  
+  if Enregistrement.objects.filter(idu=value).exists():
+    raise ValidationError("Cet identifiant est déjà utilisé.")

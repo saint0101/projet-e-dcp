@@ -17,7 +17,7 @@ class UserRegistrationForm(UserCreationForm):
   # email = forms.EmailField(validators=[validate_unique_email])
   nom = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
   prenoms = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
-  telephone = forms.CharField(required=True, min_length=2, max_length=100, validators=[validators.validate_phone_number], )
+  telephone = forms.CharField(required=True, min_length=2, max_length=100)
   organisation = forms.CharField(required=False, min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
   fonction = forms.CharField(required=False, min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
   avatar = forms.ImageField(required=False, validators=[validators.validate_image_size], help_text='Photo de profil (facultative). Taille limite : 1Mb')

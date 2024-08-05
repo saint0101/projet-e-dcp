@@ -34,6 +34,8 @@
                   <td> {{ enregistrement.typeclient }} </td>
                   <td> {{ enregistrement.secteur }} </td>
                 </tr>
+              {% empty %}
+                <p>Aucune organisation n'a été enregistrée. <a href="{% url 'dashboard:enregistrement:create' %}">Enregistrer une organisation</a></p>
               {% endfor %}
             </tbody>
           </table>

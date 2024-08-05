@@ -1,3 +1,4 @@
+from email import message
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -12,6 +13,8 @@ from dashboard.mixins import UserHasAccessMixin
 
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
+from django.contrib import messages
+from base_edcp.emails import MAIL_CONTENTS, send_email
 
 
 # Vue d'index pour afficher la page d'accueil ou la vue d'enregistrement
@@ -56,15 +59,13 @@ class EnregCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        """ Méthode appelée lorsque le formulaire est valide """
+        # Méthode appelée lorsque le formulaire est valide
         # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
         obj = form.save(commit=False)
-
         # Ajoute l'utilisateur courant comme auteur de l'enregistrement
         obj.user = self.request.user
         # Ajoute la date et l'heure actuelles de création
         obj.created_at = datetime.now()
-
         # Sauvegarde l'objet en appelant la méthode de la classe parente
         response = super().form_valid(form)
         # Définit l'objet sauvegardé pour les actions post-sauvegarde
@@ -73,13 +74,18 @@ class EnregCreateView(CreateView):
         # Ajoute des traitements post-sauvegarde ici si nécessaire
         # Appelle la fonction pour envoyer une notification
         print('Enregistrement sauvegardé : ', obj)
-        send_notification(obj)
-
+        # send_notification(obj)
+        mail_context = {
+            'organisation': obj,
+        }
+        print('sending email')
+        send_email(self.request, MAIL_CONTENTS['enregistrement_new_client'], [obj.email_contact, self.request.user.email], mail_context)
         return response
 
     def get_success_url(self):
         """ URL de redirection après une soumission réussie du formulaire """
         # Redirige vers la vue de détail de l'enregistrement nouvellement créé
+        messages.success(self.request, 'L\'enregistrement a bien été effectué.')
         return reverse('dashboard:enregistrement:detail', kwargs={'pk': self.object.pk})
 
 class EnregListView(ListView):

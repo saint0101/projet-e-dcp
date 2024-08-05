@@ -1,11 +1,14 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import FileExtensionValidator
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
+
+from base_edcp import validators
 
 # Create your models here.
 # Gestionnaire personnalisé pour le modèle d'utilisateur
@@ -50,15 +53,15 @@ class CustomUserManager(BaseUserManager):
     ## - PermissionsMixin: fournit des fonctionnalités liées aux permissions et aux groupes
 class User(AbstractBaseUser, PermissionsMixin):
     """Utilisateur de l'application """
+    email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création', null=True)
     username = models.CharField(max_length=100, blank=True, verbose_name='Nom d\'utilisateur')
     avatar = models.ImageField(upload_to='avatars', max_length=255, null=True, blank=True, verbose_name='Avatar', help_text='Photo de profil (facultative)')
-    nom = models.CharField(max_length=225, verbose_name='Nom')
-    prenoms = models.CharField(max_length=255, verbose_name='Prénoms')
-    organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation')
-    telephone = models.CharField(max_length=100, null=True, blank=True, verbose_name='Téléphone')
-    fonction = models.CharField(max_length=255, null=True, blank=True, verbose_name='Fonction')
-    email = models.EmailField(max_length=255, unique=True, verbose_name='Email')
+    nom = models.CharField(max_length=225, verbose_name='Nom', validators=[validators.validate_charfield, validators.validate_no_special_chars])
+    prenoms = models.CharField(max_length=255, verbose_name='Prénoms', validators=[validators.validate_charfield, validators.validate_no_special_chars])
+    organisation = models.CharField(max_length=255, null=True, blank=True, verbose_name='Organisation', validators=[validators.validate_charfield, validators.validate_no_special_chars])
+    telephone = models.CharField(max_length=100, null=True, blank=True, verbose_name='Téléphone', validators=[validators.validate_charfield, validators.validate_no_special_chars])
+    fonction = models.CharField(max_length=255, null=True, blank=True, verbose_name='Fonction', validators=[validators.validate_charfield, validators.validate_no_special_chars])
     is_active = models.BooleanField(default=True, verbose_name='Est Actif')
     is_staff = models.BooleanField(default=False, verbose_name='Est Membre du Personnel')
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
@@ -99,36 +102,159 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Enregistrement(models.Model):
     """ Table enregistrement """
     # Lien vers l'utilisateur
-    user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Utilisateur')
+    user = models.ForeignKey(
+        'User', 
+        on_delete=models.CASCADE, 
+        verbose_name='Utilisateur'
+    )
     # correspondant = models.ForeignKey('correspondant.Correspondant', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Correspondant')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création')
+    created_at = models.DateTimeField(
+        auto_now_add=True, 
+        verbose_name='Date de Création'
+    )
     # Lien vers le type de client
-    typeclient = models.ForeignKey('TypeClient', on_delete=models.CASCADE, null=True, verbose_name='Type de Client')
-    raisonsociale = models.CharField(max_length=100, verbose_name='Nom ou Raison Sociale', blank=True)
-    representant = models.CharField(max_length=100, verbose_name='Représentant légal', blank=True)
-    rccm = models.CharField(max_length=100, null=True, verbose_name='Numéro RCCM', blank=True)
+    typeclient = models.ForeignKey(
+        'TypeClient', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        verbose_name='Type de Client'
+    )
+    raisonsociale = models.CharField(
+        max_length=100, 
+        verbose_name='Nom ou Raison Sociale',  
+        validators=[validators.validate_charfield, validators.validate_no_special_chars],
+        help_text='Nom de la personne physique ou de l\'organisation à enregistrer'
+    )
+    idu = models.CharField(
+        max_length=100, 
+        null=True, 
+        blank=True, 
+        verbose_name='Numéro d\'IDentifiant Unique'
+    )
+    representant = models.CharField(
+        max_length=100, 
+        verbose_name='Nom du représentant légal', 
+        blank=True
+    )
+    rccm = models.CharField(
+        max_length=100, 
+        null=True, 
+        blank=True,
+        validators=[validators.validate_charfield, validators.validate_no_special_chars, validators.validate_rccm_idu],
+        verbose_name='Numéro RCCM'
+    )
     # Lien vers le secteur d'activité
-    secteur = models.ForeignKey('Secteur', on_delete=models.CASCADE, null=True, verbose_name='Secteur d\'Activité')
+    secteur = models.ForeignKey(
+        'Secteur', 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        verbose_name='Secteur d\'Activité'
+    )
     # secteur_description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur')
-    telephone = models.CharField(max_length=20, null=True, verbose_name='Téléphone')
-    email_contact = models.CharField(max_length=100, null=True, verbose_name='Email de Contact')
-    site_web = models.URLField(max_length=100, null=True, verbose_name='Site Web', blank=True)
-    # Lien vers le pays
-    pays = models.ForeignKey('Pays', on_delete=models.CASCADE, null=True, verbose_name='Pays')
-    ville = models.CharField(max_length=100, null=True, verbose_name='Ville')
-    adresse_geo = models.CharField(max_length=100, null=True, verbose_name='Adresse Géographique')
-    adresse_bp = models.CharField(max_length=100, null=True, verbose_name='Boîte Postale', blank=True)
-    gmaps_link = models.URLField(max_length=255, null=True, verbose_name='Lien Google Maps', blank=True)
-    effectif = models.IntegerField(null=True, verbose_name='Effectif', blank=True)
-    presentation = models.TextField(max_length=255, null=True, verbose_name='Présentation de l\'activité')
+    telephone = models.CharField(
+        max_length=20, 
+        null=True, 
+        blank=True,
+        verbose_name='Téléphone',
+        # validators=[validators.validate_phone_number]
+    )
+    email_contact = models.EmailField(
+        max_length=100, 
+        null=True, 
+        verbose_name='Email de Contact'
+    )
+    site_web = models.URLField(
+        max_length=100, 
+        null=True, 
+        verbose_name='Site Web', 
+        blank=True
+    )
+    pays = models.ForeignKey(
+        'Pays', 
+        on_delete=models.CASCADE,
+        null=True, 
+        verbose_name='Pays'
+    )
+    ville = models.CharField(
+        max_length=100, 
+        null=True, 
+        validators=[validators.validate_charfield, validators.validate_no_special_chars],
+        verbose_name='Ville'
+    )
+    adresse_geo = models.CharField(
+        max_length=100, 
+        null=True, 
+        blank=True,
+        validators=[validators.validate_charfield, validators.validate_no_special_chars],
+        verbose_name='Adresse Géographique'
+    )
+    adresse_bp = models.CharField(
+        max_length=100, 
+        null=True, 
+        verbose_name='Boîte Postale', 
+        blank=True
+    )
+    gmaps_link = models.URLField(
+        max_length=255, 
+        null=True, 
+        verbose_name='Lien Google Maps', 
+        blank=True
+    )
+    effectif = models.IntegerField(
+        null=True, 
+        verbose_name='Effectif', 
+        blank=True
+    )
+    presentation = models.TextField(
+        max_length=255, 
+        null=True, 
+        blank=True,
+        verbose_name='Présentation de l\'activité'
+    )
     # Champs personne physique
-    type_piece = models.ForeignKey('TypePiece', null=True, default='', on_delete=models.CASCADE, verbose_name='Type de pièce d\'identité', blank=True)
-    num_piece = models.CharField(max_length=100, null=True, verbose_name='Numéro de la pièce', blank=True)
-    has_dpo = models.BooleanField(verbose_name='A désigné un Correspondant', default=False)
+    type_piece = models.ForeignKey(
+        'TypePiece', 
+        null=True, 
+        default='', 
+        on_delete=models.CASCADE, 
+        verbose_name='Type de pièce d\'identité', 
+        blank=True
+    )
+    num_piece = models.CharField(
+        max_length=100, 
+        null=True, 
+        verbose_name='Numéro de la pièce', 
+        blank=True
+    )
+    has_dpo = models.BooleanField(
+        verbose_name='A désigné un Correspondant', 
+        default=False
+    )
     # Fichiers (pièces justificatives)
-    file_piece = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Pièce d\'identité')
-    file_rccm = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Copie du Registre du Commerce')
-    file_mandat = models.FileField(null=True, blank=True, upload_to='docs/enregistrement', verbose_name='Mandat de représentation', help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
+    file_piece = models.FileField(
+        null=True, 
+        blank=True, 
+        upload_to='docs/enregistrement', 
+        verbose_name='Pièce d\'identité', 
+        validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+        help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
+    )
+    file_rccm = models.FileField(
+        null=True, 
+        blank=True, 
+        upload_to='docs/enregistrement', 
+        verbose_name='Copie du Registre du Commerce', 
+        validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+        help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
+    )
+    file_mandat = models.FileField(
+        null=True, 
+        blank=True, 
+        upload_to='docs/enregistrement', 
+        verbose_name='Mandat de représentation', 
+        validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+        help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """

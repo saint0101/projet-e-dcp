@@ -1,13 +1,15 @@
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 
 
 MAIL_CONTENTS = {
-  'enregistrement_new': {
+  'enregistrement_new_client': {
     'subject': 'Enregistrement effectué',
-    'template': 'emails/enregistrement_new.html'
+    'template': 'emails/enregistrement/enregistrement_new.html'
   },
   'correspondant_designation_client': {
     'subject': 'Désignation de Correspondant',
@@ -21,12 +23,23 @@ MAIL_CONTENTS = {
 
 def send_email(request, mail_content, recipient_list, context):
   email_from = settings.EMAIL_HOST_USER 
+  current_site = get_current_site(request)
+  context['domain'] = "http://" + current_site.domain
+
   print('EMAIL from : ', email_from)
-  message = render_to_string(mail_content['template'], context)
-  print('EMAIL message : ', message)
+  html_message = render_to_string(mail_content['template'], context)
+  text_message = strip_tags(html_message)
+  print('EMAIL message : ', text_message)
   
   try:
-    send_mail(mail_content['subject'], message, email_from, recipient_list, fail_silently=False)
+    send_mail(
+      subject=mail_content['subject'], 
+      message=text_message,
+      html_message=html_message, 
+      from_email=email_from, 
+      recipient_list=recipient_list, 
+      fail_silently=False
+    )
     print('EMAIL envoyé')
     messages.success(request, 'Un email de confirmation vous a été envoyé.')
 
