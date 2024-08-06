@@ -16,8 +16,6 @@ def index(request):
 
   return render(request, 'dashboard/index.html')
 
-
-
 """
 Vue qui gère l'affichage de la page 403 en cas de permission refusée
 """

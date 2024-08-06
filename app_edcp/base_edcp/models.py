@@ -66,8 +66,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
     is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
 
-
-
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
         verbose_name = 'Utilisateur'
