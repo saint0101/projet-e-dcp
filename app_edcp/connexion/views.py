@@ -12,6 +12,8 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
+from django.urls import reverse_lazy
 
 import logging
 
@@ -151,3 +153,48 @@ def activate(request, uidb64, token):
         # Afficher une page d'erreur si l'activation échoue
         logger.error('Activation échouée ou utilisateur non valide')
         return render(request, 'connexion/activation_invalid.html')
+    
+
+class Login(LoginView):
+    template_name = 'registration/login_form.html'
+    success_url = reverse_lazy('dashboard:index')
+
+    
+    """ def get(self, request, *args, **kwargs):
+        must_reset = self.kwargs.get('must_reset')
+        if must_reset == 1:
+            self.success_url = reverse_lazy('connexion:password_change')
+        return super().get(request, *args, **kwargs) """
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Bienvenue {self.request.user} !')
+        return response
+
+    """ def get_success_url(self):
+        reset_param = self.kwargs.get('reset_param')
+        if reset_param == 'reset':
+            return redirect('connexion:password_change') """
+
+
+class Logout(LogoutView):
+    pass
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Bienvenue {self.request.user} !')
+        return response
+
+
+class PasswordChange(PasswordChangeView):
+    template_name = 'registration/password_change.html'
+    success_url = reverse_lazy('dashboard:user:index')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = User.objects.get(pk=self.request.user.id)
+        user.must_reset = False
+        user.email_verified = True
+        user.save()
+        messages.success(self.request, 'Votre mot de passe a été mis à jour.')
+        return response

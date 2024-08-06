@@ -1,5 +1,7 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from base_edcp.models import User, Enregistrement
+from base_edcp import validators
 
 
 class TypeDPO(models.Model):
@@ -112,6 +114,10 @@ class Correspondant(models.Model):
         blank=True,
         verbose_name='Experiences et diplômes'
     )
+    profile_completed = models.BooleanField(
+        default=False,
+        verbose_name='Profil complet'
+    )
     is_active = models.BooleanField(
         default=True,
         verbose_name='Actif'
@@ -125,18 +131,24 @@ class Correspondant(models.Model):
        null=True, 
        blank=True, 
        upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='Lettre de désignation')
     
     file_lettre_acceptation = models.FileField(
        null=True, 
        blank=True, 
        upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='Lettre d\'acceptation')
     
     file_attestation_travail = models.FileField(
        null=True, 
        blank=True, 
        upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='Attestation de travail')
     
     file_casier_judiciaire = models.FileField(
@@ -144,18 +156,23 @@ class Correspondant(models.Model):
        blank=True, 
        upload_to='docs/correspondant', 
        verbose_name='Casier judiciaire',
-       help_text='datant de moins de 3 mois')
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.')
     
     file_certificat_nationalite = models.FileField(
        null=True, 
        blank=True, 
        upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='Certificat de nationalité')
     
     file_cv = models.FileField(
        null=True, 
        blank=True, 
        upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='CV')
 
     class Meta:
@@ -163,4 +180,4 @@ class Correspondant(models.Model):
         verbose_name_plural = 'Correspondants à la protection des données'
 
     def __str__(self):
-        return f"{self.user.nom} ({self.user.prenoms})"
+        return f"{self.user.nom} {self.user.prenoms}"

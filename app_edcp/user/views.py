@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib import messages
@@ -9,7 +9,9 @@ from base_edcp.models import User
 # user/views.py
 def index(request):
     """ Vue index user """
-    return render(request, 'user/index.html')
+    id = request.user.id
+    # return render(request, 'user/index.html')
+    return redirect('dashboard:user:detail', pk=id)
 
 
 class UserListView(ListView):

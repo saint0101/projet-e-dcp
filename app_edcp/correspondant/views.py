@@ -1,8 +1,10 @@
 from multiprocessing import context
+import secrets
 from traceback import format_list
+from django.forms import BaseModelForm
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.db.models import Q
 from django.conf import settings
@@ -15,6 +17,7 @@ from .models import Correspondant
 from .forms import DPOFormPage1, UserIsDPOForm
 from base_edcp.models import User, Enregistrement
 from connexion.forms import UserRegistrationForm
+from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
 
 # Create your views here.
@@ -55,54 +58,15 @@ def approve(request, pk, approve):
     return redirect('dashboard:correspondant:detail', pk=correspondant.id)
 
 
-def check_email(email):
-    """
-    Fonction de vérification de l'existence d'un email dans la base de données
-    Returns : objet JSON
-    """
-    # si l'utilisateur avec l'email fourni en paramètre existe dans la BD
-    if User.objects.filter(email=email).exists():
-        print(f'email found : {email}')
-        # récupération de l'utilisateur
-        user=User.objects.get(email=email)
-        print(f'user : {user}')
-        print(f'is_dpo : {user.is_dpo}')
-
-        # renvoi de l'objet JSON
-        return JsonResponse({
-            'email_exists': True, 
-            'is_dpo': user.is_dpo
-            })
-    # renvoi de l'objet JSON si l'email n'existe pas
-    print(f'email not found : {email}')
-    return JsonResponse({'email_exists': False})
-
-
-def create_new_user(data):
-    """
-    Fonction de création d'un nouvel utilisateur.
-    Crée un mot de passe aléatoire par défaut.
-    """
-    # à remplacer par l'ajout d'une méthode random pour le mot de passe.
-    random_password = 'pbkdf2_sha256$600000$aM8OOxx8RVXcAA8ISDbNC5$CgJsb4SLOpQgiw8SEGEsO27PR07iW8YSL2kwA6ZVV8o='
-    # Création d'un nouvel utilisateur
-    new_user = User.objects.create_user(
-        nom=data['nom'], 
-        prenoms=data['prenoms'], 
-        telephone=data['telephone'], 
-        email=data['email'], 
-        password=random_password, 
-        is_dpo=True, is_active=True, 
-        email_verified=False)
-
-    return new_user
-
+""" def generate_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789$;?.,/:<>&@)([]\{\}'):
+    return ''.join(secrets.choice(allowed_chars) for i in range(length))
+ """
 
 def designate(request, org):
     """
     Vue de désignation du DPO.
     Renvoie un premier formulaire pour la création du compte utilisateur du DPO,
-    puis redirige vers la vue UpdateView pour l'édtion du DPO créé
+    puis redirige vers la vue UpdateView pour l'édition du DPO créé
     """
     context = {}
     organisation = Enregistrement.objects.get(id=org) # récupération de l'organisation pour laquelle le DPO va être désigné
@@ -126,27 +90,40 @@ def designate(request, org):
         if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
             dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
-            
+            messages.success(request, 'Le Correspondant a bien été créé.')
             return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
         
         # si le formulaire de création de compte a été soumis et est valide,
         #    l'utilisateur courant désigne quelqu'un d'autre comme DPO.
         #    le DPO est alors enregistré avec le compte nouvellement créé
         elif 'submit_designation_form' in request.POST and form_page1.is_valid(): 
-            user = create_new_user(form_page1.cleaned_data) # appel de la fonction de création d'un nouvel utilisateur
+            user, password = create_new_user(form_page1.cleaned_data) # appel de la fonction de création d'un nouvel utilisateur
             # si l'utilisateur a bien été créé
             if user:
+                print(f'Password check : {password}')
+                # envoi du mail de notification à l'utilisateur nouvellement créé
+                send_email(
+                    request=request,
+                    mail_content=MAIL_CONTENTS['correspondant_new_compte'],
+                    recipient_list=[user.email],
+                    show_message=False,
+                    context={
+                        'user': user,
+                        'organisation': organisation,
+                        'password': password
+                    },
+                )
                 dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user) # création du DPO
                 Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
 
                 print(f'DPO {dpo} created')
-                messages.success(request, 'Le Correspondant a bien été enregistré.')
+                messages.success(request, 'Le Correspondant a bien été créé.')
 
-                mail_context = {
+                """ mail_context = {
                     'correspondant': dpo,
                 }
-                print('sending email')
-                send_email(request, MAIL_CONTENTS['correspondant_designation_client'], [dpo.user.email, request.user.email], mail_context)
+                send_email(request, MAIL_CONTENTS['correspondant_designation_client'], [dpo.user.email, request.user.email], mail_context) 
+                """
 
                 return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
 
@@ -194,6 +171,24 @@ class DPOUpdateView(UpdateView):
     
     template_name = 'correspondant/correspondant_edit.html'
     context_object_name = 'correspondant'
+    
+    def form_valid(self, form):
+        """Méthode appelée lorsque le formulaire est valide"""
+        obj = form.save(commit=False) # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
+        obj.profile_completed = True # 
+        response = super().form_valid(form) # Sauvegarde l'objet en appelant la méthode de la classe parente
+        self.object = obj # Définit l'objet sauvegardé pour les actions post-sauvegarde
+        
+        messages.success(self.request, 'Informations enregistrées avec succès.')
+
+        # s'il s'agit d'une nouvelle désignation de correspondant
+        if self.kwargs.get('is_new'):
+            mail_context = {
+                'correspondant': obj,
+            }
+            send_email(self.request, MAIL_CONTENTS['correspondant_designation_client'], [obj.user.email, self.request.user.email], mail_context)
+        return response
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

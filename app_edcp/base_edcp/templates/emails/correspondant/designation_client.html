@@ -1,9 +1,12 @@
-{% autoescape off %}
-Bonjour {{ correspondant }},
+{% extends '../base.html' %}
 
-Vous avez été désigné par {{ correspondant.created_by }} comme Correspondant à la protection des données de l'organiation {{ correspondant.organisation }}.
-Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">ce lien</a> pour afficher les détails.
-
-Merci !
-L'Autorité de Protection
-{% endautoescape %}
+{% block content %}
+  Bonjour,
+  <br><br>
+  La désignation de <strong>{{correspondant}}</strong> comme Correspondant à la protection des données de l'organiation <strong>"{{ correspondant.organisation }}"</strong>, par <strong>{{ correspondant.created_by }}</strong> a bien été enregistrée.
+  <br>
+  Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">ce lien</a> pour afficher les détails.
+  <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

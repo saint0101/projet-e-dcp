@@ -19,7 +19,10 @@ def index(request):
   #user = request.user
   # Récupération des types d'autorisation depuis la base de données
   # types_demandes = models.TypeDemandeAutorisation.objects.all()
-  
+  if request.user.must_reset:
+    messages.info(request, 'Vous devez réinitialiser votre mot de passe.')
+    return redirect('connexion:password_change')
+
   if not request.user.is_staff:
     return render(request, 'dashboard/index.html')
   

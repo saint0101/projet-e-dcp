@@ -64,13 +64,7 @@
             </div>
           {% endfor %}
 
-          <div id="email-not-available" class="alert alert-danger" role="alert" style="display: none;">
-            Cette adresse email est déjà utilisée, veuillez en sélectionner une autre.
-          </div>
-
-          <div id="email-available" class="alert alert-success" role="alert" style="display: none;">
-            Adresse disponible
-          </div>
+          
 
           <p class="text-secondary mb-4"> Etape 1/2 : Création du compte utilisateur du Correspondant
           </p>
@@ -80,6 +74,14 @@
             {{ form_user_is_dpo | crispy }}
             <button id="btn-submit-is-dpo" name="submit_user_is_dpo_form" class="btn btn-primary py-2" type="submit" style="display: none;">Poursuivre</button>
           </form>
+          
+          <div id="email-not-available" class="alert alert-danger" role="alert" style="display: none;">
+            Cette adresse email est déjà utilisée, veuillez en sélectionner une autre.
+          </div>
+
+          <div id="email-available" class="alert alert-success" role="alert" style="display: none;">
+            Adresse disponible
+          </div>
           
           <form method="post" id="designation-form" style="display: none;">
             {% csrf_token %}

@@ -43,8 +43,20 @@
     </style>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <div class="email-container">
+        <div class="header">
+            {% block header %}
+                <h1>Cet email est envoyé depuis la plateforme e-DCP</h1>
+            {% endblock %}
+        </div>
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="footer">
+            &copy; Autorité de Régulation des Télécommunications / TICs de Côte d'Ivoire.
+        </div>
+      </div>
 </body>
 </html>
 {% endautoescape %}
