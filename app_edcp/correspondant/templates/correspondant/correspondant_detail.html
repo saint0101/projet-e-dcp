@@ -37,10 +37,20 @@
 
             {% if request.user.is_staff %}
               {% if not correspondant.is_approved %}
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" class="btn btn-primary me-2">Approuver</a>
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" class="btn btn-danger me-2">Refuser</a>
+                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
+                  class="btn btn-primary me-2" onclick="openLoader()">
+                  Approuver
+                </a>
+
+                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" 
+                  class="btn btn-danger me-2" onclick="openLoader()">
+                  Refuser
+                </a>
               {% else %}
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=0 %}" class="btn btn-danger me-2">Retirer l'approbation</a>
+                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=0 %}" 
+                  class="btn btn-danger me-2" onclick="openLoader()">
+                  Retirer l'approbation
+                </a>
               {% endif %}
             {% else %}
               <a href="{% url 'dashboard:correspondant:edit' pk=correspondant.id %}" class="btn btn-success me-2">Modifier</a>

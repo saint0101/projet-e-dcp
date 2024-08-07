@@ -54,6 +54,21 @@
     }
   </script>
 
+  <script>
+    function openLoader() {
+      document.getElementById("loadingModal").style.display = "block";
+    }
+
+    /*const linkLoader = document.querySelector(".link-loader");
+    linkLoader.addEventListener("click", (event) => {
+      openLoader();
+    });*/
+  </script>
+
+  <div id="loadingModal" class="spinner-border text-primary" role="status" style="display: none;">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
+
   {% block layout %}
   {% endblock %}
 

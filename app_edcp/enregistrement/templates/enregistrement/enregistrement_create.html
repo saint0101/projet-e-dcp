@@ -86,7 +86,7 @@
             </div>
           {% endif %}
 
-          <form method="POST" enctype="multipart/form-data">
+          <form method="POST" enctype="multipart/form-data" onsubmit="openLoader()">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn btn-primary py-2 text-light" type="submit">Envoyer</button>

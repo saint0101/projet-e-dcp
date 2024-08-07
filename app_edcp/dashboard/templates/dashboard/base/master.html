@@ -15,7 +15,6 @@
     {% compress css %}
         <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
         <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
-
     {% endcompress %}
 {% endblock %}
 
@@ -25,6 +24,8 @@
 
 {% block custom_scripts %}
 {% endblock %}
+
+
 
 
 {% block layout %}
@@ -50,6 +51,7 @@
                 {% endfor %}
                 </ul>
             {% endif %}
+
 
             {% block content %}
             {% endblock %}

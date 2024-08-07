@@ -107,7 +107,7 @@
           </div>
         {% endif %}
 
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data" onsubmit="openLoader()">
         {% csrf_token %}
         {% comment %} {% crispy form %} {% endcomment %}
         {{ form|crispy }}

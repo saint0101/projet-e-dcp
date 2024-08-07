@@ -83,7 +83,7 @@
             Adresse disponible
           </div>
           
-          <form method="post" id="designation-form" style="display: none;">
+          <form method="post" id="designation-form" style="display: none;" onsubmit="openLoader()">
             {% csrf_token %}
             {{ form_page1 | crispy }}
             <button id="btn-submit-designation" name="submit_designation_form" class="btn btn-primary py-2" type="submit">Envoyer</button>

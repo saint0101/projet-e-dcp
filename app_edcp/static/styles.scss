@@ -167,3 +167,12 @@ table.table-dark{
 .toast-error{
   background-color: $danger;
 }
+
+#loadingModal{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 4rem;
+  height: 4rem;
+  z-index: 1000;
+}
