@@ -12,6 +12,7 @@ class CorrespondantAdmin(admin.ModelAdmin):
     list_display = ['user', 'organisation', 'created_at', 'created_by', 'type_dpo', 'is_active', 'is_approved']
     # search_fields = ['user__nom', 'user__prenoms', 'organisation__nom']  # Ajoute un champ de recherche
     # list_filter = ['is_active', 'is_approved', 'type_dpo', 'organisation']  # Ajoute des filtres
+    readonly_fields = ('created_at',)  # Le champ 'created_at' est en lecture seule
 
     # Configuration des champs dans le formulaire d'édition
     """ fieldsets = (
@@ -23,8 +24,7 @@ class CorrespondantAdmin(admin.ModelAdmin):
             'classes': ('collapse',),  # Ajoute un accordéon pour les informations complémentaires
         }),
     ) """
-    readonly_fields = ('created_at',)  # Le champ 'created_at' est en lecture seule
-
+    
     """ def has_add_permission(self, request):
         # Optionnel : empêcher l'ajout de nouveaux correspondants via l'admin
         return False

@@ -7,10 +7,10 @@ app_name = 'correspondant'
 urlpatterns = [
     path('', views.index, name='index'), # affichage de l'ensemble des organisations enregistrées par l'utilisateur en précisant celles qui ont des DPO
     path('liste/', views.DPOListView.as_view(), name='list'), # affichage de la liste des DPO (pour le gestionnaire)
-    path('designation/org=<int:org>/', views.designate, name='designation'),
-    path('edit/<int:pk>/', views.DPOUpdateView.as_view(), name='edit'),
-    path('edit/<int:pk>/<str:is_new>/', views.DPOUpdateView.as_view(), name='edit'),
-    path('appr/<int:pk>/<int:approve>/', views.approve, name='approve'),
+    path('designation/org=<int:org>/', views.designate, name='designation'), # page de désignation d'un DPO (page 1)
+    path('edit/<int:pk>/', views.DPOUpdateView.as_view(), name='edit'), # page d'édition du DPO
+    path('edit/<int:pk>/<str:is_new>/', views.DPOUpdateView.as_view(), name='edit'), # page d'édition du DPO après la désignation (page 2)
+    path('appr/<int:pk>/<int:approve>/', views.approve, name='approve'), # approbation ou refus du DPO
     path('<int:pk>/', views.DPODetailView.as_view(), name='detail'),
     # path('nouveau/', views.EnregCreateView.as_view(), name='create'),
     # path('nouveau/', views.DPOCreateView.as_view(), name='nouveau'),

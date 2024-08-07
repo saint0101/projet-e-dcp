@@ -8,7 +8,7 @@ from base_edcp.models import User
 
 # user/views.py
 def index(request):
-    """ Vue index user """
+    """ Vue index user. Redirige vers la page de déatil de l'utilisateur"""
     id = request.user.id
     # return render(request, 'user/index.html')
     return redirect('dashboard:user:detail', pk=id)

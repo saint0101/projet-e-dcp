@@ -19,17 +19,21 @@ def index(request):
   #user = request.user
   # Récupération des types d'autorisation depuis la base de données
   # types_demandes = models.TypeDemandeAutorisation.objects.all()
+
+  # Si l'utilisateur doit rénitialiser son mot de passe (valable pour les comptes créés dynamiquement)
   if request.user.must_reset:
     messages.info(request, 'Vous devez réinitialiser votre mot de passe.')
     return redirect('connexion:password_change')
 
+  # Si l'utilisateur n'est pas un manager
   if not request.user.is_staff:
     return render(request, 'dashboard/index.html')
   
+  # Si l'utilisateur est un manager, préparation des données pour son tableau de bord
   context = {}
-  organisations = Enregistrement.objects.order_by('-created_at')[:4]
-  correspondants = Correspondant.objects.order_by('-created_at')[:4]
-  users = User.objects.order_by('-created_at')[:4]
+  organisations = Enregistrement.objects.order_by('-created_at')[:4] # Liste des 4 derniers enregistrements
+  correspondants = Correspondant.objects.order_by('-created_at')[:4] # Liste des 4 derniers correspondants
+  users = User.objects.order_by('-created_at')[:4] # Liste des 4 derniers utilisateurs
 
   context['organisations'] = organisations
   context['correspondants'] = correspondants

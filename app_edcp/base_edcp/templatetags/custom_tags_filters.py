@@ -40,8 +40,9 @@ def get_filename(value):
 @register.filter
 def get_fileinfos(value):
     """
-    Affiche l'URL et le nom du fichier sous forme de lien
-    Le nom du fichier est le dernier élément du path
+    Affiche l'URL et le nom du fichier sous forme de lien.
+    Le nom du fichier est le dernier élément du path.
+    Renvoie du code HTML.
     """
     if value :
         fileurl = value.url
@@ -54,7 +55,7 @@ def get_fileinfos(value):
 @register.filter
 def get_file_fields(instance):
     """
-    Retourne la liste des champs FileField de l'instance.
+    Retourne la liste des champs FileField de l'instance passée en paramètre (ex: Enregistrement, Correspondant etc.).
     Utilisé pour l'affichage des fichiers justificatifs
     """
     return [field for field in instance._meta.get_fields() if isinstance(field, FileField)]

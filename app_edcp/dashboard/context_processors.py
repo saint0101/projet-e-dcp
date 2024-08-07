@@ -337,9 +337,7 @@ def get_menu(request):
   """
   Returns the menu for the given request.
   Parameters:
-    request (HttpRequest): The HTTP request object.
-  Returns:
-    list: The menu for the user.
+  - request (HttpRequest) -- The HTTP request object.
   """
   user = request.user
   if user.is_authenticated and user.is_staff :

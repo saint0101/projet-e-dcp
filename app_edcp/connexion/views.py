@@ -1,7 +1,7 @@
-from email import message
-from multiprocessing import context
+# from email import message
+# from multiprocessing import context
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
+# from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -10,12 +10,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.views import PasswordChangeView, LoginView, LogoutView
 from django.urls import reverse_lazy
-
 import logging
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -23,11 +23,10 @@ logging.basicConfig(level=logging.DEBUG)
 # Obtention du modèle utilisateur configuré
 User = get_user_model()
 
+
 def index(request):
-    """
-    Vue d'index du module de connexion. Redirige l'utilisateur vers l'URL de login.
-    """
-    return redirect('login')
+    """ Vue d'index du module de connexion. Redirige l'utilisateur vers l'URL de login."""
+    return redirect('connexion:login')
 # views.py
 
 
@@ -48,15 +47,11 @@ def signup(request):
     context = {}
     # si le formulaire a été soumis
     if request.method == 'POST':
-        # Créer une instance de formulaire avec les données POST et en incluant les fichiers joints
-        user_form = UserRegistrationForm(request.POST, request.FILES)
-        # print(f'Uploaded files : {request.FILES['avatar']}')
+        user_form = UserRegistrationForm(request.POST, request.FILES) # Créer une instance de formulaire avec les données POST et en incluant les fichiers joints
         
         # si le formulaire est valid
         if user_form.is_valid():
-
-            # Créer l'utilisateur mais ne pas l'activer encore
-            user = user_form.save(commit=False)
+            user = user_form.save(commit=False) # Créer l'utilisateur mais ne pas l'activer encore
             user.is_active = False  # L'utilisateur doit confirmer son e-mail avant activation
             user.email_verified = False  # Assurez-vous que `email_verified` est défini
             user.save()
@@ -73,13 +68,6 @@ def signup(request):
                 'token': token,
             })
 
-            """
-                # Debugging
-                print('User id: ', user.pk)
-                print('User: ', user)
-                print('UID (encoded): ', uid)
-                print('Token: ', token)
-            """
             email_from = settings.EMAIL_HOST_USER  # Adresse e-mail configurée dans settings
             recipient_list = [user.email]
             try:
@@ -101,11 +89,7 @@ def signup(request):
                     'message': message
                 }
 
-            # Afficher le formulaire de connexion
-            # login_form = AuthenticationForm()
-            # context['form'] = login_form
             return render(request, 'connexion/signup_landing.html', context=context) # Affichage de la page de landing avec les messages de succès ou d'erreur
-            # return redirect('login')
         
         # si le formulaire est invalide
         else:
@@ -127,12 +111,10 @@ def activate(request, uidb64, token):
     Vue pour activer le compte utilisateur via le lien envoyé par e-mail.
     """
     try:
-        # Décoder l'ID utilisateur
-        uid = urlsafe_base64_decode(uidb64).decode()
-
-        # Trouver l'utilisateur correspondant
-        user = User.objects.get(pk=uid)
+        uid = urlsafe_base64_decode(uidb64).decode() # Décoder l'ID utilisateur
+        user = User.objects.get(pk=uid) # Trouver l'utilisateur correspondant
         print('Utilisateur trouvé:', user)
+
     except (TypeError, ValueError, OverflowError, User.DoesNotExist) as e:
         logger.error('Erreur de décodage ou utilisateur non trouvé:', e)
         user = None
@@ -144,21 +126,16 @@ def activate(request, uidb64, token):
         user.save()
         
         messages.success(request, 'Votre compte a été activé. Vous pouvez à présent vous connecter au tableau de bord')
-        return redirect('login')
-        """ form = AuthenticationForm()
-        message = 'Votre compte a été activé. Vous pouvez à présent vous connecter au tableau de bord'
-        context = {'form': form, 'message': message}
-        return render(request, 'registration/login.html', context=context) """
+        return redirect('connexion:login')
+
     else:
-        # Afficher une page d'erreur si l'activation échoue
-        logger.error('Activation échouée ou utilisateur non valide')
+        logger.error('Activation échouée ou utilisateur non valide') # Afficher une page d'erreur si l'activation échoue
         return render(request, 'connexion/activation_invalid.html')
     
 
 class Login(LoginView):
     template_name = 'registration/login_form.html'
-    success_url = reverse_lazy('dashboard:index')
-
+    success_url = reverse_lazy('dashboard:index') # Page affichée après la connexion
     
     """ def get(self, request, *args, **kwargs):
         must_reset = self.kwargs.get('must_reset')
@@ -168,13 +145,9 @@ class Login(LoginView):
     
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f'Bienvenue {self.request.user} !')
+        messages.success(self.request, f'Bienvenue {self.request.user} !') 
         return response
 
-    """ def get_success_url(self):
-        reset_param = self.kwargs.get('reset_param')
-        if reset_param == 'reset':
-            return redirect('connexion:password_change') """
 
 
 class Logout(LogoutView):
@@ -182,7 +155,7 @@ class Logout(LogoutView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, f'Bienvenue {self.request.user} !')
+        messages.success(self.request, 'Déconnexion effectuée')
         return response
 
 
@@ -193,7 +166,9 @@ class PasswordChange(PasswordChangeView):
     def form_valid(self, form):
         response = super().form_valid(form)
         user = User.objects.get(pk=self.request.user.id)
-        user.must_reset = False
+        # Met le champs must_reset à False. utilisé pour les compte utilisateurs créés dynmaiquement 
+        # et pour lesquels l'utilisateur doit réinitialiser le mot de passe à la première connexion
+        user.must_reset = False 
         user.email_verified = True
         user.save()
         messages.success(self.request, 'Votre mot de passe a été mis à jour.')

@@ -1,7 +1,7 @@
-from email import message
-from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
+# from email import message
+# from django.forms import BaseModelForm
+# from django.http import HttpResponse
+from django.shortcuts import redirect #, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -20,7 +20,7 @@ from base_edcp.emails import MAIL_CONTENTS, send_email
 # Vue d'index pour afficher la page d'accueil ou la vue d'enregistrement
 @login_required(login_url=reverse_lazy('login'))
 def index(request):
-    """ Vue index pour demander un enregistrement """
+    """ Vue index pour afficher un enregistrement """
     # Rendu du template 'index.html' pour la vue d'accueil
     return redirect('dashboard:enregistrement:list')
 
@@ -45,33 +45,34 @@ def send_notification(enregistrement):
 
 
 class EnregCreateView(CreateView):
+    """ Vue de création d'un enregistrement """
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_create.html'
     form_class = EnregistrementForm
 
     def get_context_data(self, **kwargs):
-        """ Ajoute des données supplémentaires au contexte du template """
+        """ 
+        Ajoute des données supplémentaires au contexte du template.
+        Permet d'ajouter l'ID de l'objet TypeClient avec le label "Personne physique" au contexte.
+        Utilisé pour l'affychage dynamique du formulaire d'enregistrement en cas de personne physique.
+        """
         context = super().get_context_data(**kwargs)
-        # Recherche de l'objet TypeClient avec le label "Personne physique"
-        type_client = TypeClient.objects.filter(label="Personne physique").first()
-        # Ajoute l'ID de cet objet au contexte (ou None si non trouvé)
-        context['id_personnephysique'] = type_client.id if type_client else None
+        
+        type_client = TypeClient.objects.filter(label="Personne physique").first() # Recherche de l'objet TypeClient avec le label "Personne physique"
+        context['id_personnephysique'] = type_client.id if type_client else None # Ajoute l'ID de cet objet au contexte (ou None si non trouvé)
+        
         return context
 
     def form_valid(self, form):
-        # Méthode appelée lorsque le formulaire est valide
-        # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
-        obj = form.save(commit=False)
-        # Ajoute l'utilisateur courant comme auteur de l'enregistrement
-        obj.user = self.request.user
-        # Ajoute la date et l'heure actuelles de création
-        obj.created_at = datetime.now()
-        # Sauvegarde l'objet en appelant la méthode de la classe parente
-        response = super().form_valid(form)
-        # Définit l'objet sauvegardé pour les actions post-sauvegarde
-        self.object = obj
+        """ Méthode appelée lorsque le formulaire est valide """
+        obj = form.save(commit=False) # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
+        obj.user = self.request.user # Ajoute l'utilisateur courant comme auteur de l'enregistrement 
+        obj.created_at = datetime.now() # Ajoute la date et l'heure actuelles de création
+        response = super().form_valid(form) # Sauvegarde l'objet en appelant la méthode de la classe parente
+        self.object = obj # Définit l'objet sauvegardé pour les actions post-sauvegarde
 
-        # Ajoute des traitements post-sauvegarde ici si nécessaire
+        # Ajouter des traitements post-sauvegarde ici si nécessaire
+        
         # Appelle la fonction pour envoyer une notification
         print('Enregistrement sauvegardé : ', obj)
         # send_notification(obj)
@@ -107,13 +108,14 @@ class EnregDetailView(UserHasAccessMixin, DetailView):
     context_object_name = 'enregistrement'
 
     def get_context_data(self, **kwargs):
-        """ Ajoute des données supplémentaires au contexte du template """
+        """ 
+        Ajoute des données supplémentaires au contexte du template.
+        Permet de récupérer le Correspondant de l'organisation à afficher;
+        """
         context = super().get_context_data(**kwargs)
-        # Recherche de l'objet TypeClient avec le label "Personne physique"
-        org_id = super().get_object().pk
-        correspondant = Correspondant.objects.filter(organisation=org_id).first()
-        print('correspondant : ', correspondant)
-        # Ajoute l'ID de cet objet au contexte (ou None si non trouvé)
+        org_id = super().get_object().pk # récupération de l'ID de l'organisation actuelle
+        correspondant = Correspondant.objects.filter(organisation=org_id).first() # Recherche du premier Correspondant correspondant à l'ID de l'organisation
+        # print('correspondant : ', correspondant)
         context['correspondant'] = correspondant
         return context
 
@@ -124,10 +126,13 @@ class EnregUpdateView(UserHasAccessMixin, UpdateView):
     form_class = EnregistrementForm
 
     def get_context_data(self, **kwargs):
-        """ Ajoute des données supplémentaires au contexte du template """
+        """ 
+        Ajoute des données supplémentaires au contexte du template.
+        Permet d'ajouter l'ID de l'objet TypeClient avec le label "Personne physique" au contexte.
+        Utilisé pour l'affychage dynamique du formulaire d'enregistrement en cas de personne physique.
+        """
         context = super().get_context_data(**kwargs)
-        # Recherche de l'objet TypeClient avec le label "Personne physique"
-        type_client = TypeClient.objects.filter(label="Personne physique").first()
+        type_client = TypeClient.objects.filter(label="Personne physique").first() # Recherche de l'objet TypeClient avec le label "Personne physique"
         # Ajoute l'ID de cet objet au contexte (ou None si non trouvé)
         context['id_personnephysique'] = type_client.id if type_client else None
         return context

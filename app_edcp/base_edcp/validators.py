@@ -1,4 +1,4 @@
-## Regroupe les méthodes utilisées pour la validation des champs des formulaires
+"""Regroupe les méthodes utilisées pour la validation des champs des formulaires"""
 
 import re
 from django.core.exceptions import ValidationError
@@ -9,7 +9,6 @@ from django.core.files.images import get_image_dimensions
 # https://docs.python.org/fr/3/howto/regex.html
 
 
-
 def validate_unique_email(value):
   from base_edcp.models import User
   """
@@ -17,7 +16,7 @@ def validate_unique_email(value):
   - ne doit pas être déjà utilisée
   - doit avoir une longueur max
   """
-  # si l'email existe
+  # si l'email existe déjà dans la base de données
   if User.objects.filter(email=value).exists():
     raise ValidationError("Cet adresse e-mail est déjà utilisée.")
   
@@ -64,20 +63,20 @@ def validate_phone_number(value):
   
 
 def validate_image_size(value):
-    """
-    Validation des champs image :
-    - doit avoir une taille max
-    - doit être une image
-    """
-    max_size_kb = 1024  # Example: 1 MB limit
-    if value.size > max_size_kb * 1024:
-        raise ValidationError(f"Le fichier dépasse la taille maximale de {max_size_kb} Mb.")
-    
-    # Check if the uploaded file is an image
-    try:
-        w, h = get_image_dimensions(value)
-    except AttributeError:
-        raise ValidationError("Le fichier téléchargé n'est pas une image.")
+  """
+  Validation des champs image :
+  - doit avoir une taille max
+  - doit être une image
+  """
+  max_size_kb = 1024  # Example: 1 MB limit
+  if value.size > max_size_kb * 1024:
+      raise ValidationError(f"Le fichier dépasse la taille maximale de {max_size_kb} Mb.")
+  
+  # Check if the uploaded file is an image
+  try:
+      w, h = get_image_dimensions(value)
+  except AttributeError:
+      raise ValidationError("Le fichier téléchargé n'est pas une image.")
     
 
 def validate_files(value):

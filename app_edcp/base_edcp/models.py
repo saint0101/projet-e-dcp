@@ -85,10 +85,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     #REQUIRED_FIELDS spécifie les champs supplémentaires requis
     REQUIRED_FIELDS = [
-            'username',
-            'nom',
-            'prenoms',
-        ]
+        'username',
+        'nom',
+        'prenoms',
+    ]
     
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
@@ -98,6 +98,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """ les champs a retourner pour l'affichage d'un objet USER"""
         return self.nom + ' ' + self.prenoms
+
 
 
 class Enregistrement(models.Model):

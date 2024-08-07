@@ -1,9 +1,19 @@
+"""
+Fonctions utilitaires pour la gestion des utilisateurs.
+Ex: vérification de l'adresse email, création de mot de passe etc.
+"""
+
 import random
 import string
 from django.http import JsonResponse
 from base_edcp.models import User
 
 def generate_random_password(length=10):
+    """
+    Génère un mot de passe aléatoire de longueur fixée (10 caractères par défaut).
+    Le mot de passe doit contenir des caractères minuscules, majuscules, chiffres et symboles.
+    ChatGPT generated.
+    """
     if length < 10:
         raise ValueError("Password length must be at least 10 characters.")
     
@@ -59,9 +69,12 @@ def create_new_user(data):
     """
     Fonction de création d'un nouvel utilisateur.
     Crée un mot de passe aléatoire par défaut.
+    paramètres :
+    - data -- dictionnaire provenant de la soumission d'un formulaire
+    returns : 
+    - tuple composé de l'utilisateur créé et de son mot de passe (qui sera envoyé par email)
     """
-    # à remplacer par l'ajout d'une méthode random pour le mot de passe.
-    # random_password = 'pbkdf2_sha256$600000$aM8OOxx8RVXcAA8ISDbNC5$CgJsb4SLOpQgiw8SEGEsO27PR07iW8YSL2kwA6ZVV8o='
+
     # Création d'un nouvel utilisateur
     new_user = User.objects.create_user(
         nom=data['nom'], 
@@ -70,12 +83,12 @@ def create_new_user(data):
         email=data['email'], 
         password='', 
         is_dpo=True, is_active=True, 
-        must_reset = True,
+        must_reset = True, # L'utilisateur devra réinitialiser son mot de passe à la première connexion
         email_verified=False)
     
-    password = generate_random_password(12)
+    password = generate_random_password(12) # génération d'un mot de passe aléatoire
     print(f'Password created : {password}')
-    new_user.set_password(password)
+    new_user.set_password(password) # attribution du mot de passe
     new_user.save()
 
     return new_user, password
