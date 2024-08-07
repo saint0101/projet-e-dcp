@@ -126,6 +126,10 @@ class Correspondant(models.Model):
         default=False,
         verbose_name='Approuvé'
     )
+    is_rejected = models.BooleanField(
+        default=False,
+        verbose_name='Refusé'
+    )
 
     file_lettre_designation = models.FileField(
        null=True, 

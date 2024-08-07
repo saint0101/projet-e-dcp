@@ -48,7 +48,24 @@ def approve(request, pk, approve):
             correspondant.is_approved = False
             messages.success(request, 'Approbation retirée.')
 
+        if approve == 2 :
+            correspondant.is_approved = False
+            correspondant.is_rejected = True
+            messages.success(request, 'Désignation refusée.')
+
         correspondant.save()
+        
+        mail_context = {
+            'correspondant': correspondant,
+            'approved': approve
+        }
+        send_email(
+            request=request, 
+            mail_content=MAIL_CONTENTS['correspondant_approbation_client'], 
+            recipient_list=[correspondant.created_by.email, correspondant.user.email], 
+            context=mail_context,
+            show_message=False
+        )
     
     else :
         messages.error(request, 'Vous n\'avez pas les droits pour effectuer cette action.')
@@ -183,10 +200,22 @@ class DPOUpdateView(UpdateView):
 
         # s'il s'agit d'une nouvelle désignation de correspondant
         if self.kwargs.get('is_new'):
-            mail_context = {
-                'correspondant': obj,
-            }
-            send_email(self.request, MAIL_CONTENTS['correspondant_designation_client'], [obj.user.email, self.request.user.email], mail_context)
+            # notification du correspondant et de l'utilisateur qui l'a désigné
+            send_email(
+                request=self.request, 
+                mail_content=MAIL_CONTENTS['correspondant_designation_client'], 
+                recipient_list=[obj.user.email, self.request.user.email], 
+                context={'correspondant': obj}
+            )
+            # notification de l'Autorité de Protection
+            send_email(
+                request=self.request, 
+                mail_content=MAIL_CONTENTS['correspondant_designation_mgr'], 
+                recipient_list=[settings.EMAIL_HOST_USER ], 
+                context={'correspondant': obj},
+                show_message=False
+            )
+
         return response
     
 

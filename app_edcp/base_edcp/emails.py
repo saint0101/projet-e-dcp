@@ -19,9 +19,13 @@ MAIL_CONTENTS = {
     'subject': 'Désignation de Correspondant',
     'template': 'emails/correspondant/designation_client.html'
   },
-  'correspondant_approbation': {
-    'subject': '',
-    'template': 'emails/enregistrement.html'
+  'correspondant_designation_mgr': {
+    'subject': 'Désignation de Correspondant',
+    'template': 'emails/correspondant/designation_mgr.html'
+  },
+  'correspondant_approbation_client': {
+    'subject': 'Approbation du Correspondant',
+    'template': 'emails/correspondant/approbation_client.html'
   },
 }
 

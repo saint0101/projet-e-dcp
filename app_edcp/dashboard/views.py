@@ -9,7 +9,7 @@ from correspondant.models import Correspondant
 # Create your views here.
 
 
-@login_required(login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('connexion:login'))
 def index(request):
   """
   Vue qui génère la page de tableau de bord d'un utilisateur

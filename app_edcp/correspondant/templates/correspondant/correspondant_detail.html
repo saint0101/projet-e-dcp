@@ -28,16 +28,17 @@
             <span class="badge text-bg-light custom-text-light me-2">
               {% if correspondant.is_approved %}
                 <i class="bi bi-shield-fill-check"></i> Approuvé
-              {% endif %}
-
-              {% if not correspondant.is_approved %}
+              {% elif not correspondant.is_approved and not correspondant.is_rejected %}
                 <i class="bi bi-exclamation-circle-fill"></i> En attente d'approbation
+              {% elif not correspondant.is_approved and correspondant.is_rejected %}
+                <i class="bi bi-shield-fill-x"></i> Refusé
               {% endif %}
             </span>
 
             {% if request.user.is_staff %}
               {% if not correspondant.is_approved %}
                 <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" class="btn btn-primary me-2">Approuver</a>
+                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" class="btn btn-danger me-2">Refuser</a>
               {% else %}
                 <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=0 %}" class="btn btn-danger me-2">Retirer l'approbation</a>
               {% endif %}

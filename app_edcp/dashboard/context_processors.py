@@ -191,13 +191,13 @@ MENU_MGR = [
     'url' : '',
     'disabled': False, 
     'items' : [
-      {
-        'text' : 'Récent',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False,
-      },
+      #{
+      #  'text' : 'Récent',
+      #  'type' : 'sous-menu-item',
+      #  'icon' : '',
+      #  'url' : 'dashboard:index',
+      #  'disabled': False,
+      #},
       {
         'text' : 'Toutes les organisation',
         'type' : 'sous-menu-item',
