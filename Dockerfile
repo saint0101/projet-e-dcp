@@ -32,8 +32,11 @@ WORKDIR /app_edcp
 # Copier les fichiers de l'application
 COPY ./app_edcp /app_edcp
 
+# Copier le fichier requirements.django5.txt
+COPY requirements.django5.txt /app_edcp/requirements.django5.txt
+
 # Installer les dépendances Python
-RUN pip3 install --trusted-host pypi.python.org -r requirements.django5.txt
+RUN pip3 install --trusted-host pypi.python.org -r /app_edcp/requirements.django5.txt
 
 # Ajouter le nom de l'instructeur (étiquette maintainer)
 LABEL maintainer="projetedcp.ci"
