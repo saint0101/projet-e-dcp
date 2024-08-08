@@ -44,7 +44,7 @@ def approve(request, pk, approve):
     context = {}
     correspondant = Correspondant.objects.get(id=pk)
     # vérifie si l'utilisateur est un gestionnaire
-    if request.user.is_staff: 
+    if request.user.is_staff:
         # si l'action est une approbation (approve == 1)
         if approve == 1 :
             correspondant.is_approved = True
@@ -69,13 +69,13 @@ def approve(request, pk, approve):
         }
         # envoi de l'email
         send_email(
-            request=request, 
-            mail_content=MAIL_CONTENTS['correspondant_approbation_client'], 
-            recipient_list=[correspondant.created_by.email, correspondant.user.email], 
+            request=request,
+            mail_content=MAIL_CONTENTS['correspondant_approbation_client'],
+            recipient_list=[correspondant.created_by.email, correspondant.user.email],
             context=mail_context,
             show_message=False
         )
-    
+
     # si l'utilisateur n'est pas un gestionnaire
     else :
         messages.error(request, 'Vous n\'avez pas les droits pour effectuer cette action.')
@@ -84,9 +84,9 @@ def approve(request, pk, approve):
     return redirect('dashboard:correspondant:detail', pk=correspondant.id)
 
 
-""" def generate_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789$;?.,/:<>&@)([]\{\}'):
-    return ''.join(secrets.choice(allowed_chars) for i in range(length))
- """
+# """ def generate_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789$;?.,/:<>&@)([]\{\}'):
+#    return ''.join(secrets.choice(allowed_chars) for i in range(length))
+# """
 
 def designate(request, org):
     """
@@ -102,7 +102,7 @@ def designate(request, org):
     if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
         email = request.GET.get('email')
         print(f'Ajax request received {email}')
-        
+
         return check_email(email) # appel de la fonction de vérification de l'email et renvoi de la valeur
 
     # si le formulaire de création de compte utilisateur a été soumis
@@ -113,16 +113,16 @@ def designate(request, org):
         # si le formulaire de choix a été soumis et est valide,
         #    l'utilisateur courant fait donc une auto-désignation
         #    le DPO est alors créé avec pour "user" l'utilisateur courant
-        if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
+        if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid():
             dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
             messages.success(request, 'Le Correspondant a bien été créé.')
             return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
-        
+
         # si le formulaire de création de compte a été soumis et est valide,
         #    l'utilisateur courant désigne quelqu'un d'autre comme DPO.
         #    le DPO est alors enregistré avec le compte nouvellement créé
-        elif 'submit_designation_form' in request.POST and form_page1.is_valid(): 
+        elif 'submit_designation_form' in request.POST and form_page1.is_valid():
             user, password = create_new_user(form_page1.cleaned_data) # appel de la fonction de création d'un nouvel utilisateur
             # si l'utilisateur a bien été créé
             if user:
@@ -148,7 +148,7 @@ def designate(request, org):
                 """ mail_context = {
                     'correspondant': dpo,
                 }
-                send_email(request, MAIL_CONTENTS['correspondant_designation_client'], [dpo.user.email, request.user.email], mail_context) 
+                send_email(request, MAIL_CONTENTS['correspondant_designation_client'], [dpo.user.email, request.user.email], mail_context)
                 """
                 return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
 
@@ -158,13 +158,13 @@ def designate(request, org):
                 context['form_page1'] = form_page1
                 context['form_user_is_dpo'] = form_user_is_dpo
                 return render(request, 'correspondant/designation.html', context=context)
-        
+
         # si le formulaire de création d'utilisateur n'est pas valide
         else:
             context['errors'] = form_page1.errors # ajout des erreurs du formulaire au contexte
             context['form_page1'] = form_page1 # ajout du formulaire au contexte
             context['form_user_is_dpo'] = UserIsDPOForm(initial={'user_is_dpo': False}) # ajout du formulaire au contexte
-    
+
     # si le formulaire de création de compte utilisateur n'a pas encore été soumis (la page vient d'être ouverte)
     else:
         form_page1 = DPOFormPage1() # initialisation du formulaire
@@ -181,10 +181,10 @@ class DPOUpdateView(UpdateView):
     model = Correspondant
     fields = [
         'is_active',
-        'qualifications', 
-        'exercice_activite', 
-        'moyens_materiels', 
-        'moyens_humains', 
+        'qualifications',
+        'exercice_activite',
+        'moyens_materiels',
+        'moyens_humains',
         'experiences',
         'file_lettre_designation',
         'file_lettre_acceptation',
@@ -193,39 +193,39 @@ class DPOUpdateView(UpdateView):
         'file_certificat_nationalite',
         'file_cv',
     ]
-    
+
     template_name = 'correspondant/correspondant_edit.html'
     context_object_name = 'correspondant'
-    
+
     def form_valid(self, form):
         """Méthode appelée lorsque le formulaire est valide"""
         obj = form.save(commit=False) # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
         obj.profile_completed = True # Marque le profil comme complet
         response = super().form_valid(form) # Sauvegarde l'objet en appelant la méthode de la classe parente
         self.object = obj # Définit l'objet sauvegardé pour les actions post-sauvegarde
-        
+
         messages.success(self.request, 'Informations enregistrées avec succès.')
 
         # s'il s'agit d'une nouvelle désignation de correspondant
         if self.kwargs.get('is_new'):
             # notification du correspondant et de l'utilisateur qui l'a désigné
             send_email(
-                request=self.request, 
-                mail_content=MAIL_CONTENTS['correspondant_designation_client'], 
-                recipient_list=[obj.user.email, self.request.user.email], 
+                request=self.request,
+                mail_content=MAIL_CONTENTS['correspondant_designation_client'],
+                recipient_list=[obj.user.email, self.request.user.email],
                 context={'correspondant': obj}
             )
             # notification de l'Autorité de Protection
             send_email(
-                request=self.request, 
-                mail_content=MAIL_CONTENTS['correspondant_designation_mgr'], 
-                recipient_list=[settings.EMAIL_HOST_USER ], 
+                request=self.request,
+                mail_content=MAIL_CONTENTS['correspondant_designation_mgr'],
+                recipient_list=[settings.EMAIL_HOST_USER ],
                 context={'correspondant': obj},
                 show_message=False
             )
 
         return response
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_new'] = self.kwargs.get('is_new') # permet de vérifier si le formulaire est affiché suite à la création d'un DPO
@@ -260,7 +260,7 @@ class DPODetailView(DetailView):
             return queryset.filter(created_by=self.request.user)
 
         return queryset
-    
+
 
 """TO DELETE"""
 """ class CreateDPOWizardView(SessionWizardView):
@@ -304,7 +304,7 @@ class DPODetailView(DetailView):
         'type_piece',
         'num_piece',
     ]
-    
+
     form_class = DPOForm
     # id_personnephysique = TypeClient.objects.filter(label="Personne physique").first().id
     # id_personnephysique = '1'
@@ -313,7 +313,7 @@ class DPODetailView(DetailView):
     def form_valid(self, form):
         # Add custom processing here
         obj = form.save(commit=False)
-        
+
         # Ajout de l'utilisateur courant
         obj.user = self.request.user
         # obj.created_at = datetime.now()
@@ -359,7 +359,7 @@ class DPODetailView(DetailView):
                 context['new_user'] = new_user
                 context['is_first_step'] = False
                 context['dpo_form'] = dpo_form
-                
+
                 dpo = dpo_form.save(commit=False)
                 dpo.user = user
                 dpo.save()
@@ -370,5 +370,5 @@ class DPODetailView(DetailView):
         context['is_first_step'] = True
         context['user_form'] = user_form
         context['dpo_form'] = dpo_form
-        
+
     return render(request, 'correspondant/create_dpo_new.html', context=context) """
