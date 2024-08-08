@@ -10,26 +10,49 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const fieldTypeClient = document.getElementById('id_typeclient');
-      const fieldTypePiece = document.getElementById('id_type_piece').parentElement;
+      // champs personne physique
+      // const fieldTypePiece = document.getElementById('id_type_piece').parentElement;
+      const divTypePiece = document.getElementById('div_id_type_piece');
       const fieldNumPiece = document.getElementById('id_num_piece').parentElement;
+      const filedFilePiece = document.getElementById('div_id_file_piece');
+      // champs personne morale
       const fieldRepresentant = document.getElementById('id_representant').parentElement;
       const fieldRCCM = document.getElementById('id_rccm').parentElement;
+      const fieldIDU = document.getElementById('id_idu').parentElement;
       const fieldEffectif = document.getElementById('id_effectif').parentElement;
+      const filedFileRCCM = document.getElementById('div_id_file_rccm');
+      const filedFileMandat = document.getElementById('div_id_file_mandat');
 
       function toggleFields() {
           const typeClient = fieldTypeClient.value;
           if (typeClient == {{ id_personnephysique }}) {
-            fieldTypePiece.style.display = 'block' ;
+            // personne physique
+            // fieldTypePiece.style.display = 'block' ;
+            divTypePiece.style.display = 'block' ;
             fieldNumPiece.style.display = 'block' ;
+            filedFilePiece.style.display = 'block' ;
+
+            // personne morale
             fieldRepresentant.style.display = 'none' ;
             fieldRCCM.style.display = 'none';
+            fieldIDU.style.display = 'none';
             fieldEffectif.style.display = 'none' ;
+            filedFileRCCM.style.display = 'none' ;
+            filedFileMandat.style.display = 'none' ;
           } else {
-            fieldTypePiece.style.display = 'none' ;
+            // personne physique
+            // fieldTypePiece.style.display = 'none' ;
+            divTypePiece.style.display = 'none' ;
             fieldNumPiece.style.display = 'none' ;
+            filedFilePiece.style.display = 'none' ;
+            
+            // personne morale 
             fieldRepresentant.style.display = 'block' ;
             fieldEffectif.style.display = 'block' ;
             fieldRCCM.style.display = 'block' ;
+            fieldIDU.style.display = 'block';
+            filedFileRCCM.style.display = 'block' ;
+            filedFileMandat.style.display = 'block' ;
           }
       }
 
@@ -56,7 +79,14 @@
             nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
             reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
           </p>
-          <form method="POST" enctype="multipart/form-data">
+
+          {% if errors %}
+            <div class="alert alert-danger" role="alert">
+              Le formulaire contient des erreurs. Veuillez réessayer.
+            </div>
+          {% endif %}
+
+          <form method="POST" enctype="multipart/form-data" onsubmit="openLoader()">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn btn-primary py-2 text-light" type="submit">Envoyer</button>

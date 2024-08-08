@@ -5,31 +5,31 @@
 
 {% block content %}
 
-<!-- Affichage des notifications via Toastr -->
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <script>toastr.{{ message.tags }}('{{ message }}')</script>
-      {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-    {% endfor %}
-  </ul>
-{% endif %}
-
 <!-- Bloc enregistrement -->
 <div class="row my-4">
   <div class="col">
     <div class="card custom-card">
-      <div class="card-body">
-        <h5 class="card-title">Enregistrement</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-          nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        </p>
-        <a href="{% url 'dashboard:enregistrement:create' %}" class="btn btn-danger">Démarrer</a>
+      
+      <div class="row p-2">
+        <div class="col-2 text-center my-auto ">
+          <i class="bi bi-building-check custom-text-light dashboard-large-icon"></i>
+        </div>
+
+        <div class="card-body col-10">
+          <h5 class="card-title">Enregistrement</h5>
+          <div class="card-text">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+            <a href="{% url 'dashboard:enregistrement:create' %}" class="btn btn-danger">Démarrer</a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -38,27 +38,45 @@
 <div class="row my-4">
   <div class="col-6">
     <div class="card custom-card">
-      <div class="card-body">
-        <h5 class="card-title">Désignation du Correspondant</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-        <a href="{% url 'dashboard:correspondant:index' %}" class="btn btn-primary">Démarrer</a>
+      <div class="row p-2">
+        <div class="col-3 text-center my-auto ">
+          <i class="bi bi-file-earmark-person custom-text-light dashboard-icon"></i>
+        </div>
+      
+        <div class="card-body col-9">
+          <h5 class="card-title">Désignation du Correspondant </h5>
+          <div class="card-text">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a href="{% url 'dashboard:correspondant:index' %}" class="btn btn-primary">Démarrer</a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
   <!-- Bloc Autorisations -->
   <div class="col-6">
     <div class="card custom-card">
-      <div class="card-body">
-        <h5 class="card-title">Demandes d'autorisation</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-        <a href="/pages/client/enregistrement" class="btn btn-success">Démarrer</a>
+      
+      <div class="row p-2">
+        <div class="col-3 text-center my-auto ">
+          <i class="bi bi-file-earmark-text custom-text-light dashboard-icon"></i>
+        </div>
+      
+        <div class="card-body col-9">
+          <h5 class="card-title">Demandes d'autorisation</h5>
+          <div class="card-text">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a href="/pages/client/enregistrement" class="btn btn-success">Démarrer</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -68,32 +86,48 @@
 <div class="row my-4">
   <div class="col-6">
     <div class="card custom-card">
-      <div class="card-body">
-        <h5 class="card-title">Mise en conformité</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-        <a href="/pages/client/enregistrement" class="btn btn-info" disabled>Démarrer</a>
+      <div class="row p-2">
+        <div class="col-3 text-center my-auto ">
+          <i class="bi bi-patch-check custom-text-light dashboard-icon"></i>
+        </div>
+      
+        <div class="card-body col-9">
+          <h5 class="card-title">Mise en conformité</h5>
+          <div class="card-text">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a href="/pages/client/enregistrement" class="btn btn-info" disabled>Démarrer</a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
   <div class="col-6">
     <div class="card custom-card">
-      <div class="card-body">
-        <h5 class="card-title">Notifications</h5>
-        <p class="card-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-        <a href="/pages/client/enregistrement" class="btn btn-secondary" disabled>Démarrer</a>
+      <div class="row p-2">
+        <div class="col-3 text-center my-auto ">
+          <i class="bi bi-bell custom-text-light dashboard-icon"></i>
+        </div>
+      
+        <div class="card-body col-9">
+          <h5 class="card-title">Notifications</h5>
+          <div class="card-text">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a href="/pages/client/enregistrement" class="btn btn-secondary" disabled>Démarrer</a>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- inclure le contenu de la page  acceuil dans la page index -->
-<!-- {% include 'dashboard/contents/acceuil_demande_autor.html' %} -->
 
 {% endblock content %}

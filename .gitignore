@@ -1,6 +1,9 @@
 # Fichiers de cache CSS
 app_edcp/staticfiles/CACHE
 
+# Fichiers uploadés
+app_edcp/uploads
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

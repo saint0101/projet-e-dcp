@@ -15,9 +15,13 @@ class UserRegistrationForm(UserCreationForm):
   Spécifie les champs utilisés dans le formulaire.
   """
   # email = forms.EmailField(validators=[validate_unique_email])
-  nom = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield])
-  prenoms = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield])
-  telephone = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_phone_number], required=False)
+  nom = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
+  prenoms = forms.CharField(min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
+  telephone = forms.CharField(required=True, min_length=2, max_length=100)
+  organisation = forms.CharField(required=False, min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
+  fonction = forms.CharField(required=False, min_length=2, max_length=100, validators=[validators.validate_charfield, validators.validate_no_special_chars])
+  avatar = forms.ImageField(required=False, validators=[validators.validate_image_size], help_text='Photo de profil (facultative). Taille limite : 1Mb')
+
 
   class Meta:
     model = User
@@ -30,7 +34,16 @@ class UserRegistrationForm(UserCreationForm):
       'organisation',
       'fonction',
       'avatar',
+      'password1',
+      'password2',
+      'consentement',
       )
+    
+    # apparence des champs du formulaire. Ne fonctionne pas tant que crispy_forms est utilisé
+    widgets = {
+      # 'consentement': forms.RadioSelect 
+    }
+    
   def save(self, commit=True):
     user = super(UserRegistrationForm, self).save(commit=False)
     print(f'User : {user.email}')

@@ -281,12 +281,12 @@ class EnregistrementAdmin(admin.ModelAdmin):
     list_display = ['user', 'created_at', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
                     'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif', ]
 
-    fieldsets = (
+    """ fieldsets = (
         (None, {
             'fields': ('user', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'presentation', 'telephone', 'email_contact', 'site_web', 'pays',
                        'ville', 'adresse_geo', 'adresse_bp', 'gmaps_link', 'effectif', 'has_dpo')
         }),
-    )
+    ) """
 
 
 # module Autorisation

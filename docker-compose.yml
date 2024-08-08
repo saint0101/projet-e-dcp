@@ -42,7 +42,7 @@ services:
 
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
-    
+
     networks:
       - default
     environment:
@@ -52,8 +52,8 @@ services:
       - EMAIL_HOST = 'smtp.office365.com'
       - EMAIL_PORT = 587
       - EMAIL_USE_TLS = True
-      - EMAIL_HOST_USER = 'info-apdcp@artci.ci'
-      - EMAIL_HOST_PASSWORD = 'jeFs3oq-jycjZr%1sYwfu'
+      - EMAIL_HOST_USER = 'edcp@artci.ci'
+      - EMAIL_HOST_PASSWORD = 'ZM7rfPxdS87&bWq$'
 
   pgadmin:
     image: dpage/pgadmin4

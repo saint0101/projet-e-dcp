@@ -25,8 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls), # page d'administration
     path('public/', include('public.urls')), # partie publque du site (accueil, à propos, contacts etc.)
     path('dashboard/', include('dashboard.urls')), # tableaux de bord client et gestionnaire
-    path('connexion/', include('connexion.urls')), # page d'inscription
-    path('connexion/', include('django.contrib.auth.urls')), # autres pages de connexion (login, mot de passe oublié etc.) 
+    path('connexion/', include('connexion.urls')), # page d'inscription, login, changement de mot de passe etc.
+    # path('connexion/', include('django.contrib.auth.urls')), # autres pages de connexion (login, mot de passe oublié etc.) 
 
     # ajouter l'utiisateur
     # path('edcp/user/', include('user.urls')),

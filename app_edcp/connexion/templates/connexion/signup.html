@@ -97,14 +97,17 @@
     <main class="form-signin w-100 m-auto">
       
         {% if errors %}
-          <ul class="alert alert-danger" role="alert">
+          {% comment %} <ul class="alert alert-danger" role="alert">
             {% for error in errors.values %}
               {{ error }}
             {% endfor %}
-          </ul>
+          </ul> {% endcomment %}
+          <div class="alert alert-danger" role="alert">
+            Le formulaire contient des erreurs. Veuillez réessayer.
+          </div>
         {% endif %}
 
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data" onsubmit="openLoader()">
         {% csrf_token %}
         {% comment %} {% crispy form %} {% endcomment %}
         {{ form|crispy }}
@@ -126,7 +129,7 @@
     </main>
 
     <p>
-      Déjà inscrit ? <a href="{% url 'login' %}">Connectez-vous</a>
+      Déjà inscrit ? <a href="{% url 'connexion:login' %}">Connectez-vous</a>
     </p>
 
     {% comment %} {% for error in errors.values %}

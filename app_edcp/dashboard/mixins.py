@@ -4,8 +4,8 @@ from django.core.exceptions import PermissionDenied
 class UserHasAccessMixin:
   """
   Class qui vérifie si l'utilisateur peut avoir accès à un objet, si :
-    - il est propriétaire de l'objet ;
-    - il est membre du staff.
+    - il est propriétaire de l'objet
+    - ou, il est membre du staff.
   Utilisée comme mixin pour l'affichage des objets dans les vues DetailView.
   """
   user_field = 'user'  # Champ utilisateur (par défaut)

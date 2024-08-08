@@ -1,6 +1,7 @@
 {% extends '../dashboard/base/master.html' %}
 {% load static %}
-{% load breadcrumbs %}
+{% load custom_tags_filters %}
+{% comment %} {% load breadcrumbs %} {% endcomment %}
 
 
 {% block content %}
@@ -56,11 +57,12 @@
         </div>
         <div class="card-body">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              Copie du Registre du Commerce : <a href="{{ enregistrement.file_piece.url }}"> {{ enregistrement.file_piece.name | get_filename }} </a>
-            </li>
-            <li class="list-group-item">Document 2</li>
-            <li class="list-group-item">Document 3</li>
+            {% for file_field in enregistrement|get_file_fields %}
+              <li class="list-group-item">
+                <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                  {{ enregistrement|attr:file_field.name|get_fileinfos|safe }}
+              </li>
+            {% endfor %}
           </ul>
         </div>
       </div>
@@ -76,6 +78,18 @@
           <p>
             <i class="bi bi-person fw-bold custom-text-light x-large"></i> &emsp;
             Enregistrement effectué par : <a href="{% url 'dashboard:user:detail' pk=user.id %}"><strong>{{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }}</strong></a>
+          </p>
+          <p>
+            <i class="bi bi-person-fill fw-bold custom-text-light x-large"></i> &emsp;
+            Correspondant : 
+            {% if correspondant %}
+              <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}"><strong>{{ correspondant }}</strong></a>
+            {% elif not correspondant and not request.user.is_staff %}
+              <a href="{% url 'dashboard:correspondant:designation' org=enregistrement.id %}">Désigner un correspondant</a>
+            {% else %}
+              Pas encore désigné.
+            {% endif %}
+            
           </p>
         </div>
       </div>

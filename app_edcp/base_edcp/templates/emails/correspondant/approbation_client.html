@@ -1,0 +1,25 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  Bonjour,
+  <br><br>
+  {% if approved == 1 %}
+
+    La désignation de <strong>{{correspondant}}</strong> 
+    comme Correspondant à la protection des données de l'organiation 
+    <strong>"{{ correspondant.organisation }}"</strong>, 
+    par <strong>{{ correspondant.created_by }}</strong> a été approuvée.
+
+  {% elif approved == 2 or approved == 0 %}
+    
+    La désignation de <strong>{{correspondant}}</strong> 
+    comme Correspondant à la protection des données de l'organiation 
+    <strong>"{{ correspondant.organisation }}"</strong>, 
+    par <strong>{{ correspondant.created_by }}</strong> n'a pas été approuvée.
+
+  {% endif %}
+
+ <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}
