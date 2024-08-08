@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     consentement = models.BooleanField(
         default=False,
-        null=True,  # Autoriser temporairement les valeurs NULL
+        #null=True,  # Autoriser temporairement les valeurs NULL
         verbose_name='Je donne mon consentement',
         help_text='''Veuillez cocher cette case pour donner votre consentement :
         les données soumises via ce formulaire seront utilisées pour la création
