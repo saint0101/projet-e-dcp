@@ -102,7 +102,7 @@ class EnregListView(ListView):
             return queryset.filter(user=self.request.user)
         return queryset
 
-class EnregDetailView(UserHasAccessMixin, DetailView):
+class EnregDetailView(DetailView):
     model = Enregistrement
     template_name = 'enregistrement/enregistrement_detail.html'
     context_object_name = 'enregistrement'

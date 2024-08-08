@@ -1,86 +1,12 @@
 {% extends '../base.html' %}
-{% comment %} 
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        /* Inline CSS */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-
-        .email-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 5px;
-        }
-
-        .header {
-            background-color: #FB8521;
-            color: #ffffff;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .image {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .footer {
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px;
-            font-size: 12px;
-        }
-    </style>
-</head>
-<body>
-    <div class="email-container">
-        <div class="header">
-            <h1>Cet email est envoyé depuis la plateforme e-DCP</h1>
-        </div>
-        <div class="content">
-          Bonjour {{ organisation.user }},<br><br>
-          <br><br>
-          L'organiation {{ organisation }} a bien été enregistrée !<br>
-          Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:enregistrement:detail' pk=organisation.id %}">ce lien</a> pour afficher ses informations.
-          <br><br>
-          Merci !<br>
-          L'Autorité de Protection
-        </div>
-        <div class="footer">
-            &copy; Autorité de Régulation des Télécommunications / TICs de Côte d'Ivoire.
-        </div>
-    </div>
-</body>
-</html> {% endcomment %}
 
 
 {% block content %}
-<div class="email-container">
-  <div class="header">
-      <h1>Cet email est envoyé depuis la plateforme e-DCP</h1>
-  </div>
-  <div class="content">
-    Bonjour {{ organisation.user }},
-    <br><br>
-    L'organiation <strong>"{{ organisation }}"</strong> a bien été enregistrée !<br>
-    Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:enregistrement:detail' pk=organisation.id %}">ce lien</a> pour afficher ses informations.
-    <br><br>
-    Merci !<br>
-    L'Autorité de Protection
-  </div>
-  <div class="footer">
-      &copy; Autorité de Régulation des Télécommunications / TICs de Côte d'Ivoire.
-  </div>
-</div>
+Bonjour {{ organisation.user }},
+<br><br>
+L'organisation <strong>"{{ organisation }}"</strong> a bien été enregistrée !<br>
+Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:enregistrement:detail' pk=organisation.id %}">ce lien</a> pour afficher ses informations.
+<br><br>
+Merci !<br>
+L'Autorité de Protection
 {% endblock %}
