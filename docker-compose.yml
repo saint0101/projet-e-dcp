@@ -30,8 +30,8 @@ services:
       - DB_PASS=e_dcp@2023#
 
     # demarrer premierement la bd
-    # depends_on:
-    #  - db
+    depends_on:
+      - db
 
   # creation du service de base de donnee
   db:
