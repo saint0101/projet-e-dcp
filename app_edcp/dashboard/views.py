@@ -6,6 +6,7 @@ from django.contrib import messages
 from base_edcp.models import Enregistrement, User
 from correspondant.models import Correspondant
 
+
 # Create your views here.
 
 
