@@ -50,6 +50,9 @@ drafts.txt
 # Ignorer les scripts d'entrypoint
 entrypoint.sh
 
+# Ignorer les scripts de deploiment
+depoimentedcp.sh
+
 # Ignorer les fichiers de requirements de développement
 requirements.dev.txt
 
