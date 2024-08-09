@@ -1,45 +1,61 @@
----
-    # Nom du flux de travail
-    name: Les Vérifications
+# Nom du flux de travail
+name: Les Vérifications et Déploiement
 
-    # Événement déclencheur
-    on: # Événement déclencheur
-      push: # Déclenché lors d'une poussée sur github (push)
-        branches: # specifier le banche concernées
-          - main # Seulement la branche principale (main)
+# Événement déclencheur
+on:
+  push:
+    branches:
+      - main # Seulement la branche principale (main)
 
-    # Définition des tâches à exécuter
-    jobs:
-      test-lint: # nom de la tâche
-        name: Test et Linting. # Nom affiché dans l'interface utilisateur
-        runs-on: ubuntu-20.04  # Environnement d'exécution
+# Définition des tâches à exécuter
+jobs:
+  test-lint: # Nom du job
+    name: Test et Linting # Nom affiché dans l'interface utilisateur
+    runs-on: ubuntu-20.04  # Environnement d'exécution
 
-        # Étapes à exécuter dans la tâche
-        steps:
-          - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
-            uses: docker/login-action@v2 # Utilisation de l'action docker/login-action@v1
-            with: # parametre de docker hub
-              username: ${{ secrets.DOCKERHUB_USER }}  # Nom d'utilisateur Docker Hub
-              password: ${{ secrets.DOCKERHUB_TOKEN }} # Mot de passe d'utilisateur Docker Hub
+    # Étapes à exécuter dans le job
+    steps:
+      - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
+        uses: docker/login-action@v3 # Utilisation de l'action docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}  # Nom d'utilisateur Docker Hub
+          password: ${{ secrets.DOCKERHUB_TOKEN }} # Mot de passe Docker Hub
 
-          # Ajoutez cette étape pour afficher les informations sur la connexion.
-          - name: Afficher les informations de connexion de Docker Hub # nom d el'etape
-            run: |
-              echo "Logged in as: $DOCKER_USERNAME"
-              echo "Docker token: $DOCKER_TOKEN"
-            env:  # Variables d'environnement
-              DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USER }} # Nom d'utilisateur Docker Hub
-              DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }} # Token Docker Hub
+      - name: Téléchargement du code source # Étape de récupération du code source
+        uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
 
-            # Étape de récupération du code source
-          - name: Téléchargement
-            uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
+      - name: Exécuter les tests # Étape d'exécution des tests
+        run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution des tests via docker-compose
 
-            # Étape d'exécution des tests
-          - name: Tests
-            run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
-            # run: docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
+      - name: Vérification du linting # Étape de vérification du linting
+        run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8
 
-            # Étape de vérification du linting
-          - name: Tests de linting
-            run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8
+  deploy: # Nom du job de déploiement
+    name: Déploiement
+    runs-on: ubuntu-20.04
+    needs: test-lint # Le job deploy ne s'exécute que si test-lint réussit
+    steps:
+      - name: Se connecter à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Téléchargement du code source
+        uses: actions/checkout@v2
+
+      - name: Construire l'image Docker
+        run: docker-compose -f docker-compose.prod.yml build app_edcp
+
+      - name: Pousser l'image sur Docker Hub
+        run: docker-compose -f docker-compose.prod.yml push app_edcp
+
+      - name: Installer SSHpass pour utiliser le mot de passe SSH
+        run: sudo apt-get install -y sshpass
+
+      - name: Déployer sur le serveur de production
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          docker-compose -f /chemin/vers/votre/docker-compose.prod.yml pull app_edcp
+          docker-compose -f /chemin/vers/votre/docker-compose.prod.yml up -d --no-deps app_edcp
+          EOF
