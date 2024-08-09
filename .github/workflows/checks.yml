@@ -10,30 +10,30 @@ on:
 # Définition des tâches à exécuter
 jobs:
   test-lint: # Nom du job
-    name: Test et Linting # Nom affiché dans l'interface utilisateur
-    runs-on: ubuntu-20.04  # Environnement d'exécution
+    name: Test et Linting
+    runs-on: ubuntu-20.04
 
     # Étapes à exécuter dans le job
     steps:
-      - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
+      - name: Se connecter à Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Téléchargement du code source # Étape de récupération du code source
+      - name: Téléchargement du code source
         uses: actions/checkout@v2
 
-      # - name: Exécuter les tests # Étape d'exécution des tests
+      # - name: Exécuter les tests
       # run: docker-compose run --rm app_edcp sh -c "python manage.py test"
 
-      # - name: Vérification du linting # Étape de vérification du linting
+      # - name: Vérification du linting
       # run: docker-compose run --rm app_edcp sh -c "flake8"
 
-  deploy: # Nom du job de déploiement
+  deploy:
     name: Déploiement
     runs-on: ubuntu-20.04
-    needs: test-lint # Le job deploy ne s'exécute que si test-lint réussit
+    needs: test-lint
     steps:
       - name: Se connecter à Docker Hub
         uses: docker/login-action@v3
