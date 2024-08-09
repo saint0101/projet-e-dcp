@@ -5,7 +5,7 @@ name: Les Vérifications et Déploiement
 on:
   push:
     branches:
-      - main # Seulement la branche principale (main)
+      - dev_edcp_v0.1 # Seulement la branche principale (main, dev_edcp_v0.1)
 
 # Définition des tâches à exécuter
 jobs:
