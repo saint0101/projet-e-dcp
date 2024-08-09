@@ -44,6 +44,12 @@ jobs:
       - name: Téléchargement du code source
         uses: actions/checkout@v2
 
+      - name: Installer Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
       - name: Construire l'image Docker
         run: docker-compose -f docker-compose.yml build app_edcp
 
@@ -59,3 +65,9 @@ jobs:
           docker-compose -f projet-e-dcp/docker-compose.yml pull app_edcp
           docker-compose -f projet-e-dcp/docker-compose.yml up -d --no-deps app_edcp
           EOF
+
+      - name: Construire l'image Docker pour la production
+        run: docker-compose -f docker-compose.prod.yml build app_edcp
+
+      - name: Pousser l'image Docker pour la production
+        run: docker-compose -f docker-compose.prod.yml push app_edcp
