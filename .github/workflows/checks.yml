@@ -50,7 +50,7 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      - name: Construire l'image Docker avec tags
+      - name: Construire l'image Docker avec tags sfourier
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }} .
 
