@@ -52,7 +52,7 @@ jobs:
 
       - name: Construire l'image Docker avec tags
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }} .
+          docker build -f docker-compose.yml -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }} .
 
       - name: Pousser l'image sur Docker Hub
         run: |
