@@ -45,10 +45,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Construire l'image Docker
-        run: docker-compose -f docker-compose.prod.yml build app_edcp
+        run: docker-compose -f docker-compose.yml build app_edcp
 
       - name: Pousser l'image sur Docker Hub
-        run: docker-compose -f docker-compose.prod.yml push app_edcp
+        run: docker-compose -f docker-compose.yml push app_edcp
 
       - name: Installer SSHpass pour utiliser le mot de passe SSH
         run: sudo apt-get install -y sshpass
@@ -56,6 +56,6 @@ jobs:
       - name: Déployer sur le serveur de production
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker-compose -f /chemin/vers/votre/docker-compose.prod.yml pull app_edcp
-          docker-compose -f /chemin/vers/votre/docker-compose.prod.yml up -d --no-deps app_edcp
+          docker-compose -f projet-e-dcp/docker-compose.yml pull app_edcp
+          docker-compose -f projet-e-dcp/docker-compose.yml up -d --no-deps app_edcp
           EOF
