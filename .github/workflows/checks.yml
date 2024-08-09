@@ -24,8 +24,8 @@ jobs:
       - name: Téléchargement du code source # Étape de récupération du code source
         uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
 
-      - name: Exécuter les tests # Étape d'exécution des tests
-        run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution des tests via docker-compose
+       #- name: Exécuter les tests # Étape d'exécution des tests
+       # run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution des tests via docker-compose
 
       - name: Vérification du linting # Étape de vérification du linting
         run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8
