@@ -6,44 +6,7 @@
   {% comment %} 
     Le script permet de rechercher dans la base de données si l'adresse email saisie existe déjà
   {% endcomment %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const fieldEmail = document.getElementById('id_email');
-      const divNotAvailable = document.getElementById('email-not-available');
-      const divAvailable = document.getElementById('email-available');
-      const btnSubmit = document.getElementById('btn-submit')
-
-      function showMessage(email_exists) {
-        if(email_exists){
-          divNotAvailable.style.display = 'block'
-          divAvailable.style.display = 'none'
-          btnSubmit.style.display = 'none'
-        }
-        else {
-          divNotAvailable.style.display = 'none'
-          divAvailable.style.display = 'block'
-          btnSubmit.style.display = 'block'
-        }
-      }
-
-      fieldEmail.addEventListener('change', function() {
-        // console.log('change event fired : ');
-        const email = fieldEmail.value;
-        fetch(`?email=${email}`, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then(response => response.json())
-        .then(data => {
-          // console.log('data : ', data);
-          showMessage(data.email_exists);
-        });
-      });
-
-      // fieldTypeClient.addEventListener('change', toggleFields);
-      // toggleFields();  // Initial call to set correct fields on load
-  });
-  </script>
+  <script src="{% static 'correspondant/scripts.js' %}">
 {% endblock %}
 
 
@@ -101,6 +64,17 @@
             </div>
           {% endfor %}
 
+          
+
+          <p class="text-secondary mb-4"> Etape 1/2 : Création du compte utilisateur du Correspondant
+          </p>
+
+          <form method="post" id="user-is-dpo-form">
+            {% csrf_token %}
+            {{ form_user_is_dpo | crispy }}
+            <button id="btn-submit-is-dpo" name="submit_user_is_dpo_form" class="btn btn-primary py-2" type="submit" style="display: none;">Poursuivre</button>
+          </form>
+          
           <div id="email-not-available" class="alert alert-danger" role="alert" style="display: none;">
             Cette adresse email est déjà utilisée, veuillez en sélectionner une autre.
           </div>
@@ -108,14 +82,11 @@
           <div id="email-available" class="alert alert-success" role="alert" style="display: none;">
             Adresse disponible
           </div>
-
-          <p class="text-secondary"> Etape 1/2 : Création du compte utilisateur du Correspondant
-          </p>
           
-          <form method="post">
+          <form method="post" id="designation-form" style="display: none;" onsubmit="openLoader()">
             {% csrf_token %}
             {{ form_page1 | crispy }}
-            <button id="btn-submit" class="btn btn-primary py-2" type="submit">Envoyer</button>
+            <button id="btn-submit-designation" name="submit_designation_form" class="btn btn-primary py-2" type="submit">Envoyer</button>
           </form>
           
         </div>

@@ -14,8 +14,19 @@
   color: #8f9bb3 !important;
 }
 
-.header-menu-icon{
+.header-menu-icon, .dropdown-toggle::after{
   color: #8f9bb3;
+}
+
+.dropdown-menu.show {
+  border: none;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
+  width: 220px;
+}
+
+.dropdown-menu[data-bs-popper] {
+  top: 40px;
+  left: -50px;
 }
 
 
@@ -25,6 +36,10 @@
   border-right: 1px solid #EEE;
   background-color: #FFF;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+#sidebar.sidebar-dark{
+  background-color: #212529;
 }
 
 .dropdown-toggle { outline: 0; }
@@ -80,9 +95,11 @@
   overflow-y: auto;
 }
 
-/* .menu-elmt{
+.menu-elmt{
   border-bottom: 1px solid rgba(143, 155, 179, .15);
-} */
+}
+
+
 
 .menu-elmt p{
   color: #8f9bb3;
@@ -90,6 +107,7 @@
   font-size: .8rem;
   margin-bottom: 5px;
 }
+
 
 .sous-menu{
   text-align: left;
@@ -104,6 +122,12 @@
   text-align: left;
   font-size: .9rem;
   color: #555;
+}
+
+/******************** USER *********************/
+.img-avatar{
+  border-radius: 50%;
+  width: auto;
 }
 
 
@@ -166,28 +190,18 @@
   background-color: #EAEEF4;
 }
 
-/******************** Index *********************/
-.custom-card{
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-  border: none;
-  /* padding: .5rem 1rem; */
+/******************** Dashboard Index *********************/
+
+.dashboard-large-icon{
+  font-size: 5rem;
 }
 
-.custom-card .card-header{
-  border: none;
+.dashboard-icon{
+  font-size: 3.5rem;
 }
 
-.custom-card .card-body{
-  padding: 2rem;
-}
-
-.custom-card .card-title{
-  font-weight: 600;
-  color: #8f9bb3;
-}
-
-.custom-card .card-text{
-  color: var(--bs-secondary-color);
+.row > .card-body{
+  padding: 15px 30px 15px 0px;
 }
 
 /******************** Enregistrement *********************/
@@ -198,4 +212,8 @@
 .dpo-infos-list li{
   padding: 0;
   border: none;
+}
+
+#div_id_user_is_dpo legend{
+  font-weight: 600;
 }

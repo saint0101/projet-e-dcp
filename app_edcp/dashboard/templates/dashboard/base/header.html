@@ -6,7 +6,7 @@
 {% endif %}
 
   <div class="container">
-    <a class="navbar-brand fw-bold text-primary fs-3" href="#">
+    <a class="navbar-brand fw-bold text-primary fs-3" href="{% url 'public:index' %}">
       e-DCP &nbsp;
       {% if request.user.is_authenticated and request.user.is_staff %}
        <span class="fs-6 fw-normal">Manager</span>
@@ -36,12 +36,12 @@
               <i class="bi bi-person-circle fw-bold header-menu-icon x-large"></i>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item text-primary" href="#">{{ request.user.nom }}</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item text-primary">{{ request.user }}</a></li>
+              <li><a class="dropdown-item" href="{% url 'dashboard:user:edit' pk=request.user.id %}">Modifier le profil</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a></li>
+              <li><a class="dropdown-item" href="{% url 'connexion:logout' %}">Déconnexion</a></li>
             </ul>
           </li>
 

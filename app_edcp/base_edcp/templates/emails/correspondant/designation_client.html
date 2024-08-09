@@ -1,0 +1,12 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  Bonjour,
+  <br><br>
+  La désignation de <strong>{{correspondant}}</strong> comme Correspondant à la protection des données de l'organiation <strong>"{{ correspondant.organisation }}"</strong>, par <strong>{{ correspondant.created_by }}</strong> a bien été enregistrée.
+  <br>
+  Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">ce lien</a> pour afficher les détails.
+  <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

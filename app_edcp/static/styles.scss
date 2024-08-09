@@ -71,7 +71,16 @@ a{
   font-size: .9rem;
 }
 
+.form-text{
+  color: $custom-light;
+  margin-top: 0.5rem;
+}
+
 /********************** TABLES **********************/
+
+table{
+  font-size: 0.9rem;
+}
 
 table th{
   font-weight: normal;
@@ -79,6 +88,91 @@ table th{
 }
 
 table td{
-  color: $secondary-text-emphasis !important;
   cursor: pointer;
+}
+
+table.table-dark{
+  padding: 1rem;
+  border-radius: 7px;
+}
+
+/********************** CARDS **********************/
+
+.custom-card{
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+  border: none;
+  /* padding: .5rem 1rem; */
+}
+
+.custom-card .card-header{
+  border: none;
+}
+
+.custom-card-dark .card-header{
+  background-color: rgba($color: #ffffff, $alpha: 0.1);
+}
+
+
+.custom-card .card-body{
+  padding: 2rem;
+}
+
+.custom-card .card-title{
+  font-weight: 600;
+  color: #8f9bb3;
+}
+
+.custom-card .card-text{
+  color: var(--bs-secondary-color);
+}
+
+.custom-card-dark{
+  background-color: $custom-dark;
+}
+
+/********************** TOASTR **********************/
+#toast-container > div{
+  width: 400px;
+  padding: 25px 25px 25px 50px;
+  border-radius: 5px;
+  opacity: 1;
+  color: rgba($color: #ffffff, $alpha: 0.8);
+  box-shadow: 0 0 10px 0px rgba($color: #000000, $alpha: 0.2);
+  font-size: 1rem;
+  font-weight: 400;
+  border: none;
+}
+
+#toast-container > div:hover {
+  box-shadow: 0 0 20px 0px rgba($color: #000000, $alpha: 0.4);
+  /* box-shadow: 0 0 12px #000; */
+  opacity: 1;
+  color: rgba($color: #ffffff, $alpha: 1);
+  font-weight: 600;
+  border: none;
+}
+
+.toast-success {
+  background-color: $success;
+}
+
+.toast-info{
+  background-color: $info;
+}
+
+.toast-warning{
+  background-color: $warning;
+}
+
+.toast-error{
+  background-color: $danger;
+}
+
+#loadingModal{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 4rem;
+  height: 4rem;
+  z-index: 1000;
 }

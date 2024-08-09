@@ -1,0 +1,22 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  Bonjour,
+  <br><br>
+  Un compte utilisateur vous a été créé sur la plateforme e-DCP, 
+  en vue de votre désignation en tant que Correspondant à la protection des données 
+  de "{{organisation}}".
+  <br>
+  Vous devrez vous connecter à la plateforme avec les accès ci-dessous pour valider votre compte utilisateur. 
+  Il vous sera demandé de procéder au changement de votre mot de passe :
+
+  <ul>
+    <li><em>Adresse de connexion</em> : <a href="{{ domain }}{% url 'connexion:login' %}">Login e-DCP</a></li>
+    <li><em>Adresse email</em> : {{ user.email }}</li>
+    <li><em>Mot de passe temporaire</em> : {{ password }} </li>
+  </ul>
+  
+  <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

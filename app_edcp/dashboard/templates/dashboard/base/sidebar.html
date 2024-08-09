@@ -1,7 +1,13 @@
+{% comment %} {% if request.user.is_staff %}
+  <div id="sidebar" class="flex-shrink-0 p-3 sidebar-dark" style="width: 280px;">
+{% else %}
+  <div id="sidebar" class="flex-shrink-0 p-3" style="width: 280px;">
+{% endif %} {% endcomment %}
+
 <div id="sidebar" class="flex-shrink-0 p-3" style="width: 280px;">
-  {% comment %} <a href="/" class="d-flex align-items-center pb-3 mb-3 border-bottom text-secondary">
-      <i class="bi bi-house-door"></i> &nbsp; <span class="">Tableau de bord</span>
-  </a> {% endcomment %}
+  <p><a class="link-primary" href="{% url 'dashboard:index' %}">
+    <i class="bi bi-house-door me-2"></i> Tableau de bord
+  </a></p>
 
   <ul class="list-unstyled ps-0 mt-3">
     {% for elmt in  get_menu %}
@@ -19,8 +25,8 @@
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             {% for item in elmt.items %}
             <li>
-              <a href={% url item.url %} class="link-body-emphasis d-inline-flex text-decoration-none rounded">
-                <span class="sous-menu-item"> {{ item.text }} </span>
+              <a href={% url item.url %} class="d-inline-flex text-decoration-none rounded">
+                <span class="sous-menu-item custom-text-light"> {{ item.text }} </span>
               </a>
             </li>
             {% endfor %}
@@ -34,61 +40,4 @@
     {% endfor %}
   </ul>
 
-{% comment %}   
-EXAMPLE
-<ul class="list-unstyled ps-0">
-    <li class="mb-1">
-      <p>Formalités</p>
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-        Home
-      </button>
-      <div class="collapse show" id="home-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Updates</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reports</a></li>
-        </ul>
-      </div>
-    </li>
-    <li class="mb-1">
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-        Dashboard
-      </button>
-      <div class="collapse" id="dashboard-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Weekly</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Monthly</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Annually</a></li>
-        </ul>
-      </div>
-    </li>
-    <li class="mb-1">
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-        Orders
-      </button>
-      <div class="collapse" id="orders-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Processed</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Shipped</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
-        </ul>
-      </div>
-    </li>
-    <li class="border-top my-3"></li>
-    <li class="mb-1">
-      <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-        Account
-      </button>
-      <div class="collapse" id="account-collapse">
-        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Settings</a></li>
-          <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a></li>
-        </ul>
-      </div>
-    </li>
-  </ul> {% endcomment %}
 </div>

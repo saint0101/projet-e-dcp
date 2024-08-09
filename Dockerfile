@@ -11,7 +11,6 @@ RUN apk update && apk add --no-cache \
        tzdata \
        curl \
        zlib-dev \
-       # libressl-dev \
        readline-dev \
        yaml-dev \
        libxml2-dev \
@@ -25,21 +24,19 @@ RUN apk update && apk add --no-cache \
        nodejs \
        yarn \
        build-base \
-       # postgresql-dev \
        postgresql-client
-       # wkhtmltopdf
 
 # Spécifier le répertoire de travail dans le conteneur
 WORKDIR /app_edcp
 
-# Cloner le dépôt GitHub dans le conteneur
-RUN git clone -b dev_edcp_v0.1 https://github.com/saint0101/projet-e-dcp.git .
-
 # Copier les fichiers de l'application
 COPY ./app_edcp /app_edcp
 
+# Copier le fichier requirements.django5.txt
+COPY requirements.django5.txt /app_edcp/requirements.django5.txt
+
 # Installer les dépendances Python
-RUN pip3 install --trusted-host pypi.python.org -r requirements.django5.txt
+RUN pip3 install --trusted-host pypi.python.org -r /app_edcp/requirements.django5.txt
 
 # Ajouter le nom de l'instructeur (étiquette maintainer)
 LABEL maintainer="projetedcp.ci"
@@ -69,3 +66,6 @@ RUN adduser \
         django-user
 
 USER django-user
+
+# Commande par défaut à exécuter
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8088"]

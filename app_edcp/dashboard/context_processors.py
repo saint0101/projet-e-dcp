@@ -13,7 +13,7 @@ MENU_CLIENT = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : 'pencil-square',
+    'icon' : 'building',
     'url' : '',
     'disabled': False, 
     'items' : [
@@ -95,7 +95,7 @@ MENU_CLIENT = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : 'journal-text',
+    'icon' : 'patch-check',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -187,17 +187,17 @@ MENU_MGR = [
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
-    'icon' : 'pencil-square',
+    'icon' : 'building',
     'url' : '',
     'disabled': False, 
     'items' : [
-      {
-        'text' : 'Récent',
-        'type' : 'sous-menu-item',
-        'icon' : '',
-        'url' : 'dashboard:index',
-        'disabled': False,
-      },
+      #{
+      #  'text' : 'Récent',
+      #  'type' : 'sous-menu-item',
+      #  'icon' : '',
+      #  'url' : 'dashboard:index',
+      #  'disabled': False,
+      #},
       {
         'text' : 'Toutes les organisation',
         'type' : 'sous-menu-item',
@@ -276,7 +276,7 @@ MENU_MGR = [
     'text' : 'Mise en conformité',
     'id' : 'mise-en-conf',
     'type' : 'sous-menu',
-    'icon' : 'journal-text',
+    'icon' : 'patch-check',
     'url' : 'dashboard:index',
     'disabled': False, 
     'items' : [
@@ -337,9 +337,7 @@ def get_menu(request):
   """
   Returns the menu for the given request.
   Parameters:
-    request (HttpRequest): The HTTP request object.
-  Returns:
-    list: The menu for the user.
+  - request (HttpRequest) -- The HTTP request object.
   """
   user = request.user
   if user.is_authenticated and user.is_staff :

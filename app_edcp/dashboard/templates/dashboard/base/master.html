@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-
 {% load compress %}
 {% load static %}
+{% load custom_tags_filters %}
 {% comment %} {% load icon %} {% endcomment %}
 {% comment %} {% load bootstrap5 %}
     {% bootstrap_css %}
@@ -15,16 +15,18 @@
     {% compress css %}
         <link type="text/x-scss" href="{% static 'dashboard/styles.scss' %}" rel="stylesheet" >
         <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
-
     {% endcompress %}
 {% endblock %}
 
-{% block scripts %}
+{% comment %} {% block scripts %}
     <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 {% block custom_scripts %}
 {% endblock %}
+
+
+
 
 {% block layout %}
     {% block header %}
@@ -40,6 +42,17 @@
         {% endblock %}
 
         <div class="container p-4" id="content">
+            <!-- Affichage des notifications via Toastr -->
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <script>toastr.{{ message.tags }}('{{ message }}')</script>
+                    {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+
             {% block content %}
             {% endblock %}
         </div>

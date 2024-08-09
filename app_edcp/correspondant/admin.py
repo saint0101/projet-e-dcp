@@ -10,11 +10,12 @@ class CorrespondantAdmin(admin.ModelAdmin):
     """Correspondant"""
     ordering = ['id']  # Ordonne les correspondants par ID
     list_display = ['user', 'organisation', 'created_at', 'created_by', 'type_dpo', 'is_active', 'is_approved']
-    search_fields = ['user__nom', 'user__prenoms', 'organisation__nom']  # Ajoute un champ de recherche
-    list_filter = ['is_active', 'is_approved', 'type_dpo', 'organisation']  # Ajoute des filtres
+    # search_fields = ['user__nom', 'user__prenoms', 'organisation__nom']  # Ajoute un champ de recherche
+    # list_filter = ['is_active', 'is_approved', 'type_dpo', 'organisation']  # Ajoute des filtres
+    readonly_fields = ('created_at',)  # Le champ 'created_at' est en lecture seule
 
     # Configuration des champs dans le formulaire d'édition
-    fieldsets = (
+    """ fieldsets = (
         (None, {
             'fields': ('user', 'organisation', 'created_at', 'created_by', 'type_dpo', 'is_active', 'is_approved')
         }),
@@ -22,10 +23,9 @@ class CorrespondantAdmin(admin.ModelAdmin):
             'fields': ('qualifications', 'exercice_activite', 'moyens_materiels', 'moyens_humains', 'experiences'),
             'classes': ('collapse',),  # Ajoute un accordéon pour les informations complémentaires
         }),
-    )
-    readonly_fields = ('created_at',)  # Le champ 'created_at' est en lecture seule
-
-    def has_add_permission(self, request):
+    ) """
+    
+    """ def has_add_permission(self, request):
         # Optionnel : empêcher l'ajout de nouveaux correspondants via l'admin
         return False
 
@@ -33,7 +33,7 @@ class CorrespondantAdmin(admin.ModelAdmin):
         # Optionnel : personnaliser les permissions de modification
         if obj is not None and obj.created_by != request.user:
             return False
-        return super().has_change_permission(request, obj)
+        return super().has_change_permission(request, obj) """
 
 
 @admin.register(models.TypeDPO)

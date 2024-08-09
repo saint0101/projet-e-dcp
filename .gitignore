@@ -1,6 +1,9 @@
 # Fichiers de cache CSS
 app_edcp/staticfiles/CACHE
 
+# Fichiers uploadés
+app_edcp/uploads
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -12,6 +15,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+!app_edcp/static/toastr/build
 develop-eggs/
 dist/
 !app_edcp/static/bootstrap/dist
@@ -45,6 +49,9 @@ drafts.txt
 
 # Ignorer les scripts d'entrypoint
 entrypoint.sh
+
+# Ignorer les scripts de deploiment
+depoimentedcp.sh
 
 # Ignorer les fichiers de requirements de développement
 requirements.dev.txt

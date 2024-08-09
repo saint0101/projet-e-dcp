@@ -16,6 +16,7 @@
 
     {% compress css %}
       {% comment %}<link type="text/x-scss" href="{% static 'bootstrap/scss/bootstrap.scss' %}" rel="stylesheet" media="screen"> {% endcomment %}      
+      <link type="text/x-scss" href="{% static 'toastr/build/toastr.min.css' %}" rel="stylesheet">
       <link type="text/x-scss" href="{% static 'styles.scss' %}" rel="stylesheet" media="screen">
     {% endcompress %}
 
@@ -23,8 +24,9 @@
     {% endblock %}
 
     {% block scripts %}
-      {% comment %} <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script> {% endcomment %}
-      {% comment %} <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
+      <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script> 
+      <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'toastr/build/toastr.min.js' %}"></script>
     {% endblock %}
 
     {% block custom_scripts %}
@@ -32,6 +34,40 @@
 
 </head>
 <body>
+  <script>
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": false,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "2000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+  </script>
+
+  <script>
+    function openLoader() {
+      document.getElementById("loadingModal").style.display = "block";
+    }
+
+    /*const linkLoader = document.querySelector(".link-loader");
+    linkLoader.addEventListener("click", (event) => {
+      openLoader();
+    });*/
+  </script>
+
+  <div id="loadingModal" class="spinner-border text-primary" role="status" style="display: none;">
+    <span class="visually-hidden">Chargement...</span>
+  </div>
 
   {% block layout %}
   {% endblock %}
