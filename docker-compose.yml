@@ -18,22 +18,21 @@ services:
       - ./app_edcp:/app_edcp  # Montage du dossier local './app_edcp' dans le dossier '/app_edcp' du conteneur
 
     # Commande à exécuter lors du démarrage du conteneur
-    # Correction de la commande avec le nom correct 'manage.py'
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8088"
 
-    # definition des variables d'environnement des acces de la bd
+    # Définition des variables d'environnement pour l'accès à la base de données
     environment:
       - DB_HOST=db
       - DB_NAME=edcp_db
       - DB_USER=Uroot_edcp
       - DB_PASS=e_dcp@2023#
 
-    # demarrer premierement la bd
+    # Démarrer d'abord la base de données
     depends_on:
       - db
 
-  # creation du service de base de donnee
+  # Création du service de base de données
   db:
     image: postgres:13-alpine
     # Configuration des ports
@@ -46,14 +45,14 @@ services:
     networks:
       - default
     environment:
-      - POSTGRES_DB=edcp_db # nom de la bd 7B5e.kZc4d6!Dq
-      - POSTGRES_USER=Uroot_edcp # name user of database
-      - POSTGRES_PASSWORD=e_dcp@2023#  # password for user of database
-      - EMAIL_HOST ='smtp.office365.com'
-      - EMAIL_PORT =587
-      - EMAIL_USE_TLS =True
-      - EMAIL_HOST_USER ='edcp@artci.ci'
-      - EMAIL_HOST_PASSWORD ='ZM7rfPxdS87&bWq$$'
+      - POSTGRES_DB=edcp_db  # Nom de la base de données
+      - POSTGRES_USER=Uroot_edcp  # Nom d'utilisateur de la base de données
+      - POSTGRES_PASSWORD=e_dcp@2023#  # Mot de passe de l'utilisateur de la base de données
+      - EMAIL_HOST=smtp.office365.com
+      - EMAIL_PORT=587
+      - EMAIL_USE_TLS=True
+      - EMAIL_HOST_USER=edcp@artci.ci
+      - EMAIL_HOST_PASSWORD=ZM7rfPxdS87&bWq$$
 
   pgadmin:
     image: dpage/pgadmin4
@@ -64,7 +63,6 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin_edcp@1234#.
     depends_on:
       - db
-
 
 volumes:
   devedcp-db-data:
