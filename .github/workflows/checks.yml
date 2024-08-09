@@ -16,19 +16,19 @@ jobs:
     # Étapes à exécuter dans le job
     steps:
       - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
-        uses: docker/login-action@v3 # Utilisation de l'action docker/login-action@v3
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}  # Nom d'utilisateur Docker Hub
-          password: ${{ secrets.DOCKERHUB_TOKEN }} # Mot de passe Docker Hub
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Téléchargement du code source # Étape de récupération du code source
-        uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
+        uses: actions/checkout@v2
 
-       #- name: Exécuter les tests # Étape d'exécution des tests
-       # run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution des tests via docker-compose
+      # - name: Exécuter les tests # Étape d'exécution des tests
+      # run: docker-compose run --rm app_edcp sh -c "python manage.py test"
 
       # - name: Vérification du linting # Étape de vérification du linting
-      #  run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8
+      # run: docker-compose run --rm app_edcp sh -c "flake8"
 
   deploy: # Nom du job de déploiement
     name: Déploiement
@@ -58,6 +58,10 @@ jobs:
 
       - name: Installer SSHpass pour utiliser le mot de passe SSH
         run: sudo apt-get install -y sshpass
+
+      - name: Tester la connexion SSH avant le déploiement
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo 'SSH Connection Successful'"
 
       - name: Déployer sur le serveur de production
         run: |
