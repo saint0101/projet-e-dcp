@@ -61,7 +61,7 @@ jobs:
 
       - name: Tester la connexion SSH avant le déploiement
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo 'SSH Connection Successful'"
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} "echo 'SSH Connection Successful'"
 
       - name: Déployer sur le serveur de production
         run: |
