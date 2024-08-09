@@ -1,53 +1,45 @@
 version: "3.9"
 
-# Définition des services pour l'API
 services:
   app_edcp:
-    # Configuration de la construction de l'image
     build:
-      context: .  # Chemin du contexte de construction (répertoire courant)
-      args:     # creation d'un argument appeler dev avec pour valeur true
+      context: .
+      args:
         - DEV=true
 
-    # Configuration des ports
     ports:
-      - "8088:8088"  # Mapping du port du conteneur sur le port de l'hôte
+      - "8088:8088"
 
-    # Configuration des volumes
     volumes:
-      - ./app_edcp:/app_edcp  # Montage du dossier local './app_edcp' dans le dossier '/app_edcp' du conteneur
+      - ./app_edcp:/app_edcp
 
-    # Commande à exécuter lors du démarrage du conteneur
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8088"
 
-    # Définition des variables d'environnement pour l'accès à la base de données
     environment:
       - DB_HOST=db
       - DB_NAME=edcp_db
       - DB_USER=Uroot_edcp
       - DB_PASS=e_dcp@2023#
 
-    # Démarrer d'abord la base de données
     depends_on:
       - db
 
-  # Création du service de base de données
   db:
     image: postgres:13-alpine
-    # Configuration des ports
     ports:
-      - "5436:5432"  # Mapping du port du conteneur sur le port de l'hôte
+      - "5436:5432"
 
     volumes:
       - devedcp-db-data:/var/lib/postgresql/data
 
     networks:
       - default
+
     environment:
-      - POSTGRES_DB=edcp_db  # Nom de la base de données
-      - POSTGRES_USER=Uroot_edcp  # Nom d'utilisateur de la base de données
-      - POSTGRES_PASSWORD=e_dcp@2023#  # Mot de passe de l'utilisateur de la base de données
+      - POSTGRES_DB=edcp_db
+      - POSTGRES_USER=Uroot_edcp
+      - POSTGRES_PASSWORD=e_dcp@2023#
       - EMAIL_HOST=smtp.office365.com
       - EMAIL_PORT=587
       - EMAIL_USE_TLS=True
@@ -58,9 +50,11 @@ services:
     image: dpage/pgadmin4
     ports:
       - "8880:80"
+
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin_projet_edcp@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin_edcp@1234#.
+
     depends_on:
       - db
 
