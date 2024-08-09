@@ -55,23 +55,3 @@ jobs:
 
       - name: Pousser l'image sur Docker Hub
         run: docker-compose -f docker-compose.yml push app_edcp
-
-      - name: Installer SSHpass pour utiliser le mot de passe SSH
-        run: sudo apt-get install -y sshpass
-
-      - name: Tester la connexion SSH avant le déploiement
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no edcp@172.16.0.86 "echo 'SSH Connection Successful'"
-
-      - name: Déployer sur le serveur de production
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker-compose -f projet-e-dcp/docker-compose.yml pull app_edcp
-          docker-compose -f projet-e-dcp/docker-compose.yml up -d --no-deps app_edcp
-          EOF
-
-      - name: Construire l'image Docker pour la production
-        run: docker-compose -f docker-compose.prod.yml build app_edcp
-
-      - name: Pousser l'image Docker pour la production
-        run: docker-compose -f docker-compose.prod.yml push app_edcp
