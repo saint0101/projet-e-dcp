@@ -5,7 +5,7 @@ name: Les Vérifications et Déploiement
 on:
   push:
     branches:
-      - main # Seulement la branche principale (main)
+      - dev_edcp_v0.1 # Seulement la branche principale (main, dev_edcp_v0.1)
 
 # Définition des tâches à exécuter
 jobs:
@@ -50,8 +50,11 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      - name: Construire l'image Docker
-        run: docker-compose -f docker-compose.yml build app_edcp
+      - name: Construire l'image Docker avec tags
+        run: |
+          docker-compose -f docker-compose.yml build app_edcp --tag ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier --tag ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }}
 
       - name: Pousser l'image sur Docker Hub
-        run: docker-compose -f docker-compose.yml push app_edcp
+        run: |
+          docker-compose -f docker-compose.yml push ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier
+          docker-compose -f docker-compose.yml push ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }}
