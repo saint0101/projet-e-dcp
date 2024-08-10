@@ -9,4 +9,5 @@ urlpatterns = [
     path('enregistrement/', include('enregistrement.urls')),
     path('correspondant/', include('correspondant.urls')),
     path('user/', include('user.urls')),
+    path('demande-autorisation/', include('demande_auto.urls')),
 ]

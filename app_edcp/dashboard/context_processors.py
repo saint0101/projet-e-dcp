@@ -71,7 +71,7 @@ MENU_CLIENT = [
         'text' : 'Nouvelle demande',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:demande_auto:create',
         'disabled': False, 
       },
       {
@@ -85,7 +85,7 @@ MENU_CLIENT = [
         'text' : 'Mes demandes',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:demande_auto:index',
         'disabled': False, 
       },
     ]
@@ -252,7 +252,7 @@ MENU_MGR = [
         'text' : 'Nouvelle demande',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:demande_auto:create',
         'disabled': False, 
       },
       {
@@ -266,7 +266,7 @@ MENU_MGR = [
         'text' : 'Toutes les demandes',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:demande_auto:index',
         'disabled': False, 
       },
     ]

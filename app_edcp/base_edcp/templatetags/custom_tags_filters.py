@@ -68,3 +68,12 @@ def attr(obj, attr_name):
     Utilisé pour l'affichage dynamique des fichiers justificatifs
     """
     return getattr(obj, attr_name, None)
+
+
+@register.filter
+def get_form_field(form, field_name):
+    """
+    Renvoie la valeur du champ field_name de l'objet.
+    Utilisé pour l'affichage dynamique des formulaires.
+    """
+    return form[field_name]

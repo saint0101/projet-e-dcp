@@ -1,0 +1,44 @@
+{% extends 'dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load compress %}
+{% load static %}
+
+{% block app_styles %}
+  {% compress css %}
+    <link type="text/x-scss" href="{% static 'forms.scss' %}" rel="stylesheet" media="screen">
+    <link type="text/x-scss" href="{% static 'demande_auto/styles.scss' %}" rel="stylesheet" media="screen">
+  {% endcompress %}
+{% endblock %}
+
+{% block custom_scripts %}
+
+{% endblock %}
+
+
+{% block content %}
+
+  
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Edition de la demande d'autorisation</h3>
+          <div class="card-text">
+            <form method="post" id="update-demande-form" onsubmit="openLoader()">
+              {% csrf_token %}
+              {{ form | crispy }}
+              <button id="btn-submit" name="submit" class="btn btn-primary py-2" type="submit">Enregistrer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  
+{% endblock content %}
+
+

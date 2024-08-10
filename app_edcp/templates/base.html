@@ -20,8 +20,12 @@
       <link type="text/x-scss" href="{% static 'styles.scss' %}" rel="stylesheet" media="screen">
     {% endcompress %}
 
-    {% block styles %}
-    {% endblock %}
+      {% block styles %}
+      {% endblock %}
+
+      {% block app_styles %}
+      {% endblock %}
+    
 
     {% block scripts %}
       <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script> 

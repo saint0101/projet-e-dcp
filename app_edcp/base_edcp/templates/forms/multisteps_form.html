@@ -1,0 +1,145 @@
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load static %}
+
+{% comment %} <style>
+  .nav .nav-item button.active {
+    background-color: transparent;
+    color: var(--bs-primary) !important;
+  }
+  
+  .nav .nav-item button.invalid {
+    color: var(--bs-danger) !important;
+  }
+  
+  .nav .nav-item button.valid {
+    color: var(--bs-success) !important;
+  }
+  
+  .nav .nav-item button.active::after {
+    content: "";
+    border-right: 4px solid var(--bs-primary);
+    height: 100%;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .nav .nav-item button.active.invalid::after {
+    content: "";
+    border-right: 4px solid var(--bs-danger);
+    height: 100%;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .nav .nav-item button.invalid::before {
+    content: "\F622";
+    font-family: "bootstrap-icons";
+    color: var(--bs-danger) !important;
+    height: 100%;
+    position: absolute;
+    left: -4px;
+    top: 8px;
+  }
+  
+  .nav .nav-item button.active.valid::after {
+    content: "";
+    border-right: 4px solid var(--bs-success);
+    height: 100%;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .nav .nav-item button.valid::before {
+    content: "\F26A";
+    font-family: "bootstrap-icons";
+    color: var(--bs-success) !important;
+    height: 100%;
+    position: absolute;
+    left: -4px;
+    top: 8px;
+  }
+  
+  #tab-panel {
+    width: 800px;
+  }
+</style> {% endcomment %}
+<style>
+
+</style>
+
+
+<script>
+  $(document).ready(function(){
+    $("#multisteps-form").steps({
+      headerTag: "h3",
+      bodyTag: "section",
+      transitionEffect: "slideLeft",
+      autoFocus: true
+    });
+  });
+  
+</script>
+
+<div id="multisteps-form">
+  {% for form_tab in form_structure %}
+    <h3>{{ form_tab.display_name }}</h3>
+    <section>
+      {% for field in form_tab.fields %}
+        <div class="fieldWrapper">
+          {{ form|get_form_field:field|as_crispy_field }}
+        </div>
+    {% endfor %}
+    </section>
+  {% endfor %}
+</div>
+
+<div class="container p-5 d-flex align-items-start" id="tab-panel">
+  <ul class=" nav nav-pills flex-column nav-pills border-end border-3 me-3 align-items-end" id="pills-tab" role="tablist">
+    {% for form_tab in form_structure %}
+      <li class="nav-item" role="presentation">
+        {{ form_tab.display_name }}
+        {% comment %} <button 
+          (click)="goToStep(i)" 
+          ngClass="{
+            'active': activeStep == i,
+            'invalid': formGroup.invalid && !formGroup.pristine,
+            'valid': formGroup.valid && !formGroup.pristine
+          }"
+          class="nav-link text-secondary fw-semibold  position-relative" 
+          id="form_tab_{{forloop.counter}}" role="tab" 
+          aria-controls="pills-home" aria-selected="true">
+            {{ form_tab.display_name }}
+        </button> {% endcomment %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="tab-content border rounded-3 border-primary p-3 text-primary w-100" id="pills-tabContent">
+    {% for form_tab in form_structure %}
+      <div id="tab_{{forloop.counter}}}}" ngClass="activeStep == i ? 'show active' : '' " class="tab-pane fade" role="tabpanel" aria-labelledby="pills-home-tab">
+        <h2>{{ form_tab.display_name }}</h2>
+        <main class="form m-auto">
+          {% for field in form_tab.fields %}
+            <div class="fieldWrapper">
+              {% comment %} {{ form|get_form_field:field|as_crispy_field }} {% endcomment %}
+              {{ field }}
+            </div>
+          {% endfor %}
+          <div class="form-row d-flex justify-content-between" >
+            <button class="btn btn-secondary py-2" type="submit" (click)="previous()" [disabled]="activeStep==0">Précédent</button>
+            <button class="btn btn-primary py-2" type="submit" (click)="next()" [disabled]="activeStep==sections.length-1">Suivant</button>
+          </div>
+        
+        </main>
+      </div>
+    {% endfor %}
+    
+  </div>
+</div>
