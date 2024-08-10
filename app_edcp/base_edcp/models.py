@@ -568,8 +568,7 @@ class TypeDemandeAutorisation(models.Model):
 
 
 # Modèle principal pour représenter la demande d'autorisation
-class DemandeAuto(models.Model):
-    """ Modèle pour représenter un exemple de données liées a la demande d'autorisation """
+""" class DemandeAutoOld(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name="Utilisateur")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date de Création')
     organisation_id = models.CharField(max_length=255, verbose_name='ID de l\'Organisation')
@@ -597,7 +596,7 @@ class DemandeAuto(models.Model):
 
     def __str__(self):
         return f"ID: {self.id} - Utilisateur: {self.user.username}"
-
+ """
 
 class Fonction(models.Model):
     """ Table Fonction """

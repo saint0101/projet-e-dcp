@@ -198,11 +198,11 @@ class CategorieTraitAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(models.DemandeAuto)
-class DemandeAutoAdmin(admin.ModelAdmin):
+""" @admin.register(models.DemandeAuto)
+class DemandeAutodAdmin(admin.ModelAdmin):
     list_display = ('user', 'organisation_id', 'organisation_name', 'consent_dcp', 'consent_docs', 'summary', 'traitement_sensible', 'finalite', 'legitimite', 'status', 'type_demande')
     search_fields = ('organisation_name', 'summary')
-    list_filter = ('finalite', 'legitimite', 'status', 'type_demande')
+    list_filter = ('finalite', 'legitimite', 'status', 'type_demande') """
 
 
 # module Fonction

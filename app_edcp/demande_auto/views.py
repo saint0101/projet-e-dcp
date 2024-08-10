@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django import forms
-from .models import TypeDemandeAuto, DemandeAuto
+from .models import DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, DemandeAutoBiometrie, TypeDemandeAuto, Status, DemandeAuto
 from .forms import CreateDemandeForm, FORM_STRUCTURE
 from base_edcp.models import Enregistrement
 
@@ -16,7 +16,8 @@ def index(request):
 
 def create(request):
     context = {}
-    form = CreateDemandeForm(request)
+    form = CreateDemandeForm()
+    form.fields['organisation'].queryset = Enregistrement.objects.filter(user=request.user)
     """ Pour le multisteps"""
     """ rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': FORM_STRUCTURE}) """
     # context['form'] = form
@@ -26,7 +27,22 @@ def create(request):
     if request.method == 'POST':
       form = CreateDemandeForm(request.POST)
       if form.is_valid():
-        pass
+        form.cleaned_data['user'] = request.user
+        form.cleaned_data['status'] = Status.objects.get(label='brouillon')
+        demande = None
+        if form.cleaned_data['type_demande'] == DemandeAutoTraitement.get_type_demande():
+           demande = DemandeAutoTraitement.objects.create(**form.cleaned_data)
+        
+        if form.cleaned_data['type_demande'] == DemandeAutoTransfert.get_type_demande():
+           demande = DemandeAutoTransfert.objects.create(**form.cleaned_data)
+
+        if form.cleaned_data['type_demande'] == DemandeAutoVideo.get_type_demande():
+           demande = DemandeAutoVideo.objects.create(**form.cleaned_data)
+
+        if form.cleaned_data['type_demande'] == DemandeAutoBiometrie.get_type_demande():
+           demande = DemandeAutoBiometrie.objects.create(**form.cleaned_data)
+
+        return redirect('dashboard:demande_auto:edit', pk=demande.id)        
 
     types_demandes = TypeDemandeAuto.objects.all()
     context['form'] = form
@@ -61,8 +77,32 @@ def create(request):
   
 
 class demandeUpdateView(UpdateView):
-   fields = '__all__'
-   template_name = 'demande_auto/demande_edit.html'
+  model = DemandeAuto
+  fields = '__all__'
+  template_name = 'demande_auto/demande_edit.html'
+
+  def get_object(self, queryset=None):
+    object = super().get_object(queryset=queryset)
+
+    if object.type_demande.label == 'traitement':
+      print ('update traitement')
+      self.model = DemandeAutoTraitement
+
+    if object.type_demande.label == 'transfert':
+      print ('update transfert')
+      self.model = DemandeAutoTransfert
+
+    if object.type_demande.label == 'videosurveillance':
+      print ('update videosurveillance')
+      self.model = DemandeAutoVideo
+
+    if object.type_demande.label == 'biometrie':
+      print ('update biometrie')
+      self.model = DemandeAutoBiometrie
+
+    # Now, call the original get_object method
+    return object
+
 
    
   

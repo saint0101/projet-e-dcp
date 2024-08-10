@@ -43,9 +43,10 @@ class CreateDemandeForm(forms.Form):
 
   # template_name = 'forms/multisteps_form.html'
 
-  def __init__(self, request=None, *args, **kwargs):
+  def __init__(self, *args, **kwargs):
     # request_kwargs = kwargs.pop('request')
     super().__init__(*args, **kwargs)
     # print('user : ', request.user)
-    if request:
-      self.fields['organisation'].queryset = Enregistrement.objects.filter(user=request.user)
+    """ if user:
+      self.fields['organisation'].queryset = Enregistrement.objects.filter(user=user)
+      pass """

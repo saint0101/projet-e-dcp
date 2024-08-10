@@ -82,13 +82,15 @@ class Status(OptionModel):
 
 
 def get_default_status():
-  return Status.objects.get_or_create(label='brouillon')
+  default_status = Status.objects.get(label='brouillon')
+  return default_status.id
 
 
 class DemandeAuto(models.Model):
     user = models.ForeignKey(
       User, 
       on_delete=models.CASCADE, 
+      blank=True,
       verbose_name="Utilisateur"
     )
     organisation = models.ForeignKey(
@@ -104,16 +106,19 @@ class DemandeAuto(models.Model):
       'Status', 
       blank=True,
       on_delete=models.CASCADE, 
-      default=get_default_status,
       verbose_name='Statut de la demande'
     )
     finalite = models.ForeignKey(
       'Finalite', 
+      null=True,
+      blank=True,
       on_delete=models.CASCADE, 
       verbose_name='Finalité'
     )
     sous_finalites = models.ForeignKey(
       'SousFinalite', 
+      null=True,
+      blank=True,
       on_delete=models.CASCADE, 
       verbose_name='Sous-finalités'
     )
@@ -128,11 +133,14 @@ class DemandeAuto(models.Model):
       verbose_name='Description du traitement'
     )
     personnes_concernees = models.ManyToManyField(
-      'PersConcernee', 
+      'PersConcernee',
       blank=True,
       verbose_name='Personnes Concernées'
     )
-    # consent_docs = models.BooleanField(default=False, verbose_name='Consentement Documents')
+    consent_docs = models.BooleanField(
+      default=False, 
+      verbose_name='Consentement Documents'
+    )
     # traitement_sensible = models.BooleanField(default=False, verbose_name='Traitement Sensible')
     # procedure_droit_persones = models.TextField(blank=True, null=True, verbose_name='Procédure Droit des Personnes')
     # finalite = models.ForeignKey('Finalite', on_delete=models.CASCADE, verbose_name='Finalité')
@@ -145,7 +153,6 @@ class DemandeAuto(models.Model):
     # securite = models.ForeignKey('Securite', on_delete=models.CASCADE, verbose_name='Sécurité')
     
     class Meta:
-      abstract = True
       verbose_name = 'Demande d\'autorisation'
       verbose_name_plural = 'Demandes d\'autorisation'
 
@@ -154,13 +161,30 @@ class DemandeAuto(models.Model):
     
 
 class DemandeAutoTraitement(DemandeAuto):
-  pass
+  @classmethod
+  def get_type_demande(cls):
+    return TypeDemandeAuto.objects.get(label='traitement')
 
 
 class DemandeAutoTransfert(DemandeAuto):
-  pass
+  destination = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+  )
+  @classmethod
+  def get_type_demande(cls):
+    return TypeDemandeAuto.objects.get(label='transfert')
 
 
 class DemandeAutoVideo(DemandeAuto):
-  pass
+  @classmethod
+  def get_type_demande(cls):
+    return TypeDemandeAuto.objects.get(label='videosurveillance')
+  
+
+class DemandeAutoBiometrie(DemandeAuto):
+  @classmethod
+  def get_type_demande(cls):
+    return TypeDemandeAuto.objects.get(label='biometrie')
 
