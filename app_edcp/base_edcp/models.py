@@ -6,6 +6,8 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
+    Group,
+    Permission,
 )
 
 from base_edcp import validators
@@ -67,7 +69,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
     must_reset = models.BooleanField(default=False, verbose_name='Doit Reinitialiser son Mot de Passe')
     is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
-
     consentement = models.BooleanField(
         default=False,
         #null=True,  # Autoriser temporairement les valeurs NULL
@@ -97,8 +98,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Utilisateurs'
 
     def __str__(self):
-        """ les champs a retourner pour l'affichage d'un objet USER"""
-        return self.nom + ' ' + self.prenoms
+        """Retourne une représentation sous forme de chaîne de l'utilisateur"""
+        return f"{self.nom} ({self.prenoms})"
 
 
 
