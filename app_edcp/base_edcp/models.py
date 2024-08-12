@@ -79,6 +79,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         Vos données ne seront traitées que par les agents habilités de l'Autorité de Protection.
         Vous pouvez à tous moments exercer vos droits exercer à l'adresse ..... ''')
 
+    # Relation ManyToMany pour gérer les groupes de l'utilisateur
+    groups = models.ManyToManyField(
+        Group,
+        related_name="base_edcp_user_set",  # Nom unique pour la relation inverse avec 'groups'
+        blank=True,
+        help_text="Les groupes auxquels cet utilisateur appartient.",
+        verbose_name="Groupes",
+    )
+
+    # Relation ManyToMany pour gérer les permissions spécifiques de l'utilisateur
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="base_edcp_user_permissions_set",  # Nom unique pour la relation inverse avec 'user_permissions'
+        blank=True,
+        help_text="Permissions spécifiques pour cet utilisateur.",
+        verbose_name="Permissions des utilisateurs",
+    )
+
     # extenssier la gestionnaire d'utilisateur
     objects = CustomUserManager()
 
