@@ -12,12 +12,75 @@
 {% endblock %}
 
 {% block custom_scripts %}
+  <script src="{% static 'jquery-steps/jquery.steps.min.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      // const $selectFinalite = $('#id_finalite');
+      // console.log('starting script', $selectFinalite);
+      $("#multisteps-form").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        autoFocus: true
+      });
+
+      const selectFinalite = $('#id_finalite');
+      const inputName = 'sous_finalites';
+       
+      $('input[name="' + inputName + '"]').parent('div').toggle(false);
+      //console.log('inputs ', 'input[name="' + inputName + '"]');
+
+      selectFinalite.on('change', function(){
+        const idFinalite = selectFinalite.val();
+        console.log('select changed value : ', idFinalite);
+
+        $.ajax({
+          url: 'sous-finalites',
+          data: { id_finalite: idFinalite },
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          success: function(data) {
+            console.log('response : ', data)
+            showSousFinalite(data);
+          }
+        });
+      });
+
+      function showSousFinalite(data){
+        $('input[name="' + inputName + '"]').parent('div').toggle(false);
+        data.sousFinalites.forEach(sousFinalite => {
+          $('input[name="' + inputName + '"][value="' + sousFinalite.id + '"]').parent('div').toggle(true);
+        })
+      }
+    });
+    {% comment %} document.addEventListener("DOMContentLoaded", function(){
+      const fieldFinalite = document.getElementById('id_finalite')
+      fieldFinalite.addEventListener('change', function(){
+        console.log('change value : ', fieldFinalite.value);
+      });
+    }); {% endcomment %}
+  </script>
 
 {% endblock %}
 
 
 {% block content %}
-
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card custom-card">
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Historique</h3>
+            <ul class="list-group">
+            {% for elmt in historique %}
+              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
+              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
+            {% endfor %}
+            </ul>
+          <div class="card-text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="row mx-3 my-4">
     <div class="col">
@@ -25,10 +88,13 @@
         
         <div class="card-body">
           <h3 class="text-hint mb-3 card-title">Edition de la demande d'autorisation</h3>
-          <div class="card-text">
+          <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
+          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }}<br>
+          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong><br>
+          <div class="card-text mt-3">
             <form method="post" id="update-demande-form" onsubmit="openLoader()">
               {% csrf_token %}
-              {{ form | crispy }}
+              {{ form }}
               <button id="btn-submit" name="submit" class="btn btn-primary py-2" type="submit">Enregistrer</button>
             </form>
           </div>

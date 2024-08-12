@@ -68,6 +68,11 @@ class SousFinalite(OptionModel):
     verbose_name='Finalité',
   )
 
+class ActionDemande(OptionModel):
+  class Meta:
+    verbose_name = 'Action effectuée'
+    verbose_name_plural = 'Actions effectuées'
+
 
 class PersConcernee(OptionModel):
   class Meta:
@@ -115,11 +120,9 @@ class DemandeAuto(models.Model):
       on_delete=models.CASCADE, 
       verbose_name='Finalité'
     )
-    sous_finalites = models.ForeignKey(
+    sous_finalites = models.ManyToManyField(
       'SousFinalite', 
-      null=True,
       blank=True,
-      on_delete=models.CASCADE, 
       verbose_name='Sous-finalités'
     )
     type_demande = models.ForeignKey(
@@ -157,10 +160,28 @@ class DemandeAuto(models.Model):
       verbose_name_plural = 'Demandes d\'autorisation'
 
     def __str__(self):
-      return f"{self.type_demande} - {self.user.username}"
+      return f"{self.type_demande} #{self.pk}"
     
 
 class DemandeAutoTraitement(DemandeAuto):
+  fondement_juridique = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+    verbose_name='Fondement Juridique'
+  )
+  procedures = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Procédures'
+  )
+  mesures_securite = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Mesures de Securité'
+  )
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='traitement')
@@ -171,20 +192,110 @@ class DemandeAutoTransfert(DemandeAuto):
     null=True,
     blank=True,
     max_length=255,
+    verbose_name='Destination du transfert'
   )
+  motif_transfert = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+    verbose_name='Motif du Transfert'
+  )
+  mesures_securite = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Mesures de Securité'
+  )
+
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='transfert')
 
 
 class DemandeAutoVideo(DemandeAuto):
+  types_cameras = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+    verbose_name='Types de cameras'
+  )
+  nb_cameras = models.IntegerField(
+    null=True,
+    blank=True,
+    verbose_name='Nombre de cameras'
+  )
+  mesures_securite = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Mesures de Securité'
+  )
+
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='videosurveillance')
   
 
 class DemandeAutoBiometrie(DemandeAuto):
+  types_dispositifs = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+    verbose_name='Types de dispositifs'
+  )
+  nb_dispositifs = models.IntegerField(
+    null=True,
+    blank=True,
+    verbose_name='Nombre de dispositifs'
+  )
+  mesures_securite = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Mesures de Securité'
+  )
+
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='biometrie')
+
+
+
+class HistoriqueDemande(models.Model):
+  demande = models.ForeignKey(
+    'DemandeAuto',
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Demande d\'autorisation'
+  )
+  status = models.ForeignKey(
+    'Status', 
+    blank=True,
+    on_delete=models.CASCADE, 
+    verbose_name='Statut de la demande'
+  )
+  action = models.ForeignKey(
+    'ActionDemande',
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Action effectuée'
+  )
+  auteur = models.ForeignKey(
+    User,
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Auteur'
+  )
+  created_at = models.DateTimeField(
+    auto_now_add=True,
+    verbose_name='Date de Création'
+  )
+
+  class Meta:
+      verbose_name = 'Historique de la demande'
+      verbose_name_plural = 'Historiques des demandes'
+
+  def __str__(self):
+    return f"{self.action.description}"
+
 

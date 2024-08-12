@@ -77,3 +77,12 @@ def get_form_field(form, field_name):
     Utilisé pour l'affichage dynamique des formulaires.
     """
     return form[field_name]
+
+
+@register.filter
+def leading_zeros(value, num_digits):
+    """
+    Permet d'ajouter des zero devant une valeur.
+    Utilisé pour l'affichage des ID des demandes.
+    """
+    return str(value).zfill(num_digits)

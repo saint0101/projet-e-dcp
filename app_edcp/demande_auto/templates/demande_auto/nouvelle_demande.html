@@ -12,7 +12,9 @@
 {% endblock %}
 
 {% block custom_scripts %}
-  <script src="{% static 'jquery-steps/jquery.steps.min.js' %}"></script><script>
+  <script src="{% static 'jquery-steps/jquery.steps.min.js' %}"></script>
+  
+  <script>
     $(document).ready(function(){
       $('#div_id_type_demande').toggle(false);
       $('#div_id_type_demande').height(0);      

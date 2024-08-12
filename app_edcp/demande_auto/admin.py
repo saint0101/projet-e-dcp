@@ -40,4 +40,19 @@ class StatusAdmin(admin.ModelAdmin):
     list_display = ['label', 'description', 'is_sensible', 'ordre']
 
 
+@admin.register(models.ActionDemande)
+class ActionDemandeAdmin(admin.ModelAdmin):
+    """ Actions effectuées """
+    ordering = ['id']
+    list_display = ['label', 'description', 'is_sensible', 'ordre']
+
+
+
+@admin.register(models.HistoriqueDemande)
+class HistoriqueAdmin(admin.ModelAdmin):
+    """ Historique des demandes """
+    ordering = ['id']
+    list_display = ['created_at', 'demande', 'status','action', 'auteur']
+
+
 # admin.site.unregister(models.Status, StatusAdmin)

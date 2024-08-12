@@ -75,7 +75,7 @@
 </style>
 
 
-<script>
+{% comment %} <script>
   $(document).ready(function(){
     $("#multisteps-form").steps({
       headerTag: "h3",
@@ -85,7 +85,7 @@
     });
   });
   
-</script>
+</script> {% endcomment %}
 
 <div id="multisteps-form">
   {% for form_tab in form_structure %}
@@ -100,6 +100,7 @@
   {% endfor %}
 </div>
 
+<!-- 
 <div class="container p-5 d-flex align-items-start" id="tab-panel">
   <ul class=" nav nav-pills flex-column nav-pills border-end border-3 me-3 align-items-end" id="pills-tab" role="tablist">
     {% for form_tab in form_structure %}
@@ -143,3 +144,4 @@
     
   </div>
 </div>
+-->
