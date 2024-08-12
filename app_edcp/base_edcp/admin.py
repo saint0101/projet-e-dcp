@@ -367,8 +367,6 @@ class JournalTransactionAdmin(admin.ModelAdmin):
     )
 
 
-
-
 @admin.register(models.Legitimite)
 class LegitimiteAdmin(admin.ModelAdmin):
     list_display = ('label', 'description')
@@ -441,3 +439,9 @@ class StatusAdmin(admin.ModelAdmin):
 class TypeDemandeAutorisationAdmin(admin.ModelAdmin):
     list_display = ('label',)
     search_fields = ('label',)
+
+
+# modifier le titre de l'espace admin de django
+admin.site.site_header = "Administration de e-DCP"
+admin.site.site_title = "e-DCP Admin"
+admin.site.index_title = "Bienvenue dans l'administration de e-DCP"
