@@ -238,7 +238,7 @@ class Enregistrement(models.Model):
     type_piece = models.ForeignKey(
         'TypePiece',
         null=True,
-        default='',
+        default=None,
         on_delete=models.CASCADE,
         verbose_name='Type de pièce d\'identité',
         blank=True
@@ -324,6 +324,7 @@ class TypePiece(models.Model):
 class Secteur(models.Model):
     """ Table secteur d'activité """
     label = models.CharField(max_length=100, verbose_name='Secteur d\'Activité')
+    description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur', blank=True)
     sensible = models.BooleanField(verbose_name='Est Sensible')
     ordre = models.IntegerField(verbose_name='Ordre d\'Affichage')
 
@@ -335,6 +336,7 @@ class Secteur(models.Model):
 class Pays(models.Model):
     """ Table des pays """
     label = models.CharField(max_length=100, verbose_name='Nom du Pays')
+    code = models.CharField(max_length=50, verbose_name='Code du Pays')
 
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
@@ -343,7 +345,7 @@ class Pays(models.Model):
 
     def __str__(self):
         """ les champs a retourner """
-        return self.label
+        return f'{self.label} ({self.code})'
 
 
 class CasExemption(models.Model):
@@ -361,7 +363,7 @@ class CategorieDCP(models.Model):
 
     def __str__(self):
         """ les champs a retourner """
-        return self.categoriedcp
+        return f'{self.categoriedcp}'
 
 
 class CategorieTrait(models.Model):
