@@ -673,7 +673,7 @@ class Notification(models.Model):
 
     def __str__(self):
         """ les champs à retourner """
-        return f'Notification pour {self.user} - {self.message}'
+        return f'Notification :{self.user} - {self.message}'
 
 
 class Autorisation(models.Model):

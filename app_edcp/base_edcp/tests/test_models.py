@@ -10,7 +10,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import set_script_prefix
 
-from base_edcp.models import Enregistrement, User, TypeClient, Secteur, Pays, TypePiece
+from base_edcp.models import Enregistrement, User, TypeClient, Secteur, Pays, TypePiece, Notification
 
 
 class UserModelTest(TestCase):
@@ -367,7 +367,6 @@ class PaysModelTest(TestCase):
             label=label,
             code=code
         )
-
         # Vérification de la méthode __str__
         self.assertEqual(str(pays), 'France (FR)')  # Vérifie que la méthode __str__ renvoie bien "France (FR)"
 
@@ -471,3 +470,62 @@ class SecteurModelTest(TestCase):
         secteur = Secteur(label='Éducation', sensible=False)
         with self.assertRaises(ValidationError):
             secteur.full_clean()  # Doit lever une ValidationError car le champ ordre est manquant
+
+
+class NotificationModelTest(TestCase):
+    """ Classe de test pour le modèle Notification """
+
+    def setUp(self):
+        """ Configuration initiale avant chaque test """
+        # Création d'un utilisateur pour les tests
+        self.user = get_user_model().objects.create_user(
+            email='admin@mail.com',
+            password='admin@1234',
+            username='admin'
+        )
+
+    def test_create_notification_successful(self):
+        """ Test de création d'une notification avec succès """
+        # Données de test pour la notification
+        notification_data = {
+            'user': self.user,
+            'message': 'Test notification message'
+        }
+
+        # Création d'une instance de Notification
+        notification = Notification.objects.create(**notification_data)
+
+        # Vérifications des attributs de la notification
+        self.assertEqual(notification.user, self.user)  # Vérifie que l'utilisateur associé est correct
+        self.assertEqual(notification.message, notification_data['message'])  # Vérifie que le message est correct
+        self.assertFalse(notification.is_read)  # Vérifie que la notification n'est pas lue par défaut
+        self.assertIsNotNone(notification.created_at)  # Vérifie que la date de création est définie automatiquement
+
+    def test_str_representation(self):
+        """ Test de la représentation en chaîne de caractères (__str__) de la Notification """
+        # Création d'une instance de Notification
+        notification = Notification.objects.create(
+            user=self.user,
+            message='Another test message'
+        )
+
+        # Vérification de la méthode __str__
+        self.assertEqual(str(notification), f'Notification :{self.user} - Another test message')
+
+    def test_mark_notification_as_read(self):
+        """ Test pour marquer une notification comme lue """
+        # Création d'une instance de Notification
+        notification = Notification.objects.create(
+            user=self.user,
+            message='Read this message'
+        )
+
+        # Marquer la notification comme lue
+        notification.is_read = True
+        notification.save()
+
+        # Récupération de la notification mise à jour depuis la base de données
+        updated_notification = Notification.objects.get(id=notification.id)
+
+        # Vérification que la notification est marquée comme lue
+        self.assertTrue(updated_notification.is_read)

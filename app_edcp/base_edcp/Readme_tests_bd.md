@@ -12,6 +12,8 @@ Les modèles suivants sont testés dans ce projet :
 4. **EnregistrementModel** : Vérifie la création d'enregistrements, l'association des relations entre les différents modèles, et l'utilisation des valeurs par défaut.
 5. **PaysModel** : Vérifie la création de pays, leur représentation en chaîne de caractères, et la validation des champs obligatoires.
 6. **SecteurModel** : Vérifie la création de secteurs, leur représentation en chaîne de caractères, et la validation des champs obligatoires.
+7.	NotificationModel : Vérifie la création de notifications, la gestion de leur état (lu/non lu), et leur représentation en chaîne de caractères.
+
 
 ## Structure des Tests
 
@@ -55,9 +57,15 @@ Chaque modèle possède sa propre classe de tests, définie comme suit :
 - **`test_create_secteur_default_description`** : Vérifie la création d'un secteur avec une description par défaut (null).
 - **`test_validation_without_required_fields`** : Vérifie que la validation échoue si les champs obligatoires ne sont pas fournis.
 
+### `NotificationModelTest`
+
+- **`test_create_notification_successful`** : Teste la création d'une notification avec des données valides.
+- **`test_str_representation`** : Vérifie la représentation en chaîne de caractères d’une notification.
+- **`test_mark_notification_as_read`** : Teste la fonctionnalité pour marquer une notification comme lue.
+
 ## Exécution des Tests
 
 Pour exécuter les tests, utilisez la commande suivante dans votre terminal :
-
 ```bash
-docker-compose exec app_edcp python manage.py test
+    - ** Le niveau -v 2 (ou supérieur, 3) affichera des informations plus détaillées sur les tests exécutés.
+docker-compose exec app_edcp python manage.py test -v 2
