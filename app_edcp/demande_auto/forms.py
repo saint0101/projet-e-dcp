@@ -1,9 +1,14 @@
 from cProfile import label
 from django import forms
-from demande_auto.models import PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
+from demande_auto.models import Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
 
 from base_edcp.models import Enregistrement
 
+
+class CommentaireForm(forms.ModelForm):
+  class Meta:
+    model = Commentaire
+    fields = ['objet', 'message']
 
 
 class CreateDemandeForm(forms.Form):

@@ -16,7 +16,7 @@
     $(document).ready(function (){
       $('#form-demande input').attr('disabled', true);
       $('#form-demande textarea').attr('disabled', true);
-      $('#form-demande textarea').attr('disabled', true);
+      $('#form-demande select').attr('disabled', true);
       $('span.asteriskField').toggle(false);
     });
   </script>
@@ -44,9 +44,74 @@
       </div>
     </div>
   </div>
+
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card custom-card">
+        <div class="card-header">
+          Commentaires
+        </div>
+
+        <div class="card-body small-padding">
+          <div class="card-text">
+            <div class="row">
+              <div class="col-5 col-form-commentaires">
+                <form method="post" onsubmit="openLoader()">
+                  {% csrf_token %}
+                  {{ form_comment|crispy}}
+                  <button type="submit" class="btn btn-primary" name="form_comment_submit">Envoyer</button>
+                </form>
+              </div>
+              <div class="col-7 col-list-commentaires">
+                {% for commentaire in commentaires %}
+                    {% if commentaire.auteur == request.user %}
+                      <div class="message-bubble ">
+                    {% else %}
+                      <div class="message-bubble message-bubble-self">
+                    {% endif %}
+                      <span class="message-bubble-title text-hint custom-text-light">
+                        <i class="bi bi-person"></i>
+                        {{ commentaire.auteur }} - {{ commentaire.created_at }}
+                      </span><br>
+                      <span class=" message-bubble-body text-hint fw-bold">
+                        {{ commentaire.objet }}
+                      </span>
+                      <br>
+                      <span class=" message-bubble-body">
+                        {{ commentaire.message }}
+                      </span>
+                    </div>
+                  {% empty%}
+                    Aucun commentaire pour l'instant.
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <div class="row mx-3 my-4">
-    <div class="col-3">
+
+    <div class="col-7">
+      <div class="card custom-card">
+        <div class="card-header custom-text-light">
+          Contenu du formulaire
+        </div>
+        <div class="card-body small-padding">
+          {% comment %} <h3 class="text-hint mb-3 card-title"></h3> {% endcomment %}
+          <div class="card-text mt-3">
+            <form id="form-demande">
+              {% csrf_token %}
+              {{ raw_form|crispy }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-5">
       <div class="card custom-card mb-3">
         <div class="card-header custom-text-light">
           Historique
@@ -66,39 +131,6 @@
 
       <div class="card mb-3 custom-card">
         <div class="card-header custom-text-light">
-          Commentaires
-        </div>
-        <div class="card-body small-padding">
-          <ul class="list-group">
-            {% for elmt in historique %}
-              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
-              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-6">
-      <div class="card custom-card">
-        <div class="card-header custom-text-light">
-          Contenu du formulaire
-        </div>
-        <div class="card-body small-padding">
-          {% comment %} <h3 class="text-hint mb-3 card-title"></h3> {% endcomment %}
-          <div class="card-text mt-3">
-            <form id="form-demande">
-              {% csrf_token %}
-              {{ raw_form|crispy }}
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-3">
-      <div class="card custom-card">
-        <div class="card-header custom-text-light">
           Fichiers
         </div>
         <div class="card-body small-padding">
@@ -111,6 +143,21 @@
         </div>
       </div>
     </div>
+
+    {% comment %} <div class="col-3">
+      <div class="card custom-card">
+        <div class="card-header custom-text-light">
+          Fichiers
+        </div>
+        <div class="card-body small-padding">
+          <ul class="list-group">
+            {% for elmt in historique %}
+              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div> {% endcomment %}
     
   </div>
 

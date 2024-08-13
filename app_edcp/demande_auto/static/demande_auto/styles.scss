@@ -73,3 +73,32 @@
 .type-demande-resume.show{
   display: block;
 }
+
+.col-form-commentaires textarea{
+  height: 100px;
+}
+
+.col-list-commentaires{
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.message-bubble{
+  background-color: #eaeef3;
+  padding: 0.5rem;
+  margin: .5rem;
+  border-radius: 10px;
+  max-width: 80%;
+  margin-left: 10%;
+}
+
+.message-bubble-self{
+  background-color: #212529;
+  color: #eee !important;
+  margin-left: 2%;
+}
+
+.message-bubble-body{
+  margin-left: 12px;
+}
+

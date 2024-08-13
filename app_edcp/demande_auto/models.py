@@ -316,3 +316,40 @@ class HistoriqueDemande(models.Model):
     return f"{self.action.description}"
 
 
+class Commentaire(models.Model):
+  """ Commentaires sur une demande"""
+  demande = models.ForeignKey(
+    'DemandeAuto',
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Demande d\'autorisation'
+  )
+  auteur = models.ForeignKey(
+    User,
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Auteur'
+  )
+  created_at = models.DateTimeField(
+    auto_now_add=True,
+    verbose_name='Date de Création'
+  )
+  objet = models.CharField(
+    null=True,
+    blank=True,
+    max_length=255,
+    verbose_name='Objet du message'
+  )
+  message = models.TextField(
+    null=True,
+    blank=True,
+    max_length=500,
+    verbose_name='Contenu du message'
+  )
+
+  class Meta:
+      verbose_name = 'Historique de la demande'
+      verbose_name_plural = 'Historiques des demandes'
+
+  def __str__(self):
+    return f"{self.objet}"

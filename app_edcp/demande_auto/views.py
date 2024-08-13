@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django import forms
 from .models import *
-from .forms import CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
+from .forms import CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
 
@@ -28,12 +28,32 @@ class DemandeListView(ListView):
     queryset = super().get_queryset()
     # Si l'utilisateur n'est pas un membre du personnel, filtre pour ne montrer que ses propres enregistrements
     if not self.request.user.is_staff:
-        return queryset.filter(user=self.request.user)
+      return queryset.filter(user=self.request.user)
     return queryset
   
 
 def detail(request, pk):
   context = get_form_context(pk)
+  form_comment = CommentaireForm()
+  # list_commentaires = 
+  if request.method == 'POST':
+    if 'form_comment_submit' in request.POST:
+      form_comment = CommentaireForm(request.POST)
+      if form_comment.is_valid():
+        commentaire = form_comment.save(commit=False)
+        commentaire.demande = context['demande']
+        commentaire.auteur = request.user
+        commentaire.save() 
+        form_comment = CommentaireForm()
+      else:
+        # context['form_comment'] = form_comment
+        print('erreur : ', form_comment.errors)
+        messages.error(f'{form_comment.errors}')
+
+  context['form_comment'] = form_comment
+  context['commentaires'] = Commentaire.objects.filter(demande=context['demande'])
+  print(context['commentaires'])
+
   return render(request, "demande_auto/demande_detail.html", context)
 
 
