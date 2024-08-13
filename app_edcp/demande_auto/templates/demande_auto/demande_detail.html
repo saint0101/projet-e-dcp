@@ -1,0 +1,120 @@
+{% extends 'dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load compress %}
+{% load static %}
+
+{% block app_styles %}
+  {% compress css %}
+    <link type="text/x-scss" href="{% static 'forms.scss' %}" rel="stylesheet" media="screen">
+    <link type="text/x-scss" href="{% static 'demande_auto/styles.scss' %}" rel="stylesheet" media="screen">
+  {% endcompress %}
+{% endblock %}
+
+{% block custom_scripts %}
+  <script>
+    $(document).ready(function (){
+      $('#form-demande input').attr('disabled', true);
+      $('#form-demande textarea').attr('disabled', true);
+      $('#form-demande textarea').attr('disabled', true);
+      $('span.asteriskField').toggle(false);
+    });
+  </script>
+{% endblock %}
+
+
+{% block content %}
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card custom-card">
+        <div class="card-body small-padding">
+          <h3 class="mb-3 card-title">Demande d'autorisation
+            #<strong>{{ demande.id|stringformat:"08d" }}</strong> :
+            {{ demande.type_demande }}
+          </h3>
+          <div class="card-text">
+              <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
+              <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }}<br>
+              <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong><br><br>
+              <a href="{% url 'dashboard:demande_auto:edit' pk=demande.id %}" class="btn btn-primary me-2">Modifier</a>
+              <button class="btn btn-success me-2">Soumettre la demande</button>
+              <button class="btn btn-danger me-2">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row mx-3 my-4">
+    <div class="col-3">
+      <div class="card custom-card mb-3">
+        <div class="card-header custom-text-light">
+          Historique
+        </div>
+        <div class="card-body small-padding">
+          <ul class="list-group">
+            {% for elmt in historique %}
+              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
+              <li class="list-group-item mb-2">
+                <span class="text-hint custom-text-light">{{ elmt.created_at }}</span> <br> 
+                <span class="text-hint fw-bold">{{ elmt.action }} </span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3 custom-card">
+        <div class="card-header custom-text-light">
+          Commentaires
+        </div>
+        <div class="card-body small-padding">
+          <ul class="list-group">
+            {% for elmt in historique %}
+              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
+              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="card custom-card">
+        <div class="card-header custom-text-light">
+          Contenu du formulaire
+        </div>
+        <div class="card-body small-padding">
+          {% comment %} <h3 class="text-hint mb-3 card-title"></h3> {% endcomment %}
+          <div class="card-text mt-3">
+            <form id="form-demande">
+              {% csrf_token %}
+              {{ raw_form|crispy }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="card custom-card">
+        <div class="card-header custom-text-light">
+          Fichiers
+        </div>
+        <div class="card-body small-padding">
+          <ul class="list-group">
+            {% for elmt in historique %}
+              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
+              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  
+{% endblock content %}
+
+

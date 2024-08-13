@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from base_edcp.emails import send_email
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django import forms
 from .models import *
-from .forms import CreateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
+from .forms import CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
 
@@ -14,6 +16,25 @@ from base_edcp.models import Enregistrement
 def index(request):
     """ Vue index demande autorisation """
     return render(request, 'demande_auto/index.html')
+
+
+class DemandeListView(ListView):
+  model = DemandeAuto
+  template_name = 'demande_auto/demande_list.html'
+  context_object_name = 'demandes'
+
+  def get_queryset(self):
+    """ Filtre les demandes en fonction des droits de l'utilisateur """
+    queryset = super().get_queryset()
+    # Si l'utilisateur n'est pas un membre du personnel, filtre pour ne montrer que ses propres enregistrements
+    if not self.request.user.is_staff:
+        return queryset.filter(user=self.request.user)
+    return queryset
+  
+
+def detail(request, pk):
+  context = get_form_context(pk)
+  return render(request, "demande_auto/demande_detail.html", context)
 
 
 def save_historique(demande, action_label, user):
@@ -99,38 +120,127 @@ def get_sous_finalites(request, pk):
     return JsonResponse({'sousFinalites': list(sous_finalites)})
 
 
-
-def update(request, pk):
+def get_update_form(object, request=None):
   form_structure = []
-  context = {}
   form = None
-  object = DemandeAuto.objects.get(pk=pk)
-
   if object.type_demande.label == 'traitement':
     print ('update traitement')
     form_structure = FORM_STRUCTURE_TRAITEMENT
-    form = UpdateDemandeTraitementForm(instance=object)
+    if request:
+      form = UpdateDemandeTraitementForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeTraitementForm(instance=object)
 
   if object.type_demande.label == 'transfert':
     print ('update transfert')
     form_structure = FORM_STRUCTURE_TRANSFERT
-    form = UpdateDemandeTransfertForm(instance=object)
+    if request:
+      form = UpdateDemandeTransfertForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeTransfertForm(instance=object)
 
   if object.type_demande.label == 'videosurveillance':
     print ('update videosurveillance')
     form_structure = FORM_STRUCTURE_VIDEO
-    form = UpdateDemandeVideoForm(instance=object)
+    if request:
+      form = UpdateDemandeVideoForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeVideoForm(instance=object)
 
   if object.type_demande.label == 'biometrie':
     print ('update biometrie')
     form_structure = FORM_STRUCTURE_BIOMETRIE
-    form = UpdateDemandeBioForm(instance=object)
+    if request:
+      form = UpdateDemandeBioForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeBioForm(instance=object)
 
+  return form, form_structure
+
+def get_form_context(obj_id, request=None):
+  obj = get_object_or_404(DemandeAuto, pk=obj_id)
+  type_demande_label = obj.type_demande.label
+  form_structure = []
+  form = None
+  object = None
+  context = {}
+  if type_demande_label == 'traitement':
+    print ('update traitement')
+    form_structure = FORM_STRUCTURE_TRAITEMENT
+    object = get_object_or_404(DemandeAutoTraitement, pk=obj_id)
+    if request:
+      form = UpdateDemandeTraitementForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeTraitementForm(instance=object)
+
+  if type_demande_label == 'transfert':
+    print ('update transfert')
+    form_structure = FORM_STRUCTURE_TRANSFERT
+    object = get_object_or_404(DemandeAutoTransfert, pk=obj_id)
+    if request:
+      form = UpdateDemandeTransfertForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeTransfertForm(instance=object)
+
+  if type_demande_label == 'videosurveillance':
+    print ('update videosurveillance')
+    form_structure = FORM_STRUCTURE_VIDEO
+    object = get_object_or_404(DemandeAutoVideo, pk=obj_id)
+    if request:
+      form = UpdateDemandeVideoForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeVideoForm(instance=object)
+
+  if type_demande_label == 'biometrie':
+    print ('update biometrie')
+    form_structure = FORM_STRUCTURE_BIOMETRIE
+    object = get_object_or_404(DemandeAutoBiometrie, pk=obj_id)
+    if request:
+      form = UpdateDemandeBioForm(request.POST, instance=object)
+    else:
+      form = UpdateDemandeBioForm(instance=object)
+  
   rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
-  context['form'] = rendered_form
+
   context['demande'] = object
+  context['raw_form'] = form
+  context['form'] = rendered_form
+  context['form_structure'] = form_structure
   context['historique'] = HistoriqueDemande.objects.filter(demande=object)
+  
+  return context
+
+def update(request, pk):
+  form_structure = []
+  context = {}
+  # form = None
+  
+  # object = DemandeAuto.objects.get(pk=pk)
+  #object = get_object_or_404(DemandeAuto, pk=pk)
+  #form, form_structure = get_update_form(object)
+
+  if request.method == 'POST':
+    # form, form_structure = get_update_form(object, request)
+    # print ('form : ', form)
+    context = get_form_context(pk, request)
+    if context['raw_form'].is_valid():
+      # print('form valid. trying save')
+      context['raw_form'].save()
+      messages.success(request, 'La demande a bien été enregistrée.')
+      return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
+    
+    else:
+      print('form not valid')
+      print(context['raw_form'].errors)
+      messages.error(request, 'La demande n\'a pas pu être enregistrée. Veuillez vérifier les données du formulaire et réessayer.')
+      return render(request, "demande_auto/demande_edit.html", context)
+
+  # rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
+  """ context['form'] = rendered_form
+  context['demande'] = object
+  context['historique'] = HistoriqueDemande.objects.filter(demande=object) """
   #context['form_structure'] = FORM_STRUCTURE
+  context = get_form_context(pk)
   return render(request, "demande_auto/demande_edit.html", context)
 
 
@@ -165,12 +275,30 @@ class demandeUpdateView(UpdateView):
 
     # Now, call the original get_object method
     return object
+  
+  def get_form(self, form_class=None):
+    form = super().get_form(form_class)
+    type_demande_label = self.object.type_demande.label
+    list_finalites = TypeDemandeAuto.objects.get(label=type_demande_label).finalites.all()
+    form.fields['finalite'].queryset = list_finalites
+    
+    list_sousfinalites = SousFinalite.objects.filter(finalite__in=list_finalites)
+    #form.fields['sous_finalites'].widget = forms.CheckboxSelectMultiple(attrs={'required': True}, choices=[(sousfinalite.id, sousfinalite.label) for sousfinalite in list_sousfinalites])
+    # form.fields['sous_finalites'].initial = 0
+    # form.fields['sous_finalites'].widget = forms.CheckboxSelectMultiple(attrs={'required': True})
+    form.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+    # form.fields['personnes_concernees'].widget = forms.CheckboxSelectMultiple(attrs={'required': True})
+    # form_html = form.render()  # Renders the form with the default rendering or custom template
+    rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
+    return rendered_form
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['historique'] = HistoriqueDemande.objects.filter(demande=self.object)
     context['form_structure'] = self.context_form_structure
     return context
+  
+
 
    
   

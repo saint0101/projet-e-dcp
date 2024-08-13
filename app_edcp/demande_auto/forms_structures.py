@@ -1,3 +1,8 @@
+"""
+Dictionnaires décrivant la présentation des formulaires de demandes d'autorisation,
+sous forme de formulaire multisteps
+"""
+
 FORM_STRUCTURE_TRAITEMENT = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',

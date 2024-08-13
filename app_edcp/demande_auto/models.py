@@ -46,6 +46,7 @@ class OptionModel(models.Model):
   
   
 class TypeDemandeAuto(OptionModel):
+  """ Type de demande d'autorisation """
   finalites = models.ManyToManyField(
     'Finalite',
     verbose_name='Finalités liées à ce type de demande',
@@ -58,10 +59,12 @@ class TypeDemandeAuto(OptionModel):
 
 
 class Finalite(OptionModel):
+  """ Finalité du traiment """
   pass
 
 
 class SousFinalite(OptionModel):
+  """ Sous-finalité du traitement """
   finalite = models.ForeignKey(
     'Finalite',
     on_delete=models.CASCADE,
@@ -69,29 +72,34 @@ class SousFinalite(OptionModel):
   )
 
 class ActionDemande(OptionModel):
+  """ Action effectuée sur une demande d'autorisation. Utilisée pour l'historique des traitements """
   class Meta:
     verbose_name = 'Action effectuée'
     verbose_name_plural = 'Actions effectuées'
 
 
 class PersConcernee(OptionModel):
+  """ Catégorie de personne concernée """
   class Meta:
     verbose_name = 'Catégorie de personnes concernées'
     verbose_name_plural = 'Catégories de personnes concernées'
 
 
 class Status(OptionModel):
+  """ Statut de demande d'autorisation """
   class Meta:
     verbose_name = 'Statut de demande'
     verbose_name_plural = 'Statuts de demandes'
 
 
 def get_default_status():
+  """ Renvoie le statut par défaut que doit avoir une nouvelle demande d'autorisation """
   default_status = Status.objects.get(label='brouillon')
   return default_status.id
 
 
 class DemandeAuto(models.Model):
+    """ Demande d'autorisation """
     user = models.ForeignKey(
       User, 
       on_delete=models.CASCADE, 
@@ -101,7 +109,8 @@ class DemandeAuto(models.Model):
     organisation = models.ForeignKey(
       Enregistrement, 
       on_delete=models.CASCADE, 
-      verbose_name='Organisation'
+      verbose_name='Organisation',
+      blank=True,
     )
     created_at = models.DateTimeField(
       auto_now_add=True, 
@@ -128,7 +137,8 @@ class DemandeAuto(models.Model):
     type_demande = models.ForeignKey(
       'TypeDemandeAuto', 
       on_delete=models.CASCADE, 
-      verbose_name="Type de Demande d'Autorisation"
+      verbose_name="Type de Demande d'Autorisation",
+      blank=True
     )
     summary = models.TextField(
       blank=True, 
@@ -144,6 +154,8 @@ class DemandeAuto(models.Model):
       default=False, 
       verbose_name='Consentement Documents'
     )
+
+    """ Autres champs à prévoir """
     # traitement_sensible = models.BooleanField(default=False, verbose_name='Traitement Sensible')
     # procedure_droit_persones = models.TextField(blank=True, null=True, verbose_name='Procédure Droit des Personnes')
     # finalite = models.ForeignKey('Finalite', on_delete=models.CASCADE, verbose_name='Finalité')
@@ -164,6 +176,7 @@ class DemandeAuto(models.Model):
     
 
 class DemandeAutoTraitement(DemandeAuto):
+  """ Sous-classe de demande d'autorisation pour les traitements """
   fondement_juridique = models.CharField(
     null=True,
     blank=True,
@@ -188,6 +201,7 @@ class DemandeAutoTraitement(DemandeAuto):
 
 
 class DemandeAutoTransfert(DemandeAuto):
+  """ Sous-classe de demande d'autorisation pour les transferts de données """
   destination = models.CharField(
     null=True,
     blank=True,
@@ -213,6 +227,7 @@ class DemandeAutoTransfert(DemandeAuto):
 
 
 class DemandeAutoVideo(DemandeAuto):
+  """ Sous-classe de demande d'autorisation pour la vidéosurveillance """
   types_cameras = models.CharField(
     null=True,
     blank=True,
@@ -237,6 +252,7 @@ class DemandeAutoVideo(DemandeAuto):
   
 
 class DemandeAutoBiometrie(DemandeAuto):
+  """ Sous-classe de demande d'autorisation pour la biométrie """
   types_dispositifs = models.CharField(
     null=True,
     blank=True,
@@ -262,6 +278,7 @@ class DemandeAutoBiometrie(DemandeAuto):
 
 
 class HistoriqueDemande(models.Model):
+  """ Historique des actions effectuées dans le traitement d'une demande d'autorisation """
   demande = models.ForeignKey(
     'DemandeAuto',
     blank=True,

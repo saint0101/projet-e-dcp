@@ -7,9 +7,7 @@ from base_edcp.models import Enregistrement
 
 
 class CreateDemandeForm(forms.Form):
-  """
-  Formulaire permettant de créeer une nouvelle demande d'autorisation
-  """
+  """ Formulaire permettant de créeer une nouvelle demande d'autorisation """
   
   organisation = forms.ModelChoiceField(
     label='2. Organisation concernée', 
@@ -44,20 +42,50 @@ class CreateDemandeForm(forms.Form):
       pass """
     
 
+class UpdateDemandeForm(forms.ModelForm):
+  """ Formulaire de mise à jour d'une demande d'autorisation """
+  finalite = forms.ModelChoiceField(
+    label='Finalité du traitement', 
+    queryset=Finalite.objects.all(),
+  )
+  sous_finalites = forms.ModelMultipleChoiceField(
+    label='Sous-finalités', 
+    queryset=SousFinalite.objects.all(),
+    widget=forms.CheckboxSelectMultiple,
+  )
+  personnes_concernees = forms.ModelMultipleChoiceField(
+    label='Personnes concernées', 
+    queryset=PersConcernee.objects.all(),
+    widget=forms.CheckboxSelectMultiple,
+  )
+
+  class Meta:
+    model = DemandeAuto
+    fields = '__all__'
+    # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    
+    """ list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
+    self.fields['finalite'].queryset = list_finalites
+    self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) """
+
 
 class UpdateDemandeTraitementForm(forms.ModelForm):
+  """ Formulaire de mise à jour d'une demande d'autorisation de traitement """
   # type_demande_auto = TypeDemandeAuto.objects.get(label='traitement')
   label_type = 'traitement'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
     queryset=Finalite.objects.all(),
   )
-  sous_finalites = forms.ModelChoiceField(
+  sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
   )
-  personnes_concernees = forms.ModelChoiceField(
+  personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
@@ -65,7 +93,8 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
   
   class Meta:
     model = DemandeAutoTraitement
-    fields = '__all__'
+    # fields = '__all__'
+    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
@@ -76,17 +105,18 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
 
 
 class UpdateDemandeTransfertForm(forms.ModelForm):
+  """ Formulaire de mise à jour d'une demande d'autorisation de transfert """
   label_type = 'transfert'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
     queryset=Finalite.objects.all(),
   )
-  sous_finalites = forms.ModelChoiceField(
+  sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
   )
-  personnes_concernees = forms.ModelChoiceField(
+  personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
@@ -94,7 +124,8 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
   
   class Meta:
     model = DemandeAutoTransfert
-    fields = '__all__'
+    # fields = '__all__'
+    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
   
   def __init__(self, *args, **kwargs):
@@ -105,17 +136,18 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
 
 
 class UpdateDemandeVideoForm(forms.ModelForm):
+  """ Formulaire de mise à jour d'une demande d'autorisation de vidéosurveillance """
   label_type = 'videosurveillance'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
     queryset=Finalite.objects.all(),
   )
-  sous_finalites = forms.ModelChoiceField(
+  sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
   )
-  personnes_concernees = forms.ModelChoiceField(
+  personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
@@ -123,7 +155,8 @@ class UpdateDemandeVideoForm(forms.ModelForm):
 
   class Meta:
     model = DemandeAutoVideo
-    fields = '__all__'
+    # fields = '__all__'
+    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
@@ -134,17 +167,18 @@ class UpdateDemandeVideoForm(forms.ModelForm):
 
 
 class UpdateDemandeBioForm(forms.ModelForm):
+  """ Formulaire de mise à jour d'une demande d'autorisation de biométrie """
   label_type = 'biometrie'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
     queryset=Finalite.objects.all(),
   )
-  sous_finalites = forms.ModelChoiceField(
+  sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
   )
-  personnes_concernees = forms.ModelChoiceField(
+  personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
@@ -152,7 +186,8 @@ class UpdateDemandeBioForm(forms.ModelForm):
 
   class Meta:
     model = DemandeAutoBiometrie
-    fields = '__all__'
+    # fields = '__all__'
+    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):

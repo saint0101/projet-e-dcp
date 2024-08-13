@@ -85,7 +85,7 @@ MENU_CLIENT = [
         'text' : 'Mes demandes',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:demande_auto:index',
+        'url' : 'dashboard:demande_auto:list',
         'disabled': False, 
       },
     ]
@@ -266,7 +266,7 @@ MENU_MGR = [
         'text' : 'Toutes les demandes',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:demande_auto:index',
+        'url' : 'dashboard:demande_auto:list',
         'disabled': False, 
       },
     ]

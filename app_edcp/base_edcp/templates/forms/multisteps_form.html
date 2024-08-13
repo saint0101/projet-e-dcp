@@ -93,7 +93,7 @@
     <section>
       {% for field in form_tab.fields %}
         <div class="fieldWrapper">
-          {{ form|get_form_field:field|as_crispy_field }}
+          {{ form|get_form_field:field|as_crispy_field:"bootstrap5" }}
         </div>
     {% endfor %}
     </section>

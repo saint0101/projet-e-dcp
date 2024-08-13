@@ -55,4 +55,10 @@ class HistoriqueAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'demande', 'status','action', 'auteur']
 
 
+@admin.register(models.DemandeAuto)
+class DemandeAutoAdmin(admin.ModelAdmin):
+    """ Demanded 'autorisation """
+    ordering = ['id']
+    list_display = ['created_at', 'type_demande', 'status','organisation', 'user', 'finalite']
+
 # admin.site.unregister(models.Status, StatusAdmin)
