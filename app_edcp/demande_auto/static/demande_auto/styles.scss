@@ -79,12 +79,15 @@
 }
 
 .col-list-commentaires{
-  max-height: 300px;
+  height: 500px;
   overflow: scroll;
+  background-color: #eaeef3;
+  border-radius: 8px;
+  // box-shadow: inset 0px 1px 6px rgba(0, 0, 0, 0.15);
 }
 
 .message-bubble{
-  background-color: #eaeef3;
+  background-color: #fff;
   padding: 0.5rem;
   margin: .5rem;
   border-radius: 10px;

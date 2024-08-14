@@ -352,3 +352,43 @@ class Commentaire(models.Model):
 
   def __str__(self):
     return f"{self.objet}"
+  
+
+
+class AnalyseDemande(models.Model):
+  """ Analuyse d'une demande"""
+  demande = models.ForeignKey(
+    'DemandeAuto',
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Demande d\'autorisation'
+  )
+  agent = models.ForeignKey(
+    User,
+    blank=True,
+    on_delete=models.CASCADE,
+    verbose_name='Agent en charge'
+  )
+  created_at = models.DateTimeField(
+    auto_now_add=True,
+    verbose_name='Date de Création'
+  )
+  niveau_validation = models.IntegerField(
+    blank=True,
+    null=True,
+    default=1,
+    verbose_name='Niveau de validation requis'
+  )
+  prescriptions = models.TextField(
+    blank=True,
+    null=True,
+    # max_length=1000,
+  )
+  
+
+  class Meta:
+      verbose_name = 'Analyse de la demande'
+      verbose_name_plural = 'Analyses des demandes'
+
+  def __str__(self):
+    return f"Analyse de : {self.demande}"
