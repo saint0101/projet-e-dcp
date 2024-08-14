@@ -44,7 +44,6 @@ class OptionModel(models.Model):
     return self.description
 
   
-  
 class TypeDemandeAuto(OptionModel):
   """ Type de demande d'autorisation """
   finalites = models.ManyToManyField(
@@ -70,6 +69,7 @@ class SousFinalite(OptionModel):
     on_delete=models.CASCADE,
     verbose_name='Finalité',
   )
+
 
 class ActionDemande(OptionModel):
   """ Action effectuée sur une demande d'autorisation. Utilisée pour l'historique des traitements """
@@ -274,7 +274,6 @@ class DemandeAutoBiometrie(DemandeAuto):
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='biometrie')
-
 
 
 class HistoriqueDemande(models.Model):

@@ -31,8 +31,8 @@
       const selectFinalite = $('#id_finalite');
       const inputName = 'sous_finalites';
        
-      // $('input[name="' + inputName + '"]').parent('div').toggle(false);
-      $('#id_sous_finalites option').toggle(false);
+      $('input[name="' + inputName + '"]').parent('div').toggle(false);
+      // $('#id_sous_finalites option').toggle(false);
       //console.log('inputs ', 'input[name="' + inputName + '"]');
 
       selectFinalite.on('change', function(){
@@ -51,11 +51,11 @@
       });
 
       function showSousFinalite(data){
-        // $('input[name="' + inputName + '"]').parent('div').toggle(false);
-        $('#id_sous_finalites option').toggle(false);
+        $('input[name="' + inputName + '"]').parent('div').toggle(false);
+        // $('#id_sous_finalites option').toggle(false);
         data.sousFinalites.forEach(sousFinalite => {
-          // $('input[name="' + inputName + '"][value="' + sousFinalite.id + '"]').parent('div').toggle(true);
-          $('#id_sous_finalites option[value="' + sousFinalite.id + '"]').toggle(true)
+          $('input[name="' + inputName + '"][value="' + sousFinalite.id + '"]').parent('div').toggle(true);
+          // $('#id_sous_finalites option[value="' + sousFinalite.id + '"]').toggle(true)
         })
       }
     });

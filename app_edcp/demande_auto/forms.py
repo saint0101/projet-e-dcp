@@ -6,6 +6,7 @@ from base_edcp.models import Enregistrement
 
 
 class CommentaireForm(forms.ModelForm):
+  """ Formulaire d'ajout de commentaires """
   class Meta:
     model = Commentaire
     fields = ['objet', 'message']
