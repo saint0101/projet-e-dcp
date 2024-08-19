@@ -74,6 +74,16 @@
   display: block;
 }
 
+
+#card-historique ul{
+  line-height: 1.1rem;
+}
+
+#card-historique .card-body{
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 .col-form-commentaires textarea{
   height: 100px;
 }
@@ -105,3 +115,14 @@
   margin-left: 12px;
 }
 
+#row-actions{
+  border-top: 1px solid #eaeef3;
+  padding-top: 15px;
+}
+
+#change-status-form select{
+  max-width: 100%;
+  height: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+}

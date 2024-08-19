@@ -73,14 +73,15 @@
 {% block content %}
   <div class="row mx-3 my-4">
     <div class="col">
-      <div class="card custom-card">
+      <div id="card-historique" class="card custom-card">
         <div class="card-body">
           <h3 class="text-hint mb-3 card-title">Historique</h3>
             <ul class="list-group">
             {% for elmt in historique %}
               {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
               <li class="list-group-item">
-                <span class="text-hint custom-text-light">{{ elmt.created_at }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> </li>
+                <span class="text-hint custom-text-light">{{ elmt.created_at }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
+              </li>
             {% endfor %}
             </ul>
           <div class="card-text">

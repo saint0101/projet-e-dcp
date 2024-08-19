@@ -1,6 +1,7 @@
 from cProfile import label
 from django import forms
-from demande_auto.models import Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
+from demande_auto.models import *
+# Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
 
 from base_edcp.models import Enregistrement
 
@@ -10,6 +11,48 @@ class CommentaireForm(forms.ModelForm):
   class Meta:
     model = Commentaire
     fields = ['objet', 'message']
+    
+
+
+class ChangeStatusForm(forms.Form):
+  """ Formulaire de changement de statut de la demande """
+  # CHOICES = []
+  status = forms.ModelChoiceField(queryset=Status.objects.all())
+
+
+class AnalyseDemandeForm(forms.ModelForm):
+  """ Formulaire d'analyse d'une demande d'autorisation """
+  NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+  critere_completude = forms.IntegerField(
+    label='1. Completude du dossier',
+    required=False,
+    widget=forms.Select(choices=NOTATION_CHOICES),
+  )
+  critere_docsvalides = forms.IntegerField(
+    label='2. Validité des documents',
+    required=False,
+    widget=forms.Select(choices=NOTATION_CHOICES),
+  )
+  critere_finalite = forms.IntegerField(
+    label='3. Finalité',
+    required=False,
+    widget=forms.Select(choices=NOTATION_CHOICES),
+  )
+  critere_transparence = forms.IntegerField(
+    label='4. Transparence',
+    required=False,
+    widget=forms.Select(choices=NOTATION_CHOICES),
+  )
+
+  class Meta:
+    model = AnalyseDemande
+    fields = ['critere_completude', 'critere_docsvalides', 'critere_finalite', 'critere_transparence', 'observations','prescriptions', 'avis_juridique', 'avis_technique']
+
+    """ def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
+      list_notations = EchelleNotation.objects.all()
+      self.fields['critere_completude'].widget = forms.forms.Select(choices=[(notation.id, notation.description) for notation in list_notations])
+    """
 
 
 class CreateDemandeForm(forms.Form):

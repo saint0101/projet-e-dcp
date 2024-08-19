@@ -88,9 +88,20 @@ class PersConcernee(OptionModel):
 class Status(OptionModel):
   """ Statut de demande d'autorisation """
   class Meta:
-    verbose_name = 'Statut de demande'
-    verbose_name_plural = 'Statuts de demandes'
+    verbose_name = 'Statut de demande ou d\'analyse'
+    verbose_name_plural = 'Statuts de demandes ou d\'analyses'
 
+
+class EchelleNotation(OptionModel):
+  """ Echelle de notation des demandes d'autorisation """
+  valeur = models.IntegerField(
+    default=0,
+    verbose_name='Valeur'
+  )
+
+  class Meta:
+    verbose_name = 'Echelle de notation'
+    verbose_name_plural = 'Echelles de notation'
 
 def get_default_status():
   """ Renvoie le statut par défaut que doit avoir une nouvelle demande d'autorisation """
@@ -306,6 +317,10 @@ class HistoriqueDemande(models.Model):
     auto_now_add=True,
     verbose_name='Date de Création'
   )
+  is_private = models.BooleanField(
+    default=False,
+    verbose_name='Est confidentiel'
+  )
 
   class Meta:
       verbose_name = 'Historique de la demande'
@@ -356,8 +371,8 @@ class Commentaire(models.Model):
 
 
 class AnalyseDemande(models.Model):
-  """ Analuyse d'une demande"""
-  demande = models.ForeignKey(
+  """ Analyse d'une demande"""
+  demande = models.OneToOneField(
     'DemandeAuto',
     blank=True,
     on_delete=models.CASCADE,
@@ -369,6 +384,13 @@ class AnalyseDemande(models.Model):
     on_delete=models.CASCADE,
     verbose_name='Agent en charge'
   )
+  status = models.ForeignKey(
+    Status,
+    blank=True,
+    null=True,
+    on_delete=models.CASCADE,
+    verbose_name='Statut de l\'analyse'
+  )
   created_at = models.DateTimeField(
     auto_now_add=True,
     verbose_name='Date de Création'
@@ -379,10 +401,49 @@ class AnalyseDemande(models.Model):
     default=1,
     verbose_name='Niveau de validation requis'
   )
+  critere_completude = models.IntegerField(
+    blank=True,
+    null=True,
+    default=0,
+    verbose_name='Complétude du dossier'
+  )
+  critere_docsvalides = models.IntegerField(
+    blank=True,
+    null=True,
+    default=0,
+    verbose_name='Validité des documents'
+  )
+  critere_finalite = models.IntegerField(
+    blank=True,
+    null=True,
+    default=0,
+    verbose_name='Principe de la finalité'
+  )
+  critere_transparence = models.IntegerField(
+    blank=True,
+    null=True,
+    default=0,
+    verbose_name='Principe de la transparence'
+  )
+  observations = models.TextField(
+    blank=True,
+    null=True,
+    # max_length=1000,
+  )
   prescriptions = models.TextField(
     blank=True,
     null=True,
     # max_length=1000,
+  )
+  avis_juridique = models.BooleanField(
+    default=False,
+    verbose_name='Aspects juridiques OK ?',
+    help_text='Cocher pour autoriser le traitement'
+  )
+  avis_technique = models.BooleanField(
+    default=False,
+    verbose_name='Aspects techniques OK ? ',
+    help_text='Cocher pour autoriser le traitement'
   )
   
 

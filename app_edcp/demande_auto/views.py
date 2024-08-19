@@ -6,7 +6,8 @@ from django.http import JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django import forms
 from .models import *
-from .forms import CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
+from .forms import *
+# CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
 
@@ -121,27 +122,94 @@ def detail(request, pk):
   """ Vue de détail d'une demande d'autorisation """
   context = get_form_context(pk) # récupération du contexte à envoyer au template
   form_comment = CommentaireForm() # initialisation du formulaire de commentaire
+  form_status = ChangeStatusForm(initial={'status': context['demande'].status}) # initialisation du formulaire de changement de status
 
   # si une requête a été soumise
   if request.method == 'POST':
     # si la requête est un ajout de commentaire
-    if 'form_comment_submit' in request.POST:
+    # avec ou sans suspension de la demande
+    if 'form_comment_submit' in request.POST or 'form_comment_submit_suspend' in request.POST:
       form_comment = CommentaireForm(request.POST) # récupération des données du formulaire
       if form_comment.is_valid():
         # si le formulaire est valide, sauvegarde du commentaire
         commentaire = form_comment.save(commit=False)
         commentaire.demande = context['demande']
         commentaire.auteur = request.user
+        # si l'agent a cliqué sur 'envoyer et suspendre la demande'
+        if 'form_comment_submit_suspend' in request.POST:
+          context['demande'].status = Status.objects.get(label='attente_complement') # suspension de la demande
+          context['demande'].save()
+          save_historique(context['demande'], 'changement_statut', request.user)
         commentaire.save() 
         form_comment = CommentaireForm()
       else:
         # context['form_comment'] = form_comment
         print('erreur : ', form_comment.errors)
-        messages.error(f'{form_comment.errors}')
+        messages.error(request, f'{form_comment.errors}')
+    
+    if 'form_status_submit' in request.POST:
+      form_status = ChangeStatusForm(request.POST) # instanciation du formulaire
+      if form_status.is_valid():
+        context['demande'].status = form_status.cleaned_data['status'] # suspension de la demande
+        context['demande'].save()
+        save_historique(context['demande'], 'changement_statut', request.user)
+        messages.success(request, 'Statut de la demande mis à jour')
 
   context['form_comment'] = form_comment # affichage du formulaire de commentaires
   context['commentaires'] = Commentaire.objects.filter(demande=context['demande']) # récuperation des commentaires sur la demande
-  print(context['commentaires'])
+  context['form_status'] = form_status # affichage du formulaire de changement de statut
+  context['analyse_exists'] = AnalyseDemande.objects.filter(demande=context['demande']).exists() # si l'analyse a déjà commencé
+
+  return render(request, "demande_auto/demande_detail.html", context)
+
+
+def analyse(request, pk):
+  """ Vue pour l'analyse d'une demande d'autorisation """
+  context = get_form_context(pk) # récupération du contexte à envoyer au template
+  analyse_exists = AnalyseDemande.objects.filter(demande=context['demande']).exists()
+  analyse = {}
+  if analyse_exists:
+    analyse = AnalyseDemande.objects.get(demande=context['demande'])
+    form_analyse = AnalyseDemandeForm(instance=analyse) # initialisation du formulaire d'analyse
+  else:
+    form_analyse = AnalyseDemandeForm()
+
+  # si une requête a été soumise
+  if request.method == 'POST':
+    # si la requête est un ajout de commentaire
+    if 'form_analyse_submit' in request.POST:
+      if analyse_exists:
+        form_analyse = AnalyseDemandeForm(request.POST, instance=analyse)
+      else:
+        form_analyse = AnalyseDemandeForm(request.POST) # récupération des données du formulaire
+      if form_analyse.is_valid():
+        # si le formulaire est valide, sauvegarde de l'analyse
+        analyse = form_analyse.save(commit=False)
+        analyse.demande = context['demande']
+        analyse.agent = request.user
+        analyse.status = Status.objects.get(label='analyse_en_cours')
+        # changement du status de la demande si un des avis a été donné
+        if analyse.avis_juridique and not analyse.avis_technique :
+          analyse.status = Status.objects.get(label='attente_analyse_technique')
+
+        if analyse.avis_technique and not analyse.avis_juridique :
+          analyse.status = Status.objects.get(label='attente_analyse_juridique')
+        
+        if analyse.avis_juridique and analyse.avis_technique :
+          analyse.status = Status.objects.get(label='analyse_terminee')
+
+        analyse.save() 
+        messages.success(request, 'Analyse enregistrée.')
+        return redirect('dashboard:demande_auto:detail', pk=pk)
+        # form_comment = CommentaireForm()
+      else:
+        # context['form_comment'] = form_comment
+        print('erreur : ', form_analyse.errors)
+        messages.error(request, f'{form_analyse.errors}')
+
+  context['form_analyse'] = form_analyse # affichage du formulaire de commentaires
+  context['show_form_analyse'] = True
+  context['analyse'] = analyse
 
   return render(request, "demande_auto/demande_detail.html", context)
 

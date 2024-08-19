@@ -46,7 +46,11 @@ class ActionDemandeAdmin(admin.ModelAdmin):
     ordering = ['id']
     list_display = ['label', 'description', 'is_sensible', 'ordre']
 
-
+@admin.register(models.EchelleNotation)
+class EchelleNotationAdmin(admin.ModelAdmin):
+    """ Echelle de notation des demandes d'autorisation """
+    ordering = ['valeur']
+    list_display = ['valeur', 'label', 'description']
 
 @admin.register(models.HistoriqueDemande)
 class HistoriqueAdmin(admin.ModelAdmin):

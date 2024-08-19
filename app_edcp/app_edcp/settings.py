@@ -104,7 +104,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5436'), # Facultatif via docker
+        # 'PORT': os.environ.get('DB_PORT', '5436'), # Facultatif via docker
         'NAME': os.environ.get('DB_NAME', 'edcp_db'),
         'USER': os.environ.get('DB_USER', 'Uroot_edcp'),
         'PASSWORD': os.environ.get('DB_PASS', 'e_dcp@2023#')
