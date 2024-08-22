@@ -36,12 +36,22 @@
             </span>
 
             {% if request.user.is_staff %}
-              {% if not correspondant.is_approved %}
+              {% if correspondant.analyse %}
+                <span class="custom-text-light text-hint me-2">
+                  Analyse démarrée le {{ correspondant.analyse.created_at }} par {{ correspondant.analyse.created_by }}
+                </span>
+                <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+                  class="btn btn-secondary me-2" onclick="openLoader()">
+                  Poursuivre l'analyse
+                </a>
+              {% else %}
                 <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
                   class="btn btn-primary me-2" onclick="openLoader()">
                   Démarrer l'analyse
                 </a>
+              {% endif %}
               
+              {% comment %} {% if not correspondant.is_approved %}
                 <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
                   class="btn btn-primary me-2" onclick="openLoader()">
                   Approuver
@@ -56,7 +66,7 @@
                   class="btn btn-danger me-2" onclick="openLoader()">
                   Retirer l'approbation
                 </a>
-              {% endif %}
+              {% endif %} {% endcomment %}
             {% else %}
               <a href="{% url 'dashboard:correspondant:edit' pk=correspondant.id %}" class="btn btn-success me-2">Modifier</a>
             {% endif %}

@@ -1,3 +1,4 @@
+import json
 from multiprocessing import context
 # import secrets
 # from traceback import format_list
@@ -11,7 +12,7 @@ from django.conf import settings
 from django.contrib import messages
 import os
 from django import forms
-
+from options.models import Status
 #from django.core.files.storage import FileSystemStorage
 # from datetime import datetime
 # from formtools.wizard.views import SessionWizardView
@@ -23,6 +24,7 @@ from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
 from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation
 from demande_auto.models import EchelleNotation
+from datetime import datetime
 
 # Create your views here.
 
@@ -184,17 +186,37 @@ def designate(request, org):
 def analyse(request, pk):
   correspondant = get_object_or_404(Correspondant, pk=pk)
   analyse = correspondant.analyse
-  AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'))
+  AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'), analyse)
+  
+  
   if not analyse :
-    analyse = AnalyseDemande.objects.create(created_by=request.user)
+    analyse = AnalyseDemande.objects.create(created_by=request.user, status=Status.objects.get(label='brouillon'))
     correspondant.analyse = analyse
     correspondant.save()
-    form = AnalyseDPOForm(initial=analyse.__dict__)
-    print('analyse created : ', analyse)
-  else:
-    print('analyse exists : ', analyse)
-    form = AnalyseDPOForm()
 
+  if request.method == 'POST':
+    form = AnalyseDPOForm(request.POST)
+    if form.is_valid():
+      form_data = form.cleaned_data
+
+      analyse.observations = form.cleaned_data['observations']
+      analyse.prescriptions = form.cleaned_data['prescriptions']
+      analyse.avis_juridique = form.cleaned_data['avis_juridique']
+      analyse.updated_at = datetime.now()
+      analyse.updated_by = request.user
+
+      evaluation = {}
+      for field in CritereEvaluation.objects.filter(categorie_demande=CategorieDemande.objects.get(label='designation_correspondant')):
+          if field.label in form_data.keys() :
+            evaluation[field.label] = form_data[field.label]
+      serialized_data = json.dumps(evaluation)
+      print('serialized_data : ', serialized_data)
+      analyse.evaluation = serialized_data
+
+      analyse.save()
+      return redirect('dashboard:correspondant:analyse', pk=pk)
+
+  form = AnalyseDPOForm(initial=analyse.__dict__)
   form_dpo = DPOUpdateForm(instance=correspondant)
 
   context = {

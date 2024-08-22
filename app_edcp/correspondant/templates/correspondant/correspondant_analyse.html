@@ -126,7 +126,7 @@
             Analyse
           </div>
           <div class="card-body small-padding">
-            <form method="post">
+            <form method="post" onsubmit="openLoader()">
               {% csrf_token %}
               {{ form|crispy }}
               <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>

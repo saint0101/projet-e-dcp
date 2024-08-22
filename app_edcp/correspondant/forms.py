@@ -1,3 +1,4 @@
+import json
 from select import select
 from django import forms
 # from .models import Correspondant
@@ -56,7 +57,7 @@ class DPOFormPage1(forms.Form):
       self.fields['organisation'].queryset = Enregistrement.objects.filter(user=self.user).filter(has_dpo=False) """
 
 
-def generate_analyse_form(categorie):
+def generate_analyse_form(categorie_demande, analyse=None):
   AVIS_CHOICES = [('', '---------'),] + [(False, 'Refuser'), (True, 'Autoriser')]
   observations = forms.CharField(
     label='Observations', 
@@ -78,15 +79,27 @@ def generate_analyse_form(categorie):
     """ Formulaire d'analyse d'une désignation de DPO """
     pass
   
-  evaluation_fields = CritereEvaluation.objects.filter(categorie_demande=categorie)
+  critere_fields = CritereEvaluation.objects.filter(categorie_demande=categorie_demande)
   NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
 
-  for field in evaluation_fields:
-    form_field = forms.CharField(
-      label=field.field_name,
-      required=field.field_required,
-      widget=forms.Select(choices=NOTATION_CHOICES)
-    )
+  deserialized_data = {}
+  if analyse and analyse.evaluation :
+    deserialized_data = json.loads(analyse.evaluation)
+
+  for field in critere_fields:
+    if field.label in deserialized_data:
+      form_field = forms.CharField(
+        label=field.field_name,
+        required=field.field_required,
+        widget=forms.Select(choices=NOTATION_CHOICES),
+        initial=deserialized_data[field.label],
+      )
+    else:
+      form_field = forms.CharField(
+        label=field.field_name,
+        required=field.field_required,
+        widget=forms.Select(choices=NOTATION_CHOICES),
+      )
     AnalyseDPOForm.base_fields[field.label] = form_field
   
   AnalyseDPOForm.base_fields['observations'] = observations
