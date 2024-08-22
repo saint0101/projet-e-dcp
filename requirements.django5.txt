@@ -5,6 +5,7 @@ Django==4.2.14
 django-appconf==1.0.6
 django-bootstrap-v5==1.0.11
 django-crispy-forms==2.3
+django-extensions==3.2.3
 django-feather==0.3.0
 django-formtools==2.5.1
 django-libsass==0.9

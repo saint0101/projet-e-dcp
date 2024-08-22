@@ -9,7 +9,7 @@
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
-    <h3 class="text-hint mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
+    <h3 class=" mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
     
     <div class="row mb-4">
       <div class="col">
@@ -37,6 +37,11 @@
 
             {% if request.user.is_staff %}
               {% if not correspondant.is_approved %}
+                <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+                  class="btn btn-primary me-2" onclick="openLoader()">
+                  Démarrer l'analyse
+                </a>
+              
                 <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
                   class="btn btn-primary me-2" onclick="openLoader()">
                   Approuver

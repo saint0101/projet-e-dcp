@@ -1,5 +1,6 @@
 from django import forms
-from base_edcp.models import Enregistrement, TypeClient, TypePiece
+from base_edcp.models import Enregistrement
+from options.models import TypeClient, TypePiece
 from base_edcp import validators
 
 class EnregistrementForm(forms.ModelForm):

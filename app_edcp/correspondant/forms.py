@@ -1,8 +1,12 @@
+from select import select
 from django import forms
 # from .models import Correspondant
 # from connexion.forms import UserRegistrationForm
 # from base_edcp.models import User, Enregistrement
 from base_edcp import validators
+from demande.models import CategorieDemande, CritereEvaluation
+from demande_auto.models import EchelleNotation
+from correspondant.models import Correspondant
 
 
 class UserIsDPOForm(forms.Form):
@@ -51,6 +55,57 @@ class DPOFormPage1(forms.Form):
       # Filter the tags queryset based on the current user
       self.fields['organisation'].queryset = Enregistrement.objects.filter(user=self.user).filter(has_dpo=False) """
 
+
+def generate_analyse_form(categorie):
+  AVIS_CHOICES = [('', '---------'),] + [(False, 'Refuser'), (True, 'Autoriser')]
+  observations = forms.CharField(
+    label='Observations', 
+    required=False,
+    widget=forms.Textarea(attrs={'rows': 4}),
+  )
+  prescriptions = forms.CharField(
+    label='Prescriptions',
+    required=False,
+    widget=forms.Textarea(attrs={'rows': 4}),
+  )
+  avis_juridique = forms.BooleanField(
+    label='Avis juridique',
+    required=False,
+    widget=forms.Select(choices=AVIS_CHOICES)
+  )
+  
+  class AnalyseDPOForm(forms.Form):
+    """ Formulaire d'analyse d'une désignation de DPO """
+    pass
+  
+  evaluation_fields = CritereEvaluation.objects.filter(categorie_demande=categorie)
+  NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+
+  for field in evaluation_fields:
+    form_field = forms.CharField(
+      label=field.field_name,
+      required=field.field_required,
+      widget=forms.Select(choices=NOTATION_CHOICES)
+    )
+    AnalyseDPOForm.base_fields[field.label] = form_field
+  
+  AnalyseDPOForm.base_fields['observations'] = observations
+  AnalyseDPOForm.base_fields['prescriptions'] = prescriptions
+  AnalyseDPOForm.base_fields['avis_juridique'] = avis_juridique
+  
+  return AnalyseDPOForm
+  
+
+class DPOUpdateForm(forms.ModelForm):
+  class Meta:
+    model = Correspondant
+    fields = [
+      'qualifications',
+      'exercice_activite',
+      'moyens_materiels',
+      'moyens_humains',
+      'experiences',
+    ]
 
 """ class DPOFormPage2(forms.Form):
   qualifications = forms. CharField(label='Qualifications')

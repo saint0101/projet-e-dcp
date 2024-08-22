@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from base_edcp.models import User, Enregistrement
+from demande.models import Demande
 from base_edcp import validators
 
 
@@ -48,7 +49,7 @@ class ExerciceActivite(models.Model):
       return self.label
 
 
-class Correspondant(models.Model):
+class Correspondant(Demande):
     """
     Correspondant à la protection des données
     """
@@ -58,7 +59,7 @@ class Correspondant(models.Model):
         verbose_name='Compte utilisateur',
         related_name='correspondant_profiles'
     )
-    created_by = models.ForeignKey(
+    """ created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Crée par',
@@ -75,10 +76,10 @@ class Correspondant(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Date de désignation'
-    )
+    ) """
     type_dpo = models.ForeignKey(
         TypeDPO,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name='Type de Correspondant',
         null=True,
         blank=True

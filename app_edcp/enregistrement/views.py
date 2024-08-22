@@ -6,7 +6,8 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
-from base_edcp.models import Enregistrement, TypeClient
+from base_edcp.models import Enregistrement
+from options.models import TypeClient
 from correspondant.models import Correspondant
 from .forms import EnregistrementForm
 from dashboard.mixins import UserHasAccessMixin

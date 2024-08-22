@@ -11,6 +11,8 @@ from .forms import *
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
 
+from demande.models import Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
+
 ######## Fonctions utilitaires ########
 
 def save_historique(demande, action_label, user):

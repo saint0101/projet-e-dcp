@@ -33,36 +33,18 @@ class PersConcerneeAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(models.Status)
-class StatusAdmin(admin.ModelAdmin):
-    """ Status des demandes """
-    ordering = ['id']
-    list_display = ['label', 'description', 'is_sensible', 'ordre']
-
-
-@admin.register(models.ActionDemande)
-class ActionDemandeAdmin(admin.ModelAdmin):
-    """ Actions effectuées """
-    ordering = ['id']
-    list_display = ['label', 'description', 'is_sensible', 'ordre']
-
 @admin.register(models.EchelleNotation)
 class EchelleNotationAdmin(admin.ModelAdmin):
     """ Echelle de notation des demandes d'autorisation """
     ordering = ['valeur']
     list_display = ['valeur', 'label', 'description']
 
-@admin.register(models.HistoriqueDemande)
-class HistoriqueAdmin(admin.ModelAdmin):
-    """ Historique des demandes """
-    ordering = ['id']
-    list_display = ['created_at', 'demande', 'status','action', 'auteur']
 
 
 @admin.register(models.DemandeAuto)
 class DemandeAutoAdmin(admin.ModelAdmin):
-    """ Demanded 'autorisation """
+    """ Demande d'autorisation """
     ordering = ['id']
-    list_display = ['created_at', 'type_demande', 'status','organisation', 'user', 'finalite']
+    list_display = ['created_at', 'type_demande', 'status','organisation', 'created_by', 'finalite']
 
 # admin.site.unregister(models.Status, StatusAdmin)

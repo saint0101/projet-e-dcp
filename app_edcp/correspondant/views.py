@@ -2,7 +2,7 @@ from multiprocessing import context
 # import secrets
 # from traceback import format_list
 # from django.forms import BaseModelForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 # from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -10,15 +10,19 @@ from django.db.models import Q
 from django.conf import settings
 from django.contrib import messages
 import os
+from django import forms
+
 #from django.core.files.storage import FileSystemStorage
 # from datetime import datetime
 # from formtools.wizard.views import SessionWizardView
 from .models import Correspondant
-from .forms import DPOFormPage1, UserIsDPOForm
+from .forms import DPOFormPage1, UserIsDPOForm, generate_analyse_form, DPOUpdateForm #, AnalyseDPOForm
 from base_edcp.models import User, Enregistrement
 # from connexion.forms import UserRegistrationForm
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
+from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation
+from demande_auto.models import EchelleNotation
 
 # Create your views here.
 
@@ -114,7 +118,7 @@ def designate(request, org):
         #    l'utilisateur courant fait donc une auto-désignation
         #    le DPO est alors créé avec pour "user" l'utilisateur courant
         if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
-            dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user) # création du DPO
+            dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user, categorie=CategorieDemande.objects.get(label='designation_correspondant')) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
             messages.success(request, 'Le Correspondant a bien été créé.')
             return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
@@ -139,7 +143,7 @@ def designate(request, org):
                         'password': password
                     },
                 )
-                dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user) # création du DPO
+                dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user, categorie=CategorieDemande.objects.get(label='designation_correspondant')) # création du DPO
                 Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
 
                 print(f'DPO {dpo} created')
@@ -176,6 +180,33 @@ def designate(request, org):
 
     return render(request, 'correspondant/designation.html', context=context) # renvoi de la vue
 
+
+def analyse(request, pk):
+  correspondant = get_object_or_404(Correspondant, pk=pk)
+  analyse = correspondant.analyse
+  AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'))
+  if not analyse :
+    analyse = AnalyseDemande.objects.create(created_by=request.user)
+    correspondant.analyse = analyse
+    correspondant.save()
+    form = AnalyseDPOForm(initial=analyse.__dict__)
+    print('analyse created : ', analyse)
+  else:
+    print('analyse exists : ', analyse)
+    form = AnalyseDPOForm()
+
+  form_dpo = DPOUpdateForm(instance=correspondant)
+
+  context = {
+    'form': form,
+    'form_dpo': form_dpo,
+    'correspondant': correspondant,
+    'analyse': analyse
+  }
+
+  return render(request, 'correspondant/correspondant_analyse.html', context=context)
+
+        
 
 class DPOUpdateView(UpdateView):
     model = Correspondant

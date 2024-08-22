@@ -1,0 +1,148 @@
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
+{% load custom_tags_filters %}
+{% load crispy_forms_tags %}
+
+{% block custom_scripts %}
+  {% comment %} 
+    Script : désactivation des champs du formulaire pour empêcher la modification
+  {% endcomment %}
+  <script>
+    $(document).ready(function (){
+      $('#form-dpo input').attr('disabled', true);
+      $('#form-dpo textarea').attr('disabled', true);
+      $('#form-dpo select').attr('disabled', true);
+      $('span.asteriskField').toggle(false);
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col-12">
+    <h3 class=" mb-3 custom-text-light fw-bold">Analyse du dossier de désignation de Correspondant</h3>
+    
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card custom-card">
+          <div class="card-body">
+
+            <span class="badge text-bg-light custom-text-light me-2">
+              Statut : {{ analyse.status }}
+            </span>
+
+            <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+              class="btn btn-primary me-2" onclick="openLoader()">
+              Enregistrer
+            </a>
+          
+            <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
+              class="btn btn-primary me-2" onclick="openLoader()">
+              Terminer l'analyse
+            </a>
+
+            <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" 
+              class="btn btn-danger me-2" onclick="openLoader()">
+              Soumettre à validation
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6" style="max-height: 600px; overflow-y: scroll;">
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Organisation
+          </div>
+          <div class="card-body small-padding">
+            {% with correspondant.organisation as org %}
+              <p>
+                <i class="bi bi-building fw-bold text-secondary x-large">
+                </i>
+                <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
+                  <strong>{{ org }}</strong>
+                </a>
+                {% comment %} <i class="bi bi-telephone text-secondary"></i> {{ org.telephone }} <br>
+                <i class="bi bi-envelope-at text-secondary"></i> {{ org.email_contact }} <br> {% endcomment %}
+                <ul class="list-group list-group-flush dpo-infos-list">
+                  <li class="list-group-item custom-text-light" > <i class="bi bi-telephone custom-text-light"></i> &emsp; {{ org.telephone }} </li>
+                  <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light"></i> &emsp; {{ org.email_contact }} </li>
+                  <li class="list-group-item custom-text-light"> <i class="bi bi-geo-alt custom-text-light"></i> &emsp; {{ org.ville }} </li>
+                </ul>
+              </p>
+            {% endwith %}
+      
+          </div>
+        </div>
+        
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Correspondant
+          </div>
+          <div class="card-body small-padding">
+            <p>
+              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
+              </i>
+              <a href="">
+                <strong>{{ correspondant.user }}</strong>
+              </a>
+              <ul class="list-group list-group-flush dpo-infos-list mb-3">
+                <li class="list-group-item custom-text-light"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
+                <li class="list-group-item custom-text-light" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.user.telephone }} </li>
+                <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.user.email }} </li>
+              </ul>
+              <form method="post" id="form-dpo">
+                {% csrf_token %}
+                {{ form_dpo|crispy }}
+              </form>
+            </p>
+          </div>
+        </div>
+
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Justificatifs
+          </div>
+          <div class="card-body small-padding">
+            <ul class="list-group list-group-flush">
+              {% for file_field in correspondant|get_file_fields %}
+                <li class="list-group-item">
+                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                    {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-6">
+        <div class="card custom-card">
+          <div class="card-header custom-text-light">
+            Analyse
+          </div>
+          <div class="card-body small-padding">
+            <form method="post">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+  
+{% endblock content %}
