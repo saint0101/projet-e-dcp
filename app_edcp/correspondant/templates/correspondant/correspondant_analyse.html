@@ -29,31 +29,55 @@
         <div class="card custom-card">
           <div class="card-body">
 
-            <span class="badge text-bg-light custom-text-light me-2">
+            <span class="badge text-bg-light custom-text-light me-2 mb-2">
               Statut : {{ analyse.status }}
             </span>
 
-            <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
-              class="btn btn-primary me-2" onclick="openLoader()">
-              Enregistrer
-            </a>
-          
-            <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
-              class="btn btn-primary me-2" onclick="openLoader()">
-              Terminer l'analyse
-            </a>
+            {% if action and action == 'validate' %}
+              <div id="actions-validator">
+                <form method="post">
+                  <div class="row">
+                    <div class="col-7">
+                      {% csrf_token %}
+                      {{ form_validation|crispy }}
+                    </div>
+                    <div class="col-5">
+                      <a href="" class="btn btn-info align-middle mt-4 mb-2">Valider</a><br>
+                      <a href="" class="btn btn-danger align-middle">Rejeter</a>
+                    </div>
+                  </div>
+                  
+                </form>
+                
+              </div>
+            {% elif not action %}
+              <div id="actions-agent">
+                <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+                  class="btn btn-primary me-2 {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="openLoader()">
+                  Enregistrer
+                </a>
+              
+                <a href="{% url 'dashboard:correspondant:reponse' pk=correspondant.id %}" 
+                  class="btn btn-primary me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                  Générer le projet de réponse
+                </a>
 
-            <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" 
-              class="btn btn-danger me-2" onclick="openLoader()">
-              Soumettre à validation
-            </a>
+                <a href="{% url 'dashboard:correspondant:submit' pk=correspondant.id %}" 
+                  class="btn btn-danger me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                  Soumettre à validation
+                </a>
+              </div>
+            {% endif %}
+            
+
+            
           </div>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-6" style="max-height: 600px; overflow-y: scroll;">
+      <div class="col-5" style="max-height: 800px; overflow-y: scroll;">
         <div class="card custom-card mb-3">
           <div class="card-header custom-text-light">
             Organisation
@@ -120,7 +144,61 @@
         </div>
       </div>
     
-      <div class="col-6">
+      <div class="col-7">
+        <div class="card custom-card">
+          <div class="accordion" id="accordionAnalyse">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button {{projet_reponse_pdf|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyse" aria-expanded="true" aria-controls="collapseAnalyse">
+                  Analyse de la demande
+                </button>
+              </h2>
+              <div id="collapseAnalyse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:' , show'}} " data-bs-parent="#accordionAnalyse">
+                <div class="accordion-body">
+                  <form method="post" onsubmit="openLoader()">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button {{projet_reponse_pdf|yesno:' , collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReponse" aria-expanded="false" aria-controls="collapseReponse">
+                  Projet de réponse
+                </button>
+              </h2>
+              <div id="collapseReponse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:'show, '}}" data-bs-parent="#accordionAnalyse">
+                <div class="accordion-body">
+                  {% if correspondant.analyse.projet_reponse %}
+                    <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
+                    <div>
+                      {% comment %} <embed id="embedded_pdf" src="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="600" height="800"> {% endcomment %}
+                      <object id="embedded_pdf" data="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="100%" height="700"></object>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {% comment %} {% if correspondant.analyse.projet_reponse %}
+          <div class="card custom-card mb-3">
+            <div class="card-header custom-text-light">
+              Projet de réponse
+            </div>
+            <div class="card-body small-padding">
+              <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
+              <div>
+                <object id="embedded_pdf" data="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="100%" height="700"></object>
+              </div>
+            </div>
+          </div>
+        {% endif %}
         <div class="card custom-card">
           <div class="card-header custom-text-light">
             Analyse
@@ -132,7 +210,9 @@
               <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
             </form>
           </div>
-        </div>
+        </div> {% endcomment %}
+
+        
       </div>
     </div>
   </div>

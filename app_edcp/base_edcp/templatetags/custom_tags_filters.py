@@ -86,3 +86,12 @@ def leading_zeros(value, num_digits):
     Utilisé pour l'affichage des ID des demandes.
     """
     return str(value).zfill(num_digits)
+
+@register.filter
+def get_demande_url(demande):
+    """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
+    if demande.categorie.label == 'designation_correspondant':
+        return 'dashboard:correspondant:'
+    
+    if demande.categorie.label == 'demande_autorisation':
+        return 'dashboard:demande_auto:'

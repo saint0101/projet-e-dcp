@@ -1,5 +1,4 @@
 import json
-from select import select
 from django import forms
 # from .models import Correspondant
 # from connexion.forms import UserRegistrationForm

@@ -67,11 +67,14 @@ class Demande(models.Model):
     on_delete=models.CASCADE,
     verbose_name='Analyse de la demande'
   )
-  
   finished_at = models.DateTimeField(
     null=True,
     blank=True,
     verbose_name='Date de fin de traitement.'
+  )
+  is_locked = models.BooleanField(
+    default=False,
+    verbose_name='Est verrouillée (en cours de validation)'
   )
 
   class Meta:
@@ -252,6 +255,10 @@ class AnalyseDemande(models.Model):
     verbose_name='Validation de la demande - niveau 5',
     related_name='analyse_validate_niv5',
   )
+  is_locked = models.BooleanField(
+    default=False,
+    verbose_name='Est verrouillée (en cours de validation)'
+  )
 
   class Meta:
     verbose_name = 'Analyse d\'une demande'
@@ -307,6 +314,16 @@ class ValidationDemande(models.Model):
   niveau_validation = models.IntegerField(
     default=1,
     verbose_name="Niveau de validation effectué"
+  )
+  avis = models.BooleanField(
+    blank=True,
+    null=True,
+    verbose_name='Avis sur l\'analsye et le projet de réponse'
+  )
+  observations = models.TextField(
+    null=True,
+    blank=True,
+    verbose_name="Observations sur l'analyse ou le projet de réponse"
   )
 
 

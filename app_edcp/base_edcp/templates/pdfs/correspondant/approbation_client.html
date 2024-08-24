@@ -1,0 +1,16 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  <img src="data:image/png;base64,{{qr_code}}" alt="QR Code" width="250px">
+  <h1>Lettre d'approbation</h1>
+  <br><br>
+  
+  La désignation de <strong>{{correspondant}}</strong> 
+  comme Correspondant à la protection des données de l'organiation 
+  <strong>"{{ correspondant.organisation }}"</strong>, 
+  par <strong>{{ correspondant.created_by }}</strong> a été approuvée.
+
+ <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

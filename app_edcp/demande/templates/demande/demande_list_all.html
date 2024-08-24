@@ -1,0 +1,60 @@
+{% extends '../dashboard/base/master.html' %}
+{% load static %}
+{% load custom_tags_filters %}
+
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col">
+    <div class="card custom-card">
+      <div class="card-body">
+        {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+        <h3 class="card-title mb-5 mt-3">Toutes les demandes</h3>
+        <div class="card-text">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Organisation</th>
+                {% comment %} <th scope="col">Utilisateur</th> {% endcomment %}
+                <th scope="col">Date</th>
+                <th scope="col">Objet</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Analyse</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for demande in demandes %}
+                <tr>
+                  {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
+                  <td> {{ demande.id|stringformat:"08d" }} </td>
+                  <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}">{{ demande.organisation }} </a> </td>
+                  {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
+                  <td> {{ demande.created_at }} </td>
+                  <td> {{ demande.categorie }} </td>
+                  <td> {{ demande.status }} </td>
+                  <td> {{ demande.analyse.status }} </td>
+                  <td> <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success">Valider</a> </td>
+                </tr>
+              {% empty %}
+                <p>Aucune demande n'a été enregistrée.</p>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+
+{% endblock content %}

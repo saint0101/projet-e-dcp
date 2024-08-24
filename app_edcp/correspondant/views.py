@@ -22,9 +22,12 @@ from base_edcp.models import User, Enregistrement
 # from connexion.forms import UserRegistrationForm
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
-from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation
+from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation, ReponseDemande
+from demande.forms import ValidateForm
 from demande_auto.models import EchelleNotation
 from datetime import datetime
+from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
+import base64
 
 # Create your views here.
 
@@ -183,11 +186,10 @@ def designate(request, org):
     return render(request, 'correspondant/designation.html', context=context) # renvoi de la vue
 
 
-def analyse(request, pk):
+def analyse(request, pk, action=None):
   correspondant = get_object_or_404(Correspondant, pk=pk)
   analyse = correspondant.analyse
   AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'), analyse)
-  
   
   if not analyse :
     analyse = AnalyseDemande.objects.create(created_by=request.user, status=Status.objects.get(label='brouillon'))
@@ -223,12 +225,59 @@ def analyse(request, pk):
     'form': form,
     'form_dpo': form_dpo,
     'correspondant': correspondant,
-    'analyse': analyse
-  }
+    'analyse': analyse,
+    'action': action
+  }  
+
+  if action == 'validate':
+    form_validation = ValidateForm()
+    context['form_validation'] = form_validation
+
+  if correspondant.analyse.projet_reponse:
+    pdf_path = correspondant.analyse.projet_reponse.fichier_reponse.path
+    with open(pdf_path, 'rb') as pdf_file:
+        # Convert pdf to a string
+        pdf_content = base64.b64encode(pdf_file.read()).decode()
+        context['projet_reponse_pdf'] = pdf_content
 
   return render(request, 'correspondant/correspondant_analyse.html', context=context)
 
-        
+
+def generate_response(request, pk):
+    correspondant = get_object_or_404(Correspondant, pk=pk)
+    context = {
+        'pk': pk,
+        'correspondant': correspondant,
+        'url_path': 'dashboard:correspondant:detail',
+    }
+    pdf_file = generate_pdf(request, PDF_TEMPLATES['correspondant_approbation'], context)
+    # print('generating pdf : ', pdf_file)
+    projet_reponse = ReponseDemande.objects.create()
+    projet_reponse.fichier_reponse.save('projet_reponse.pdf', pdf_file)
+    projet_reponse.intitule = 'Lettre d\'approbation'
+    # projet_reponse.fichier_reponse = pdf_file
+    projet_reponse.save()
+    correspondant.analyse.projet_reponse = projet_reponse
+    correspondant.analyse.save()
+    messages.success(request, 'Projet de réponse généré.')
+
+    return redirect('dashboard:correspondant:analyse', pk=pk)
+
+
+def submit_analyse(request, pk):
+    correspondant = get_object_or_404(Correspondant, pk=pk)
+    analyse = correspondant.analyse
+
+    if analyse :
+        status, created = Status.objects.get_or_create(
+            label='attente_validation_1',
+            defaults={'description': 'En attente de validation niv. 1'}    
+        )
+        analyse.status = status
+        analyse.is_locked = True
+        analyse.save()
+
+    return redirect('dashboard:correspondant:detail', pk=pk)
 
 class DPOUpdateView(UpdateView):
     model = Correspondant
