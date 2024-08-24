@@ -44,6 +44,7 @@ class UserAdmin(BaseUserAdmin):
                     'is_active',    # Active ou désactive le compte
                     'is_staff',     # Accorde l'accès au site d'administration
                     'is_superuser', # Accorde tous les accès
+                    'groups',       # Gestion des groupes
                 )
             }
         ),

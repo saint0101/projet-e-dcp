@@ -1,3 +1,4 @@
+
 # Create your views here.
 """
 Menu à afficher dans barre latérale (sidebar.html) du tableau de bord pour les utilisateurs de type client.
@@ -202,11 +203,11 @@ MENU_MGR = [
         'text' : 'À traiter',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:index',
+        'url' : 'dashboard:demande:liste_a_traiter',
         'disabled': False, 
       },
       {
-        'text' : 'Terminer',
+        'text' : 'Terminées',
         'type' : 'sous-menu-item',
         'icon' : '',
         'url' : 'dashboard:index',
@@ -216,7 +217,7 @@ MENU_MGR = [
         'text' : 'Toutes les demandes',
         'type' : 'sous-menu-item',
         'icon' : '',
-        'url' : 'dashboard:demande:list_all',
+        'url' : 'dashboard:demande:liste_all' ,
         'disabled': False, 
       },
     ],

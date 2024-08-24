@@ -37,10 +37,20 @@
                   <td> {{ demande.categorie }} </td>
                   <td> {{ demande.status }} </td>
                   <td> {{ demande.analyse.status }} </td>
-                  <td> <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success">Valider</a> </td>
+                  <td> 
+                    {% if demande.analyse.niv_validation == 0 %}
+                      <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-secondary">Traiter</a> 
+                    {% elif demande.analyse.niv_validation > 0 %}
+                      {% if user_niv_validation >= demande.analyse.niv_validation %}
+                        <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success" >Valider</a> 
+                      {% else %}
+                        <button class="btn btn-light">Verrouillé</a> 
+                      {% endif %}
+                    {% endif %}
+                  </td>
                 </tr>
               {% empty %}
-                <p>Aucune demande n'a été enregistrée.</p>
+                <p>Aucune demande à traiter</p>
               {% endfor %}
             </tbody>
           </table>

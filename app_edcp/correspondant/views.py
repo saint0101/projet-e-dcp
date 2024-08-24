@@ -226,6 +226,7 @@ def analyse(request, pk, action=None):
     'form_dpo': form_dpo,
     'correspondant': correspondant,
     'analyse': analyse,
+    'validations': analyse.validations.all(),
     'action': action
   }  
 
@@ -275,6 +276,7 @@ def submit_analyse(request, pk):
         )
         analyse.status = status
         analyse.is_locked = True
+        analyse.niv_validation = 1
         analyse.save()
 
     return redirect('dashboard:correspondant:detail', pk=pk)
