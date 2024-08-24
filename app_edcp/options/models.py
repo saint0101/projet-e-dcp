@@ -51,6 +51,13 @@ class Status(OptionModel):
     verbose_name_plural = 'Statuts de demandes ou d\'analyses'
 
 
+class GroupName(OptionModel):
+  class Meta:
+    verbose_name = 'Nom de groupe d\'utilisateurs'
+    verbose_name_plural = 'Noms de groupes d\'utilisateurs'
+
+
+
 class TypeClient(models.Model):
     """ Table du type des clients """
     label = models.CharField(max_length=100, verbose_name='Type de Client')

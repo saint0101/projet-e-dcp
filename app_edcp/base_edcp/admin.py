@@ -9,15 +9,15 @@ from base_edcp import models
 
 # module enregistreprement d'un utilisateur
 @admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin):
     """
     Définit les pages d'administration pour les utilisateurs.
     """
     ordering = ['id']  # Ordonne les utilisateurs par ID
-    list_display = ['nom', 'prenoms', 'email']  # Affiche les utilisateurs par e-mail et login
+    list_display = ['nom', 'prenoms', 'email', 'is_superuser', 'is_staff', 'is_active', 'is_dpo',]  # Affiche les utilisateurs par e-mail et login
 
     # Éditer l'utilisateur
-    """ fieldsets = (
+    fieldsets = (
         (None, {'fields': ('email', "password")}),  # Informations de connexion
         (
             _('Personal Info'),  # Titre pour les champs d'informations personnelles
@@ -32,6 +32,8 @@ class UserAdmin(admin.ModelAdmin):
                     'username',
                     'avatar',
                     'is_dpo',
+                    'email_verified',
+                    'must_reset'
                 )
             }
         ),
@@ -46,12 +48,12 @@ class UserAdmin(admin.ModelAdmin):
             }
         ),
         (_('Dates importantes'), {'fields': ('last_login',)}),  # Date de dernière connexion
-    ) """
+    )
 
     readonly_fields = ['last_login']  # Affiche la dernière connexion en lecture seule
 
     # Ajout d'un utilisateur
-    """ add_fieldsets = (
+    add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': (
@@ -69,9 +71,11 @@ class UserAdmin(admin.ModelAdmin):
                 'is_active',
                 'is_staff',
                 'is_superuser',
+                'email_verified',
+                'must_reset',
             ),
         }),
-    ) """
+    )
 
 
 @admin.register(models.Role)
@@ -81,6 +85,12 @@ class RoleAdmin(admin.ModelAdmin):
     ordering = ['id']  # Ordonne les Role par ID
     list_display = ['role']  # Affiche informatons de la table
 
+
+@admin.register(models.GroupExtension)
+class GroupExtensionAdmin(admin.ModelAdmin):
+    """ Definir la table GroupExtension dans l'espace admin """
+    ordering = ['niv_validation']  # Ordonne les GroupExtension par ID
+    list_display = ['group_name', 'group', 'niv_validation']  # Affiche les GroupExtension
 
 
 # module notificaton

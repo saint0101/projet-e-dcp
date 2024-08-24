@@ -215,6 +215,15 @@ class AnalyseDemande(models.Model):
     on_delete=models.CASCADE,
     verbose_name='Réponse apportée à la demande'
   )
+  niv_validation = models.IntegerField(
+    default=0,
+    verbose_name='Niveau de validation actuel de l\'analyse'
+  )
+  validations = models.ManyToManyField(
+    'ValidationDemande',
+    blank=True,
+    verbose_name='Liste des validations',
+  )
   validation_niv1 = models.ForeignKey(
     'ValidationDemande',
     null=True,
@@ -263,6 +272,13 @@ class AnalyseDemande(models.Model):
   class Meta:
     verbose_name = 'Analyse d\'une demande'
     verbose_name_plural = 'Analyses des demandes'
+    permissions = [
+      ('can_validate_niv_1', 'Peut valider la demande - niveau 1'),
+      ('can_validate_niv_2', 'Peut valider la demande - niveau 2'),
+      ('can_validate_niv_3', 'Peut valider la demande - niveau 3'),
+      ('can_validate_niv_4', 'Peut valider la demande - niveau 4'),
+      ('can_validate_niv_5', 'Peut valider la demande - niveau 5'),
+    ]
 
 
 class ReponseDemande(models.Model):

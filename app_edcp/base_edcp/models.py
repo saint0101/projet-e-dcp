@@ -6,9 +6,10 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
+    Group,
 )
 # from base_edcp.models import User
-from options.models import TypeClient, TypePiece, Secteur, Pays
+from options.models import TypeClient, TypePiece, Secteur, Pays, GroupName
 from base_edcp import validators
 
 # Create your models here.
@@ -99,6 +100,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """ les champs a retourner pour l'affichage d'un objet USER"""
         return self.nom + ' ' + self.prenoms
+
+
+class GroupExtension(models.Model):
+    """ Extension des groupes par défaut de Django. """
+    group_name = models.ForeignKey(
+        GroupName, 
+        on_delete=models.CASCADE, 
+        verbose_name='Nom du Groupe',
+        null=True,
+        blank=True,
+    )
+    group = models.OneToOneField(
+        Group,
+        on_delete=models.CASCADE,
+    )
+    niv_validation = models.IntegerField(
+        default=0,
+        verbose_name='Niveau de Validation',
+    )
+
+    def __str__(self):
+        return f"{self.group.name} (Niv. validation {self.niv_validation})"
 
 
 class Enregistrement(models.Model):

@@ -35,15 +35,15 @@
 
             {% if action and action == 'validate' %}
               <div id="actions-validator">
-                <form method="post">
+                <form method="post" action="{% url 'dashboard:demande:validation' pk=correspondant.pk %}">
                   <div class="row">
                     <div class="col-7">
                       {% csrf_token %}
                       {{ form_validation|crispy }}
                     </div>
                     <div class="col-5">
-                      <a href="" class="btn btn-info align-middle mt-4 mb-2">Valider</a><br>
-                      <a href="" class="btn btn-danger align-middle">Rejeter</a>
+                      <button type="submit" name="submit_form_accept" class="btn btn-info align-middle mt-4 mb-2">Valider</button><br>
+                      <button type="submit" name="submit_form_reject" class="btn btn-danger align-middle">Rejeter</button>
                     </div>
                   </div>
                   

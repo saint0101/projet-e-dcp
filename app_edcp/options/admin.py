@@ -9,6 +9,13 @@ class StatusAdmin(admin.ModelAdmin):
   list_display = ['label', 'description', 'is_sensible', 'ordre']
 
 
+@admin.register(models.GroupName)
+class GroupNameAdmin(admin.ModelAdmin):
+  """ Noms de groupes d'utilisateurs """
+  ordering = ['id']
+  list_display = ['label', 'description', 'is_sensible', 'ordre']
+
+
 @admin.register(models.TypeClient)
 class TypeClientAdmin(admin.ModelAdmin):
   """ definir la page de l'administrateur """
