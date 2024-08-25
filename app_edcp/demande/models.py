@@ -1,9 +1,12 @@
-from wsgiref import validate
+from datetime import datetime
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from base_edcp.models import User, Enregistrement
 from options.models import OptionModel, Status
 from base_edcp import validators
 from django.core.validators import FileExtensionValidator
+
 
 # Create your models here.
 class Demande(models.Model):
@@ -81,8 +84,43 @@ class Demande(models.Model):
     verbose_name = 'Demande générale'
     verbose_name_plural = 'Demandes générales'
 
+  def save_historique(self, action_label, user, is_private=False):
+    """
+    Sauvegarde de l'historique d'une demande.
+    Paramètres :
+    -- demande - l'objet demande d'autorisation concerné
+    -- action_label - le label de l'action effectuee
+    -- user - l'utilisateur à l'origine de l'action
+    """
+    historique = HistoriqueDemande()
+    historique.demande = self
+    historique.status = self.status
+    historique.action = ActionDemande.objects.get(label=action_label)
+    historique.auteur = user
+    historique.is_private = is_private
+    historique.save()
+
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
+    if not self.num_demande:
+      date_demande = self.created_at if self.created_at else datetime.now()
+      #f'{str(i):<5}'
+      self.num_demande = f'{date_demande.year}{date_demande.month:>02}{date_demande.day:>02}-{str(self.id):>06}'
+      print('num_demande : ', self.num_demande)
+    super().save(update_fields=['num_demande'])
+
   def __str__(self):
     return f"{self.categorie} #{self.pk}"
+
+
+""" @receiver(pre_save, sender=Demande)
+def create_num_demande(sender, instance, **kwargs):
+    # Modify the instance's fields before saving
+    if not instance.num_demande:
+      date_demande = instance.created_at
+      #f'{str(i):<5}'
+      instance.num_demande = f'{date_demande.year}{date_demande.month}{date_demande.day}-{str(instance.id):>06}'
+      print('num_demande : ', instance.num_demande) """
 
 
 class CategorieDemande(OptionModel):
@@ -354,6 +392,7 @@ class HistoriqueDemande(models.Model):
   status = models.ForeignKey(
     Status, 
     blank=True,
+    null=True,
     on_delete=models.CASCADE, 
     verbose_name='Statut de la demande'
   )

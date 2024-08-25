@@ -2,8 +2,26 @@ from django.db.models import Max, Q
 from django.shortcuts import redirect, render, get_object_or_404
 from options.models import Status
 from base_edcp.models import User, GroupExtension
-from demande.models import Demande, ValidationDemande
+from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande
 from demande.forms import ValidateForm
+
+## Functions
+def save_historique(demande, action_label, user):
+  """
+  Sauvegarde de l'historique d'une demande.
+  Paramètres :
+  -- demande - l'objet demande d'autorisation concerné
+  -- action_label - le label de l'action effectuee
+  -- user - l'utilisateur à l'origine de l'action
+  """
+  historique = HistoriqueDemande()
+  historique.demande = demande
+  historique.status = demande.status
+  historique.action = ActionDemande.objects.get(label=action_label)
+  historique.auteur = user
+  historique.save()
+
+
 
 # Create your views here.
 def demandes_all(request):

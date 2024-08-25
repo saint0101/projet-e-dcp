@@ -6,7 +6,7 @@ from django import forms
 from base_edcp import validators
 from demande.models import CategorieDemande, CritereEvaluation
 from demande_auto.models import EchelleNotation
-from correspondant.models import Correspondant
+from correspondant.models import Correspondant, MoyensDPO
 
 
 class UserIsDPOForm(forms.Form):
@@ -109,14 +109,28 @@ def generate_analyse_form(categorie_demande, analyse=None):
   
 
 class DPOUpdateForm(forms.ModelForm):
+  moyens_dpo = forms.ModelMultipleChoiceField(
+    label='Moyens matériels et humains', 
+    queryset=MoyensDPO.objects.all(), 
+    help_text='Moyens mis à la disposition du Correspondant.',
+    required=False,
+    widget = forms.CheckboxSelectMultiple
+  )
+
   class Meta:
     model = Correspondant
     fields = [
-      'qualifications',
-      'exercice_activite',
-      'moyens_materiels',
-      'moyens_humains',
-      'experiences',
+        'is_active',
+        'qualifications', 
+        'exercice_activite', 
+        'moyens_dpo', 
+        'experiences',
+        'file_lettre_designation',
+        'file_lettre_acceptation',
+        'file_attestation_travail',
+        'file_casier_judiciaire',
+        'file_certificat_nationalite',
+        'file_cv',
     ]
 
 """ class DPOFormPage2(forms.Form):

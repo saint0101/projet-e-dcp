@@ -22,7 +22,7 @@ from base_edcp.models import User, Enregistrement
 # from connexion.forms import UserRegistrationForm
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
-from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation, ReponseDemande
+from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation, HistoriqueDemande, ReponseDemande
 from demande.forms import ValidateForm
 from demande_auto.models import EchelleNotation
 from datetime import datetime
@@ -123,9 +123,16 @@ def designate(request, org):
         #    l'utilisateur courant fait donc une auto-désignation
         #    le DPO est alors créé avec pour "user" l'utilisateur courant
         if 'submit_user_is_dpo_form' in request.POST and form_user_is_dpo.is_valid(): 
-            dpo = Correspondant.objects.create(user=request.user, organisation=organisation, created_by=request.user, categorie=CategorieDemande.objects.get(label='designation_correspondant')) # création du DPO
+            dpo = Correspondant.objects.create(
+                user=request.user, 
+                organisation=organisation, 
+                created_by=request.user, 
+                categorie=CategorieDemande.objects.get(label='designation_correspondant'),
+                status=Status.objects.get(label='demande_attente_traitement'),
+            ) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
             messages.success(request, 'Le Correspondant a bien été créé.')
+            dpo.save_historique(action_label='creation', user=request.user)
             return redirect('dashboard:correspondant:edit', pk=dpo.id, is_new=True) # redirection vers la vue UpdateView avec l'id du DPO créé
         
         # si le formulaire de création de compte a été soumis et est valide,
@@ -153,6 +160,7 @@ def designate(request, org):
 
                 print(f'DPO {dpo} created')
                 messages.success(request, 'Le Correspondant a bien été créé.')
+                dpo.save_historique(action_label='creation', user=request.user)
 
                 """ mail_context = {
                     'correspondant': dpo,
@@ -283,12 +291,11 @@ def submit_analyse(request, pk):
 
 class DPOUpdateView(UpdateView):
     model = Correspondant
-    fields = [
+    """ fields = [
         'is_active',
         'qualifications', 
         'exercice_activite', 
-        'moyens_materiels', 
-        'moyens_humains', 
+        'moyens_dpo', 
         'experiences',
         'file_lettre_designation',
         'file_lettre_acceptation',
@@ -296,8 +303,8 @@ class DPOUpdateView(UpdateView):
         'file_casier_judiciaire',
         'file_certificat_nationalite',
         'file_cv',
-    ]
-    
+    ] """
+    form_class = DPOUpdateForm
     template_name = 'correspondant/correspondant_edit.html'
     context_object_name = 'correspondant'
     
@@ -364,6 +371,14 @@ class DPODetailView(DetailView):
             return queryset.filter(created_by=self.request.user)
 
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        historique = HistoriqueDemande.objects.filter(demande=self.object)
+        print('historique', historique)
+        context['historique'] = historique
+        return context
+
     
 
 """TO DELETE"""

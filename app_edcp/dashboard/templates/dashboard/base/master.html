@@ -27,8 +27,6 @@
 {% endblock %}
 
 
-
-
 {% block layout %}
     {% block header %}
         {% include "./header.html" %}
@@ -37,6 +35,10 @@
     <main class="d-flex flex-nowrap">
         {% block sidebar %}
             {% include "./sidebar.html" %}
+        {% endblock %}
+
+        {% block historique %}
+            {% include "./historique_demande.html" %}
         {% endblock %}
 
         {% block breadcrumbs %}

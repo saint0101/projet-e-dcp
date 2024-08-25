@@ -10,25 +10,10 @@ from .forms import *
 # CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
-
+from demande.views import save_historique
 from demande.models import Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
 
 ######## Fonctions utilitaires ########
-
-def save_historique(demande, action_label, user):
-  """
-  Sauvegarde de l'historique d'une demande.
-  Paramètres :
-  -- demande - l'objet demande d'autorisation concerné
-  -- action_label - le label de l'action effectuee
-  -- user - l'utilisateur à l'origine de l'action
-  """
-  historique = HistoriqueDemande()
-  historique.demande = demande
-  historique.status = demande.status
-  historique.action = ActionDemande.objects.get(label=action_label)
-  historique.auteur = user
-  historique.save()
 
 
 def get_sous_finalites(request, pk):

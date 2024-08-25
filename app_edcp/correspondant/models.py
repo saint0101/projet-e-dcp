@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from base_edcp.models import User, Enregistrement
 from demande.models import Demande
+from options.models import OptionModel
 from base_edcp import validators
 
 
@@ -47,6 +48,13 @@ class ExerciceActivite(models.Model):
   def __str__(self):
       """ les champs à retourner """
       return self.label
+
+
+class MoyensDPO(OptionModel):
+  """ Moyens matériels et humains """
+  class Meta:
+    verbose_name = 'Moyens du DPO'
+    verbose_name_plural = 'Moyens du DPO'
 
 
 class Correspondant(Demande):
@@ -98,7 +106,7 @@ class Correspondant(Demande):
         on_delete=models.CASCADE,
         verbose_name="Exercice de l'activité"
     )
-    moyens_materiels = models.CharField(
+    """ moyens_materiels = models.CharField(
         max_length=255,
         null=True,
         blank=True,
@@ -109,6 +117,12 @@ class Correspondant(Demande):
         null=True,
         blank=True,
         verbose_name='Moyens humains mis à la disposition du Correspondant'
+    ) """
+    moyens_dpo = models.ManyToManyField(
+        MoyensDPO,
+        blank=True,
+        verbose_name='Moyens humains et matériels',
+        help_text='Moyens mis à la disposition du Correspondant.'
     )
     experiences = models.TextField(
         null=True,

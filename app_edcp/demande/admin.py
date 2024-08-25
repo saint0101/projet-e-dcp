@@ -4,6 +4,20 @@ from . import models
 # Register your models here.
 
 
+@admin.register(models.Demande)
+class DemandeAdmin(admin.ModelAdmin):
+    """ Demandes effectuées """
+    ordering = ['created_at']
+    list_display = ['id', 'organisation', 'created_by', 'categorie', 'status']
+
+
+
+@admin.register(models.HistoriqueDemande)
+class HistoriqueDemandeAdmin(admin.ModelAdmin):
+    """ Historiqe """
+    ordering = ['created_at']
+    list_display = ['id', 'demande', 'status', 'action', 'auteur', 'is_private']
+
 
 @admin.register(models.ActionDemande)
 class ActionDemandeAdmin(admin.ModelAdmin):

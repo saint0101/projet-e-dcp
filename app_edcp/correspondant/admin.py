@@ -12,28 +12,8 @@ class CorrespondantAdmin(admin.ModelAdmin):
     list_display = ['user', 'organisation', 'created_at', 'created_by', 'type_dpo', 'is_active', 'is_approved']
     # search_fields = ['user__nom', 'user__prenoms', 'organisation__nom']  # Ajoute un champ de recherche
     # list_filter = ['is_active', 'is_approved', 'type_dpo', 'organisation']  # Ajoute des filtres
-    readonly_fields = ('created_at',)  # Le champ 'created_at' est en lecture seule
+   
 
-    # Configuration des champs dans le formulaire d'édition
-    """ fieldsets = (
-        (None, {
-            'fields': ('user', 'organisation', 'created_at', 'created_by', 'type_dpo', 'is_active', 'is_approved')
-        }),
-        ('Informations complémentaires', {
-            'fields': ('qualifications', 'exercice_activite', 'moyens_materiels', 'moyens_humains', 'experiences'),
-            'classes': ('collapse',),  # Ajoute un accordéon pour les informations complémentaires
-        }),
-    ) """
-    
-    """ def has_add_permission(self, request):
-        # Optionnel : empêcher l'ajout de nouveaux correspondants via l'admin
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        # Optionnel : personnaliser les permissions de modification
-        if obj is not None and obj.created_by != request.user:
-            return False
-        return super().has_change_permission(request, obj) """
 
 
 @admin.register(models.TypeDPO)
@@ -68,9 +48,9 @@ class ExerciceActiviteAdmin(admin.ModelAdmin):
   ordering = ['id']  # Ordonne les notifications par ID
   list_display = ['label', 'description']  # Affiche informatons de la table
 
-  # Éditer le type du client
-  fieldsets = (
-      (None, {
-          'fields': ('label', 'description')
-      }),
-  )
+
+@admin.register(models.MoyensDPO)
+class MoyensDPOAdmin(admin.ModelAdmin):
+  """Moyens du DPO"""
+  ordering = ['id']  # Ordonne les notifications par ID
+  list_display = ['label', 'description']  # Affiche informatons de la table

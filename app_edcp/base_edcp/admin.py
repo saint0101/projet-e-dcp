@@ -111,7 +111,7 @@ class EnregistrementAdmin(admin.ModelAdmin):
     """ Page d'administration pour Enregistrement """
 
     ordering = ['id']  # Ordonne les enregistrements par ID
-    list_display = ['user', 'created_at', 'typeclient', 'raisonsociale', 'representant', 'rccm', 'secteur', 'telephone', 'email_contact', 'ville' ]
+    list_display = ['raisonsociale', 'user', 'created_at', 'typeclient', 'representant', 'rccm', 'secteur', 'telephone', 'email_contact', 'ville' ]
 
 
 @admin.register(models.JournalTransaction)
