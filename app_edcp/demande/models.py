@@ -467,6 +467,9 @@ class Commentaire(models.Model):
     max_length=500,
     verbose_name='Contenu du message'
   )
+  is_new = models.BooleanField(
+    default=True,
+  )
 
   class Meta:
       verbose_name = 'Commentaire sur une demande'

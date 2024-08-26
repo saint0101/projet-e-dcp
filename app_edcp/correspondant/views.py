@@ -16,14 +16,14 @@ from options.models import Status
 #from django.core.files.storage import FileSystemStorage
 # from datetime import datetime
 # from formtools.wizard.views import SessionWizardView
-from .models import Correspondant
-from .forms import DPOFormPage1, UserIsDPOForm, generate_analyse_form, DPOUpdateForm #, AnalyseDPOForm
+from .models import Correspondant, DesignationDpoMoral, TypeDPO
+from .forms import DPOCabinetFormDisabled, DPODPOUpdateFormDisabled, DPOFormPage1, DPOCabinetForm, UserIsDPOForm, generate_analyse_form, DPOUpdateForm #, AnalyseDPOForm
 from base_edcp.models import User, Enregistrement
 # from connexion.forms import UserRegistrationForm
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
-from demande.models import ActionDemande, AnalyseDemande, CategorieDemande, CritereEvaluation, HistoriqueDemande, ReponseDemande
-from demande.forms import ValidateForm
+from demande.models import ActionDemande, AnalyseDemande, CategorieDemande, Commentaire, CritereEvaluation, HistoriqueDemande, ReponseDemande
+from demande.forms import CommentaireForm, ValidateForm
 from demande_auto.models import EchelleNotation
 from datetime import datetime
 from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
@@ -38,10 +38,12 @@ def index(request):
     Affiche la liste des correspondants désignés par l'utilisateur,
     et la liste des organisations pour lesquels l'utilisateur n'a pas encore désigné de DPO.
     """
-    correspondants = Correspondant.objects.filter(Q(user=request.user) | Q(created_by=request.user)) # Filtre si l'utilisateur est lui-même un DPO ou s'il a désigné des DPO
+    dpos_physique = Correspondant.objects.filter(Q(user=request.user) | Q(created_by=request.user)).filter(is_personne_morale=False) # Filtre si l'utilisateur est lui-même un DPO ou s'il a désigné des DPO
+    dpos_moral = Correspondant.objects.filter(created_by=request.user).filter(is_personne_morale=True)
     orgs_without_dpo = Enregistrement.objects.filter(user=request.user).filter(has_dpo=False) # Liste des organisations créées par l'utilisateur et qui n'ont pas de DPO
     context = {
-        'correspondants': correspondants,
+        'correspondants_physique': dpos_physique,
+        'correspondants_moral': dpos_moral,
         'orgs_without_dpo': orgs_without_dpo
     }
 
@@ -93,10 +95,6 @@ def approve(request, pk, approve):
     return redirect('dashboard:correspondant:detail', pk=correspondant.id)
 
 
-""" def generate_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789$;?.,/:<>&@)([]\{\}'):
-    return ''.join(secrets.choice(allowed_chars) for i in range(length))
- """
-
 def designate(request, org):
     """
     Vue de désignation du DPO.
@@ -127,7 +125,8 @@ def designate(request, org):
                 user=request.user, 
                 organisation=organisation, 
                 created_by=request.user, 
-                categorie=CategorieDemande.objects.get(label='designation_correspondant'),
+                categorie=CategorieDemande.objects.get(label='designation_dpo'),
+                type_dpo=TypeDPO.objects.get(label='personne_physique'),
                 status=Status.objects.get(label='demande_attente_traitement'),
             ) # création du DPO
             Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
@@ -155,7 +154,14 @@ def designate(request, org):
                         'password': password
                     },
                 )
-                dpo = Correspondant.objects.create(user=user, organisation=organisation, created_by=request.user, categorie=CategorieDemande.objects.get(label='designation_correspondant')) # création du DPO
+                dpo = Correspondant.objects.create(
+                  user=user, 
+                  organisation=organisation, 
+                  created_by=request.user, 
+                  categorie=CategorieDemande.objects.get(label='designation_dpo'),
+                  type_dpo=TypeDPO.objects.get(label='personne_physique'),
+                  status=Status.objects.get(label='demande_attente_traitement'),
+                ) # création du DPO
                 Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
 
                 print(f'DPO {dpo} created')
@@ -194,10 +200,59 @@ def designate(request, org):
     return render(request, 'correspondant/designation.html', context=context) # renvoi de la vue
 
 
+def designate_cabinet(request, org):
+  """
+  Vue de désignation du DPO.
+  Renvoie un premier formulaire pour la création du compte utilisateur du DPO,
+  puis redirige vers la vue UpdateView pour l'édition du DPO créé
+  """
+  context = {}
+  organisation = Enregistrement.objects.get(id=org) # récupération de l'organisation pour laquelle le DPO va être désigné
+  form = DPOCabinetForm()
+
+  if request.method == 'POST':
+    form = DPOCabinetForm(request.POST)
+    if form.is_valid():
+      dpo = form.save(commit=False)
+      correspondant = Correspondant.objects.create(
+        user = dpo.cabinet.user,
+        created_by = request.user,
+        organisation = organisation,
+        cabinet = dpo.cabinet,
+        categorie = CategorieDemande.objects.get(label='designation_dpo'),
+        is_personne_morale = True,
+        type_dpo=TypeDPO.objects.get(label='personne_morale'),
+        status=Status.objects.get(label='demande_attente_traitement'),
+      )
+      """ correspondant.organisation = organisation
+      correspondant.categorie = CategorieDemande.objects.get(label='designation_dpo'),
+      correspondant.created_by = request.user
+      correspondant.is_personne_morale = True
+      correspondant.save() """
+
+      messages.success(request, 'La désignation du Correspondant a bien été enregistrée.')
+      correspondant.save_historique(action_label='creation', user=request.user)
+      
+      Enregistrement.objects.filter(id=org).update(has_dpo=True) # mise à jour de l'organsiation avec --> has_dpo = True
+      # send_email()
+      # context
+      return redirect('dashboard:correspondant:detail', pk=correspondant.id) #
+    
+    else:
+      context['errors'] = form.errors
+
+  context['form'] = form
+  return render(request, 'correspondant/designation_cabinet.html', context=context)
+
+
+def designation_detail(request, pk):
+   pass
+
+
 def analyse(request, pk, action=None):
   correspondant = get_object_or_404(Correspondant, pk=pk)
   analyse = correspondant.analyse
-  AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'), analyse)
+  AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_dpo'), analyse)
   
   if not analyse :
     status_brouillon, created = Status.objects.get_or_create(label='brouillon', defaults={'description': 'Brouillon'})
@@ -222,7 +277,7 @@ def analyse(request, pk, action=None):
       analyse.updated_by = request.user
 
       evaluation = {}
-      for field in CritereEvaluation.objects.filter(categorie_demande=CategorieDemande.objects.get(label='designation_correspondant')):
+      for field in CritereEvaluation.objects.filter(categorie_demande=CategorieDemande.objects.get(label='designation_dpo')):
           if field.label in form_data.keys() :
             evaluation[field.label] = form_data[field.label]
       serialized_data = json.dumps(evaluation)
@@ -233,12 +288,19 @@ def analyse(request, pk, action=None):
       return redirect('dashboard:correspondant:analyse', pk=pk)
 
   form = AnalyseDPOForm(initial=analyse.__dict__)
-  form_dpo = DPOUpdateForm(instance=correspondant)
+  if correspondant.is_personne_morale:
+    form_dpo = DPOCabinetFormDisabled(instance=correspondant)
+  else:
+    form_dpo = DPODPOUpdateFormDisabled(instance=correspondant)
+
+  form_comment = CommentaireForm()
   context = {
     'form': form,
     'form_dpo': form_dpo,
+    'form_comment': form_comment,
     'correspondant': correspondant,
     'analyse': analyse,
+    'commentaires': Commentaire.objects.filter(demande=correspondant),
     'validations': analyse.validations.all(),
     'action': action,
     'historique': HistoriqueDemande.objects.filter(demande=correspondant)
@@ -247,6 +309,9 @@ def analyse(request, pk, action=None):
   if action == 'validate':
     form_validation = ValidateForm()
     context['form_validation'] = form_validation
+
+  if action == 'show_comments':
+    context['show_comments'] = True
 
   if correspondant.analyse.projet_reponse:
     pdf_path = correspondant.analyse.projet_reponse.fichier_reponse.path
@@ -296,62 +361,76 @@ def submit_analyse(request, pk):
 
     return redirect('dashboard:correspondant:detail', pk=pk)
 
+
+class DPOUpdateCabinet(UpdateView):
+  model = Correspondant
+  form_class = DPOCabinetForm
+  template_name = 'correspondant/correspondant_edit.html'
+  context_object_name = 'correspondant'
+
+  def get_success_url(self):
+    # Redirect to the detail view of the created object
+    messages.success(self.request, 'Désignation du correspondant mise à jour.')
+    return reverse('dashboard:correspondant:detail', kwargs={'pk': self.object.pk})
+    
+
+
 class DPOUpdateView(UpdateView):
-    model = Correspondant
-    """ fields = [
-        'is_active',
-        'qualifications', 
-        'exercice_activite', 
-        'moyens_dpo', 
-        'experiences',
-        'file_lettre_designation',
-        'file_lettre_acceptation',
-        'file_attestation_travail',
-        'file_casier_judiciaire',
-        'file_certificat_nationalite',
-        'file_cv',
-    ] """
-    form_class = DPOUpdateForm
-    template_name = 'correspondant/correspondant_edit.html'
-    context_object_name = 'correspondant'
+  model = Correspondant
+  """ fields = [
+      'is_active',
+      'qualifications', 
+      'exercice_activite', 
+      'moyens_dpo', 
+      'experiences',
+      'file_lettre_designation',
+      'file_lettre_acceptation',
+      'file_attestation_travail',
+      'file_casier_judiciaire',
+      'file_certificat_nationalite',
+      'file_cv',
+  ] """
+  form_class = DPOUpdateForm
+  template_name = 'correspondant/correspondant_edit.html'
+  context_object_name = 'correspondant'
+  
+  def form_valid(self, form):
+      """Méthode appelée lorsque le formulaire est valide"""
+      obj = form.save(commit=False) # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
+      obj.profile_completed = True # Marque le profil comme complet
+      response = super().form_valid(form) # Sauvegarde l'objet en appelant la méthode de la classe parente
+      self.object = obj # Définit l'objet sauvegardé pour les actions post-sauvegarde
+      
+      messages.success(self.request, 'Informations enregistrées avec succès.')
+
+      # s'il s'agit d'une nouvelle désignation de correspondant
+      if self.kwargs.get('is_new'):
+          # notification du correspondant et de l'utilisateur qui l'a désigné
+          send_email(
+              request=self.request, 
+              mail_content=MAIL_CONTENTS['correspondant_designation_client'], 
+              recipient_list=[obj.user.email, self.request.user.email], 
+              context={'correspondant': obj}
+          )
+          # notification de l'Autorité de Protection
+          send_email(
+              request=self.request, 
+              mail_content=MAIL_CONTENTS['correspondant_designation_mgr'], 
+              recipient_list=[settings.EMAIL_HOST_USER ], 
+              context={'correspondant': obj},
+              show_message=False
+          )
+
+      return response
     
-    def form_valid(self, form):
-        """Méthode appelée lorsque le formulaire est valide"""
-        obj = form.save(commit=False) # Sauvegarde l'objet avec les données du formulaire, sans le valider encore
-        obj.profile_completed = True # Marque le profil comme complet
-        response = super().form_valid(form) # Sauvegarde l'objet en appelant la méthode de la classe parente
-        self.object = obj # Définit l'objet sauvegardé pour les actions post-sauvegarde
-        
-        messages.success(self.request, 'Informations enregistrées avec succès.')
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['is_new'] = self.kwargs.get('is_new') # permet de vérifier si le formulaire est affiché suite à la création d'un DPO
+    return context
 
-        # s'il s'agit d'une nouvelle désignation de correspondant
-        if self.kwargs.get('is_new'):
-            # notification du correspondant et de l'utilisateur qui l'a désigné
-            send_email(
-                request=self.request, 
-                mail_content=MAIL_CONTENTS['correspondant_designation_client'], 
-                recipient_list=[obj.user.email, self.request.user.email], 
-                context={'correspondant': obj}
-            )
-            # notification de l'Autorité de Protection
-            send_email(
-                request=self.request, 
-                mail_content=MAIL_CONTENTS['correspondant_designation_mgr'], 
-                recipient_list=[settings.EMAIL_HOST_USER ], 
-                context={'correspondant': obj},
-                show_message=False
-            )
-
-        return response
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['is_new'] = self.kwargs.get('is_new') # permet de vérifier si le formulaire est affiché suite à la création d'un DPO
-        return context
-
-    def get_success_url(self):
-        # Redirect to the detail view of the created object
-        return reverse('dashboard:correspondant:detail', kwargs={'pk': self.object.pk})
+  def get_success_url(self):
+    # Redirect to the detail view of the created object
+    return reverse('dashboard:correspondant:detail', kwargs={'pk': self.object.pk})
 
 
 class DPOListView(ListView):

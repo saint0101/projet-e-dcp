@@ -1,9 +1,11 @@
 from django.db.models import Max, Q
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib import messages
+from urllib3 import Retry
 from options.models import Status
 from base_edcp.models import User, GroupExtension
-from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande
-from demande.forms import ValidateForm
+from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande, Commentaire
+from demande.forms import ValidateForm, CommentaireForm
 
 ## Functions
 def save_historique(demande, action_label, user):
@@ -22,6 +24,14 @@ def save_historique(demande, action_label, user):
   historique.save()
 
 
+def get_demande_url(demande):
+  """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
+  print('demandes', demande.categorie.label)
+  if demande.categorie.label == 'designation_dpo':
+      return 'dashboard:correspondant:'
+  
+  if demande.categorie.label == 'demande_autorisation':
+      return 'dashboard:demande_auto:'
 
 # Create your views here.
 def demandes_all(request):
@@ -66,6 +76,7 @@ def user_has_niv_validation(user, required_levels):
 
   # Check if there are any matching groups
   return matching_groups.exists()
+
 
 def user_get_niv_validation(user):
   # Get all groups the user belongs to
@@ -135,3 +146,30 @@ def handle_validation(request, pk):
 
       return redirect('dashboard:demande:liste_a_traiter') 
   pass
+
+
+
+def add_commentaire(request, pk):
+  demande = get_object_or_404(Demande, pk=pk)
+  context = {}
+  if request.method == 'POST':
+    form_comment = CommentaireForm(request.POST) # récupération des données du formulaire
+    if form_comment.is_valid():
+      # si le formulaire est valide, sauvegarde du commentaire
+      commentaire = form_comment.save(commit=False)
+      commentaire.demande = demande
+      commentaire.auteur = request.user
+      # si l'agent a cliqué sur 'envoyer et suspendre la demande'
+      if 'form_comment_submit_suspend' in request.POST:
+        demande.status = Status.objects.get(label='demande_attente_complement') # suspension de la demande
+        demande.save()
+      commentaire.save() 
+      demande.save_historique('commentaires', request.user, demande.status)
+    else:
+      # context['form_comment'] = form_comment
+      print('erreur : ', form_comment.errors)
+      messages.error(request, f'{form_comment.errors}')
+  
+  url = get_demande_url(demande) + 'analyse'
+  print ('demande url : ', url)
+  return redirect(url, pk=demande.pk, action='show_comments')

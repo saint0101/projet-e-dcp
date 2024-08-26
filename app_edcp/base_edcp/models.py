@@ -69,6 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email_verified = models.BooleanField(default=False, verbose_name='Email Vérifié')  # Utiliser une valeur par défaut pour éviter les valeurs nulles
     must_reset = models.BooleanField(default=False, verbose_name='Doit Reinitialiser son Mot de Passe')
     is_dpo = models.BooleanField(default=False, verbose_name='Est un Correspondant') # Est un Correspondant
+    is_business_account = models.BooleanField(default=False, verbose_name='Est un compte entreprise')
     
     consentement = models.BooleanField(
         default=False,

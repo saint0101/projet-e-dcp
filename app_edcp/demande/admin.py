@@ -8,7 +8,7 @@ from . import models
 class DemandeAdmin(admin.ModelAdmin):
     """ Demandes effectuées """
     ordering = ['created_at']
-    list_display = ['id', 'organisation', 'created_by', 'categorie', 'status']
+    list_display = ['id', 'created_at', 'organisation', 'created_by', 'categorie', 'status']
 
 
 

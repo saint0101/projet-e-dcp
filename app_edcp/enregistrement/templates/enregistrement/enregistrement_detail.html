@@ -56,6 +56,7 @@
           Justificatifs
         </div>
         <div class="card-body">
+          {% comment %} {% if enregistrement.typeclient %}{% endif %} {% endcomment %}
           <ul class="list-group list-group-flush">
             {% for file_field in enregistrement|get_file_fields %}
               <li class="list-group-item">

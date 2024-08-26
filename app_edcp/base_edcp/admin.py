@@ -33,7 +33,7 @@ class UserAdmin(BaseUserAdmin):
                     'avatar',
                     'is_dpo',
                     'email_verified',
-                    'must_reset'
+                    'must_reset',
                 )
             }
         ),
@@ -44,6 +44,7 @@ class UserAdmin(BaseUserAdmin):
                     'is_active',    # Active ou désactive le compte
                     'is_staff',     # Accorde l'accès au site d'administration
                     'is_superuser', # Accorde tous les accès
+                    'is_business_account', # compte entreprise
                     'groups',       # Gestion des groupes
                 )
             }
@@ -74,6 +75,7 @@ class UserAdmin(BaseUserAdmin):
                 'is_superuser',
                 'email_verified',
                 'must_reset',
+                'is_business_account',
             ),
         }),
     )

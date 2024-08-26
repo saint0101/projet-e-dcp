@@ -13,6 +13,12 @@
       $('#form-dpo textarea').attr('disabled', true);
       $('#form-dpo select').attr('disabled', true);
       $('span.asteriskField').toggle(false);
+
+      var show_comments = $('#action-parameter').val();
+      console.log(show_comments);
+      if (show_comments == 'True'){ // valeur python
+        $('#offcanvasCommentaires').addClass('show');
+      } 
     });
   </script>
 {% endblock %}
@@ -36,8 +42,11 @@
               Traité par : {{ analyse.created_by }}
             </span>
 
-            <button class="btn btn-light mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
               Afficher l'historique
+            </button>
+            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+              Commentaires
             </button>
 
             {% if analyse and analyse.niv_validation > 0 %}
@@ -120,6 +129,7 @@
                 <strong>{{ correspondant.user }}</strong>
               </a>
               <ul class="list-group list-group-flush dpo-infos-list mb-3">
+                <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ correspondant.type_dpo }}</strong> </li>
                 <li class="list-group-item custom-text-light"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
                 <li class="list-group-item custom-text-light" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.user.telephone }} </li>
                 <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.user.email }} </li>
@@ -137,14 +147,26 @@
             Justificatifs
           </div>
           <div class="card-body small-padding">
-            <ul class="list-group list-group-flush">
-              {% for file_field in correspondant|get_file_fields %}
-                <li class="list-group-item">
-                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                    {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
-                </li>
-              {% endfor %}
-            </ul>
+            {% if correspondant.is_personne_morale %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields_include:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+
+            {% else %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -256,5 +278,51 @@
   
   {% comment %} <div class="col-3"></div> {% endcomment %}
 </div>
-  
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title custom-text-light" id="offcanvasLabel">Commentaires sur la demande</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form method="post" onsubmit="openLoader()" action="{% url 'dashboard:demande:add_commentaire' pk=correspondant.id%}">
+      {% csrf_token %}
+      {{ form_comment|crispy}}
+      <button type="submit" class="btn btn-primary me-1 mb-2" name="form_comment_submit">Envoyer</button>
+      {% if demande.status.label == 'attente_complement' %}
+        <button type="submit" class="btn btn-secondary mb-2" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+      {% else %}
+        <button type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+      {% endif %}
+    </form>
+    
+    <div class="col-12 col-list-commentaires py-3">
+      {% for commentaire in commentaires %}
+        {% if commentaire.auteur == request.user %}
+          <div class="message-bubble ">
+        {% else %}
+          <div class="message-bubble message-bubble-self">
+        {% endif %}
+          <span class="message-bubble-title text-hint custom-text-light">
+            <i class="bi bi-person"></i>
+            {{ commentaire.auteur }} - {{ commentaire.created_at }}
+          </span><br>
+          <span class=" message-bubble-body text-hint fw-bold">
+            {{ commentaire.objet }}
+          </span>
+          <br>
+          <span class=" message-bubble-body">
+            {{ commentaire.message }}
+          </span>
+        </div>
+      {% empty%}
+        Aucun commentaire pour l'instant.
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
 {% endblock content %}
+
+

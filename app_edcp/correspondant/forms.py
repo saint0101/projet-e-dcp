@@ -6,7 +6,7 @@ from django import forms
 from base_edcp import validators
 from demande.models import CategorieDemande, CritereEvaluation
 from demande_auto.models import EchelleNotation
-from correspondant.models import Correspondant, MoyensDPO
+from correspondant.models import Correspondant, DesignationDpoMoral, MoyensDPO
 
 
 class UserIsDPOForm(forms.Form):
@@ -45,8 +45,6 @@ class DPOFormPage1(forms.Form):
   telephone = forms.CharField(label='Téléphone', max_length=100, strip=True)
   fonction = forms.CharField(label='Fonction', required=False)
 
-
-
   """TO DELETE"""
   """ def __init__(self, *args, **kwargs):
     self.user = kwargs.pop('user', None)
@@ -54,6 +52,20 @@ class DPOFormPage1(forms.Form):
     if self.user:
       # Filter the tags queryset based on the current user
       self.fields['organisation'].queryset = Enregistrement.objects.filter(user=self.user).filter(has_dpo=False) """
+
+
+
+class DPOCabinetForm(forms.ModelForm):
+  """ Formulaire de désignation de DPO pour une organisation """
+  class Meta:
+    model = Correspondant
+    fields = ['cabinet', 'commentaires', 'file_contrat']
+
+
+class DPOCabinetFormDisabled(forms.ModelForm):
+  class Meta:
+    model = Correspondant
+    fields = ['cabinet', 'commentaires',]
 
 
 def generate_analyse_form(categorie_demande, analyse=None):
@@ -132,6 +144,19 @@ class DPOUpdateForm(forms.ModelForm):
         'file_certificat_nationalite',
         'file_cv',
     ]
+
+
+class DPODPOUpdateFormDisabled(DPOUpdateForm):
+  class Meta:
+    model = Correspondant
+    fields = [
+        'is_active',
+        'qualifications', 
+        'exercice_activite', 
+        'moyens_dpo', 
+        'experiences',
+    ]
+
 
 """ class DPOFormPage2(forms.Form):
   qualifications = forms. CharField(label='Qualifications')
