@@ -1,5 +1,5 @@
 {% if historique %}
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasHistorique" aria-labelledby="offcanvasHistorique">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasHistorique" aria-labelledby="offcanvasHistorique">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title custom-text-light" id="offcanvasExampleLabel">Historique de la demande</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -7,10 +7,12 @@
   <div class="offcanvas-body">
     <ul>
       {% for action in historique %}
-        <li>
-          <span class="text-hint custom-text-light">{{ action.created_at }}</span> <br> 
-          <span class="text-hint text-body-secondary"><strong>{{ action.action }}</strong> - {{ action.status }} </span>
-        </li>
+        {% if not action.is_private or action.is_private and request.user.is_staff %}
+          <li>
+            <span class="text-hint custom-text-light">{{ action.created_at }}</span> <br> 
+            <span class="text-hint text-body-secondary"><strong>{{ action.action }}</strong> - {{ action.status }} </span>
+          </li>
+        {% endif %}
       {% endfor %}
     </ul>
   </div>

@@ -1,3 +1,4 @@
+@import "../../../static/colors.scss";
 
 /******************** HEADER *********************/
 #header{
@@ -188,6 +189,27 @@
 /******************** Content *********************/
 #content {
   background-color: #EAEEF4;
+}
+
+/******************** Accordions *********************/
+
+.accordion-button{
+  font-size: .8rem;
+  font-weight: 600;
+  color: $custom-light;
+  background-color: $custom-bg-light;
+}
+
+.accordion-button:not(.collapsed) {
+  color: $custom-light;
+  font-weight: 600;
+  background-color: $custom-bg-light;
+  // background-color: #FFF;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  outline: none;
 }
 
 /******************** Dashboard Index *********************/

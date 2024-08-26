@@ -22,7 +22,7 @@ from base_edcp.models import User, Enregistrement
 # from connexion.forms import UserRegistrationForm
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
-from demande.models import AnalyseDemande, CategorieDemande, CritereEvaluation, HistoriqueDemande, ReponseDemande
+from demande.models import ActionDemande, AnalyseDemande, CategorieDemande, CritereEvaluation, HistoriqueDemande, ReponseDemande
 from demande.forms import ValidateForm
 from demande_auto.models import EchelleNotation
 from datetime import datetime
@@ -200,9 +200,15 @@ def analyse(request, pk, action=None):
   AnalyseDPOForm = generate_analyse_form(CategorieDemande.objects.get(label='designation_correspondant'), analyse)
   
   if not analyse :
-    analyse = AnalyseDemande.objects.create(created_by=request.user, status=Status.objects.get(label='brouillon'))
+    status_brouillon, created = Status.objects.get_or_create(label='brouillon', defaults={'description': 'Brouillon'})
+    status_encours, created = Status.objects.get_or_create(label='analyse_en_cours', defaults={'description': 'Analyse en cours'})
+    # action_changement, created = ActionDemande.objects.get_or_create(label='changement_statut', defaults={'description': 'Changement de statut'})
+    
+    analyse = AnalyseDemande.objects.create(created_by=request.user, status=status_brouillon)
     correspondant.analyse = analyse
+    correspondant.status = status_encours
     correspondant.save()
+    correspondant.save_historique(action_label='changement_statut', user=request.user)
 
   if request.method == 'POST':
     form = AnalyseDPOForm(request.POST)
@@ -228,14 +234,14 @@ def analyse(request, pk, action=None):
 
   form = AnalyseDPOForm(initial=analyse.__dict__)
   form_dpo = DPOUpdateForm(instance=correspondant)
-
   context = {
     'form': form,
     'form_dpo': form_dpo,
     'correspondant': correspondant,
     'analyse': analyse,
     'validations': analyse.validations.all(),
-    'action': action
+    'action': action,
+    'historique': HistoriqueDemande.objects.filter(demande=correspondant)
   }  
 
   if action == 'validate':
@@ -278,14 +284,15 @@ def submit_analyse(request, pk):
     analyse = correspondant.analyse
 
     if analyse :
-        status, created = Status.objects.get_or_create(
-            label='attente_validation_1',
-            defaults={'description': 'En attente de validation niv. 1'}    
-        )
-        analyse.status = status
-        analyse.is_locked = True
-        analyse.niv_validation = 1
-        analyse.save()
+      status, created = Status.objects.get_or_create(
+          label='attente_validation_1',
+          defaults={'description': 'En attente de validation niv. 1'}    
+      )
+      analyse.status = status
+      analyse.is_locked = True
+      analyse.niv_validation = 1
+      analyse.save()
+      correspondant.save_historique(action_label='changement_statut', user=request.user, status=analyse.status, is_private=True)
 
     return redirect('dashboard:correspondant:detail', pk=pk)
 

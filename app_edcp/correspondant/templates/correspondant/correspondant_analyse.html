@@ -30,8 +30,15 @@
           <div class="card-body">
 
             <span class="badge text-bg-light custom-text-light me-2 mb-2">
-              Statut : {{ analyse.status }}
+              Statut de l'analyse : {{ analyse.status }}
             </span>
+            <span class="badge text-bg-light custom-text-light me-2 mb-2">
+              Traité par : {{ analyse.created_by }}
+            </span>
+
+            <button class="btn btn-light mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+              Afficher l'historique
+            </button>
 
             {% if analyse and analyse.niv_validation > 0 %}
               <div id="actions-validator">
@@ -53,7 +60,7 @@
             {% elif not analyse or analyse.niv_validation == 0 %}
               <div id="actions-agent">
                 <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
-                  class="btn btn-primary me-2 {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="openLoader()">
+                  class="btn btn-secondary me-2 {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="openLoader()">
                   Enregistrer
                 </a>
               
@@ -63,13 +70,11 @@
                 </a>
 
                 <a href="{% url 'dashboard:correspondant:submit' pk=correspondant.id %}" 
-                  class="btn btn-danger me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                  class="btn btn-info me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
                   Soumettre à validation
                 </a>
               </div>
             {% endif %}
-            
-
             
           </div>
         </div>

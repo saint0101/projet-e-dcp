@@ -146,6 +146,20 @@ class Correspondant(Demande):
         verbose_name='Refusé'
     )
 
+    raison_sociale = models.CharField(
+       max_length=255,
+       null=True,
+       blank=True,
+       verbose_name='Raison sociale',
+       help_text='Pour un Correspondant personne morale'
+    )
+    representant = models.CharField(
+       max_length=255,
+       null=True,
+       blank=True,
+       verbose_name='Nom du représentant légal',
+       help_text='Pour un Correspondant personne morale'
+    )
     file_lettre_designation = models.FileField(
        null=True, 
        blank=True, 
@@ -200,3 +214,5 @@ class Correspondant(Demande):
 
     def __str__(self):
         return f"{self.user.nom} {self.user.prenoms}"
+
+

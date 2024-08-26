@@ -27,7 +27,7 @@ def save_historique(demande, action_label, user):
 def demandes_all(request):
   """Affiche la liste des demandes """
   niv_validation = get_niv_validation_max(request.user)
-  context = {'demandes': Demande.objects.all()}
+  context = {'demandes': Demande.objects.all().order_by('-created_at')}
   context['user_niv_validation'] = niv_validation
 
   return render(request, 'demande/demande_list_all.html', context)
@@ -36,21 +36,23 @@ def demandes_all(request):
 def demandes_a_traiter(request):
   """Affiche la liste des demandes à traiter"""
   demandes = None
+  niv_validation = get_niv_validation_max(request.user)
   print('get_niv_validation_max : ', user_get_niv_validation(request.user))
 
-  if get_niv_validation_max(request.user) == 0:
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0))
+  if niv_validation == 0:
+    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0)).order_by('-created_at')
 
-  if get_niv_validation_max(request.user) == 1:
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1]))
+  if niv_validation == 1:
+    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1])).order_by('-created_at')
     
-  elif get_niv_validation_max(request.user) > 1:
+  elif niv_validation > 1:
     niv_validations = user_get_niv_validation(request.user)
     for niv in niv_validations:
       print('niv : ', niv)
-    demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations)
+    demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations).order_by('-created_at')
   
   context = {'demandes': demandes}
+  context['user_niv_validation'] = niv_validation
   return render(request, 'demande/demande_list_all.html', context)
 
 
@@ -117,7 +119,7 @@ def handle_validation(request, pk):
         if niv_validation_actuel < niv_validation_requis:
           next_level = niv_validation_actuel + 1
           analyse.niv_validation = next_level
-          analyse.status, created = Status.objects.get_or_create(label=f'analyse_attente_validation_{next_level}', defaults={'description': 'En attente de validation niv. ' + next_level})
+          analyse.status, created = Status.objects.get_or_create(label=f'analyse_attente_validation_{next_level}', defaults={'description': 'En attente de validation niv. ' + str(next_level)})
         
         if niv_validation_actuel == niv_validation_requis:
           analyse.status, created = Status.objects.get_or_create(label='traitement_termine', defaults={'description': 'Traitement terminé'})
@@ -128,6 +130,8 @@ def handle_validation(request, pk):
         analyse.status, created = Status.objects.get_or_create(label='analyse_attente_corrections', defaults={'description': 'Analyse en attente de corrections'})
 
       analyse.save()
+      demande.save_historique(action_label='changement_statut', user=request.user, status=analyse.status, is_private=True)
+
 
       return redirect('dashboard:demande:liste_a_traiter') 
   pass

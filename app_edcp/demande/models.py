@@ -67,7 +67,7 @@ class Demande(models.Model):
     'AnalyseDemande',
     null=True,
     blank=True,
-    on_delete=models.CASCADE,
+    on_delete=models.SET_NULL,
     verbose_name='Analyse de la demande'
   )
   finished_at = models.DateTimeField(
@@ -84,7 +84,7 @@ class Demande(models.Model):
     verbose_name = 'Demande générale'
     verbose_name_plural = 'Demandes générales'
 
-  def save_historique(self, action_label, user, is_private=False):
+  def save_historique(self, action_label, user, status=None, is_private=False):
     """
     Sauvegarde de l'historique d'une demande.
     Paramètres :
@@ -92,10 +92,11 @@ class Demande(models.Model):
     -- action_label - le label de l'action effectuee
     -- user - l'utilisateur à l'origine de l'action
     """
+    action, created = ActionDemande.objects.get_or_create(label=action_label)
     historique = HistoriqueDemande()
     historique.demande = self
-    historique.status = self.status
-    historique.action = ActionDemande.objects.get(label=action_label)
+    historique.status = status if status else self.status
+    historique.action = action
     historique.auteur = user
     historique.is_private = is_private
     historique.save()
@@ -305,6 +306,10 @@ class AnalyseDemande(models.Model):
   is_locked = models.BooleanField(
     default=False,
     verbose_name='Est verrouillée (en cours de validation)'
+  )
+  is_closed= models.BooleanField(
+    default=False,
+    verbose_name='Est terminée'
   )
 
   class Meta:

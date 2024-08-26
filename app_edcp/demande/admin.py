@@ -19,6 +19,21 @@ class HistoriqueDemandeAdmin(admin.ModelAdmin):
     list_display = ['id', 'demande', 'status', 'action', 'auteur', 'is_private']
 
 
+@admin.register(models.AnalyseDemande)
+class AnalyseDemandeAdmin(admin.ModelAdmin):
+    """ Analyses effectuées """
+    ordering = ['created_at']
+    list_display = ['created_at', 'created_by', 'status', 'avis_juridique', 'avis_technique']
+
+
+
+@admin.register(models.ReponseDemande)
+class ReponseDemandeAdmin(admin.ModelAdmin):
+    """ Actions effectuées """
+    ordering = ['id']
+    list_display = ['created_at', 'fichier_reponse', 'signataire', ]
+
+
 @admin.register(models.ActionDemande)
 class ActionDemandeAdmin(admin.ModelAdmin):
     """ Actions effectuées """
