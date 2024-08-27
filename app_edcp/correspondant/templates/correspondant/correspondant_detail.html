@@ -2,10 +2,22 @@
 {% load static %}
 {% load custom_tags_filters %}
 
+{% block custom_scripts %}
+  <script>
+    $(document).ready(function (){
+      var show_comments = $('#action-parameter').val();
+      console.log(show_comments);
+      if (show_comments == 'True'){ // valeur python
+        $('#offcanvasCommentaires').addClass('show');
+      } 
+
+      
+    });
+  </script>
+{% endblock %}
 
 {% block content %}
 
-  
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
@@ -69,8 +81,11 @@
               
             {% endif %}
 
-            <button class="btn btn-light float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+            <button class="btn btn-light me-2 mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
               Afficher l'historique
+            </button>
+            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+              Commentaires
             </button>
 
             {% comment %} <form method="POST" style="display: inline;">
@@ -190,5 +205,15 @@
   
   {% comment %} <div class="col-3"></div> {% endcomment %}
 </div>
-  
+
+{% for comment in commentaires %}
+<p class="bizzz">{{ comment }}</p>
+{% endfor %}
+
+{% block commentaires %}
+  {% include "./commentaires_demande.html" with demande=correspondant %}
+{% endblock %}
+
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+
 {% endblock content %}

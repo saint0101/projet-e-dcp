@@ -126,7 +126,7 @@
               <i class="bi bi-person-circle fw-bold custom-text-light x-large">
               </i>
               <a href="">
-                <strong>{{ correspondant.user }}</strong>
+                <strong>{{ correspondant }}</strong>
               </a>
               <ul class="list-group list-group-flush dpo-infos-list mb-3">
                 <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ correspondant.type_dpo }}</strong> </li>
@@ -280,7 +280,11 @@
 </div>
 
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
+{% block commentaires %}
+  {% include "./commentaires_demande.html" with demande=correspondant %}
+{% endblock %}
+
+{% comment %} <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title custom-text-light" id="offcanvasLabel">Commentaires sur la demande</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -321,7 +325,7 @@
       {% endfor %}
     </div>
   </div>
-</div>
+</div> {% endcomment %}
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
 {% endblock content %}
 

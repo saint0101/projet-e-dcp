@@ -170,6 +170,7 @@ def add_commentaire(request, pk):
       print('erreur : ', form_comment.errors)
       messages.error(request, f'{form_comment.errors}')
   
-  url = get_demande_url(demande) + 'analyse'
+  url_parameter = 'analyse' if request.user.is_staff else 'detail'
+  url = get_demande_url(demande) + url_parameter
   print ('demande url : ', url)
   return redirect(url, pk=demande.pk, action='show_comments')

@@ -65,7 +65,7 @@ class DPOCabinetForm(forms.ModelForm):
 class DPOCabinetFormDisabled(forms.ModelForm):
   class Meta:
     model = Correspondant
-    fields = ['cabinet', 'commentaires',]
+    fields = ['commentaires',]
 
 
 def generate_analyse_form(categorie_demande, analyse=None):

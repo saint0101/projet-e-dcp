@@ -5,6 +5,7 @@ from multiprocessing import context
 # from django.forms import BaseModelForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.core.exceptions import PermissionDenied
 # from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.db.models import Q
@@ -300,7 +301,7 @@ def analyse(request, pk, action=None):
     'form_comment': form_comment,
     'correspondant': correspondant,
     'analyse': analyse,
-    'commentaires': Commentaire.objects.filter(demande=correspondant),
+    'commentaires': Commentaire.objects.filter(demande=correspondant).order_by('created_at'),
     'validations': analyse.validations.all(),
     'action': action,
     'historique': HistoriqueDemande.objects.filter(demande=correspondant)
@@ -446,6 +447,30 @@ class DPOListView(ListView):
         return queryset
 
 
+
+def correspondant_detail(request, pk, action=None):
+  template_name = 'correspondant/correspondant_detail.html'
+  context = {}
+  correspondant = get_object_or_404(Correspondant, pk=pk)
+  if not (correspondant.created_by == request.user or correspondant.user == request.user) and not request.user.is_staff:
+      raise PermissionDenied
+  
+  historique = HistoriqueDemande.objects.filter(demande=correspondant)
+  commentaires = Commentaire.objects.filter(demande=correspondant).order_by('created_at')
+  print('commentaires : ', commentaires)
+  form_comment = CommentaireForm()
+
+  context['correspondant'] = correspondant
+  context['historique'] = historique
+  context['commentaires'] = commentaires
+  context['form_comment'] = form_comment
+
+  if action == 'show_comments':
+    context['show_comments'] = True
+
+  return render(request, template_name, context=context)
+
+
 class DPODetailView(DetailView):
     model = Correspondant
     template_name = 'correspondant/correspondant_detail.html'
@@ -460,9 +485,16 @@ class DPODetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
         historique = HistoriqueDemande.objects.filter(demande=self.object)
-        print('historique', historique)
+        commentaires = Commentaire.objects.filter(demande=self.object).order_by('created_at')
+        print('commentaires : ', commentaires)
+        form_comment = CommentaireForm()
+        
         context['historique'] = historique
+        context['commentaires'] = commentaires
+        context['form_comment'] = form_comment
+
         return context
 
     

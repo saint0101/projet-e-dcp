@@ -57,8 +57,9 @@ class CritereEvaluationAdmin(admin.ModelAdmin):
     list_display = ['categorie_demande', 'label', 'field_name', 'field_type']
 
 
-# @admin.register(models.HistoriqueDemande)
-class HistoriqueAdmin(admin.ModelAdmin):
-    """ Historique des demandes """
-    ordering = ['id']
-    list_display = ['created_at', 'demande', 'status','action', 'auteur']
+
+@admin.register(models.Commentaire)
+class CommentaireAdmin(admin.ModelAdmin):
+    """ Commentaires sur les demandes """
+    ordering = ['-created_at']
+    list_display = ['demande', 'created_at', 'auteur', 'objet', 'message', 'is_new']
