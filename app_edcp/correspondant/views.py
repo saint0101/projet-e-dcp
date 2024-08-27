@@ -24,7 +24,7 @@ from base_edcp.models import User, Enregistrement
 from user.utils import create_new_user, check_email
 from base_edcp.emails import MAIL_CONTENTS, send_email
 from demande.models import ActionDemande, AnalyseDemande, CategorieDemande, Commentaire, CritereEvaluation, HistoriqueDemande, ReponseDemande
-from demande.forms import CommentaireForm, ValidateForm
+from demande.forms import CommentaireForm, ProjetReponseForm, ProjetReponseModelForm, ValidateForm
 from demande_auto.models import EchelleNotation
 from datetime import datetime
 from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
@@ -294,11 +294,14 @@ def analyse(request, pk, action=None):
   else:
     form_dpo = DPODPOUpdateFormDisabled(instance=correspondant)
 
+  form_projet_reponse = ProjetReponseModelForm(demande=correspondant)
+
   form_comment = CommentaireForm()
   context = {
     'form': form,
     'form_dpo': form_dpo,
     'form_comment': form_comment,
+    'form_projet_reponse': form_projet_reponse,
     'correspondant': correspondant,
     'analyse': analyse,
     'commentaires': Commentaire.objects.filter(demande=correspondant).order_by('created_at'),
@@ -325,24 +328,24 @@ def analyse(request, pk, action=None):
 
 
 def generate_response(request, pk):
-    correspondant = get_object_or_404(Correspondant, pk=pk)
-    context = {
-        'pk': pk,
-        'correspondant': correspondant,
-        'url_path': 'dashboard:correspondant:detail',
-    }
-    pdf_file = generate_pdf(request, PDF_TEMPLATES['correspondant_approbation'], context)
-    # print('generating pdf : ', pdf_file)
-    projet_reponse = ReponseDemande.objects.create()
-    projet_reponse.fichier_reponse.save('projet_reponse.pdf', pdf_file)
-    projet_reponse.intitule = 'Lettre d\'approbation'
-    # projet_reponse.fichier_reponse = pdf_file
-    projet_reponse.save()
-    correspondant.analyse.projet_reponse = projet_reponse
-    correspondant.analyse.save()
-    messages.success(request, 'Projet de réponse généré.')
+  correspondant = get_object_or_404(Correspondant, pk=pk)
+  context = {
+      'pk': pk,
+      'correspondant': correspondant,
+      'url_path': 'dashboard:correspondant:detail',
+  }
+  pdf_file = generate_pdf(request, PDF_TEMPLATES['correspondant_approbation'], context)
+  # print('generating pdf : ', pdf_file)
+  projet_reponse = ReponseDemande.objects.create()
+  projet_reponse.fichier_reponse.save('projet_reponse.pdf', pdf_file)
+  projet_reponse.intitule = 'Lettre d\'approbation'
+  # projet_reponse.fichier_reponse = pdf_file
+  projet_reponse.save()
+  correspondant.analyse.projet_reponse = projet_reponse
+  correspondant.analyse.save()
+  messages.success(request, 'Projet de réponse généré.')
 
-    return redirect('dashboard:correspondant:analyse', pk=pk)
+  return redirect('dashboard:correspondant:analyse', pk=pk)
 
 
 def submit_analyse(request, pk):

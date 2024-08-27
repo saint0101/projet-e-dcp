@@ -226,6 +226,11 @@
               </h2>
               <div id="collapseReponse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:'show, '}}" data-bs-parent="#accordionAnalyse">
                 <div class="accordion-body">
+                  <form method="post" action="{% url 'dashboard:demande:response_create' pk=correspondant.id template='correspondant_approbation' %}">
+                    {% csrf_token %}
+                    {{ form_projet_reponse|crispy }}
+                    <button type="submit" class="btn btn-primary">Générer le projet de réponse</button>
+                  </form>
                   {% if correspondant.analyse.projet_reponse %}
                     <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
                     <div>

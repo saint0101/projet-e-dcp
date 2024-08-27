@@ -124,6 +124,14 @@ def create_num_demande(sender, instance, **kwargs):
       print('num_demande : ', instance.num_demande) """
 
 
+
+class TypeReponse(OptionModel):
+  """ Types de réponses aux demandes """
+  class Meta:
+    verbose_name = 'Type de réponse'
+    verbose_name_plural = 'Types de réponses'
+
+
 class CategorieDemande(OptionModel):
   """ Categorie de demande """
   niv_validation = models.IntegerField(
@@ -134,7 +142,12 @@ class CategorieDemande(OptionModel):
     null=True,
     blank=True,
     max_length=255,
-    verbose_name='Intitulé de la réponse pour ce type de demande'
+    verbose_name='Intitulé de la réponse pour ce type de demande.'
+  )
+  types_reponses = models.ManyToManyField(
+    TypeReponse,
+    blank=True,
+    verbose_name='Types de réponse pour ce type de demande.'
   )
 
   class Meta:
@@ -341,6 +354,27 @@ class ReponseDemande(models.Model):
     null=True,
     blank=True,
     verbose_name="Intitulé de la réponse",
+  )
+  type_reponse = models.ForeignKey(
+    TypeReponse,
+    on_delete=models.SET_NULL,
+    blank=True,
+    null=True,
+    verbose_name='Type de réponse',
+  )
+  titre_destinataire = models.CharField(
+    max_length=255,
+    null=True,
+    blank=True,
+    verbose_name='Titre du destinataire',
+    help_text='Exemple : "Monsieur le Directeur Général" ou "Monsieur XXX"',
+  )
+  adresse_destinataire = models.CharField(
+    max_length=255,
+    null=True,
+    blank=True,
+    verbose_name='Adresse du destinataire',
+    help_text='Adresse à indiquer sur le courrier',
   )
   num_autorisation = models.CharField(
     max_length=100,

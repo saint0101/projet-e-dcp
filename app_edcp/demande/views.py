@@ -4,8 +4,9 @@ from django.contrib import messages
 from urllib3 import Retry
 from options.models import Status
 from base_edcp.models import User, GroupExtension
-from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande, Commentaire
-from demande.forms import ValidateForm, CommentaireForm
+from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
+from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande, Commentaire, ReponseDemande, TypeReponse
+from demande.forms import ValidateForm, CommentaireForm, ProjetReponseForm
 
 ## Functions
 def save_historique(demande, action_label, user):
@@ -23,6 +24,8 @@ def save_historique(demande, action_label, user):
   historique.auteur = user
   historique.save()
 
+def test_pdf(request):
+  return render(request, 'pdfs/correspondant/test_pdf.html')
 
 def get_demande_url(demande):
   """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
@@ -64,7 +67,6 @@ def demandes_a_traiter(request):
   context = {'demandes': demandes}
   context['user_niv_validation'] = niv_validation
   return render(request, 'demande/demande_list_all.html', context)
-
 
 
 def user_has_niv_validation(user, required_levels):
@@ -174,3 +176,32 @@ def add_commentaire(request, pk):
   url = get_demande_url(demande) + url_parameter
   print ('demande url : ', url)
   return redirect(url, pk=demande.pk, action='show_comments')
+
+
+
+def generate_response(request, pk, template):
+  if request.method == 'POST':
+    form = ProjetReponseForm(request.POST)
+    if form.is_valid():
+      demande = get_object_or_404(Demande, pk=pk)
+      url_path = get_demande_url(demande) + 'detail'
+      context = {
+          'pk': pk,
+          'demande': demande,
+          'url_path': url_path,
+          'type_reponse': form.cleaned_data['type_reponse'],
+          'titre_destinataire': form.cleaned_data['titre_destinataire'],
+          'adresse_destinataire': form.cleaned_data['adresse_destinataire'],
+      }
+      pdf_file = generate_pdf(request, PDF_TEMPLATES[template], context)
+      # print('generating pdf : ', pdf_file)
+      projet_reponse = ReponseDemande.objects.create()
+      projet_reponse.fichier_reponse.save(f'projet_reponse_{template}.pdf', pdf_file)
+      projet_reponse.intitule = 'Lettre d\'approbation'
+      # projet_reponse.fichier_reponse = pdf_file
+      projet_reponse.save()
+      demande.analyse.projet_reponse = projet_reponse
+      demande.analyse.save()
+      messages.success(request, 'Projet de réponse généré.')
+
+  return redirect('dashboard:correspondant:analyse', pk=pk)

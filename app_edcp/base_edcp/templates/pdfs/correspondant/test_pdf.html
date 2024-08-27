@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Inline CSS */
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+    .head-content{
+      display: flex;
+      flex-direction: row;
+    }
+    .footer-content{
+      display: flex;
+      flex-direction: row-reverse;
+    }
+    .col-left{
+      width: 60%;
+    }
+    .col-right{
+      width: 40%;
+    }
+    .footer-signature{
+      width: 40%;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="pdf-container">
+    <div class="header">
+      <img src="https://placehold.co/600x400?text=Logo" width="250px">
+      <!-- Display QR code -->
+    </div>
+    <div class="content">
+      
+      <div class="head-content">
+        <div class="col col-left" id="col-qrcode">
+          <img src="https://placehold.co/400x400?text=QR Code" alt="QR Code" width="250px">
+        </div>
+        
+        <div class="col col-right" id="col-destinataire">
+          Abidjan, le <br>
+          <h3>Le Président du Conseil de Régulation</h3> 
+          <h3>À</h3>
+          <h3>Monsieur.....</h3>
+          <h3>Directeur général</h3>
+          <p>Adresse..Ckfsf sflksflks jkfsknjskjfsj</p>
+        </div>
+      </div>
+      
+      <div class="main-content">
+        <h3>Lettre d'approbation</h3>
+        <br><br>
+        
+        La désignation de <strong>{{correspondant}}</strong> 
+        comme Correspondant à la protection des données de l'organiation 
+        <strong>"{{ correspondant.organisation }}"</strong>, 
+        par <strong>{{ correspondant.created_by }}</strong> a été approuvée.
+    
+        <br><br>
+        Merci !<br>
+        L'Autorité de Protection
+      </div>
+
+      <div class="footer-content">
+        <div class="footer-signature">
+          <p>Signataire</p>
+          <p class="signature" id="col-qrcode">
+            <img src="https://placehold.co/600x400?text=QR Code" alt="QR Code" width="200px">
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+

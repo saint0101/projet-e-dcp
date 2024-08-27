@@ -4,7 +4,7 @@ from django import forms
 # from connexion.forms import UserRegistrationForm
 # from base_edcp.models import User, Enregistrement
 from base_edcp import validators
-from demande.models import CategorieDemande, CritereEvaluation
+from demande.models import CategorieDemande, CritereEvaluation, ReponseDemande
 from demande_auto.models import EchelleNotation
 from correspondant.models import Correspondant, DesignationDpoMoral, MoyensDPO
 
@@ -156,6 +156,8 @@ class DPODPOUpdateFormDisabled(DPOUpdateForm):
         'moyens_dpo', 
         'experiences',
     ]
+
+
 
 
 """ class DPOFormPage2(forms.Form):

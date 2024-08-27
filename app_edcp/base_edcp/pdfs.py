@@ -2,6 +2,7 @@
 Fonction pour la génération des fichiers PDF.
 """
 
+from datetime import datetime
 from django.template.loader import render_to_string
 from django.core.files.base import ContentFile
 from django.contrib import messages
@@ -25,6 +26,7 @@ def generate_pdf(request, template, context):
   """
   qr_code = generate_qrcode(request, context)
   context['qr_code'] = qr_code
+  context['date'] = datetime.now().strftime('%d/%m/%Y')
 
   html = render_to_string(template, context)
   # print('html', html)

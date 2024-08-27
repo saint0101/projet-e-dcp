@@ -1,16 +1,56 @@
 {% extends '../base.html' %}
 
 {% block content %}
-  <img src="data:image/png;base64,{{qr_code}}" alt="QR Code" width="250px">
-  <h1>Lettre d'approbation</h1>
-  <br><br>
   
-  La désignation de <strong>{{correspondant}}</strong> 
-  comme Correspondant à la protection des données de l'organiation 
-  <strong>"{{ correspondant.organisation }}"</strong>, 
-  par <strong>{{ correspondant.created_by }}</strong> a été approuvée.
+  <div class="head-content">
+    <div class="col col-left" id="col-qrcode">
+      <img src="data:image/png;base64,{{qr_code}}" alt="QR Code" width="150px">
+    </div>
 
- <br><br>
-  Merci !<br>
-  L'Autorité de Protection
+    <div class="col col-right" id="col-destinataire" style="margin-left: 300px;">
+      Abidjan, le {{ date }} <br>
+      <h3>Le Président du Conseil de Régulation</h3> 
+      <h3>À</h3>
+      <h3>{{ titre_destinataire }} de {{ demande.organisation }} <br>
+        {{ adresse_destinataire }}</h3>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <p>
+      <h3 style="display: inline;">Objet : </h3> {{ type_reponse }}
+    </p>
+
+    <p>
+      <strong>{{ titre_destinataire }}</strong>
+    </p>
+    
+    <p>
+      J’accuse réception de votre désignation de correspondant à la protection des données
+      effectuée le <strong>{{ demande.created_at }}</strong>.
+    </p>
+
+    <p> 
+      En  application de l’article 12 de la Loi n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel 
+      et des articles 4 et 6 de l’Arrêté n° 511/MPTIC/CAB du 11 novembre 2014 portant définition du profil 
+      et fixant les conditions d’emploi du Correspondant à la protection des données à caractère personnel, 
+      l’Autorité de Protection approuve la désignation de <strong>{{ demande }}</strong>,
+       en qualité de Correspondant à la protection, pour le compte de <strong>{{ demande.organisation }}</strong>. 
+    </p>
+    
+    <p>
+       Veuillez agréer, {{ titre_destinataire }}, 
+       l’assurance de ma considération distinguée.
+    </p>
+  </div>
+
+  <div class="footer-content">
+    <div class="footer-signature" style="margin-left: 300px;">
+      <h3>Signataire</h3>
+      <p class="signature" id="col-qrcode">
+        <img src="static/assets/img/signature.png" alt="Signataire" width="250px">
+      </p>
+    </div>
+  </div>
+  
 {% endblock %}

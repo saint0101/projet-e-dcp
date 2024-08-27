@@ -41,6 +41,12 @@ class ActionDemandeAdmin(admin.ModelAdmin):
     list_display = ['label', 'description', 'is_sensible', 'ordre']
 
 
+@admin.register(models.TypeReponse)
+class TypeReponseAdmin(admin.ModelAdmin):
+    """ types de réponses """
+    ordering = ['id']
+    list_display = ['label', 'description']
+
 
 @admin.register(models.CategorieDemande)
 class CategorieDemandeAdmin(admin.ModelAdmin):

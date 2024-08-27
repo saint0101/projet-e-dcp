@@ -1,6 +1,10 @@
 from email import message
+from typing import Mapping
 from django import forms
-from demande.models import Commentaire
+from django.core.files.base import File
+from django.db.models.base import Model
+from django.forms.utils import ErrorList
+from demande.models import Commentaire, Demande, ReponseDemande, TypeReponse
 
 
 class ValidateForm(forms.Form):
@@ -23,3 +27,35 @@ class CommentaireForm(forms.ModelForm):
   class Meta:
     model = Commentaire
     fields = ['objet', 'message']
+
+
+
+class ProjetReponseModelForm(forms.ModelForm):
+
+  type_reponse = forms.ModelChoiceField(
+    queryset=TypeReponse.objects.all(),
+    widget=forms.RadioSelect
+  )
+  class Meta:
+    model = ReponseDemande
+    fields = ['type_reponse', 'titre_destinataire', 'adresse_destinataire']
+
+  def __init__(self, demande=None, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    types_reponses = demande.categorie.types_reponses.all()
+    # demande = Demande.objects.filter(analyse__projet_reponse=self.instance).last()
+    # print('types reponses : ', types_reponses)
+    self.fields['type_reponse'].queryset = types_reponses
+
+
+class ProjetReponseForm(forms.Form):
+  type_reponse = forms.ModelChoiceField(
+    queryset=TypeReponse.objects.all(),
+    widget=forms.RadioSelect
+  )
+  titre_destinataire = forms.CharField(
+    label='Titre',
+  )
+  adresse_destinataire = forms.CharField(
+    label='Adresse',
+  )
