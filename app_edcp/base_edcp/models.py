@@ -73,12 +73,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     consentement = models.BooleanField(
         default=False,
-        verbose_name='Je donne mon consentement', 
-        help_text='''Veuillez cocher cette case pour donner votre consentement : 
-        les données soumises via ce formulaire seront utilisées pour la création 
-        et pour l'accomplissement de vos formalités sur la plateforme e-DCP. 
+        #null=True,  # Autoriser temporairement les valeurs NULL
+        verbose_name='Je donne mon consentement',
+        help_text='''Veuillez cocher cette case pour donner votre consentement :
+        les données soumises via ce formulaire seront utilisées pour la création
+        et pour l'accomplissement de vos formalités sur la plateforme e-DCP.
         Vos données ne seront traitées que par les agents habilités de l'Autorité de Protection.
         Vous pouvez à tous moments exercer vos droits exercer à l'adresse ..... ''')
+
+    # Relation ManyToMany pour gérer les groupes de l'utilisateur
+    groups = models.ManyToManyField(
+        Group,
+        related_name="base_edcp_user_set",  # Nom unique pour la relation inverse avec 'groups'
+        blank=True,
+        help_text="Les groupes auxquels cet utilisateur appartient.",
+        verbose_name="Groupes",
+    )
+
+    # Relation ManyToMany pour gérer les permissions spécifiques de l'utilisateur
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="base_edcp_user_permissions_set",  # Nom unique pour la relation inverse avec 'user_permissions'
+        blank=True,
+        help_text="Permissions spécifiques pour cet utilisateur.",
+        verbose_name="Permissions des utilisateurs",
+    )
 
     # extenssier la gestionnaire d'utilisateur
     objects = CustomUserManager()
@@ -106,8 +125,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Utilisateurs'
 
     def __str__(self):
-        """ les champs a retourner pour l'affichage d'un objet USER"""
-        return self.nom + ' ' + self.prenoms
+        """Retourne une représentation sous forme de chaîne de l'utilisateur"""
+        return f"{self.nom} ({self.prenoms})"
 
 
 class GroupExtension(models.Model):
@@ -150,25 +169,25 @@ class Enregistrement(models.Model):
         verbose_name='Type d\'organisation'
     )
     raisonsociale = models.CharField(
-        max_length=100, 
-        verbose_name='Nom ou Raison Sociale',  
+        max_length=100,
+        verbose_name='Nom ou Raison Sociale',
         validators=[validators.validate_charfield, validators.validate_no_special_chars],
         help_text='Nom de la personne physique ou de l\'organisation à enregistrer'
     )
     idu = models.CharField(
-        max_length=100, 
-        null=True, 
-        blank=True, 
+        max_length=100,
+        null=True,
+        blank=True,
         verbose_name='Numéro d\'IDentifiant Unique'
     )
     representant = models.CharField(
-        max_length=100, 
-        verbose_name='Nom du représentant légal', 
+        max_length=100,
+        verbose_name='Nom du représentant légal',
         blank=True
     )
     rccm = models.CharField(
-        max_length=100, 
-        null=True, 
+        max_length=100,
+        null=True,
         blank=True,
         validators=[validators.validate_charfield, validators.validate_no_special_chars, validators.validate_rccm_idu],
         verbose_name='Numéro RCCM'
@@ -183,6 +202,7 @@ class Enregistrement(models.Model):
     telephone = models.CharField( # numéro de téléphone de l'organisation
         max_length=20, 
         null=True, 
+
         blank=True,
         verbose_name='Téléphone',
         # validators=[validators.validate_phone_number]
@@ -193,9 +213,9 @@ class Enregistrement(models.Model):
         verbose_name='Email de Contact'
     )
     site_web = models.URLField(
-        max_length=100, 
-        null=True, 
-        verbose_name='Site Web', 
+        max_length=100,
+        null=True,
+        verbose_name='Site Web',
         blank=True
     )
     pays = models.ForeignKey(
@@ -205,38 +225,38 @@ class Enregistrement(models.Model):
         verbose_name='Pays'
     )
     ville = models.CharField(
-        max_length=100, 
-        null=True, 
+        max_length=100,
+        null=True,
         validators=[validators.validate_charfield, validators.validate_no_special_chars],
         verbose_name='Ville'
     )
     adresse_geo = models.CharField(
-        max_length=100, 
-        null=True, 
+        max_length=100,
+        null=True,
         blank=True,
         validators=[validators.validate_charfield, validators.validate_no_special_chars],
         verbose_name='Adresse Géographique'
     )
     adresse_bp = models.CharField(
-        max_length=100, 
-        null=True, 
-        verbose_name='Boîte Postale', 
+        max_length=100,
+        null=True,
+        verbose_name='Boîte Postale',
         blank=True
     )
     gmaps_link = models.URLField(
-        max_length=255, 
-        null=True, 
-        verbose_name='Lien Google Maps', 
+        max_length=255,
+        null=True,
+        verbose_name='Lien Google Maps',
         blank=True
     )
     effectif = models.IntegerField(
-        null=True, 
-        verbose_name='Effectif', 
+        null=True,
+        verbose_name='Effectif',
         blank=True
     )
     presentation = models.TextField(
-        max_length=255, 
-        null=True, 
+        max_length=255,
+        null=True,
         blank=True,
         verbose_name='Présentation de l\'activité'
     )
@@ -250,37 +270,37 @@ class Enregistrement(models.Model):
         blank=True
     )
     num_piece = models.CharField(
-        max_length=100, 
-        null=True, 
-        verbose_name='Numéro de la pièce', 
+        max_length=100,
+        null=True,
+        verbose_name='Numéro de la pièce',
         blank=True
     )
     has_dpo = models.BooleanField(
-        verbose_name='A désigné un Correspondant', 
+        verbose_name='A désigné un Correspondant',
         default=False
     )
     # Fichiers (pièces justificatives)
     file_piece = models.FileField(
-        null=True, 
-        blank=True, 
-        upload_to='docs/enregistrement', 
-        verbose_name='Pièce d\'identité', 
+        null=True,
+        blank=True,
+        upload_to='docs/enregistrement',
+        verbose_name='Pièce d\'identité',
         validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
         help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
     )
     file_rccm = models.FileField(
-        null=True, 
-        blank=True, 
-        upload_to='docs/enregistrement', 
-        verbose_name='Copie du Registre du Commerce', 
+        null=True,
+        blank=True,
+        upload_to='docs/enregistrement',
+        verbose_name='Copie du Registre du Commerce',
         validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
         help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
     )
     file_mandat = models.FileField(
-        null=True, 
-        blank=True, 
-        upload_to='docs/enregistrement', 
-        verbose_name='Mandat de représentation', 
+        null=True,
+        blank=True,
+        upload_to='docs/enregistrement',
+        verbose_name='Mandat de représentation',
         validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
         help_text='Si vous n\'êtes pas le représentant légal, Joindre un mandat signé par le représentatnt légal de l\'organisation')
 

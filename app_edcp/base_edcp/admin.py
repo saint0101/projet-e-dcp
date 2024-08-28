@@ -124,3 +124,9 @@ class JournalTransactionAdmin(admin.ModelAdmin):
     list_display = ['transaction', 'cible', 'created', 'user']  # Affiche informatons de la table
     search_fields = ('transaction', 'cible')
 
+
+# modifier le titre de l'espace admin de django
+admin.site.site_header = "Administration de e-DCP"
+admin.site.site_title = "e-DCP Admin"
+admin.site.index_title = "Bienvenue dans l'administration de e-DCP"
+

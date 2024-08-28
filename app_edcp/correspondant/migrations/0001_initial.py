@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('demande', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('base_edcp', '0001_initial'),
     ]
 
     operations = [

@@ -1,45 +1,60 @@
----
-    # Nom du flux de travail
-    name: Les Vérifications
+# Nom du flux de travail
+name: Les Vérifications et Déploiement
 
-    # Événement déclencheur
-    on: # Événement déclencheur
-      push: # Déclenché lors d'une poussée sur github (push)
-        branches: # specifier le banche concernées
-          - main # Seulement la branche principale (main)
+# Événement déclencheur
+on:
+  push:
+    branches:
+      - dev_edcp_v0.1 # Seulement la branche principale (main, dev_edcp_v0.1)
 
-    # Définition des tâches à exécuter
-    jobs:
-      test-lint: # nom de la tâche
-        name: Test et Linting. # Nom affiché dans l'interface utilisateur
-        runs-on: ubuntu-20.04  # Environnement d'exécution
+# Définition des tâches à exécuter
+jobs:
+  test-lint: # Nom du job
+    name: Test et Linting
+    runs-on: ubuntu-20.04
 
-        # Étapes à exécuter dans la tâche
-        steps:
-          - name: Se connecter à Docker Hub # Étape de connexion à Docker Hub
-            uses: docker/login-action@v2 # Utilisation de l'action docker/login-action@v1
-            with: # parametre de docker hub
-              username: ${{ secrets.DOCKERHUB_USER }}  # Nom d'utilisateur Docker Hub
-              password: ${{ secrets.DOCKERHUB_TOKEN }} # Mot de passe d'utilisateur Docker Hub
+    # Étapes à exécuter dans le job
+    steps:
+      - name: Se connecter à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-          # Ajoutez cette étape pour afficher les informations sur la connexion.
-          - name: Afficher les informations de connexion de Docker Hub # nom d el'etape
-            run: |
-              echo "Logged in as: $DOCKER_USERNAME"
-              echo "Docker token: $DOCKER_TOKEN"
-            env:  # Variables d'environnement
-              DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USER }} # Nom d'utilisateur Docker Hub
-              DOCKER_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }} # Token Docker Hub
+      - name: Téléchargement du code source
+        uses: actions/checkout@v2
 
-            # Étape de récupération du code source
-          - name: Téléchargement
-            uses: actions/checkout@v2 # Utilisation de l'action actions/checkout@v2
+      # - name: Exécuter les tests
+      # run: docker-compose run --rm app_edcp sh -c "python manage.py test"
 
-            # Étape d'exécution des tests
-          - name: Tests
-            run: docker-compose run --rm app_edcp sh -c "python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
-            # run: docker-compose run --rm app_edcp sh -c "python manage.py wait_for_db && python manage.py test" # Exécution de l'attente du demarrage de la bd et ensuite des tests via docker-compose
+      # - name: Vérification du linting
+      # run: docker-compose run --rm app_edcp sh -c "flake8"
 
-            # Étape de vérification du linting
-          - name: Tests de linting
-            run: docker-compose run --rm app_edcp sh -c "flake8" # Vérification du linting avec flake8
+  deploy:
+    name: Déploiement
+    runs-on: ubuntu-20.04
+    needs: test-lint
+    steps:
+      - name: Se connecter à Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Téléchargement du code source
+        uses: actions/checkout@v1
+
+      - name: Installer Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Construire l'image Docker avec tags sfourier
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier -t ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }} .
+
+      - name: Pousser l'image sur Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USER }}/app_edcp:sfourier
+          docker push ${{ secrets.DOCKERHUB_USER }}/app_edcp:${{ github.sha }}
