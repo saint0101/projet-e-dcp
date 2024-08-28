@@ -45,13 +45,17 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'formtools',
     'base_edcp',
+    'options',
     'public',
     'dashboard',
     'connexion',
+    'demande',
     'correspondant',
     'user',
     'enregistrement',
     'demande_auto',
+    # 'admindocs', # génération automatique de la documentation dans l'admin Django.
+    # 'django_extensions', # génération de diagrammes de classe UML
     # ,
 ]
 
@@ -104,7 +108,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST', 'localhost'),
-        # 'PORT': os.environ.get('DB_PORT', '5436'), # Facultatif via docker
+        # 'PORT': os.environ.get('DB_PORT', '5436'), # A retirer si exécution via Docker
         'NAME': os.environ.get('DB_NAME', 'edcp_db'),
         'USER': os.environ.get('DB_USER', 'Uroot_edcp'),
         'PASSWORD': os.environ.get('DB_PASS', 'e_dcp@2023#')
@@ -229,3 +233,8 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'ZM7rfPxdS87&bWq$')
 MEDIA_URL = '/uploads/' # URL utilisée pour l'accès aux fichiers. Doit être ajoutée à la liste des URLs
 MEDIA_ROOT = BASE_DIR / 'uploads' # Répertoire de stockage des fichiers
 
+""" Outils de génération de diagrammes de classe UML sous forme d'image """
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

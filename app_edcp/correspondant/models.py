@@ -2,25 +2,26 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from base_edcp.models import User, Enregistrement
 from base_edcp import validators
+from demande.models import Demande
+from options.models import OptionModel
 
 
-class TypeDPO(models.Model):
+
+class TypeDPO(OptionModel):
   """Type de correspondant"""
-  label = models.CharField(max_length=100)
-  description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Correspondant', blank=True)
+  # label = models.CharField(max_length=100)
+  # description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Correspondant', blank=True)
 
   class Meta:
-      """ définir le nom singulier et pluriel du modèle """
       verbose_name = 'Type de Correspondant'
       verbose_name_plural = 'Types de Correspondant'
 
-  def __str__(self):
-      """ les champs à retourner """
-      return self.label
+  """ def __str__(self):
+      return self.label """
 
 
 class QualificationsDPO(models.Model):
-  """Type de correspondant"""
+  """ Qualifications du correspondant"""
   label = models.CharField(max_length=100)
   description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Correspondant', blank=True)
 
@@ -48,17 +49,52 @@ class ExerciceActivite(models.Model):
       return self.label
 
 
-class Correspondant(models.Model):
+class MoyensDPO(OptionModel):
+  """ Moyens matériels et humains """
+  class Meta:
+    verbose_name = 'Moyens du DPO'
+    verbose_name_plural = 'Moyens du DPO'
+
+
+class AgrementDCP(OptionModel):
+  """ agrement DCP """
+  class Meta:
+    verbose_name = 'Agrement DCP'
+    verbose_name_plural = 'Agrements DCP'
+
+
+class CabinetDPO(Enregistrement):
+    agrements_dcp = models.ManyToManyField(
+       AgrementDCP,
+       blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Correspondant personne morale'
+        verbose_name_plural = 'Correspondants personnes morales'
+
+
+class Correspondant(Demande):
     """
     Correspondant à la protection des données
     """
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
         verbose_name='Compte utilisateur',
         related_name='correspondant_profiles'
     )
-    created_by = models.ForeignKey(
+    cabinet = models.ForeignKey( # si Correspondant personne morale
+        CabinetDPO,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name='Cabinet désigné',
+        related_name='designations_correspondants'
+    )
+    """ created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Crée par',
@@ -75,13 +111,17 @@ class Correspondant(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Date de désignation'
-    )
+    ) """
     type_dpo = models.ForeignKey(
         TypeDPO,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name='Type de Correspondant',
         null=True,
         blank=True
+    )
+    is_personne_morale = models.BooleanField(
+        default=False,
+        verbose_name='Est une personne morale (cabinet)'
     )
     qualifications = models.ForeignKey(
         QualificationsDPO,
@@ -97,7 +137,7 @@ class Correspondant(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Exercice de l'activité"
     )
-    moyens_materiels = models.CharField(
+    """ moyens_materiels = models.CharField(
         max_length=255,
         null=True,
         blank=True,
@@ -108,6 +148,12 @@ class Correspondant(models.Model):
         null=True,
         blank=True,
         verbose_name='Moyens humains mis à la disposition du Correspondant'
+    ) """
+    moyens_dpo = models.ManyToManyField(
+        MoyensDPO,
+        blank=True,
+        verbose_name='Moyens humains et matériels',
+        help_text='Moyens mis à la disposition du Correspondant.'
     )
     experiences = models.TextField(
         null=True,
@@ -130,7 +176,10 @@ class Correspondant(models.Model):
         default=False,
         verbose_name='Refusé'
     )
-
+    commentaires = models.TextField(
+       blank=True,
+       null=True,
+    )
     file_lettre_designation = models.FileField(
        null=True, 
        blank=True, 
@@ -178,10 +227,63 @@ class Correspondant(models.Model):
        validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
        help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
        verbose_name='CV')
+    
+    file_contrat = models.FileField(
+       null=True, 
+       blank=True, 
+       upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
+       verbose_name='Contrat',
+    )
 
     class Meta:
         verbose_name = 'Correspondant à la protection des données'
         verbose_name_plural = 'Correspondants à la protection des données'
 
     def __str__(self):
-        return f"{self.user.nom} {self.user.prenoms}"
+        if self.is_personne_morale:
+           # print('personne morale : ', self.cabinet)
+           return f"{self.cabinet}"
+        else:
+            # print('personne physique : ', self.user)
+            return f"{self.user}"
+    
+
+""" TO DELETE """
+class DesignationDpoMoral(Demande):
+    cabinet = models.ForeignKey(
+        CabinetDPO,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    commentaires = models.TextField(
+       blank=True,
+       null=True,
+    )
+    file_contrat = models.FileField(
+       null=True, 
+       blank=True, 
+       upload_to='docs/correspondant', 
+       validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+       help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.',
+       verbose_name='Contrat',
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name='Est actif'
+    )
+    is_approved = models.BooleanField(
+        default=False,
+        verbose_name='Approuvé'
+    )
+    is_rejected = models.BooleanField(
+        default=False,
+        verbose_name='Refusé'
+    )
+
+    class Meta:
+        verbose_name = 'Désignation de DPO personne morale'
+        verbose_name_plural = 'Désignations de DPO personnes morales'
+

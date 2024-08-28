@@ -1,3 +1,4 @@
+
 # Create your views here.
 """
 Menu à afficher dans barre latérale (sidebar.html) du tableau de bord pour les utilisateurs de type client.
@@ -160,7 +161,7 @@ MENU_MGR = [
     'type' : 'section',
   },
 
-    {
+  {
     'text' : 'Listes',
     'id' : 'listes',
     'type' : 'sous-menu',
@@ -168,6 +169,13 @@ MENU_MGR = [
     'url' : '',
     'disabled': False, 
     'items' : [
+      {
+        'text' : 'Organisations',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:enregistrement:list',
+        'disabled': False, 
+      },
       {
         'text' : 'Utilisateurs',
         'type' : 'sous-menu-item',
@@ -181,6 +189,38 @@ MENU_MGR = [
   {
     'text' : 'Formalités',
     'type' : 'section',
+  },
+
+  {
+    'text' : 'Demandes',
+    'type' : 'sous-menu',
+    'id' : 'demandes',
+    'icon' : 'file-earmark-person',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'À traiter',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:demande:liste_a_traiter',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Terminées',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:index',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Toutes les demandes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:demande:liste_all' ,
+        'disabled': False, 
+      },
+    ],
   },
 
   {

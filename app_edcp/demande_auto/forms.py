@@ -1,5 +1,5 @@
-from cProfile import label
 from django import forms
+from demande.models import Status, Commentaire, AnalyseDemande
 from demande_auto.models import *
 # Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
 
@@ -17,12 +17,14 @@ class CommentaireForm(forms.ModelForm):
 class ChangeStatusForm(forms.Form):
   """ Formulaire de changement de statut de la demande """
   # CHOICES = []
-  status = forms.ModelChoiceField(queryset=Status.objects.all())
+  # status = forms.ModelChoiceField(queryset=Status.objects.all())
+  pass
 
 
 class AnalyseDemandeForm(forms.ModelForm):
   """ Formulaire d'analyse d'une demande d'autorisation """
   NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+  # NOTATION_CHOICES = []
   critere_completude = forms.IntegerField(
     label='1. Completude du dossier',
     required=False,

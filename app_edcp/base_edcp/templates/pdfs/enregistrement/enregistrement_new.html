@@ -1,0 +1,12 @@
+{% extends '../base.html' %}
+
+
+{% block content %}
+Bonjour {{ organisation.user }},
+<br><br>
+L'organisation <strong>"{{ organisation }}"</strong> a bien été enregistrée !<br>
+Vous pouvez cliquer sur <a href="{{ domain }}{% url 'dashboard:enregistrement:detail' pk=organisation.id %}">ce lien</a> pour afficher ses informations.
+<br><br>
+Merci !<br>
+L'Autorité de Protection
+{% endblock %}

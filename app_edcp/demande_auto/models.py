@@ -1,47 +1,9 @@
 from django.db import models
 from base_edcp.models import User, Enregistrement
+from options.models import OptionModel
+from demande.models import Demande, Status
 
 
-class OptionModel(models.Model):
-  """
-  Classe abstraite permettant de centraliser les options de liste déroulante.
-  Héritée par les modèles finalité, sous-finalité, type de demande etc.
-  """
-  label = models.CharField(
-    unique=True,
-    max_length=100,
-    verbose_name='Label', 
-    help_text='Codification du champ, à écrire sous forme de slug'
-  )
-  is_sensible = models.BooleanField(
-    default=False, 
-    verbose_name='Sensible ?'
-  )
-  description = models.CharField(
-    max_length=255, 
-    null=True, 
-    blank=True,
-    verbose_name='Description du champ', 
-    help_text='Description du champ, affichée sur les formulaire'
-  )
-  resume = models.TextField(
-    max_length=500,
-    null=True,
-    blank=True,
-    verbose_name='Résumé du champ (texte explicatif)',
-    help_text='Paragraphe plus long que la description fournissant des détails sur le champ'
-  )
-  ordre = models.IntegerField(
-    default=0, 
-    verbose_name="Ordre d'affichage"
-  )
-
-  class Meta:
-    abstract = True
-
-  def __str__(self):
-    """ les champs à retourner pour l'affichage """
-    return self.description
 
   
 class TypeDemandeAuto(OptionModel):
@@ -71,25 +33,12 @@ class SousFinalite(OptionModel):
   )
 
 
-class ActionDemande(OptionModel):
-  """ Action effectuée sur une demande d'autorisation. Utilisée pour l'historique des traitements """
-  class Meta:
-    verbose_name = 'Action effectuée'
-    verbose_name_plural = 'Actions effectuées'
-
 
 class PersConcernee(OptionModel):
   """ Catégorie de personne concernée """
   class Meta:
     verbose_name = 'Catégorie de personnes concernées'
     verbose_name_plural = 'Catégories de personnes concernées'
-
-
-class Status(OptionModel):
-  """ Statut de demande d'autorisation """
-  class Meta:
-    verbose_name = 'Statut de demande ou d\'analyse'
-    verbose_name_plural = 'Statuts de demandes ou d\'analyses'
 
 
 class EchelleNotation(OptionModel):
@@ -103,15 +52,16 @@ class EchelleNotation(OptionModel):
     verbose_name = 'Echelle de notation'
     verbose_name_plural = 'Echelles de notation'
 
+
 def get_default_status():
   """ Renvoie le statut par défaut que doit avoir une nouvelle demande d'autorisation """
   default_status = Status.objects.get(label='brouillon')
   return default_status.id
 
 
-class DemandeAuto(models.Model):
+class DemandeAuto(Demande):
     """ Demande d'autorisation """
-    user = models.ForeignKey(
+    """ user = models.ForeignKey(
       User, 
       on_delete=models.CASCADE, 
       blank=True,
@@ -128,11 +78,11 @@ class DemandeAuto(models.Model):
       verbose_name='Date de Création'
     )
     status = models.ForeignKey(
-      'Status', 
+      Status, 
       blank=True,
       on_delete=models.CASCADE, 
       verbose_name='Statut de la demande'
-    )
+    ) """
     finalite = models.ForeignKey(
       'Finalite', 
       null=True,
@@ -147,7 +97,7 @@ class DemandeAuto(models.Model):
     )
     type_demande = models.ForeignKey(
       'TypeDemandeAuto', 
-      on_delete=models.CASCADE, 
+      on_delete=models.PROTECT, 
       verbose_name="Type de Demande d'Autorisation",
       blank=True
     )
@@ -287,8 +237,8 @@ class DemandeAutoBiometrie(DemandeAuto):
     return TypeDemandeAuto.objects.get(label='biometrie')
 
 
-class HistoriqueDemande(models.Model):
-  """ Historique des actions effectuées dans le traitement d'une demande d'autorisation """
+""" class HistoriqueDemande(models.Model):
+  # Historique des actions effectuées dans le traitement d'une demande d'autorisation
   demande = models.ForeignKey(
     'DemandeAuto',
     blank=True,
@@ -296,7 +246,7 @@ class HistoriqueDemande(models.Model):
     verbose_name='Demande d\'autorisation'
   )
   status = models.ForeignKey(
-    'Status', 
+    Status, 
     blank=True,
     on_delete=models.CASCADE, 
     verbose_name='Statut de la demande'
@@ -328,50 +278,11 @@ class HistoriqueDemande(models.Model):
 
   def __str__(self):
     return f"{self.action.description}"
+ """
 
-
-class Commentaire(models.Model):
-  """ Commentaires sur une demande"""
-  demande = models.ForeignKey(
-    'DemandeAuto',
-    blank=True,
-    on_delete=models.CASCADE,
-    verbose_name='Demande d\'autorisation'
-  )
-  auteur = models.ForeignKey(
-    User,
-    blank=True,
-    on_delete=models.CASCADE,
-    verbose_name='Auteur'
-  )
-  created_at = models.DateTimeField(
-    auto_now_add=True,
-    verbose_name='Date de Création'
-  )
-  objet = models.CharField(
-    null=True,
-    blank=True,
-    max_length=255,
-    verbose_name='Objet du message'
-  )
-  message = models.TextField(
-    null=True,
-    blank=True,
-    max_length=500,
-    verbose_name='Contenu du message'
-  )
-
-  class Meta:
-      verbose_name = 'Historique de la demande'
-      verbose_name_plural = 'Historiques des demandes'
-
-  def __str__(self):
-    return f"{self.objet}"
-  
-
-
+"""
 class AnalyseDemande(models.Model):
-  """ Analyse d'une demande"""
+  # Analyse d'une demande
   demande = models.OneToOneField(
     'DemandeAuto',
     blank=True,
@@ -453,3 +364,4 @@ class AnalyseDemande(models.Model):
 
   def __str__(self):
     return f"Analyse de : {self.demande}"
+    """

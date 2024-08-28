@@ -1,0 +1,47 @@
+{% autoescape off %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Inline CSS */
+    body {
+      font-family: 'Arial', sans-serif;  
+      font-size:13px;
+    }
+    .pdf-container{
+      width: 80%;
+      margin: 0 auto;
+    }
+    .col{
+      float: left;
+    }
+    .col-left{
+      width: 60%;
+    }
+    .col-right{
+      width: 40%;
+    }
+    .footer-signature{
+      width: 40%;
+      float: right;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="pdf-container">
+    <div class="header">
+      <img src="static/assets/img/logo_artci.png" width="150px">
+      <!-- Display QR code -->
+    </div>
+    <div class="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>
+{% endautoescape %}
+
+
