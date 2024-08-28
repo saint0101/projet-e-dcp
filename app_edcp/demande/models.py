@@ -1,11 +1,15 @@
+# django
 from datetime import datetime
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from base_edcp.models import User, Enregistrement
-from options.models import OptionModel, Status
-from base_edcp import validators
 from django.core.validators import FileExtensionValidator
+# apps
+from base_edcp.models import User, Enregistrement
+from base_edcp import validators
+from options.models import OptionModel, Status
+
+
 
 
 # Create your models here.
@@ -81,8 +85,8 @@ class Demande(models.Model):
   )
 
   class Meta:
-    verbose_name = 'Demande générale'
-    verbose_name_plural = 'Demandes générales'
+    verbose_name = 'Demande'
+    verbose_name_plural = 'Demandes'
 
   def save_historique(self, action_label, user, status=None, is_private=False):
     """
@@ -102,16 +106,20 @@ class Demande(models.Model):
     historique.save()
 
   def save(self, *args, **kwargs):
+    """ Redéfinit la méthode save() afin de générer le numéro de demande. """
+
     super().save(*args, **kwargs)
+
+    # si le numéro de demande n'existe pas encore
     if not self.num_demande:
       date_demande = self.created_at if self.created_at else datetime.now()
       #f'{str(i):<5}'
       self.num_demande = f'{date_demande.year}{date_demande.month:>02}{date_demande.day:>02}-{str(self.id):>06}'
       print('num_demande : ', self.num_demande)
-    super().save(update_fields=['num_demande'])
+      super().save(update_fields=['num_demande']) # mise à jour du numéro de demande.
 
   def __str__(self):
-    return f"{self.categorie} #{self.pk}"
+    return f"{self.categorie} #{self.num_demande}"
 
 
 """ @receiver(pre_save, sender=Demande)
@@ -338,6 +346,8 @@ class AnalyseDemande(models.Model):
 
 
 class ReponseDemande(models.Model):
+  """ Réponse à une demande (lettre, décision, etc.)"""
+
   signataire = models.ForeignKey(
     User, 
     on_delete=models.CASCADE, 
@@ -393,6 +403,8 @@ class ReponseDemande(models.Model):
 
 
 class ValidationDemande(models.Model):
+  """ Validation de l'analyse d'une demande """
+  
   created_at = models.DateTimeField(
     auto_now_add=True, 
     verbose_name='Date de signature'

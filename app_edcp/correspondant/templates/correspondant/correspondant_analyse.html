@@ -20,6 +20,22 @@
         $('#offcanvasCommentaires').addClass('show');
       } 
     });
+
+    function goToAnalyse(){
+      $('#accordion-btn-analyse').removeClass('collapsed')
+      $('#collapseAnalyse').addClass('show');
+      
+      $('#accordion-btn-reponse').addClass('collapsed')
+      $('#collapseReponse').removeClass('show');
+    }
+
+    function goToReponse(){
+      $('#accordion-btn-reponse').removeClass('collapsed')
+      $('#collapseReponse').addClass('show');
+      
+      $('#accordion-btn-analyse').addClass('collapsed')
+      $('#collapseAnalyse').removeClass('show');
+    }
   </script>
 {% endblock %}
 
@@ -34,22 +50,23 @@
       <div class="col">
         <div class="card custom-card">
           <div class="card-body">
+            <div>
+              <span class="badge text-bg-light custom-text-light me-2 mb-2">
+                Statut de l'analyse : {{ analyse.status }}
+              </span>
+              <span class="badge text-bg-light custom-text-light me-2 mb-2">
+                Traité par : {{ analyse.created_by }}
+              </span>
+  
+              <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+                Afficher l'historique
+              </button>
+              <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+                Commentaires
+              </button>
+            </div>
 
-            <span class="badge text-bg-light custom-text-light me-2 mb-2">
-              Statut de l'analyse : {{ analyse.status }}
-            </span>
-            <span class="badge text-bg-light custom-text-light me-2 mb-2">
-              Traité par : {{ analyse.created_by }}
-            </span>
-
-            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
-              Afficher l'historique
-            </button>
-            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
-              Commentaires
-            </button>
-
-            {% if analyse and analyse.niv_validation > 0 %}
+            {% if analyse and can_validate %}
               <div id="actions-validator">
                 <form method="post" action="{% url 'dashboard:demande:validation' pk=correspondant.pk %}">
                   <div class="row">
@@ -66,20 +83,18 @@
                 </form>
                 
               </div>
-            {% elif not analyse or analyse.niv_validation == 0 %}
-              <div id="actions-agent">
-                <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
-                  class="btn btn-secondary me-2 {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="openLoader()">
-                  Enregistrer
+            {% elif not analyse or not can_validate %}
+              <div id="actions-agent" style="width: 100%;">
+                <a href="#accordion-analyse" class="btn btn-secondary me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="goToAnalyse()">
+                  Enregistrer l'analyse 
                 </a>
               
-                <a href="{% url 'dashboard:correspondant:reponse' pk=correspondant.id %}" 
-                  class="btn btn-primary me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                <a href="#accordion-reponse" class="btn btn-primary me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="goToReponse()">
                   Générer le projet de réponse
                 </a>
 
                 <a href="{% url 'dashboard:correspondant:submit' pk=correspondant.id %}" 
-                  class="btn btn-info me-2 {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                  class="btn btn-info me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
                   Soumettre à validation
                 </a>
               </div>
@@ -91,7 +106,7 @@
     </div>
 
     <div class="row">
-      <div class="col-5" style="max-height: 800px; overflow-y: scroll;">
+      <div class="col-5" style="max-height: 1000px; overflow-y: scroll;">
         <div class="card custom-card mb-3">
           <div class="card-header custom-text-light">
             Organisation
@@ -201,9 +216,9 @@
               </div>
             {% endif %}
 
-            <div class="accordion-item">
+            <div class="accordion-item" id="accordion-analyse">
               <h2 class="accordion-header">
-                <button class="accordion-button {{projet_reponse_pdf|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyse" aria-expanded="true" aria-controls="collapseAnalyse">
+                <button id="accordion-btn-analyse" class="accordion-button {{projet_reponse_pdf|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyse" aria-expanded="true" aria-controls="collapseAnalyse">
                   Analyse de la demande
                 </button>
               </h2>
@@ -218,9 +233,9 @@
               </div>
             </div>
 
-            <div class="accordion-item">
+            <div class="accordion-item" id="accordion-reponse">
               <h2 class="accordion-header">
-                <button class="accordion-button {{projet_reponse_pdf|yesno:' , collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReponse" aria-expanded="false" aria-controls="collapseReponse">
+                <button id="accordion-btn-reponse" class="accordion-button {{projet_reponse_pdf|yesno:' , collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReponse" aria-expanded="false" aria-controls="collapseReponse">
                   Projet de réponse
                 </button>
               </h2>

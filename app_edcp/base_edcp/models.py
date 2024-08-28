@@ -1,14 +1,14 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
-
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
     Group,
 )
-# from base_edcp.models import User
+# apps
+
 from options.models import TypeClient, TypePiece, Secteur, Pays, GroupName
 from base_edcp import validators
 
@@ -16,7 +16,7 @@ from base_edcp import validators
 # Gestionnaire personnalisé pour le modèle d'utilisateur
     ## - BaseUserManager: gérer la création des utilisateurs et des super utilisateurs
 class CustomUserManager(BaseUserManager):
-    """Manager pour le modèle User"""
+    """Manager pour le modèle personnalisé User"""
 
     # Méthode pour créer un utilisateur
     def create_user(self, email, password=None, **extra_fields):
@@ -93,6 +93,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         'prenoms',
     ]
     
+    """ def can_validate(self, demande):
+        from demande.views import get_niv_validation_max
+        niv_validation = get_niv_validation_max(self)
+        print ('niv_validation', self.object, niv_validation)
+        return True if niv_validation >= demande.analyse.niv_validation else False """
+            
+
     class Meta:
         """ définir le nom singulier et pluriel du modèle """
         verbose_name = 'Utilisateur'
@@ -114,7 +121,7 @@ class GroupExtension(models.Model):
     )
     group = models.OneToOneField(
         Group,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
     )
     niv_validation = models.IntegerField(
         default=0,
@@ -126,24 +133,21 @@ class GroupExtension(models.Model):
 
 
 class Enregistrement(models.Model):
-    """ Table enregistrement """
-    # Lien vers l'utilisateur
-    user = models.ForeignKey(
+    """ Table enregistrement (représente une organisation) """
+    user = models.ForeignKey( # utilisateur ayant effectué l'enregistrement.
         User, 
-        on_delete=models.CASCADE, 
+        on_delete=models.PROTECT, 
         verbose_name='Utilisateur'
     )
-    # correspondant = models.ForeignKey('correspondant.Correspondant', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Correspondant')
-    created_at = models.DateTimeField(
+    created_at = models.DateTimeField( # date d'enregistrement.
         auto_now_add=True, 
         verbose_name='Date de Création'
     )
-    # Lien vers le type de client
-    typeclient = models.ForeignKey(
+    typeclient = models.ForeignKey( # type d'organisation
         TypeClient, 
-        on_delete=models.CASCADE, 
+        on_delete=models.SET_NULL, 
         null=True, 
-        verbose_name='Type de Client'
+        verbose_name='Type d\'organisation'
     )
     raisonsociale = models.CharField(
         max_length=100, 
@@ -169,23 +173,21 @@ class Enregistrement(models.Model):
         validators=[validators.validate_charfield, validators.validate_no_special_chars, validators.validate_rccm_idu],
         verbose_name='Numéro RCCM'
     )
-    # Lien vers le secteur d'activité
-    secteur = models.ForeignKey(
+    secteur = models.ForeignKey( # secteur d'activité
         Secteur, 
-        on_delete=models.CASCADE, 
+        on_delete=models.SET_NULL, 
         null=True, 
         blank=True,
         verbose_name='Secteur d\'Activité'
     )
-    # secteur_description = models.CharField(max_length=100, null=True, verbose_name='Description du Secteur')
-    telephone = models.CharField(
+    telephone = models.CharField( # numéro de téléphone de l'organisation
         max_length=20, 
         null=True, 
         blank=True,
         verbose_name='Téléphone',
         # validators=[validators.validate_phone_number]
     )
-    email_contact = models.EmailField(
+    email_contact = models.EmailField( # email de contact
         max_length=100, 
         null=True, 
         verbose_name='Email de Contact'
@@ -198,7 +200,7 @@ class Enregistrement(models.Model):
     )
     pays = models.ForeignKey(
         Pays, 
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True, 
         verbose_name='Pays'
     )
@@ -243,7 +245,7 @@ class Enregistrement(models.Model):
         TypePiece, 
         null=True, 
         default='', 
-        on_delete=models.CASCADE, 
+        on_delete=models.SET_NULL, 
         verbose_name='Type de pièce d\'identité', 
         blank=True
     )

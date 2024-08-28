@@ -22,23 +22,13 @@ from public import views as public
 
 urlpatterns = [
     path('', public.index, name='index'),
+    # path('admin/doc/', include('django.contrib.admindocs.urls')), # page de documentation admin.
     path('admin/', admin.site.urls), # page d'administration
     path('public/', include('public.urls')), # partie publque du site (accueil, à propos, contacts etc.)
     path('dashboard/', include('dashboard.urls')), # tableaux de bord client et gestionnaire
     path('connexion/', include('connexion.urls')), # page d'inscription, login, changement de mot de passe etc.
     # path('connexion/', include('django.contrib.auth.urls')), # autres pages de connexion (login, mot de passe oublié etc.) 
 
-    # ajouter l'utiisateur
-    # path('edcp/user/', include('user.urls')),
-
-    # ajouter l'url des demandes d'autorisations
-    #path('edcp/demandeauto/', include('demande_auto.urls')),
-
-    # ajouter l'url enregistrement
-    #path('edcp/enregistrement/', include('enregistrement.urls')),
-
-    # ajouter l'url correspondant
-    #path('edcp/correspondant/', include('correspondant.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # ajout de l'url des fichiers statiques uploadés
 
 

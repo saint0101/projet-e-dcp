@@ -31,7 +31,7 @@ class CommentaireForm(forms.ModelForm):
 
 
 class ProjetReponseModelForm(forms.ModelForm):
-
+  """ Formulaire de génération de projet de réponse. """
   type_reponse = forms.ModelChoiceField(
     queryset=TypeReponse.objects.all(),
     widget=forms.RadioSelect
@@ -41,14 +41,17 @@ class ProjetReponseModelForm(forms.ModelForm):
     fields = ['type_reponse', 'titre_destinataire', 'adresse_destinataire']
 
   def __init__(self, demande=None, *args, **kwargs):
+    """ Initialisation du formulaire avec la demande en traitée afin de filtrer les types de réponses possibles. """
     super().__init__(*args, **kwargs)
-    types_reponses = demande.categorie.types_reponses.all()
     # demande = Demande.objects.filter(analyse__projet_reponse=self.instance).last()
-    # print('types reponses : ', types_reponses)
+    types_reponses = demande.categorie.types_reponses.all()
     self.fields['type_reponse'].queryset = types_reponses
 
 
+
+""" TO DELETE """
 class ProjetReponseForm(forms.Form):
+  """ Formulaire de génération de projet de réponse. Privilégier la version ModelForm ci-dessus. """
   type_reponse = forms.ModelChoiceField(
     queryset=TypeReponse.objects.all(),
     widget=forms.RadioSelect

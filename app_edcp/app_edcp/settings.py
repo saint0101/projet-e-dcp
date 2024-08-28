@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'user',
     'enregistrement',
     'demande_auto',
+    # 'admindocs', # génération automatique de la documentation dans l'admin Django.
     # 'django_extensions', # génération de diagrammes de classe UML
     # ,
 ]
@@ -107,7 +108,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5436'), # Facultatif via docker
+        # 'PORT': os.environ.get('DB_PORT', '5436'), # A retirer si exécution via Docker
         'NAME': os.environ.get('DB_NAME', 'edcp_db'),
         'USER': os.environ.get('DB_USER', 'Uroot_edcp'),
         'PASSWORD': os.environ.get('DB_PASS', 'e_dcp@2023#')

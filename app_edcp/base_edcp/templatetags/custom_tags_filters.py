@@ -1,7 +1,5 @@
 """
-Custom tag pour la gestion du fil d'ariane (breadcrumbs).
-Permet de récupérer le texte et l'url de l'élément à afficher.
-Utilise la fonction split() avec comme séparateur ' / '.
+Fonctions de filtres personnalisés utilisables dans les templates.
 """
 
 from django import template
@@ -13,7 +11,7 @@ register = template.Library()
 @register.filter
 @stringfilter
 def get_bread_text(value, arg):
-    """Split la chaîne en paramètre et renvoie la prmeière occurence (correspondant au texte à afficher)"""
+    """Split la chaîne en paramètre et renvoie la première occurence (correspondant au texte à afficher)"""
     return value.split(arg)[0]
 
 
@@ -56,8 +54,9 @@ def get_fileinfos(value):
 def get_file_fields(instance, excluded_fields=None):
     """
     Retourne la liste des champs FileField de l'instance passée en paramètre (ex: Enregistrement, Correspondant etc.).
-    Utilisé pour l'affichage des fichiers justificatifs
-    excluded_fields: champs FileField à exclure (séparés par des virgules)
+    Utilisé pour l'affichage des fichiers justificatifs.
+    - Paramètres:
+    -- excluded_fields: champs FileField à exclure (séparés par des virgules)
     """
     excluded = []
     if excluded_fields:
@@ -69,8 +68,9 @@ def get_file_fields(instance, excluded_fields=None):
 def get_file_fields_include(instance, included_fields=None):
     """
     Retourne la liste des champs FileField de l'instance passée en paramètre (ex: Enregistrement, Correspondant etc.).
-    Utilisé pour l'affichage des fichiers justificatifs
-    include_fields: champs à inclure
+    Utilisé pour l'affichage des fichiers justificatifs.
+    - Paramètres:
+    -- include_fields: champs à inclure
     """
     included = []
     if included_fields:

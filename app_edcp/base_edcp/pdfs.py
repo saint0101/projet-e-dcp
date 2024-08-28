@@ -21,8 +21,8 @@ PDF_TEMPLATES = {
 
 def generate_pdf(request, template, context):
   """ Fonction de génération de PDF
-  Paramètres :
-  context - doit contenir pk et url_path
+  - Paramètres :
+  -- context - doit contenir pk et url_path (pk = id de la demande et url_path = url de la page de détail de la demande)
   """
   qr_code = generate_qrcode(request, context)
   context['qr_code'] = qr_code
@@ -45,18 +45,23 @@ def generate_pdf(request, template, context):
   
 
 def generate_qrcode(request, context):
+  """ Fonction de génération de QR Code. 
+    - Paramètres :
+    -- context - doit contenir pk et url_path (pk = id de la demande et url_path = url de la page de détail de la demande)
+  """
   print('context', context)
   # url = request.build_absolute_uri(reverse(context['url_path'], args=context['pk']))
-  url = request.build_absolute_uri(reverse(context['url_path'], args=[context['pk'],]))
-  # print('url', url)
+  url = request.build_absolute_uri(reverse(context['url_path'], args=[context['pk'],])) # obtention de l'adresse de l'URL
+
+  # Création du QR code
   qr = qrcode.QRCode(
-    version=2,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    version=2, # définit la complexité du qr code
+    error_correction=qrcode.constants.ERROR_CORRECT_L, 
     box_size=10,
     border=4,
   )
-  qr.add_data(url)
-  qr.make(fit=True)
+  qr.add_data(url) # codification de l'URL
+  qr.make(fit=True) 
   img = qr.make_image(fill="black", back_color="white")
 
   # Convert PIL image to byte array

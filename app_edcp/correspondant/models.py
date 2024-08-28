@@ -1,9 +1,10 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from base_edcp.models import User, Enregistrement
+from base_edcp import validators
 from demande.models import Demande
 from options.models import OptionModel
-from base_edcp import validators
+
 
 
 class TypeDPO(OptionModel):
@@ -20,7 +21,7 @@ class TypeDPO(OptionModel):
 
 
 class QualificationsDPO(models.Model):
-  """Type de correspondant"""
+  """ Qualifications du correspondant"""
   label = models.CharField(max_length=100)
   description = models.CharField(max_length=100, null=True, verbose_name='Description du Type de Correspondant', blank=True)
 
@@ -85,7 +86,7 @@ class Correspondant(Demande):
         verbose_name='Compte utilisateur',
         related_name='correspondant_profiles'
     )
-    cabinet = models.ForeignKey(
+    cabinet = models.ForeignKey( # si Correspondant personne morale
         CabinetDPO,
         blank=True,
         null=True,
@@ -242,13 +243,14 @@ class Correspondant(Demande):
 
     def __str__(self):
         if self.is_personne_morale:
+           # print('personne morale : ', self.cabinet)
            return f"{self.cabinet}"
         else:
-            return f"{self.user.nom} {self.user.prenoms}"
+            # print('personne physique : ', self.user)
+            return f"{self.user}"
     
 
-
-
+""" TO DELETE """
 class DesignationDpoMoral(Demande):
     cabinet = models.ForeignKey(
         CabinetDPO,

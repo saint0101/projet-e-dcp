@@ -1,5 +1,5 @@
 """
-Fonction pour l'envoi des mails de notification.
+Fonctions pour l'envoi des mails de notification.
 Définit également un dictionnaire pour les sujets et templates.
 """
 
@@ -48,11 +48,11 @@ def send_email(request, mail_content, recipient_list, context, show_message=True
   - context -- le contexte de l'email sous forme de dictionnaire. Utilisé pour passer des variables au template
   - show_message -- indique si un message doit être affiché ou non sous forme d'alerte Toast (default True)
   """
+  print ('context - send email : ', context)
   email_from = settings.EMAIL_HOST_USER # récupère l'adresse email par défaut 
   print('EMAIL from : ', email_from) 
   current_site = get_current_site(request) # recuperation de l'adresse du site
   context['domain'] = "http://" + current_site.domain # constitution de l'url du site. Utilisée dans les mails pour former les liens
-
   html_message = render_to_string(mail_content['template'], context) # contenu du mail au format HTML
   text_message = strip_tags(html_message) # contenu du mail au format texte
   print('EMAIL message : ', text_message)

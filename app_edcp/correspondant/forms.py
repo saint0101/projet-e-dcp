@@ -4,9 +4,10 @@ from django import forms
 # from connexion.forms import UserRegistrationForm
 # from base_edcp.models import User, Enregistrement
 from base_edcp import validators
+from correspondant.models import Correspondant, DesignationDpoMoral, MoyensDPO
 from demande.models import CategorieDemande, CritereEvaluation, ReponseDemande
 from demande_auto.models import EchelleNotation
-from correspondant.models import Correspondant, DesignationDpoMoral, MoyensDPO
+
 
 
 class UserIsDPOForm(forms.Form):
@@ -56,13 +57,14 @@ class DPOFormPage1(forms.Form):
 
 
 class DPOCabinetForm(forms.ModelForm):
-  """ Formulaire de désignation de DPO pour une organisation """
+  """ Formulaire de désignation de DPO personne morale pour une organisation """
   class Meta:
     model = Correspondant
     fields = ['cabinet', 'commentaires', 'file_contrat']
 
 
 class DPOCabinetFormDisabled(forms.ModelForm):
+  """ Formulaire de DPO personne morale. Utilisé uniquement pour l'affichage """
   class Meta:
     model = Correspondant
     fields = ['commentaires',]
@@ -147,6 +149,7 @@ class DPOUpdateForm(forms.ModelForm):
 
 
 class DPODPOUpdateFormDisabled(DPOUpdateForm):
+  """ Formulaire de DPO personne physique. Utilisé uniquement pour l'affichage """
   class Meta:
     model = Correspondant
     fields = [

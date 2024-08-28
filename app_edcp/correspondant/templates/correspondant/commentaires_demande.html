@@ -12,10 +12,13 @@
       {% csrf_token %}
       {{ form_comment|crispy}}
       <button type="submit" class="btn btn-primary me-1 mb-2" name="form_comment_submit">Envoyer</button>
-      {% if demande.status.label == 'attente_complement' %}
-        <button type="submit" class="btn btn-secondary mb-2" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
-      {% else %}
-        <button type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+      {% if request.user.is_staff %}
+        {% if demande.status.label == 'attente_complement' %}
+          <button type="submit" class="btn btn-secondary mb-2" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+        
+          {% else %}
+          <button type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+        {% endif %}
       {% endif %}
     </form>
     

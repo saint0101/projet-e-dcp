@@ -32,7 +32,7 @@
                 <tr>
                   {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
                   {% comment %} <td> {{ demande.id|stringformat:"08d" }} </td> {% endcomment %}
-                  <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
+                  <td> <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
                   <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}"> {{ demande.organisation }} </a> </td>
                   {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
                   <td> {{ demande.created_at }} </td>
@@ -40,14 +40,18 @@
                   <td> 
                     {% if not demande.analyse %}
                     <span class="badge rounded-pill text-bg-danger text-light fw-normal">
+                    {% endif %}
                     
-                    {% elif not demande.analyse.is_closed %}
-                    <span class="badge rounded-pill text-bg-primary text-light fw-normal">
+                    {% if demande.status.label == 'demande_attente_complement' %}
+                      <span class="badge rounded-pill text-bg-primary text-light fw-normal">
+                    
+                    {% elif demande.status.label == 'analyse_en_cours' %}
+                      <span class="badge rounded-pill text-bg-warning text-light fw-normal">
                     
                     {% elif demande.analyse.is_closed %}
-                    <span class="badge rounded-pill text-bg-success text-light fw-normal">
+                      <span class="badge rounded-pill text-bg-success text-light fw-normal">
                     {% endif %}
-                      {{ demande.status }}
+                      {{ demande.status|truncatechars:30 }}
                     </span>
                 </td>
                   <td> {{ demande.analyse.status }} </td>
