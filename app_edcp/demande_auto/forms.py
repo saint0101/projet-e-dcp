@@ -23,8 +23,8 @@ class ChangeStatusForm(forms.Form):
 
 class AnalyseDemandeForm(forms.ModelForm):
   """ Formulaire d'analyse d'une demande d'autorisation """
-  NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
-  # NOTATION_CHOICES = []
+  # NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+  NOTATION_CHOICES = []
   critere_completude = forms.IntegerField(
     label='1. Completude du dossier',
     required=False,
