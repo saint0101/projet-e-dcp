@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 # apps
 from base_edcp.models import User, GroupExtension
+from base_edcp.emails import send_email, send_email_with_attachment, MAIL_CONTENTS
 from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
 from options.models import Status
 from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande, Commentaire, ReponseDemande, TypeReponse
@@ -60,8 +61,15 @@ def get_niv_validation_max(user):
 
 
 def can_validate(user, demande):
+    """ Renvoie True si l'utilisateur a le niveau nécessaire pour valider une demande. """
     niv_validation = get_niv_validation_max(user)
-    return True if niv_validation >= demande.analyse.niv_validation else False
+    return niv_validation >= demande.analyse.niv_validation
+
+
+def can_terminate(user, demande):
+    """ Renvoie True si l'utilisateur a le niveau nécessaire pour terminer une demande. """
+    niv_validation = get_niv_validation_max(user)
+    return niv_validation == demande.categorie.niv_validation
 
 
 
@@ -148,7 +156,22 @@ def handle_validation(request, pk):
         # si l'analyse a atteint le niveau de validation requis
         if niv_validation_actuel == niv_validation_requis:
           # l'analyse est marquée comme terminée
-          analyse.status, created = Status.objects.get_or_create(label='traitement_termine', defaults={'description': 'Traitement terminé'})
+          analyse.is_closed = True
+          analyse.status, created = Status.objects.get_or_create(label='analyse_terminee', defaults={'description': 'Analyse terminée'}) 
+          demande.status, created = Status.objects.get_or_create(label='traitement_termine', defaults={'description': 'Traitement terminé'}) 
+
+          """ A modifier """
+          demande.reponse_ok = demande.analyse.avis_juridique 
+          
+          mail_context = {
+            'demande': demande,
+          }
+          send_email_with_attachment(
+            request=request, 
+            mail_content=MAIL_CONTENTS['correspondant_approbation_reponse'], 
+            recipient_list=[demande.organisation.email_contact, request.user.email], # à compléter
+            context=mail_context
+          ) 
       
       # sinon si l'avis est négatif
       else:
@@ -157,6 +180,7 @@ def handle_validation(request, pk):
         analyse.status, created = Status.objects.get_or_create(label='analyse_attente_corrections', defaults={'description': 'Analyse en attente de corrections'})
 
       analyse.save()
+      demande.save()
       demande.save_historique(action_label='changement_statut', user=request.user, status=analyse.status, is_private=True)
 
       return redirect('dashboard:demande:liste_a_traiter') 

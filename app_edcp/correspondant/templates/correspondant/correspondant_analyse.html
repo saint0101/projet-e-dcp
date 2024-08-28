@@ -66,16 +66,22 @@
               </button>
             </div>
 
-            {% if analyse and can_validate %}
+            {% if analyse and can_validate and analyse.niv_validation > 0%}
               <div id="actions-validator">
-                <form method="post" action="{% url 'dashboard:demande:validation' pk=correspondant.pk %}">
+                <form method="post" action="{% url 'dashboard:demande:validation' pk=correspondant.pk %}" onsubmit="openLoader()">
                   <div class="row">
                     <div class="col-7">
                       {% csrf_token %}
                       {{ form_validation|crispy }}
                     </div>
                     <div class="col-5">
-                      <button type="submit" name="submit_form_accept" class="btn btn-info align-middle mt-4 mb-2">Valider</button><br>
+                      <button type="submit" name="submit_form_accept" class="btn btn-info align-middle mt-4 mb-2">
+                        {% if can_terminate %}
+                          Valider et terminer
+                        {% else %}
+                          Valider
+                        {% endif %}
+                      </button><br>
                       <button type="submit" name="submit_form_reject" class="btn btn-danger align-middle">Rejeter</button>
                     </div>
                   </div>
@@ -83,7 +89,7 @@
                 </form>
                 
               </div>
-            {% elif not analyse or not can_validate %}
+            {% elif not analyse or not can_validate or can_validate and analyse.niv_validation == 0 %}
               <div id="actions-agent" style="width: 100%;">
                 <a href="#accordion-analyse" class="btn btn-secondary me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="goToAnalyse()">
                   Enregistrer l'analyse 
@@ -227,7 +233,7 @@
                   <form method="post" onsubmit="openLoader()">
                     {% csrf_token %}
                     {{ form|crispy }}
-                    <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
+                    <button class="btn btn-primary" name="analyse_form_submit" {{ correspondant.analyse.is_locked|yesno:'disabled, ' }} type="submit">Enregistrer</button>
                   </form>
                 </div>
               </div>
@@ -244,7 +250,7 @@
                   <form method="post" action="{% url 'dashboard:demande:response_create' pk=correspondant.id template='correspondant_approbation' %}">
                     {% csrf_token %}
                     {{ form_projet_reponse|crispy }}
-                    <button type="submit" class="btn btn-primary">Générer le projet de réponse</button>
+                    <button type="submit" class="btn btn-primary" {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}>Générer le projet de réponse</button>
                   </form>
                   {% if correspondant.analyse.projet_reponse %}
                     <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>

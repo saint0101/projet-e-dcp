@@ -83,6 +83,10 @@ class Demande(models.Model):
     default=False,
     verbose_name='Est verrouillée (en cours de validation)'
   )
+  reponse_ok = models.BooleanField(
+    null=True,
+    verbose_name='Réponse favorable'
+  )
 
   class Meta:
     verbose_name = 'Demande'

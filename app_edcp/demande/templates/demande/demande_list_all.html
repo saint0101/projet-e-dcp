@@ -48,7 +48,7 @@
                     {% elif demande.status.label == 'analyse_en_cours' %}
                       <span class="badge rounded-pill text-bg-warning text-light fw-normal">
                     
-                    {% elif demande.analyse.is_closed %}
+                    {% elif demande.status.label == 'traitement_termine' %}
                       <span class="badge rounded-pill text-bg-success text-light fw-normal">
                     {% endif %}
                       {{ demande.status|truncatechars:30 }}

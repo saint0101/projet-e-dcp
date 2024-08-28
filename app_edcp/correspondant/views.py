@@ -17,7 +17,7 @@ from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
 from base_edcp.models import User, Enregistrement
 from demande.models import ActionDemande, AnalyseDemande, CategorieDemande, Commentaire, CritereEvaluation, HistoriqueDemande, ReponseDemande
 from demande.forms import CommentaireForm, ProjetReponseForm, ProjetReponseModelForm, ValidateForm
-from demande.views import user_has_niv_validation, can_validate
+from demande.views import user_has_niv_validation, can_validate, can_terminate
 from demande_auto.models import EchelleNotation
 from options.models import Status
 from user.utils import create_new_user, check_email
@@ -322,6 +322,7 @@ def analyse(request, pk, action=None):
 		'correspondant': correspondant,
 		'analyse': analyse,
 		'can_validate': can_validate(request.user, correspondant),
+		'can_terminate': can_terminate(request.user, correspondant),
 		'commentaires': Commentaire.objects.filter(demande=correspondant).order_by('created_at'),
 		'validations': analyse.validations.all(),
 		'action': action,
@@ -380,20 +381,24 @@ def submit_analyse(request, pk):
 	
 	# si l'analyse a bien été créée, changement du statut
 	if analyse :
-		status, created = Status.objects.get_or_create(
-			label='attente_validation_1',
-			defaults={'description': 'En attente de validation niv. 1'}    
-		)
-		analyse.status = status
 		analyse.is_locked = True # verrouillage de l'analyse pendant la validation pour éviter une modification
 		
 		# si l'utilisateur qui traite la demande est un superviseur (niv_validation 1)
 		# la demande passe directement au niveau 2
 		if user_has_niv_validation(request.user, 1):
 			analyse.niv_validation = 2
+			status, created = Status.objects.get_or_create(
+				label='attente_validation_2',
+				defaults={'description': 'En attente de validation niv. 2'}    
+			)
 		else:
 			analyse.niv_validation = 1
+			status, created = Status.objects.get_or_create(
+				label='attente_validation_1',
+				defaults={'description': 'En attente de validation niv. 1'}    
+			)
 
+		analyse.status = status
 		analyse.save()
 		correspondant.save_historique(action_label='changement_statut', user=request.user, status=analyse.status, is_private=True)
  
