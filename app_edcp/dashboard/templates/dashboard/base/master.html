@@ -18,14 +18,13 @@
     {% endcompress %}
 {% endblock %}
 
+
 {% comment %} {% block scripts %}
     <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 {% endblock %} {% endcomment %}
 
 {% block custom_scripts %}
 {% endblock %}
-
-
 
 
 {% block layout %}
@@ -38,10 +37,17 @@
             {% include "./sidebar.html" %}
         {% endblock %}
 
+        {% block historique %}
+            {% include "./historique_demande.html" %}
+        {% endblock %}
+
+        {% block commentaires %}
+        {% endblock %}
+
         {% block breadcrumbs %}
         {% endblock %}
 
-        <div class="container p-4" id="content">
+        <div class="container pt-4" id="content">
             <!-- Affichage des notifications via Toastr -->
             {% if messages %}
                 <ul class="messages">

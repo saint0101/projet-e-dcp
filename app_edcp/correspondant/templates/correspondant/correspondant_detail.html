@@ -2,14 +2,26 @@
 {% load static %}
 {% load custom_tags_filters %}
 
+{% block custom_scripts %}
+  <script>
+    $(document).ready(function (){
+      var show_comments = $('#action-parameter').val();
+      console.log(show_comments);
+      if (show_comments == 'True'){ // valeur python
+        $('#offcanvasCommentaires').addClass('show');
+      } 
+
+      
+    });
+  </script>
+{% endblock %}
 
 {% block content %}
 
-  
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
-    <h3 class="text-hint mb-3 custom-text-light fw-bold">Détails du Correspondant</h3>
+    <h3 class=" mb-3 custom-text-light fw-bold">Détails de la désignation Correspondant</h3>
     
     <div class="row mb-4">
       <div class="col">
@@ -35,26 +47,47 @@
               {% endif %}
             </span>
 
-            {% if request.user.is_staff %}
-              {% if not correspondant.is_approved %}
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=1 %}" 
-                  class="btn btn-primary me-2" onclick="openLoader()">
-                  Approuver
-                </a>
-
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=2 %}" 
-                  class="btn btn-danger me-2" onclick="openLoader()">
-                  Refuser
+            
+            {% if not correspondant.analyse and not request.user.is_staff %}
+              {% if correspondant.is_personne_morale %}
+                <a href="{% url 'dashboard:correspondant:edit_cabinet' pk=correspondant.id %}" class="btn btn-success me-2">
+                  Modifier
                 </a>
               {% else %}
-                <a href="{% url 'dashboard:correspondant:approve' pk=correspondant.id approve=0 %}" 
-                  class="btn btn-danger me-2" onclick="openLoader()">
-                  Retirer l'approbation
+                <a href="{% url 'dashboard:correspondant:edit' pk=correspondant.id %}" class="btn btn-success me-2">
+                  Modifier
                 </a>
               {% endif %}
-            {% else %}
-              <a href="{% url 'dashboard:correspondant:edit' pk=correspondant.id %}" class="btn btn-success me-2">Modifier</a>
+            
+            {% elif not correspondant.analyse and request.user.is_staff %}
+              <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+                class="btn btn-primary me-2" onclick="openLoader()">
+                Démarrer l'analyse
+              </a>
+            {% elif correspondant.analyse and not request.user.is_staff %}
+              <button class="btn btn-success me-2" disabled>
+                En cours d'analyse. Modification impossible.
+              </a>
+            {% elif correspondant.analyse and request.user.is_staff %}
+              <span class="custom-text-light text-hint me-2">
+                Analyse démarrée le {{ correspondant.analyse.created_at }} par {{ correspondant.analyse.created_by }}
+              </span>
+              {% if not correspondant.analyse.is_locked %}
+                <a href="{% url 'dashboard:correspondant:analyse' pk=correspondant.id %}" 
+                  class="btn btn-secondary me-2" onclick="openLoader()">
+                  Poursuivre l'analyse
+                </a>
+              {% endif %}
+              
             {% endif %}
+
+            <button class="btn btn-light me-2 mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+              Afficher l'historique
+            </button>
+            <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+              Commentaires
+            </button>
+
             {% comment %} <form method="POST" style="display: inline;">
               {% csrf_token %}
               <button class="btn btn-danger me-2">Désactiver</button>
@@ -71,6 +104,21 @@
             Correspondant
           </div>
           <div class="card-body">
+            {% if correspondant.is_personne_morale %}
+            <p>
+              <i class="bi bi-building fw-bold custom-text-light x-large">
+              </i>
+              <a href="">
+                <strong>{{ correspondant.cabinet }}</strong>
+              </a>
+              <ul class="list-group list-group-flush dpo-infos-list">
+                <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ correspondant.type_dpo }}</strong> </li>
+                <li class="list-group-item"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
+                <li class="list-group-item" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.cabinet.telephone }} </li>
+                <li class="list-group-item"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.cabinet.email_contact }} </li>
+              </ul>
+            </p>
+            {% else %}
             <p>
               <i class="bi bi-person-circle fw-bold custom-text-light x-large">
               </i>
@@ -78,11 +126,14 @@
                 <strong>{{ correspondant.user }}</strong>
               </a>
               <ul class="list-group list-group-flush dpo-infos-list">
+                <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ correspondant.type_dpo }}</strong> </li>
                 <li class="list-group-item"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
                 <li class="list-group-item" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.user.telephone }} </li>
                 <li class="list-group-item"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.user.email }} </li>
               </ul>
             </p>
+            {% endif %}
+            
           </div>
         </div>
 
@@ -93,7 +144,7 @@
           <div class="card-body">
             {% with correspondant.organisation as org %}
               <p>
-                <i class="bi bi-building fw-bold text-secondary x-large">
+                <i class="bi bi-building fw-bold custom-text-light x-large">
                 </i>
                 <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
                   <strong>{{ org }}</strong>
@@ -120,14 +171,27 @@
             Justificatifs
           </div>
           <div class="card-body">
-            <ul class="list-group list-group-flush">
-              {% for file_field in correspondant|get_file_fields %}
-                <li class="list-group-item">
-                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                    {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
-                </li>
-              {% endfor %}
-            </ul>
+            {% if correspondant.is_personne_morale %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields_include:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+
+            {% else %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            
           </div>
         </div>
       </div>
@@ -141,5 +205,15 @@
   
   {% comment %} <div class="col-3"></div> {% endcomment %}
 </div>
-  
+
+{% for comment in commentaires %}
+<p class="bizzz">{{ comment }}</p>
+{% endfor %}
+
+{% block commentaires %}
+  {% include "./commentaires_demande.html" with demande=correspondant %}
+{% endblock %}
+
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+
 {% endblock content %}

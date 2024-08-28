@@ -1,0 +1,105 @@
+{% extends 'dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load compress %}
+{% load static %}
+
+{% block app_styles %}
+  {% compress css %}
+    <link type="text/x-scss" href="{% static 'forms.scss' %}" rel="stylesheet" media="screen">
+    <link type="text/x-scss" href="{% static 'demande_auto/styles.scss' %}" rel="stylesheet" media="screen">
+  {% endcompress %}
+{% endblock %}
+
+{% block custom_scripts %}
+  <script src="{% static 'jquery-steps/jquery.steps.min.js' %}"></script>
+  
+  <script>
+    $(document).ready(function(){
+      $('#div_id_type_demande').toggle(false);
+      $('#div_id_type_demande').height(0);      
+    });
+
+    function changeType(value){
+      $('.type-demande.selected').removeClass('selected');
+      $('.type-demande-resume.show').removeClass('show');
+
+      $('#id_type_demande').val(value);
+      $('#type-demande-' + value).addClass('selected');
+
+      $('#type-demande-resume' + value).addClass('show');
+    }
+  </script>
+{% endblock %}
+
+
+{% block content %}
+
+  
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Avant de commencer</h3>
+          <div class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
+            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+             non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br><br>
+             <strong>NB : </strong>Vous ne pourrez pas modifier le type de demande une fois la demande créée.
+             En cas de besoin d-vous devrez supprimer la demande en cours et créer une nouvelle demande
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-5 card-title">Initialisation de la demande</h3>
+          <div class="card-text">
+            <p class="mt-3 mb-1">1. Sélectionner le type de demande d'autorisation : </p>
+            <div class="container types-demandes">
+              <div class="row mb-2">
+                {% for type_demande in types_demandes %}
+                  <div class="col type-demande" id="type-demande-{{type_demande.id}}" onclick="changeType({{type_demande.id}})">
+                    
+                    <div class="inner-col">
+                      {{type_demande}}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <div class="row mb-4">
+                {% for type_demande in types_demandes %}
+                  <div id="type-demande-resume{{type_demande.id}}" class="card type-demande-resume">
+                    {{ type_demande.resume }}
+                  </div>
+                {% endfor %}
+              </div>
+          </div>
+            
+
+            <form method="post" id="demande-form-start" onsubmit="openLoader()">
+              {% csrf_token %}
+              {{ form | crispy }}
+              <button id="btn-submit" name="submit" class="btn btn-primary py-2" type="submit">Enregistrer</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+{% endblock content %}
+
+

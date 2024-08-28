@@ -1,0 +1,66 @@
+.nav .nav-item button.active {
+  background-color: transparent;
+  color: var(--bs-primary) !important;
+}
+
+.nav .nav-item button.invalid {
+  color: var(--bs-danger) !important;
+}
+
+.nav .nav-item button.valid {
+  color: var(--bs-success) !important;
+}
+
+.nav .nav-item button.active::after {
+  content: "";
+  border-right: 4px solid var(--bs-primary);
+  height: 100%;
+  position: absolute;
+  right: -1px;
+  top: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.nav .nav-item button.active.invalid::after {
+  content: "";
+  border-right: 4px solid var(--bs-danger);
+  height: 100%;
+  position: absolute;
+  right: -1px;
+  top: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.nav .nav-item button.invalid::before {
+  content: "\F622";
+  font-family: "bootstrap-icons";
+  color: var(--bs-danger) !important;
+  height: 100%;
+  position: absolute;
+  left: -4px;
+  top: 8px;
+}
+
+.nav .nav-item button.active.valid::after {
+  content: "";
+  border-right: 4px solid var(--bs-success);
+  height: 100%;
+  position: absolute;
+  right: -1px;
+  top: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.nav .nav-item button.valid::before {
+  content: "\F26A";
+  font-family: "bootstrap-icons";
+  color: var(--bs-success) !important;
+  height: 100%;
+  position: absolute;
+  left: -4px;
+  top: 8px;
+}
+
+#tab-panel {
+  width: 800px;
+}

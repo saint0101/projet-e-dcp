@@ -16,7 +16,8 @@
               <thead>
                 <tr>
                   <th scope="col">Organisation</th>
-                  <th scope="col">Nom du Correspondant</th>
+                  <th scope="col">Correspondant</th>
+                  <th scope="col">Type</th>
                   <th scope="col">Adresse email</th>
                   <th scope="col">Téléphone</th>
                   <th scope="col">Date de désignation</th>
@@ -35,11 +36,24 @@
                     </td>
                     <td> 
                       <a href="{% url 'dashboard:correspondant:detail' pk=correspondant.id %}">
-                      {{ correspondant.user }} 
+                      {{ correspondant }} 
                       </a>
-                    </td> 
-                    <td> {{ correspondant.user.email }} </td>
-                    <td> {{ correspondant.user.telephone }} </td>
+                    </td>
+                    <td> {{ correspondant.type_dpo }} </td> 
+                    <td> 
+                      {% if correspondant.is_personne_morale %}
+                        {{ correspondantcabinet.email_contact}} 
+                      {% else %}
+                        {{ correspondant.user.email  }} 
+                      {% endif %}
+                    </td>
+                    <td> 
+                      {% if correspondant.is_personne_morale %}
+                        {{ correspondant.cabinet.telephone }} 
+                      {% else %}
+                        {{ correspondant.user.telephone }} 
+                      {% endif %}
+                    </td>
                     <td> {{ correspondant.created_at }} </td>
                     <td> 
                       {% if correspondant.is_active %}

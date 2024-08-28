@@ -1,10 +1,27 @@
-{% extends 'demande_auto/base.html' %}
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
 
 
 {% block content %}
 
-        <h1> Bienvenue sur la page d'accueil de l'application des demandes autorisations </h1>
+  
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Mes demandes </h3>
+          {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+          <div class="card-text">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 
+  
 {% endblock content %}
 
 

@@ -1,0 +1,358 @@
+{% extends 'dashboard/base/master.html' %}
+{% load static %}
+{% load custom_tags_filters %}
+{% load crispy_forms_tags %}
+
+{% block custom_scripts %}
+  {% comment %} 
+    Script : désactivation des champs du formulaire pour empêcher la modification
+  {% endcomment %}
+  <script>
+    $(document).ready(function (){
+      $('#form-dpo input').attr('disabled', true);
+      $('#form-dpo textarea').attr('disabled', true);
+      $('#form-dpo select').attr('disabled', true);
+      $('span.asteriskField').toggle(false);
+
+      var show_comments = $('#action-parameter').val();
+      console.log(show_comments);
+      if (show_comments == 'True'){ // valeur python
+        $('#offcanvasCommentaires').addClass('show');
+      } 
+    });
+
+    function goToAnalyse(){
+      $('#accordion-btn-analyse').removeClass('collapsed')
+      $('#collapseAnalyse').addClass('show');
+      
+      $('#accordion-btn-reponse').addClass('collapsed')
+      $('#collapseReponse').removeClass('show');
+    }
+
+    function goToReponse(){
+      $('#accordion-btn-reponse').removeClass('collapsed')
+      $('#collapseReponse').addClass('show');
+      
+      $('#accordion-btn-analyse').addClass('collapsed')
+      $('#collapseAnalyse').removeClass('show');
+    }
+  </script>
+{% endblock %}
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col-12">
+    <h3 class=" mb-3 custom-text-light fw-bold">Analyse du dossier de désignation de Correspondant</h3>
+    
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card custom-card">
+          <div class="card-body">
+            <div>
+              <span class="badge text-bg-light custom-text-light me-2 mb-2">
+                Statut de l'analyse : {{ analyse.status }}
+              </span>
+              <span class="badge text-bg-light custom-text-light me-2 mb-2">
+                Traité par : {{ analyse.created_by }}
+              </span>
+  
+              <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+                Afficher l'historique
+              </button>
+              <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+                Commentaires
+              </button>
+            </div>
+
+            {% if analyse and can_validate and analyse.niv_validation > 0%}
+              <div id="actions-validator">
+                <form method="post" action="{% url 'dashboard:demande:validation' pk=correspondant.pk %}" onsubmit="openLoader()">
+                  <div class="row">
+                    <div class="col-7">
+                      {% csrf_token %}
+                      {{ form_validation|crispy }}
+                    </div>
+                    <div class="col-5">
+                      <button type="submit" name="submit_form_accept" class="btn btn-info align-middle mt-4 mb-2">
+                        {% if can_terminate %}
+                          Valider et terminer
+                        {% else %}
+                          Valider
+                        {% endif %}
+                      </button><br>
+                      <button type="submit" name="submit_form_reject" class="btn btn-danger align-middle">Rejeter</button>
+                    </div>
+                  </div>
+                  
+                </form>
+                
+              </div>
+            {% elif not analyse or not can_validate or can_validate and analyse.niv_validation == 0 %}
+              <div id="actions-agent" style="width: 100%;">
+                <a href="#accordion-analyse" class="btn btn-secondary me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}" onclick="goToAnalyse()">
+                  Enregistrer l'analyse 
+                </a>
+              
+                <a href="#accordion-reponse" class="btn btn-primary me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="goToReponse()">
+                  Générer le projet de réponse
+                </a>
+
+                <a href="{% url 'dashboard:correspondant:submit' pk=correspondant.id %}" 
+                  class="btn btn-info me-2 btn-sm {{ correspondant.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                  Soumettre à validation
+                </a>
+              </div>
+            {% endif %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5" style="max-height: 1000px; overflow-y: scroll;">
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Organisation
+          </div>
+          <div class="card-body small-padding">
+            {% with correspondant.organisation as org %}
+              <p>
+                <i class="bi bi-building fw-bold text-secondary x-large">
+                </i>
+                <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
+                  <strong>{{ org }}</strong>
+                </a>
+                {% comment %} <i class="bi bi-telephone text-secondary"></i> {{ org.telephone }} <br>
+                <i class="bi bi-envelope-at text-secondary"></i> {{ org.email_contact }} <br> {% endcomment %}
+                <ul class="list-group list-group-flush dpo-infos-list">
+                  <li class="list-group-item custom-text-light" > <i class="bi bi-telephone custom-text-light"></i> &emsp; {{ org.telephone }} </li>
+                  <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light"></i> &emsp; {{ org.email_contact }} </li>
+                  <li class="list-group-item custom-text-light"> <i class="bi bi-geo-alt custom-text-light"></i> &emsp; {{ org.ville }} </li>
+                </ul>
+              </p>
+            {% endwith %}
+      
+          </div>
+        </div>
+        
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Correspondant
+          </div>
+          <div class="card-body small-padding">
+            <p>
+              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
+              </i>
+              <a href="">
+                <strong>{{ correspondant }}</strong>
+              </a>
+              <ul class="list-group list-group-flush dpo-infos-list mb-3">
+                <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ correspondant.type_dpo }}</strong> </li>
+                <li class="list-group-item custom-text-light"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ correspondant.created_at }} </li>
+                <li class="list-group-item custom-text-light" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ correspondant.user.telephone }} </li>
+                <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ correspondant.user.email }} </li>
+              </ul>
+              <form method="post" id="form-dpo">
+                {% csrf_token %}
+                {{ form_dpo|crispy }}
+              </form>
+            </p>
+          </div>
+        </div>
+
+        <div class="card custom-card mb-3">
+          <div class="card-header custom-text-light">
+            Justificatifs
+          </div>
+          <div class="card-body small-padding">
+            {% if correspondant.is_personne_morale %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields_include:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+
+            {% else %}
+              <ul class="list-group list-group-flush">
+                {% for file_field in correspondant|get_file_fields:'file_contrat' %}
+                  <li class="list-group-item">
+                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                      {{ correspondant|attr:file_field.name|get_fileinfos|safe }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    
+      <div class="col-7">
+        <div class="card custom-card">
+          <div class="accordion" id="accordionAnalyse">
+            {% if validations %}
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidations" aria-expanded="true" aria-controls="collapseAnalyse">
+                    Validations 
+                  </button>
+                </h2>
+                <div id="collapseValidations" class="accordion-collapse collapse show " data-bs-parent="#accordionAnalyse">
+                  <div class="accordion-body">
+                    <ul class="list-group list-group-flush">
+                      {% for validation in validations %}
+                        <li class="list-group-item">
+                          {% if validation.avis %}
+                            <i class="bi bi-check-circle-fill text-success"></i> <span class="text-success fw-bold text-hint">OK</span>
+                          {% else %}
+                            <i class="bi bi-x-circle-fill text-danger"></i> <span class="text-danger fw-bold text-hint">Non OK</span>
+                          {% endif %}
+                          &emsp; <span class="custom-text-light text-hint">{{ validation.created_at }} - {{ validation.created_by }}</span><br>
+                          {{ validation.observations }}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+            <div class="accordion-item" id="accordion-analyse">
+              <h2 class="accordion-header">
+                <button id="accordion-btn-analyse" class="accordion-button {{projet_reponse_pdf|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnalyse" aria-expanded="true" aria-controls="collapseAnalyse">
+                  Analyse de la demande
+                </button>
+              </h2>
+              <div id="collapseAnalyse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:' , show'}} " data-bs-parent="#accordionAnalyse">
+                <div class="accordion-body">
+                  <form method="post" onsubmit="openLoader()">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-primary" name="analyse_form_submit" {{ correspondant.analyse.is_locked|yesno:'disabled, ' }} type="submit">Enregistrer</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item" id="accordion-reponse">
+              <h2 class="accordion-header">
+                <button id="accordion-btn-reponse" class="accordion-button {{projet_reponse_pdf|yesno:' , collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReponse" aria-expanded="false" aria-controls="collapseReponse">
+                  Projet de réponse
+                </button>
+              </h2>
+              <div id="collapseReponse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:'show, '}}" data-bs-parent="#accordionAnalyse">
+                <div class="accordion-body">
+                  <form method="post" action="{% url 'dashboard:demande:response_create' pk=correspondant.id template='correspondant_approbation' %}">
+                    {% csrf_token %}
+                    {{ form_projet_reponse|crispy }}
+                    <button type="submit" class="btn btn-primary" {{ correspondant.analyse.is_locked|yesno:'disabled, ' }}>Générer le projet de réponse</button>
+                  </form>
+                  {% if correspondant.analyse.projet_reponse %}
+                    <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
+                    <div>
+                      {% comment %} <embed id="embedded_pdf" src="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="600" height="800"> {% endcomment %}
+                      <object id="embedded_pdf" data="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="100%" height="700"></object>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {% comment %} {% if correspondant.analyse.projet_reponse %}
+          <div class="card custom-card mb-3">
+            <div class="card-header custom-text-light">
+              Projet de réponse
+            </div>
+            <div class="card-body small-padding">
+              <p>{{ correspondant.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
+              <div>
+                <object id="embedded_pdf" data="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="100%" height="700"></object>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="card custom-card">
+          <div class="card-header custom-text-light">
+            Analyse
+          </div>
+          <div class="card-body small-padding">
+            <form method="post" onsubmit="openLoader()">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
+            </form>
+          </div>
+        </div> {% endcomment %}
+
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+
+{% block commentaires %}
+  {% include "./commentaires_demande.html" with demande=correspondant %}
+{% endblock %}
+
+{% comment %} <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title custom-text-light" id="offcanvasLabel">Commentaires sur la demande</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form method="post" onsubmit="openLoader()" action="{% url 'dashboard:demande:add_commentaire' pk=correspondant.id%}">
+      {% csrf_token %}
+      {{ form_comment|crispy}}
+      <button type="submit" class="btn btn-primary me-1 mb-2" name="form_comment_submit">Envoyer</button>
+      {% if demande.status.label == 'attente_complement' %}
+        <button type="submit" class="btn btn-secondary mb-2" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+      {% else %}
+        <button type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
+      {% endif %}
+    </form>
+    
+    <div class="col-12 col-list-commentaires py-3">
+      {% for commentaire in commentaires %}
+        {% if commentaire.auteur == request.user %}
+          <div class="message-bubble ">
+        {% else %}
+          <div class="message-bubble message-bubble-self">
+        {% endif %}
+          <span class="message-bubble-title text-hint custom-text-light">
+            <i class="bi bi-person"></i>
+            {{ commentaire.auteur }} - {{ commentaire.created_at }}
+          </span><br>
+          <span class=" message-bubble-body text-hint fw-bold">
+            {{ commentaire.objet }}
+          </span>
+          <br>
+          <span class=" message-bubble-body">
+            {{ commentaire.message }}
+          </span>
+        </div>
+      {% empty%}
+        Aucun commentaire pour l'instant.
+      {% endfor %}
+    </div>
+  </div>
+</div> {% endcomment %}
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+{% endblock content %}
+
+

@@ -1,0 +1,120 @@
+{% extends 'dashboard/base/master.html' %}
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load compress %}
+{% load static %}
+
+{% block app_styles %}
+  {% compress css %}
+    <link type="text/x-scss" href="{% static 'forms.scss' %}" rel="stylesheet" media="screen">
+    <link type="text/x-scss" href="{% static 'demande_auto/styles.scss' %}" rel="stylesheet" media="screen">
+  {% endcompress %}
+{% endblock %}
+
+{% block custom_scripts %}
+  {% comment %} 
+    Le premier script (jquery.steps.min.js) permet d'ajouter les fonctionnalités de formulaire multisteps.
+    Le second gère l'affichage des sous-finalités en fonction de la finalité sélectionnées
+  {% endcomment %}
+  <script src="{% static 'jquery-steps/jquery.steps.min.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      // const $selectFinalite = $('#id_finalite');
+      // console.log('starting script', $selectFinalite);
+      $("#multisteps-form").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        autoFocus: true
+      });
+
+      const selectFinalite = $('#id_finalite');
+      const inputName = 'sous_finalites';
+       
+      $('input[name="' + inputName + '"]').parent('div').toggle(false);
+      // $('#id_sous_finalites option').toggle(false);
+      //console.log('inputs ', 'input[name="' + inputName + '"]');
+
+      selectFinalite.on('change', function(){
+        const idFinalite = selectFinalite.val();
+        console.log('select changed value : ', idFinalite);
+
+        $.ajax({
+          url: 'sous-finalites',
+          data: { id_finalite: idFinalite },
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          success: function(data) {
+            console.log('response : ', data)
+            showSousFinalite(data);
+          }
+        });
+      });
+
+      function showSousFinalite(data){
+        $('input[name="' + inputName + '"]').parent('div').toggle(false);
+        // $('#id_sous_finalites option').toggle(false);
+        data.sousFinalites.forEach(sousFinalite => {
+          $('input[name="' + inputName + '"][value="' + sousFinalite.id + '"]').parent('div').toggle(true);
+          // $('#id_sous_finalites option[value="' + sousFinalite.id + '"]').toggle(true)
+        })
+      }
+    });
+    {% comment %} document.addEventListener("DOMContentLoaded", function(){
+      const fieldFinalite = document.getElementById('id_finalite')
+      fieldFinalite.addEventListener('change', function(){
+        console.log('change value : ', fieldFinalite.value);
+      });
+    }); {% endcomment %}
+  </script>
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div id="card-historique" class="card custom-card">
+        <div class="card-body">
+          <h3 class="text-hint mb-3 card-title">Historique</h3>
+            <ul class="list-group">
+            {% for elmt in historique %}
+              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
+              <li class="list-group-item">
+                <span class="text-hint custom-text-light">{{ elmt.created_at }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
+              </li>
+            {% endfor %}
+            </ul>
+          <div class="card-text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row mx-3 my-4">
+    <div class="col">
+      <div class="card p-4 custom-card">
+        
+        <div class="card-body">
+          <h3 class="mb-3 card-title">Edition de la demande d'autorisation</h3>
+          <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
+          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }}<br>
+          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong><br>
+          <div class="card-text mt-3">
+            <form method="post" id="update-demande-form" onsubmit="openLoader()">
+              {% csrf_token %}
+              {{ form }}
+              <button id="btn-submit" name="submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
+              <a href="{% url 'dashboard:demande_auto:detail' pk=demande.id %}" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  
+{% endblock content %}
+
+

@@ -1,8 +1,13 @@
+import json
 from django import forms
 # from .models import Correspondant
 # from connexion.forms import UserRegistrationForm
 # from base_edcp.models import User, Enregistrement
 from base_edcp import validators
+from correspondant.models import Correspondant, DesignationDpoMoral, MoyensDPO
+from demande.models import CategorieDemande, CritereEvaluation, ReponseDemande
+from demande_auto.models import EchelleNotation
+
 
 
 class UserIsDPOForm(forms.Form):
@@ -41,8 +46,6 @@ class DPOFormPage1(forms.Form):
   telephone = forms.CharField(label='Téléphone', max_length=100, strip=True)
   fonction = forms.CharField(label='Fonction', required=False)
 
-
-
   """TO DELETE"""
   """ def __init__(self, *args, **kwargs):
     self.user = kwargs.pop('user', None)
@@ -50,6 +53,114 @@ class DPOFormPage1(forms.Form):
     if self.user:
       # Filter the tags queryset based on the current user
       self.fields['organisation'].queryset = Enregistrement.objects.filter(user=self.user).filter(has_dpo=False) """
+
+
+
+class DPOCabinetForm(forms.ModelForm):
+  """ Formulaire de désignation de DPO personne morale pour une organisation """
+  class Meta:
+    model = Correspondant
+    fields = ['cabinet', 'commentaires', 'file_contrat']
+
+
+class DPOCabinetFormDisabled(forms.ModelForm):
+  """ Formulaire de DPO personne morale. Utilisé uniquement pour l'affichage """
+  class Meta:
+    model = Correspondant
+    fields = ['commentaires',]
+
+
+def generate_analyse_form(categorie_demande, analyse=None):
+  AVIS_CHOICES = [('', '---------'),] + [(False, 'Refuser'), (True, 'Autoriser')]
+  observations = forms.CharField(
+    label='Observations', 
+    required=False,
+    widget=forms.Textarea(attrs={'rows': 4}),
+  )
+  prescriptions = forms.CharField(
+    label='Prescriptions',
+    required=False,
+    widget=forms.Textarea(attrs={'rows': 4}),
+  )
+  avis_juridique = forms.BooleanField(
+    label='Avis juridique',
+    required=False,
+    widget=forms.Select(choices=AVIS_CHOICES)
+  )
+  
+  class AnalyseDPOForm(forms.Form):
+    """ Formulaire d'analyse d'une désignation de DPO """
+    pass
+  
+  critere_fields = CritereEvaluation.objects.filter(categorie_demande=categorie_demande)
+  NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+
+  deserialized_data = {}
+  if analyse and analyse.evaluation :
+    deserialized_data = json.loads(analyse.evaluation)
+
+  for field in critere_fields:
+    if field.label in deserialized_data:
+      form_field = forms.CharField(
+        label=field.field_name,
+        required=field.field_required,
+        widget=forms.Select(choices=NOTATION_CHOICES),
+        initial=deserialized_data[field.label],
+      )
+    else:
+      form_field = forms.CharField(
+        label=field.field_name,
+        required=field.field_required,
+        widget=forms.Select(choices=NOTATION_CHOICES),
+      )
+    AnalyseDPOForm.base_fields[field.label] = form_field
+  
+  AnalyseDPOForm.base_fields['observations'] = observations
+  AnalyseDPOForm.base_fields['prescriptions'] = prescriptions
+  AnalyseDPOForm.base_fields['avis_juridique'] = avis_juridique
+  
+  return AnalyseDPOForm
+  
+
+class DPOUpdateForm(forms.ModelForm):
+  moyens_dpo = forms.ModelMultipleChoiceField(
+    label='Moyens matériels et humains', 
+    queryset=MoyensDPO.objects.all(), 
+    help_text='Moyens mis à la disposition du Correspondant.',
+    required=False,
+    widget = forms.CheckboxSelectMultiple
+  )
+
+  class Meta:
+    model = Correspondant
+    fields = [
+        'is_active',
+        'qualifications', 
+        'exercice_activite', 
+        'moyens_dpo', 
+        'experiences',
+        'file_lettre_designation',
+        'file_lettre_acceptation',
+        'file_attestation_travail',
+        'file_casier_judiciaire',
+        'file_certificat_nationalite',
+        'file_cv',
+    ]
+
+
+class DPODPOUpdateFormDisabled(DPOUpdateForm):
+  """ Formulaire de DPO personne physique. Utilisé uniquement pour l'affichage """
+  class Meta:
+    model = Correspondant
+    fields = [
+        'is_active',
+        'qualifications', 
+        'exercice_activite', 
+        'moyens_dpo', 
+        'experiences',
+    ]
+
+
 
 
 """ class DPOFormPage2(forms.Form):

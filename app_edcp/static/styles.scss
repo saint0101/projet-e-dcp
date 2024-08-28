@@ -35,6 +35,10 @@
   background-color: $custom-light !important;
 }
 
+.text-hint{
+  font-size: 0.8rem;
+}
+
 /********************** LINKS **********************/
 
 a{
@@ -115,6 +119,14 @@ table.table-dark{
 
 .custom-card .card-body{
   padding: 2rem;
+}
+
+.custom-card .card-body.small-padding{
+  padding: 1.4rem;
+}
+
+.custom-card .card-body.no{
+  padding: 0rem;
 }
 
 .custom-card .card-title{
