@@ -5,7 +5,8 @@ app_edcp/staticfiles/CACHE
 app_edcp/uploads
 
 # Fichiers de migrations
-migrations/
+
+**/migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -52,9 +53,6 @@ drafts.txt
 
 # Ignorer les scripts d'entrypoint
 entrypoint.sh
-
-# Ignorer les scripts de deploiment
-depoimentedcp.sh
 
 # Ignorer les fichiers de requirements de développement
 requirements.dev.txt

@@ -82,7 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         Vous pouvez à tous moments exercer vos droits exercer à l'adresse ..... ''')
 
     # Relation ManyToMany pour gérer les groupes de l'utilisateur
-    groups = models.ManyToManyField(
+    """ groups = models.ManyToManyField(
         Group,
         related_name="base_edcp_user_set",  # Nom unique pour la relation inverse avec 'groups'
         blank=True,
@@ -97,7 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         help_text="Permissions spécifiques pour cet utilisateur.",
         verbose_name="Permissions des utilisateurs",
-    )
+    )  """
 
     # extenssier la gestionnaire d'utilisateur
     objects = CustomUserManager()
