@@ -63,7 +63,7 @@
                       <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-secondary">Poursuivre</a> 
                     {% elif demande.analyse and demande.analyse.niv_validation > 0 %}
                       {% if user_niv_validation >= demande.analyse.niv_validation %}
-                        <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success" >Valider</a> 
+                        <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success {{ demande.analyse.is_closed|yesno:"disabled, " }}" >Valider</a> 
                       {% else %}
                         <button class="btn btn-light">Verrouillé</a> 
                       {% endif %}

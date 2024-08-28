@@ -100,25 +100,26 @@ def send_email_with_attachment(request, mail_content, recipient_list, context, s
   html_message = render_to_string(mail_content['template'], context) # contenu du mail au format HTML
   #text_message = strip_tags(html_message) # contenu du mail au format texte
   # print('EMAIL message : ', text_message)
-  fichier = context['demande'].analyse.projet_reponse.fichier_reponse
-  print('attachment: ', fichier)
+  fichier = context['demande'].analyse.projet_reponse.fichier_reponse # récupération du fichier à joindre
+
+  # création d'un objet email
   email = EmailMessage(
-    subject=mail_content['subject'], 
-    body=html_message,
-    from_email=email_from, 
-    to=recipient_list, 
-    # fail_silently=False # indique si l'échec de l'envoi doit générer une erreur
+    subject=mail_content['subject'], # objet
+    body=html_message, # corps du mail
+    from_email=email_from, # adresse de l'expéditeur
+    to=recipient_list,  # liste des destinataires
   )
   email.content_subtype = 'html' # Set the email content type to HTML
   
+  # si le fichier existe bien
   if fichier:
-    # tentative d'envoi du mail
-    print('sending email')
-    try:
-      mime_type, _ = mimetypes.guess_type(fichier.name)
-      email.attach(fichier.name, fichier.read(), mime_type)
-      email.send(fail_silently=False)
+    
+    try: # tentative d'envoi du mail
+      mime_type, _ = mimetypes.guess_type(fichier.name) # obtention du type MIME du fichier
+      email.attach(fichier.name, fichier.read(), mime_type) # attachement du fichier
+      email.send(fail_silently=False) # fail_silently=False # indique si l'échec de l'envoi doit générer une erreur
       print('EMAIL envoyé')
+      
       if show_message: # si l'affichage d'alerte est activé
         messages.success(request, 'Réponse envoyée avec success.')
 
