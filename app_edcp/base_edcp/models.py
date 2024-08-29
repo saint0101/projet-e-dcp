@@ -126,7 +126,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """Retourne une représentation sous forme de chaîne de l'utilisateur"""
-        return f"{self.nom} ({self.prenoms})"
+        return f"{self.nom} {self.prenoms}"
 
 
 class GroupExtension(models.Model):

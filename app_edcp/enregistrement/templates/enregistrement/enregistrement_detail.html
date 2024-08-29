@@ -57,14 +57,26 @@
         </div>
         <div class="card-body">
           {% comment %} {% if enregistrement.typeclient %}{% endif %} {% endcomment %}
-          <ul class="list-group list-group-flush">
-            {% for file_field in enregistrement|get_file_fields %}
-              <li class="list-group-item">
-                <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                  {{ enregistrement|attr:file_field.name|get_fileinfos|safe }}
-              </li>
-            {% endfor %}
-          </ul>
+          {% if enregistrement.typeclient.label == 'Personne physique' %}
+            <ul class="list-group list-group-flush">
+              {% for file_field in enregistrement|get_file_fields:'file_rccm,file_mandat' %}
+                <li class="list-group-item">
+                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                    {{ enregistrement|attr:file_field.name|get_fileinfos|safe }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <ul class="list-group list-group-flush">
+              {% for file_field in enregistrement|get_file_fields:'file_piece' %}
+                <li class="list-group-item">
+                  <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                    {{ enregistrement|attr:file_field.name|get_fileinfos|safe }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          
         </div>
       </div>
     </div>
