@@ -6,7 +6,11 @@ app_edcp/uploads
 
 # Fichiers de migrations
 
-**/migrations/
+# Ignore all files in migrations folders
+**/migrations/*.py
+
+# But keep the __init__.py file
+!**/migrations/__init__.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
