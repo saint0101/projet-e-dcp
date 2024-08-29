@@ -10,6 +10,12 @@ from correspondant.models import Correspondant
 # Create your views here.
 
 
+def page_en_construction(request):
+  """ Vue page en construction """
+  return render(request, 'dashboard/construction.html')
+
+
+
 @login_required(login_url=reverse_lazy('connexion:login'))
 def index(request):
   """
