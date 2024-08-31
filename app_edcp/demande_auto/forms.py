@@ -2,8 +2,8 @@ from django import forms
 # Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
 from base_edcp.models import Enregistrement
 from demande.models import Status, Commentaire, AnalyseDemande
-from demande_auto.forms_structures import *
-from demande_auto.models import *
+from demande_auto.forms_structures import FORM_STRUCTURE_BIOMETRIE, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_VIDEO, get_form_fields
+from demande_auto.models import TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, DemandeAuto, DemandeAutoTraitement, DemandeAutoBiometrie, DemandeAutoTransfert, DemandeAutoVideo
 
 
 class ChangeStatusForm(forms.Form):
@@ -148,6 +148,13 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
 
 
+class TraitementFormDisabled(UpdateDemandeTraitementForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de traitement """
+  class Meta:
+    model = DemandeAutoTraitement
+    fields = get_form_fields(FORM_STRUCTURE_TRAITEMENT, hide_files=True)
+
+
 class UpdateDemandeTransfertForm(forms.ModelForm):
   """ Formulaire de mise à jour d'une demande d'autorisation de transfert """
   label_type = 'transfert'
@@ -179,6 +186,13 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
     list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
     self.fields['finalite'].queryset = list_finalites
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+
+
+class TransfertFormDisabled(UpdateDemandeTransfertForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de transfert """
+  class Meta:
+    model = DemandeAutoTransfert
+    fields = get_form_fields(FORM_STRUCTURE_TRANSFERT, hide_files=True)
 
 
 class UpdateDemandeVideoForm(forms.ModelForm):
@@ -213,6 +227,13 @@ class UpdateDemandeVideoForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
 
 
+class VideoFormDisabled(UpdateDemandeVideoForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de vidéosurveillance """
+  class Meta:
+    model = DemandeAutoVideo
+    fields = get_form_fields(FORM_STRUCTURE_VIDEO, hide_files=True)
+
+
 class UpdateDemandeBioForm(forms.ModelForm):
   """ Formulaire de mise à jour d'une demande d'autorisation de biométrie """
   label_type = 'biometrie'
@@ -245,3 +266,12 @@ class UpdateDemandeBioForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
 
     # print('user : ', request.user)
+
+
+
+class BiometrieFormDisabled(UpdateDemandeBioForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de biométrie """
+  class Meta:
+    model = DemandeAutoBiometrie
+    fields = get_form_fields(FORM_STRUCTURE_BIOMETRIE, hide_files=True)
+

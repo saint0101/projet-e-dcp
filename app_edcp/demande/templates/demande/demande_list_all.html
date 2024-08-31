@@ -13,7 +13,7 @@
         {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
         <h3 class="card-title mb-5 mt-3">Toutes les demandes</h3>
         <div class="card-text">
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover table-sm table-responsive-md align-middle">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -32,40 +32,39 @@
                 <tr>
                   {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
                   {% comment %} <td> {{ demande.id|stringformat:"08d" }} </td> {% endcomment %}
-                  <td> <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
+                  <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
                   <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}"> {{ demande.organisation }} </a> </td>
                   {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
                   <td> {{ demande.created_at }} </td>
                   <td> {{ demande.categorie }} </td>
+                  <td> {{ demande.status|get_status_color|safe }} </td>
                   <td> 
-                    {% if not demande.analyse %}
-                    <span class="badge rounded-pill text-bg-danger text-light fw-normal">
+                    {% if demande.analyse %}
+                      <span class="text-hint fw-bold">{{ demande.analyse.status }}</span> 
+                    {% else %}
+                      <span class="text-hint custom-text-light">Non démarrée</span>
                     {% endif %}
-                    
-                    {% if demande.status.label == 'demande_attente_complement' %}
-                      <span class="badge rounded-pill text-bg-primary text-light fw-normal">
-                    
-                    {% elif demande.status.label == 'analyse_en_cours' %}
-                      <span class="badge rounded-pill text-bg-warning text-light fw-normal">
-                    
-                    {% elif demande.status.label == 'traitement_termine' %}
-                      <span class="badge rounded-pill text-bg-success text-light fw-normal">
-                    {% endif %}
-                      {{ demande.status|truncatechars:30 }}
-                    </span>
-                </td>
-                  <td> {{ demande.analyse.status }} </td>
-                  <td> {{ demande.analyse.created_by }} </td>
+                  </td>
                   <td> 
+                    {% if demande.analyse.created_by  %}
+                    <span class="text-hint fw-bold">{{ demande.analyse.created_by }} </span>
+                    {% else %}
+                      <span class="text-hint custom-text-light">Non affectée</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center"> 
                     {% if not demande.analyse %}
-                      <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-info">Traiter</a>
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.pk action='analyse' %}" class="btn btn-info btn-sm">Traiter</a>
+                    
                     {% elif demande.analyse.niv_validation == 0 %}
-                      <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-secondary">Poursuivre</a> 
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.pk action='analyse' %}" class="btn btn-secondary btn-sm">Poursuivre</a> 
+                    
                     {% elif demande.analyse and demande.analyse.niv_validation > 0 %}
                       {% if user_niv_validation >= demande.analyse.niv_validation %}
-                        <a href="{% url demande|get_demande_url|add:'analyse' pk=demande.pk action='validate' %}" class="btn btn-success {{ demande.analyse.is_closed|yesno:"disabled, " }}" >Valider</a> 
+                        <a href="{% url 'dashboard:demande:analyse' pk=demande.pk action='validate' %}" class="btn btn-success btn-sm {{ demande.analyse.is_closed|yesno:"disabled, " }}" >Valider</a> 
+                      
                       {% else %}
-                        <button class="btn btn-light">Verrouillé</a> 
+                        <button class="btn btn-light btn-sm ">Verrouillé</a> 
                       {% endif %}
                     {% endif %}
                   </td>

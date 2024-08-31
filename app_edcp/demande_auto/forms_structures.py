@@ -72,8 +72,11 @@ FORM_STRUCTURE_BIOMETRIE = [
 ]
 
 
-def get_form_fields(form_structure):
+def get_form_fields(form_structure, hide_files=False):
   fields = []
   for elmt in form_structure:
+    if elmt['label'] == 'files' and hide_files:
+      continue
     fields += elmt['fields']
+
   return fields

@@ -44,8 +44,10 @@
 <div class="row mx-5 my-3">
   {% comment %}   <div class="col-3"></div> {% endcomment %}
   <div class="col-12">
-    <h3 class=" mb-3 custom-text-light fw-bold">Analyse de la demande</h3>
-    <h5> {{ demande }} </h5>
+    <h3 class=" mb-2 custom-text-light fw-bold">Analyse de la demande : {{ demande.categorie }}</h3>
+    <h6 class="custom-text-light fw-bold mb-3"> 
+      {{ demande }} <span>{{ demande.status|get_status_color|safe }}</span>
+    </h6>
     <div class="row mb-4">
       <div class="col">
         <div class="card custom-card">
@@ -95,7 +97,7 @@
                   Enregistrer l'analyse 
                 </a>
               
-                <a href="#accordion-reponse" class="btn btn-primary me-2 btn-sm {{ demande.analyse.is_locked|yesno:"disabled, " }}" onclick="goToReponse()">
+                <a href="#accordion-reponse" class="btn btn-success me-2 btn-sm {{ demande.analyse.is_locked|yesno:"disabled, " }}" onclick="goToReponse()">
                   Générer le projet de réponse
                 </a>
 
@@ -112,28 +114,13 @@
     </div>
 
     <div class="row">
-      <div class="col-5" style="max-height: 1000px; overflow-y: scroll;">
+      {% comment %} <div class="col-6" style="max-height: 1000px; overflow-y: scroll;">
         <div class="card custom-card mb-3">
           <div class="card-header custom-text-light">
             Organisation
           </div>
           <div class="card-body small-padding">
-            {% with demande.organisation as org %}
-              <p>
-                <i class="bi bi-building fw-bold text-secondary x-large">
-                </i>
-                <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
-                  <strong>{{ org }}</strong>
-                </a>
-                {% comment %} <i class="bi bi-telephone text-secondary"></i> {{ org.telephone }} <br>
-                <i class="bi bi-envelope-at text-secondary"></i> {{ org.email_contact }} <br> {% endcomment %}
-                <ul class="list-group list-group-flush dpo-infos-list">
-                  <li class="list-group-item custom-text-light" > <i class="bi bi-telephone custom-text-light"></i> &emsp; {{ org.telephone }} </li>
-                  <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light"></i> &emsp; {{ org.email_contact }} </li>
-                  <li class="list-group-item custom-text-light"> <i class="bi bi-geo-alt custom-text-light"></i> &emsp; {{ org.ville }} </li>
-                </ul>
-              </p>
-            {% endwith %}
+            
       
           </div>
         </div>
@@ -143,23 +130,7 @@
             Formulaire
           </div>
           <div class="card-body small-padding">
-            <p>
-              <i class="bi bi-person-circle fw-bold custom-text-light x-large">
-              </i>
-              <a href="">
-                <strong>{{ demande }}</strong>
-              </a>
-              <ul class="list-group list-group-flush dpo-infos-list mb-3">
-                <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ demande.type_dpo }}</strong> </li>
-                <li class="list-group-item custom-text-light"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ demande.created_at }} </li>
-                <li class="list-group-item custom-text-light" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ demande.user.telephone }} </li>
-                <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ demande.user.email }} </li>
-              </ul>
-              <form method="post" id="form-demande">
-                {% csrf_token %}
-                {{ form_demande|crispy }}
-              </form>
-            </p>
+            
           </div>
         </div>
 
@@ -168,31 +139,108 @@
             Justificatifs
           </div>
           <div class="card-body small-padding">
-            {% if demande.is_personne_morale %}
-              <ul class="list-group list-group-flush">
-                {% for file_field in demande|get_file_fields_include:'file_contrat' %}
-                  <li class="list-group-item">
-                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                      {{ demande|attr:file_field.name|get_fileinfos|safe }}
-                  </li>
-                {% endfor %}
-              </ul>
-
-            {% else %}
-              <ul class="list-group list-group-flush">
-                {% for file_field in demande|get_file_fields:'file_contrat' %}
-                  <li class="list-group-item">
-                    <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                      {{ demande|attr:file_field.name|get_fileinfos|safe }}
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
+            
           </div>
+        </div>
+      </div> {% endcomment %}
+      <div class="col-6">
+        <div class="accordion" id="accordionAnalyse">
+
+          <div class="accordion-item" id="accordionOrganisation">
+            <h2 class="accordion-header">
+              <button id="accordion-btn-analyse" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrganisation" aria-expanded="true" aria-controls="collapseOrganisation">
+                Organisation
+              </button>
+            </h2>
+            <div id="collapseOrganisation" class="accordion-collapse" data-bs-parent="#accordionOrganisation">
+              <div class="accordion-body">
+                {% with demande.organisation as org %}
+                  <p>
+                    <i class="bi bi-building fw-bold text-secondary x-large"></i>
+                    <a href="{% url 'dashboard:enregistrement:detail' pk=org.id %}">
+                      <strong>{{ org }}</strong>
+                    </a>
+                    {% comment %} <i class="bi bi-telephone text-secondary"></i> {{ org.telephone }} <br>
+                    <i class="bi bi-envelope-at text-secondary"></i> {{ org.email_contact }} <br> {% endcomment %}
+                    <ul class="list-group list-group-flush dpo-infos-list">
+                      <li class="list-group-item custom-text-light" > <i class="bi bi-telephone custom-text-light"></i> &emsp; {{ org.telephone }} </li>
+                      <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light"></i> &emsp; {{ org.email_contact }} </li>
+                      <li class="list-group-item custom-text-light"> <i class="bi bi-geo-alt custom-text-light"></i> &emsp; {{ org.ville }} </li>
+                    </ul>
+                  </p>
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        
+          <div class="accordion-item" id="accordionJustificatifs">
+            <h2 class="accordion-header">
+              <button id="accordion-btn-analyse" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseJustificatifs" aria-expanded="true" aria-controls="collapseJustificatifs">
+                Justificatifs
+              </button>
+            </h2>
+            <div id="collapseJustificatifs" class="accordion-collapse collapse" data-bs-parent="#accordionJustificatifs">
+              <div class="accordion-body">
+                {% if demande.is_personne_morale %}
+                  <ul class="list-group list-group-flush">
+                    {% for file_field in demande|get_file_fields_include:'file_contrat' %}
+                      <li class="list-group-item">
+                        <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                          {{ demande|attr:file_field.name|get_fileinfos|safe }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+        
+                {% else %}
+                  <ul class="list-group list-group-flush">
+                    {% for file_field in demande|get_file_fields:'file_contrat' %}
+                      <li class="list-group-item">
+                        <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                          {{ demande|attr:file_field.name|get_fileinfos|safe }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        
+          <div class="accordion-item" id="accordionFormulaire">
+            <h2 class="accordion-header">
+              <button id="accordion-btn-analyse" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormulaire" aria-expanded="true" aria-controls="collapseFormulaire">
+                Formulaire
+              </button>
+            </h2>
+            <div id="collapseFormulaire" class="accordion-collapse" data-bs-parent="#accordionFormulaire">
+              <div class="accordion-body">
+                <p>
+                  {% if demande.categorie.label == 'designation_dpo' %}
+                    <i class="bi bi-person-circle fw-bold custom-text-light x-large"></i>
+                    <a href="">
+                      <strong>{{ demande }}</strong>
+                    </a>
+                    <ul class="list-group list-group-flush dpo-infos-list mb-3">
+                      <li class="list-group-item"> <i class="bi bi-tags custom-text-light large"></i> &emsp; <strong>{{ demande.type_dpo }}</strong> </li>
+                      <li class="list-group-item custom-text-light"> <i class="bi bi-calendar3 custom-text-light large"></i> &emsp; Désigné le {{ demande.created_at }} </li>
+                      <li class="list-group-item custom-text-light" ><i class="bi bi-telephone custom-text-light large"></i> &emsp; {{ demande.user.telephone }} </li>
+                      <li class="list-group-item custom-text-light"> <i class="bi bi-envelope-at custom-text-light large"></i> &emsp; {{ demande.user.email }} </li>
+                    </ul>
+                  {% endif %}
+        
+                  <a href=""><strong>{{ demande }}</strong></a>
+                  <form method="post" id="form-demande">
+                    {% csrf_token %}
+                    {{ form_demande|crispy }}
+                  </form>
+                </p>
+              </div>
+            </div>
+          </div>
+        
         </div>
       </div>
     
-      <div class="col-7">
+      <div class="col-6">
         <div class="card custom-card">
           <div class="accordion" id="accordionAnalyse">
             {% if validations %}

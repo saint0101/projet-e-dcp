@@ -209,15 +209,23 @@
 .accordion-button{
   font-size: .8rem;
   font-weight: 600;
-  color: $custom-light;
-  background-color: $custom-bg-light;
+  // color: $custom-light;
+  color: #fff;
+  // background-color: $custom-bg-light;
+  background-color: #a6aab0;
 }
 
 .accordion-button:not(.collapsed) {
-  color: $custom-light;
+  // color: $custom-light;
+  color: #fff;
   font-weight: 600;
-  background-color: $custom-bg-light;
+  // background-color: $custom-bg-light;
+  background-color: #a6aab0;
   // background-color: #FFF;
+}
+
+.accordion-button::after {
+  color: #fff;
 }
 
 .accordion-button:focus {

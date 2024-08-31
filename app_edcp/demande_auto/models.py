@@ -2,6 +2,7 @@ from django.db import models
 from base_edcp.models import User, Enregistrement
 from options.models import OptionModel
 from demande.models import Demande, Status
+# from .forms import TraitementFormDisabled, TransfertFormDisabled, VideoFormDisabled, BiometrieFormDisabled
 
 
 
@@ -128,12 +129,34 @@ class DemandeAuto(Demande):
     # interco = models.ManyToManyField('Interco', verbose_name='Interconnexions')
     # securite = models.ForeignKey('Securite', on_delete=models.CASCADE, verbose_name='Sécurité')
     
+    def get_url_name(self):
+      return 'dashboard:demande_auto'
+    
+
+    def get_instance_form(self):
+      print('getting instance form : ', self.type_demande.label)
+      from .forms import TraitementFormDisabled, TransfertFormDisabled, VideoFormDisabled, BiometrieFormDisabled
+      type_demande_label = self.type_demande.label
+      
+      if type_demande_label == 'traitement': 
+        return TraitementFormDisabled(instance=self)
+
+      if type_demande_label == 'transfert':
+        return TransfertFormDisabled(instance=self)
+
+      if type_demande_label == 'videosurveillance':
+        return VideoFormDisabled(instance=self)
+
+      if type_demande_label == 'biometrie':
+        return BiometrieFormDisabled(instance=self)
+
+
     class Meta:
       verbose_name = 'Demande d\'autorisation'
       verbose_name_plural = 'Demandes d\'autorisation'
 
     def __str__(self):
-      return f"{self.type_demande} #{self.pk}"
+      return f"Autorisation de {self.type_demande} #{self.num_demande}"
     
 
 class DemandeAutoTraitement(DemandeAuto):
@@ -159,6 +182,10 @@ class DemandeAutoTraitement(DemandeAuto):
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='traitement')
+  
+  def get_instance_form(self):
+    from .forms import TraitementFormDisabled
+    return TraitementFormDisabled(instance=self)
 
 
 class DemandeAutoTransfert(DemandeAuto):
@@ -185,6 +212,10 @@ class DemandeAutoTransfert(DemandeAuto):
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='transfert')
+  
+  def get_instance_form(self):
+    from .forms import TransfertFormDisabled
+    return TransfertFormDisabled(instance=self)
 
 
 class DemandeAutoVideo(DemandeAuto):
@@ -211,6 +242,10 @@ class DemandeAutoVideo(DemandeAuto):
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='videosurveillance')
   
+  def get_instance_form(self):
+    from .forms import VideoFormDisabled
+    return VideoFormDisabled(instance=self)
+  
 
 class DemandeAutoBiometrie(DemandeAuto):
   """ Sous-classe de demande d'autorisation pour la biométrie """
@@ -235,6 +270,10 @@ class DemandeAutoBiometrie(DemandeAuto):
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='biometrie')
+  
+  def get_instance_form(self):
+    from .forms import BiometrieFormDisabled
+    return BiometrieFormDisabled(instance=self)
 
 
 """ class HistoriqueDemande(models.Model):

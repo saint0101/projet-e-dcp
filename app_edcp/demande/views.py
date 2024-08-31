@@ -1,3 +1,7 @@
+import json
+import base64
+from datetime import datetime
+# django
 from django.db.models import Max, Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -7,8 +11,15 @@ from base_edcp.models import User, GroupExtension
 from base_edcp.emails import send_email, send_email_with_attachment, MAIL_CONTENTS
 from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
 from options.models import Status
-from demande.models import Demande, ValidationDemande, HistoriqueDemande, ActionDemande, Commentaire, ReponseDemande, TypeReponse
-from demande.forms import ValidateForm, CommentaireForm, ProjetReponseForm
+from demande.models import (
+  Demande, 
+  CategorieDemande,
+  ValidationDemande, 
+  HistoriqueDemande,
+  ReponseDemande,
+  CritereEvaluation, ActionDemande, Commentaire, TypeReponse, AnalyseDemande
+)
+from demande.forms import ProjetReponseModelForm, ProjetReponseForm, ValidateForm, CommentaireForm, generate_analyse_form
 
 ## Functions
 
@@ -79,7 +90,7 @@ def can_terminate(user, demande):
 def demandes_all(request):
   """Affiche la liste des demandes """
   niv_validation = get_niv_validation_max(request.user) # récupération du niveau de validation de l'utilisateur
-  context = {'demandes': Demande.objects.all().order_by('-created_at')} # récupération de la liste des demandes, de la plus récente à la plus ancienne
+  context = {'demandes': Demande.objects.exclude(status__label='brouillon').order_by('-created_at')} # récupération de la liste des demandes, de la plus récente à la plus ancienne
   context['user_niv_validation'] = niv_validation
 
   return render(request, 'demande/demande_list_all.html', context)
@@ -99,18 +110,18 @@ def demandes_a_traiter(request):
   # si l'utilisateur est un agent (niveau 0)
   if niv_validation == 0:
     # filtrage des demandes : sans analyse (None) ou analyse en cours (analyse niveau 0)
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0)).order_by('-created_at')
+    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0)).exclude(status__label='brouillon').order_by('-created_at')
 
   # si l'utilisateur est un superviseur (niveau 1)
   if niv_validation == 1:
     # filtrage des demandes : sans analyse (None) ou analyse en cours ou à valider (analyse niveau 0 ou 1)
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1])).order_by('-created_at')
+    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1])).exclude(status__label='brouillon').order_by('-created_at')
 
   # si l'utilisateur est un validateur (niveau 2 à 5)  
   elif niv_validation > 1:
     niv_validations = user_get_niv_validation(request.user)
     # filtrage des demandes avec les niveau de validation de l'utilisateur
-    demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations).order_by('-created_at')
+    demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations).exclude(status__label='brouillon').order_by('-created_at')
   
   context = {'demandes': demandes}
   context['user_niv_validation'] = niv_validation
@@ -123,6 +134,98 @@ def mes_demandes(request):
   demandes = Demande.objects.filter(created_by=request.user).order_by('-created_at')
   context = {'demandes': demandes}
   return render(request, 'demande/mes_demandes.html', context)
+
+
+
+def analyse_demande(request, pk, action=None):
+  """ Vue d'analyse de la demande """
+  object = get_object_or_404(Demande, pk=pk)
+  demande, form_demande = object.get_form_and_instance()
+  analyse = demande.analyse
+  AnalyseDemandeForm = generate_analyse_form(demande.categorie, analyse)
+	
+	# si aucune analyse n'a encore été créée pour cette demande
+  if not analyse :
+    status_brouillon, created = Status.objects.get_or_create(label='brouillon', defaults={'description': 'Brouillon'})
+    status_encours, created = Status.objects.get_or_create(label='analyse_en_cours', defaults={'description': 'Analyse en cours'})
+    # action_changement, created = ActionDemande.objects.get_or_create(label='changement_statut', defaults={'description': 'Changement de statut'})
+
+    # création de l'analyse
+    analyse = AnalyseDemande.objects.create(created_by=request.user, status=status_brouillon)
+    demande.analyse = analyse
+    demande.status = status_encours
+    demande.save()
+    demande.save_historique(action_label='changement_statut', user=request.user)
+
+	# si le formulaire d'analyse a été envoyé
+  if request.method == 'POST':
+    form = AnalyseDemandeForm(request.POST)
+    if form.is_valid():
+      form_data = form.cleaned_data
+
+      # enregistrement de l'analyse
+      analyse.observations = form.cleaned_data['observations']
+      analyse.prescriptions = form.cleaned_data['prescriptions']
+      analyse.avis_juridique = form.cleaned_data['avis_juridique']
+      analyse.updated_at = datetime.now()
+      analyse.updated_by = request.user
+
+      # enregistrement de l'évaluation. Ce champ est stocké sous forme de texte sérialisé (JSON)
+      evaluation = {}
+      # pour chaque critère d'évaluation défini pour cette catégorie de demande, si le champ est renseigné, il est enregistré
+      for field in CritereEvaluation.objects.filter(categorie_demande=demande.categorie):
+          if field.label in form_data.keys() :
+            evaluation[field.label] = form_data[field.label]
+      serialized_data = json.dumps(evaluation) # conversion en JSON
+      # print('serialized_data : ', serialized_data)
+      analyse.evaluation = serialized_data # enregstrement du champ
+
+      analyse.save()
+      return redirect(f'{demande.get_url_name()}:analyse', pk=pk)
+
+  form = AnalyseDemandeForm(initial=analyse.__dict__) # initialisation du formulaire d'analyse
+
+  # initialisation du formulaire d'affichage du DPO en fonction de son type
+  # form_demande = demande.get_instance_form()
+  # print('form_demande : ', form_demande)
+
+  form_projet_reponse = ProjetReponseModelForm(demande=demande) # initialisation du formulaire de projet de reponse
+
+  form_comment = CommentaireForm() # initialisation du formulaire de commentaires
+  # préparation du contexte
+  context = {
+    'form': form,
+    'form_demande': form_demande,
+    'form_comment': form_comment,
+    'form_projet_reponse': form_projet_reponse,
+    'demande': demande,
+    'analyse': analyse,
+    'can_validate': can_validate(request.user, demande),
+    'can_terminate': can_terminate(request.user, demande),
+    'commentaires': demande.get_commentaires(),
+    'historique': demande.get_historique(),
+    'validations': analyse.validations.all(),
+    'action': action,
+  }  
+
+	# si l'action est une validation de demande
+  if action == 'validate': 
+    form_validation = ValidateForm()
+    context['form_validation'] = form_validation
+
+  # Si un projet de réponse existe pour cette demande
+  if demande.analyse.projet_reponse:
+    pdf_path = demande.analyse.projet_reponse.fichier_reponse.path # récupération de l'adresse du fichier
+    with open(pdf_path, 'rb') as pdf_file: # ouverture du fichier PDF
+      # Convert pdf to a string
+      pdf_content = base64.b64encode(pdf_file.read()).decode()
+      context['projet_reponse_pdf'] = pdf_content
+
+  return render(request, 'demande/demande_analyse.html', context=context)
+
+
+def submit_analyse(request, pk):
+  pass
 
 
 def handle_validation(request, pk):
