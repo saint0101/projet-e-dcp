@@ -116,22 +116,41 @@ def get_demande_url(demande, absolute_url=False):
         # domain = "http://" + current_site.domain
         # domain = "http://" + get_current_site() # recuperation de l'adresse du site
         pass
-
-    if demande.categorie.label == 'designation_dpo':
-        return domain + 'dashboard:correspondant:'
     
-    if demande.categorie.label == 'demande_autorisation':
-        return domain + 'dashboard:demande_auto:'
+    if demande and demande.categorie and demande.categorie.label:
+        if demande.categorie.label == 'designation_dpo':
+            return domain + 'dashboard:correspondant:'
+        
+        if demande.categorie.label == 'demande_autorisation':
+            return domain + 'dashboard:demande_auto:'
+
+    return ''
     
 
 @register.filter
 def get_status_color(status):
     badge_class = ""
+    if status and status.label:
+        if status.label == 'brouillon':
+            badge_class = "text-bg-secondary text-light"
+        
+        if status.label in ['demande_attente_traitement',]:
+            badge_class = "text-bg-danger text-light"
 
-    if status.label == 'brouillon':
-        badge_class = "text-bg-secondary text-light"
+        if status.label in ['analyse_en_cours',]:
+            badge_class = "text-bg-primary text-light"
+
+        if status.label in ['demande_attente_complement',]: 
+            badge_class = "text-bg-warning"
+
+        if status.label in ['traitement_termine',]: 
+            badge_class = "text-bg-success text-light"
+        
+        if status.description:
+            description = f'{status.description[0:30]}...' if len(status.description) > 30 else status.description
+            return f'<span class="badge rounded-pill {badge_class} fw-normal">{description}</span>'
+        
+        else:
+            return f'<span class="badge rounded-pill {badge_class} fw-normal">{status.label}</span>'
     
-    if status.label in ['demande_attente_traitement',]:
-        badge_class = "text-bg-danger text-light"
-    
-    return f'<span class="badge rounded-pill {badge_class} fw-normal">{status.label}</span>'
+    return ''

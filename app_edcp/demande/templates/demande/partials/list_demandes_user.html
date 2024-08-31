@@ -1,0 +1,39 @@
+{% load custom_tags_filters %}
+
+
+{% for demande in demandes %}
+  <tr>
+    {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
+    {% comment %} <td> {{ demande.id|stringformat:"08d" }} </td> {% endcomment %}
+    <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
+    <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}"> {{ demande.organisation }} </a> </td>
+    {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
+    <td> {{ demande.created_at }} </td>
+    <td> {{ demande.categorie }} </td>
+    <td> {{ demande.status|get_status_color|safe }} </td>
+    <td> 
+      <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" data-bs-toggle="tooltip" title="Afficher">
+        <i class="bi bi-eye fw-bold large custom-text-light me-1"></i>
+      </a>
+      <a href="{% url demande|get_demande_url|add:'edit' pk=demande.pk %}" data-bs-toggle="tooltip" title="Modifier">
+        <i class="bi bi-pencil-square fw-bold large custom-text-light me-1"></i>
+      </a>
+      <a hx-delete="{% url 'dashboard:demande:delete' pk=demande.pk %}" 
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        hx-confirm="Voulez-vous vraiment supprimer cette demande ?"
+        hx-target="#list-demandes"
+        data-bs-toggle="tooltip" 
+        title="Supprimer">
+        <i class="bi bi-trash fw-bold large text-danger me-1"></i>
+      </a>
+    </td>
+  </tr>
+{% empty %}
+  <p>Aucune demande à afficher.</p>
+{% endfor %}
+
+
+
+{% for message in messages %}
+  <script>toastr.{{ message.tags }}('{{ message }}')</script>
+{% endfor %}

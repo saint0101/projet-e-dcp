@@ -40,9 +40,11 @@ def get_sous_finalites(request, pk):
   # si la requête est une requête AJAX
   if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
     id_finalite = request.GET.get('id_finalite') # récupération de l'ID de la finalité dans la requête
-    sous_finalites = SousFinalite.objects.filter(finalite_id=id_finalite).values('id', 'label') # récupération des sous-finalités
-    return JsonResponse({'sousFinalites': list(sous_finalites)}) # renvoi les sous finalités au format JSON
+    if id_finalite and int(id_finalite) > 0:
+      sous_finalites = SousFinalite.objects.filter(finalite_id=int(id_finalite)).values('id', 'label') # récupération des sous-finalités
+      return JsonResponse({'sousFinalites': list(sous_finalites)}) # renvoi les sous finalités au format JSON
 
+    return JsonResponse({'sousFinalites': []})
 
 def get_form_context(obj_id, request=None):
   """ Initialise le formulaire de demande d'autorisation et le contexte.
@@ -273,7 +275,12 @@ def update(request, pk):
       print('update data : ', update_data)
       context['raw_form'].save() # sauvegarde de la modification
       messages.success(request, 'La demande a bien été enregistrée.')
-      return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
+
+      # si l'utilisateur a cliqué sur 'enregistrer et quitter', retour à la vue de détail
+      if 'form_submit_quit' in request.POST:
+        return redirect('dashboard:demande_auto:detail', pk=context['demande'].id)
+      else:
+        return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
     
     else:
       print('form not valid')
@@ -283,6 +290,18 @@ def update(request, pk):
 
   context = get_form_context(pk) # récupération du contexte sans requête associée
   return render(request, "demande_auto/demande_edit.html", context)
+
+
+
+def submit_demande(request, pk):
+  """ Soumission d'une demande d'autorisation """
+  demande = get_object_or_404(DemandeAuto, pk=pk)
+  demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement', defaults={'description': 'En attente de traitement'})
+  demande.is_locked = True # verrouillage de la demande pour empâcher les modifications
+  demande.save()
+  demande.save_historique(action_label='changement_statut', user=request.user, status=demande.status)
+  # demande.notify_by_email()
+  return redirect('dashboard:demande_auto:edit', pk=demande.id)
 
 
 ########## Class Based Views ###########

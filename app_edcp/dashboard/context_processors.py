@@ -38,6 +38,31 @@ MENU_CLIENT = [
   },
 
   {
+    'text' : 'Démarches',
+    'type' : 'sous-menu',
+    'id' : 'demarches',
+    'icon' : 'file-earmark-person',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Toutes mes demandes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:demande:mes_demandes',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Mises à jour récentes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:construction',
+        'disabled': False, 
+      },
+    ],
+  },
+
+  {
     'text' : 'Correspondants',
     'type' : 'sous-menu',
     'id' : 'correspondants',

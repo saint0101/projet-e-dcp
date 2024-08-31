@@ -58,7 +58,7 @@ def get_niv_validation_max(user):
     return niveau_max
   
   else:
-    return None  # or a default value like 0 if no group extension is found
+    return 0  # or a default value like 0 if no group extension is found
 
 
 def can_validate(user, demande):
@@ -116,6 +116,13 @@ def demandes_a_traiter(request):
   context['user_niv_validation'] = niv_validation
 
   return render(request, 'demande/demande_list_all.html', context)
+
+
+def mes_demandes(request):
+  """ Affiche la liste des demandes de l'utilisateur. """
+  demandes = Demande.objects.filter(created_by=request.user).order_by('-created_at')
+  context = {'demandes': demandes}
+  return render(request, 'demande/mes_demandes.html', context)
 
 
 def handle_validation(request, pk):
@@ -305,6 +312,32 @@ def generate_response(request, pk, template):
       messages.success(request, 'Projet de réponse généré.')
 
   return redirect('dashboard:correspondant:analyse', pk=pk)
+
+
+def delete_demande(request, pk):
+  if request.method == 'DELETE':
+    demande = get_object_or_404(Demande, pk=pk)
+
+    if not demande.created_by == request.user:
+      messages.error(request, 'Vous n\'avez pas l\'autorisation de supprimer cette demande.') 
+
+    if demande.status and not demande.status.label == 'brouillon' or demande.is_locked:
+      messages.error(request, 'Vous ne pouvez pas supprimer une demande en cours de traitement ou déjà traitée.')
+    
+    if demande.status and demande.status.label == 'brouillon' and not demande.is_locked:
+      nb_deleted, entries_deleted = demande.delete()
+      if nb_deleted > 0:
+        messages.success(request, f'Demande "{demande}" supprimée.')
+      else:
+        messages.error(request, f'Impossible de supprimer la demande "{demande}".')
+
+    demandes = Demande.objects.filter(created_by=request.user).order_by('-created_at')
+    context = {'demandes': demandes}
+    return render(request, 'demande/partials/list_demandes_user.html', context=context)
+  
+  return HttpResponse('Bad request.')
+       
+    
 
 
 

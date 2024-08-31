@@ -127,6 +127,7 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
+    help_text='Veuillez sélectionner une finalité pour afficher les sous-finalités correspondantes.'
   )
   personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
@@ -158,6 +159,7 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
+    help_text='Veuillez sélectionner une finalité pour afficher les sous-finalités correspondantes.'
   )
   personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 

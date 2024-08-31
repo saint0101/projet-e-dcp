@@ -34,21 +34,27 @@
       $('input[name="' + inputName + '"]').parent('div').toggle(false);
       // $('#id_sous_finalites option').toggle(false);
       //console.log('inputs ', 'input[name="' + inputName + '"]');
+      
+      getSousFinalite()
 
       selectFinalite.on('change', function(){
+        getSousFinalite();
+      });
+
+      function getSousFinalite(){
         const idFinalite = selectFinalite.val();
-        console.log('select changed value : ', idFinalite);
+        // console.log('select changed value : ', idFinalite);
 
         $.ajax({
           url: 'sous-finalites',
           data: { id_finalite: idFinalite },
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
           success: function(data) {
-            console.log('response : ', data)
+            // console.log('response : ', data)
             showSousFinalite(data);
           }
         });
-      });
+      }
 
       function showSousFinalite(data){
         $('input[name="' + inputName + '"]').parent('div').toggle(false);
@@ -106,8 +112,8 @@
               {% csrf_token %}
               {{ form }}
               {% comment %} {{ rendered_form }} {% endcomment %}
-              <button id="btn-submit" name="submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
-              <a href="{% url 'dashboard:demande_auto:detail' pk=demande.id %}" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
+              <button id="btn-submit" name="form_submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
+              <button id="btn-submit-quit" name="form_submit_quit" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
             </form>
           </div>
         </div>

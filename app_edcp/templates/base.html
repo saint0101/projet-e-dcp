@@ -39,6 +39,12 @@
 
 </head>
 <body>
+  {% comment %} <script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+      evt.detail.parameters['X-CSRFToken'] = '{{ csrf_token }}'; // add a new parameter into the mix
+    });
+  </script> {% endcomment %}
+
   <script>
     toastr.options = {
       "closeButton": true,
@@ -59,15 +65,38 @@
     }
   </script>
 
-  <script>
+{% comment %}   <script>
     function openLoader() {
       document.getElementById("loadingModal").style.display = "block";
     }
+  </script> {% endcomment %}
 
-    /*const linkLoader = document.querySelector(".link-loader");
-    linkLoader.addEventListener("click", (event) => {
-      openLoader();
-    });*/
+  <script>
+    $(document).ready(function(){
+      // Show the loading indicator when a link is clicked or a form is submitted
+      $('a, form').on('submit', function() {
+        $('#loadingModal').show();
+      });
+
+      // Hide the loading indicator when the page is fully loaded
+      $(window).on('load', function() {
+          $('#loadingModal').hide();
+      });
+
+      $(window).on('pageshow', function(event) {
+        if (event.originalEvent.persisted) {
+          $('#loadingModal').hide();
+        }
+      });
+
+      htmx.on("htmx:beforeOnLoad", function(evt) {
+        $('#loadingModal').show();
+      });
+
+      htmx.on("htmx:afterOnLoad", function(evt) {
+        $('#loadingModal').hide();
+      });
+    });
   </script>
 
   <div id="loadingModal" class="spinner-border text-primary" role="status" style="display: none;">
@@ -94,6 +123,8 @@
     
     });
   </script>
+
+  
 </body>
 <!-- <meta name="copyright" content="© 2023 ARTCI/Team e-DCP/Devs/KC-NF-LK-DD-BE-SS/B1.0. All rights reserved."> -->
 </html>
