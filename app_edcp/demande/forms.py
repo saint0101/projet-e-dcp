@@ -20,7 +20,7 @@ class ValidateForm(forms.Form):
 class CommentaireForm(forms.ModelForm):
   """ Formulaire d'ajout de commentaires """
   message = forms.CharField(
-    label='Message', 
+    label='Contenu du message', 
     required=True,
     widget=forms.Textarea(attrs={'rows': 3}),
   )

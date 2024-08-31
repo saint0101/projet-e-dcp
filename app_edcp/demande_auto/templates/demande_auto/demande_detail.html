@@ -32,14 +32,14 @@
       <div class="card custom-card">
         <div class="card-body small-padding">
           <h3 class="mb-3 card-title">Demande d'autorisation
-            #<strong>{{ demande.id|stringformat:"08d" }}</strong> :
+            #<strong>{{ demande.num_demande }}</strong> :
             {{ demande.type_demande }}
           </h3>
           <div class="card-text">
             <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }} </span><br>
-            <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }} </span><br>
-            <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong> </span><br>
-            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status }} </span><br><br>
+            <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }} </span><br>
+            <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong> </span><br>
+            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
             
             {% if show_form_analyse %}
               <div id="row-actions" class="row">
@@ -57,25 +57,33 @@
               </div>
             {% else %}
               <div id="row-actions" class="row">
-                <div class="col">
-                  <form method="post" id="change-status-form">
-                    {% csrf_token %}
-                    <div class="row">
-                      <div class="col-7">
-                        {{ form_status.status }}
+                {% if request.user.is_staff %}
+                  <div class="col">
+                    <form method="post" id="change-status-form">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-7">
+                          {{ form_status.status }}
+                        </div>
+                        <div class="col-5">
+                          <button type="submit" class="btn btn-primary" name="form_status_submit">Modifier le statut</button>
+                        </div>
                       </div>
-                      <div class="col-5">
-                        <button type="submit" class="btn btn-primary" name="form_status_submit">Modifier le statut</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
+                    </form>
+                  </div>
+                {% endif %}
+                
                 <div class="col">
                   {% if not request.user.is_staff %}
                     <a href="{% url 'dashboard:demande_auto:edit' pk=demande.id %}" class="btn btn-primary me-2">Modifier</a>
                     <button class="btn btn-success me-2">Soumettre la demande</button>
                     <button class="btn btn-danger me-2">Supprimer</button>
+                    <button class="btn btn-light me-2 mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+                      Afficher l'historique
+                    </button>
+                    <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+                      Commentaires
+                    </button>
                   {% endif %}
 
                   {% if request.user.is_staff %}
@@ -241,7 +249,12 @@
     
   </div>
 
-  
+{% block commentaires %}
+  {% include "demande/commentaires_demande.html" with demande=demande %}
+{% endblock %}
+
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+
 {% endblock content %}
 
 

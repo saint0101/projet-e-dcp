@@ -1,4 +1,5 @@
 from django.db.models import Max, Q
+from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
 # apps
@@ -187,6 +188,47 @@ def handle_validation(request, pk):
 
 
 def add_commentaire(request, pk):
+  """ 
+  Ajout de commentaire à la demande.
+  Valable pour les gestionnaires et les usagers.
+  """
+  demande = get_object_or_404(Demande, pk=pk)
+  context = {}
+  
+  if request.method == 'POST':
+    form_comment = CommentaireForm(request.POST) # récupération des données du formulaire
+    
+    # si le formulaire est valide, sauvegarde du commentaire
+    if form_comment.is_valid():
+      commentaire = form_comment.save(commit=False)
+      commentaire.demande = demande
+      commentaire.auteur = request.user
+
+      # si l'agent a cliqué sur 'envoyer et suspendre la demande', le staut de la demande est mis à jour
+      if 'form_comment_submit_suspend' in request.POST:
+        demande.status = Status.objects.get(label='demande_attente_complement') # suspension de la demande
+        demande.save()
+        messages.success(request, 'Statut de la demande mis à jour.')
+
+      commentaire.save() # enregistrement du commentaire
+      demande.save_historique('commentaires', request.user, demande.status)
+      messages.success(request, 'Message envoyé.')
+
+
+    # sinon si le formulaire n'est pas valide, affichage des erreurs  
+    else:
+      # context['form_comment'] = form_comment
+      print('erreur : ', form_comment.errors)
+      messages.error(request, f'{form_comment.errors}')
+
+  context['demande'] = demande
+  context['commentaires'] = demande.get_commentaires()
+  context['messages'] = messages.get_messages(request)
+  return render(request, 'demande/commentaires_list.html', context=context)
+  # return HttpResponse('Ok')
+
+
+def add_commentaire_old(request, pk):
   """ 
   Ajout de commentaire à la demande.
   Valable pour les gestionnaires et les usagers.

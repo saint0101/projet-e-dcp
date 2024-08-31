@@ -122,3 +122,16 @@ def get_demande_url(demande, absolute_url=False):
     
     if demande.categorie.label == 'demande_autorisation':
         return domain + 'dashboard:demande_auto:'
+    
+
+@register.filter
+def get_status_color(status):
+    badge_class = ""
+
+    if status.label == 'brouillon':
+        badge_class = "text-bg-secondary text-light"
+    
+    if status.label in ['demande_attente_traitement',]:
+        badge_class = "text-bg-danger text-light"
+    
+    return f'<span class="badge rounded-pill {badge_class} fw-normal">{status.label}</span>'

@@ -6,14 +6,6 @@ from demande_auto.forms_structures import *
 from demande_auto.models import *
 
 
-class CommentaireForm(forms.ModelForm):
-  """ Formulaire d'ajout de commentaires """
-  class Meta:
-    model = Commentaire
-    fields = ['objet', 'message']
-    
-
-
 class ChangeStatusForm(forms.Form):
   """ Formulaire de changement de statut de la demande """
   # CHOICES = []
@@ -176,7 +168,8 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoTransfert
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_TRANSFERT)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
   
   def __init__(self, *args, **kwargs):
@@ -207,7 +200,8 @@ class UpdateDemandeVideoForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoVideo
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_VIDEO)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
@@ -238,7 +232,8 @@ class UpdateDemandeBioForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoBiometrie
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_BIOMETRIE)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):

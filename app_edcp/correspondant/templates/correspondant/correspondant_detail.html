@@ -9,9 +9,7 @@
       console.log(show_comments);
       if (show_comments == 'True'){ // valeur python
         $('#offcanvasCommentaires').addClass('show');
-      } 
-
-      
+      }   
     });
   </script>
 {% endblock %}
@@ -206,12 +204,9 @@
   {% comment %} <div class="col-3"></div> {% endcomment %}
 </div>
 
-{% for comment in commentaires %}
-<p class="bizzz">{{ comment }}</p>
-{% endfor %}
 
 {% block commentaires %}
-  {% include "./commentaires_demande.html" with demande=correspondant %}
+  {% include "demande/commentaires_demande.html" with demande=correspondant %}
 {% endblock %}
 
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 

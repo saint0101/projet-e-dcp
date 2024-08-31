@@ -107,6 +107,15 @@ class Demande(models.Model):
     historique.is_private = is_private
     historique.save()
 
+  
+  def get_historique(self):
+    return HistoriqueDemande.objects.filter(demande=self)
+  
+  def get_commentaires(self):
+    return Commentaire.objects.filter(demande=self).order_by('created_at')
+  
+
+
   def save(self, *args, **kwargs):
     """ Redéfinit la méthode save() afin de : 
     - générer le numéro de demande. 

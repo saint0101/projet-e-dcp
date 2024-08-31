@@ -77,6 +77,23 @@
   {% block layout %}
   {% endblock %}
 
+  <script>
+    $(document).ready(function(){
+      // Function to scroll to the bottom of the div
+      function scrollToBottom() {
+        console.log('scrolling');
+        var $div = $('#commentsAutoScroll');
+        $div.scrollTop($div.prop("scrollHeight"));
+      }
+
+      htmx.on("htmx:afterOnLoad", function(evt) {
+        // myJavascriptLib.init(evt.detail.elt);
+        console.log(evt);
+        scrollToBottom();
+      });
+    
+    });
+  </script>
 </body>
 <!-- <meta name="copyright" content="© 2023 ARTCI/Team e-DCP/Devs/KC-NF-LK-DD-BE-SS/B1.0. All rights reserved."> -->
 </html>

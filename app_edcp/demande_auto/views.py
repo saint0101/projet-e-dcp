@@ -9,8 +9,24 @@ from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFER
 from base_edcp.models import Enregistrement
 from demande.views import save_historique
 from demande.models import CategorieDemande, Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
-from .models import *
-from .forms import *
+from demande.forms import CommentaireForm
+from .models import (
+  DemandeAuto, 
+  DemandeAutoTraitement, 
+  DemandeAutoTransfert, 
+  DemandeAutoVideo, 
+  DemandeAutoBiometrie,
+  TypeDemandeAuto,
+  SousFinalite)
+from .forms import (
+  CreateDemandeForm, 
+  ChangeStatusForm, 
+  UpdateDemandeForm,
+  UpdateDemandeTraitementForm,
+  UpdateDemandeTransfertForm,
+  UpdateDemandeVideoForm,
+  UpdateDemandeBioForm,
+  AnalyseDemandeForm)
 
 ######## Fonctions utilitaires ########
 
@@ -107,14 +123,15 @@ def index(request):
 def detail(request, pk):
   """ Vue de détail d'une demande d'autorisation """
   context = get_form_context(pk) # récupération du contexte à envoyer au template
+  demande = context['demande']
   form_comment = CommentaireForm() # initialisation du formulaire de commentaire
-  form_status = ChangeStatusForm(initial={'status': context['demande'].status}) # initialisation du formulaire de changement de status
+  form_status = ChangeStatusForm(initial={'status': demande.status}) # initialisation du formulaire de changement de status
 
   # si une requête a été soumise
   if request.method == 'POST':
     # si la requête est un ajout de commentaire
     # avec ou sans suspension de la demande
-    if 'form_comment_submit' in request.POST or 'form_comment_submit_suspend' in request.POST:
+    """ if 'form_comment_submit' in request.POST or 'form_comment_submit_suspend' in request.POST:
       form_comment = CommentaireForm(request.POST) # récupération des données du formulaire
       if form_comment.is_valid():
         # si le formulaire est valide, sauvegarde du commentaire
@@ -132,17 +149,18 @@ def detail(request, pk):
         # context['form_comment'] = form_comment
         print('erreur : ', form_comment.errors)
         messages.error(request, f'{form_comment.errors}')
-    
+     """
     if 'form_status_submit' in request.POST:
       form_status = ChangeStatusForm(request.POST) # instanciation du formulaire
       if form_status.is_valid():
-        context['demande'].status = form_status.cleaned_data['status'] # suspension de la demande
-        context['demande'].save()
+        demande.status = form_status.cleaned_data['status'] # suspension de la demande
+        demande.save()
         save_historique(context['demande'], 'changement_statut', request.user)
         messages.success(request, 'Statut de la demande mis à jour')
 
   context['form_comment'] = form_comment # affichage du formulaire de commentaires
-  context['commentaires'] = Commentaire.objects.filter(demande=context['demande']) # récuperation des commentaires sur la demande
+  context['commentaires'] = demande.get_commentaires() # récuperation des commentaires sur la demande
+  context['historique'] = demande.get_historique() # récuperation de l'historique de la demande
   context['form_status'] = form_status # affichage du formulaire de changement de statut
   context['analyse_exists'] = AnalyseDemande.objects.filter(demande=context['demande']).exists() # si l'analyse a déjà commencé
 
@@ -212,7 +230,8 @@ def create(request):
       form = CreateDemandeForm(request.POST)
       if form.is_valid():
         form.cleaned_data['created_by'] = request.user # assignation de l'utilisateur
-        form.cleaned_data['status'] = Status.objects.get(label='brouillon') # ajout du statut par défaut (brouillon)
+        form.cleaned_data['status'], created = Status.objects.get_or_create(label='brouillon', defaults={'description': 'Brouillon de la demande d’autorisation'})
+        form.cleaned_data['categorie'], created = CategorieDemande.objects.get_or_create(label='demande_autorisation', defaults={'description': 'Demande d\'autorisation'})
 
         demande = None # initialisation de la demande
         # instantiation du modèle approprié en fonction du type de la demande
@@ -228,13 +247,11 @@ def create(request):
         if form.cleaned_data['type_demande'] == DemandeAutoBiometrie.get_type_demande():
            demande = DemandeAutoBiometrie.objects.create(**form.cleaned_data)
 
-        """
-        TODO : ajouter la catégorie et le statu
-        """
-        demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement')
-        demande.categorie, created = CategorieDemande.objects.get_or_create(label='demande_autorisation')
-        demande.save()
-        demande.save_historique('creation', request.user, demande.status)
+        # demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement')
+        # demande.categorie, created = CategorieDemande.objects.get_or_create(label='demande_autorisation')
+        # demande.save()
+        if demande:
+          demande.save_historique('creation', request.user, demande.status)
         #save_historique(demande, 'creation', request.user) # création de l'historique
 
         return redirect('dashboard:demande_auto:edit', pk=demande.id)        

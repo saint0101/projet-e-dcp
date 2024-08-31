@@ -1,0 +1,52 @@
+
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title custom-text-light" id="offcanvasLabel">Commentaires sur la demande</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    {% comment %} <form method="post" id="form-comment" action="{% url 'dashboard:demande:add_commentaire' pk=demande.id%}" onsubmit="openLoader()"> {% endcomment %}
+    <form method="post" id="form-comment" onsubmit="openLoader()">
+      {% csrf_token %}
+      {{ form_comment|crispy}}
+      <button 
+        hx-post="{% url 'dashboard:demande:add_commentaire' pk=demande.id%}" 
+        hx-target="#comments-list" type="submit" 
+        hx-indicator="#btn-send-spinner"
+        hx-disabled-elt="this"
+        class="btn btn-primary me-1 mb-2" name="form_comment_submit">
+      Envoyer
+      <span class="htmx-indicator" id="btn-send-spinner">
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        <span role="status">Envoi...</span>
+      </span>
+    </button>
+      
+      {% if request.user.is_staff %}
+        <button 
+        hx-post="{% url 'dashboard:demande:add_commentaire' pk=demande.id%}" 
+        hx-target="#comments-list" type="submit" 
+        hx-indicator="#btn-send-spinner"
+        hx-disabled-elt="this"
+        {% if demande.status.label == 'attente_complement' %} disabled {% endif %}
+        type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">
+          Envoyer et suspendre la demande
+          <span class="htmx-indicator" id="btn-send-spinner">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Envoi...</span>
+          </span>
+        </button>
+      {% endif %}
+    </form>
+    
+    
+    <div class="col-12 col-list-commentaires pb-3 mt-2" id="comments-list">
+      {% include 'demande/commentaires_list.html' %} 
+    </div>
+  </div>
+</div>
+
+

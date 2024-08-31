@@ -99,6 +99,8 @@
           <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
           <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }}<br>
           <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong><br>
+          <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
+
           <div class="card-text mt-3">
             <form method="post" id="update-demande-form" onsubmit="openLoader()">
               {% csrf_token %}

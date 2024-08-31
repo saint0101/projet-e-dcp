@@ -1,3 +1,5 @@
+{% load custom_tags_filters %}
+
 {% if historique %}
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasHistorique" aria-labelledby="offcanvasHistorique">
   <div class="offcanvas-header">
@@ -10,7 +12,7 @@
         {% if not action.is_private or action.is_private and request.user.is_staff %}
           <li>
             <span class="text-hint custom-text-light">{{ action.created_at }}</span> <br> 
-            <span class="text-hint text-body-secondary"><strong>{{ action.action }}</strong> - {{ action.status }} </span>
+            <span class="text-hint text-body-secondary"><strong>{{ action.action }}</strong> - {{ action.status|get_status_color|safe }} </span>
           </li>
         {% endif %}
       {% endfor %}
