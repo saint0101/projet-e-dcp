@@ -71,16 +71,15 @@
 
 
 {% block content %}
-  <div class="row mx-3 my-4">
+  {% comment %} <div class="row mx-3 my-4">
     <div class="col">
       <div id="card-historique" class="card custom-card">
         <div class="card-body">
           <h3 class="text-hint mb-3 card-title">Historique</h3>
             <ul class="list-group">
             {% for elmt in historique %}
-              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
               <li class="list-group-item">
-                <span class="text-hint custom-text-light">{{ elmt.created_at }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
+                <span class="text-hint custom-text-light">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
               </li>
             {% endfor %}
             </ul>
@@ -89,7 +88,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
   
   <div class="row mx-3 my-4">
     <div class="col">
@@ -98,12 +97,13 @@
         <div class="card-body">
           <h3 class="mb-3 card-title">Edition de la demande d'autorisation</h3>
           <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
-          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }}<br>
-          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong><br>
+          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }}<br>
+          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong><br>
           <div class="card-text mt-3">
             <form method="post" id="update-demande-form" onsubmit="openLoader()">
               {% csrf_token %}
               {{ form }}
+              {% comment %} {{ rendered_form }} {% endcomment %}
               <button id="btn-submit" name="submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
               <a href="{% url 'dashboard:demande_auto:detail' pk=demande.id %}" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
             </form>

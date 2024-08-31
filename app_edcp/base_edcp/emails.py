@@ -44,6 +44,33 @@ MAIL_CONTENTS = {
   },
 }
 
+
+DEMANDE_EMAILS_TEMPLATES = {
+  # Templates des emails pour la désignation de correspondant
+  'designation_dpo': { 
+    'demande_attente_traitement':{
+      'subject': 'Désignation de Correspondant',
+      'template': 'emails/correspondant/designation_notification.html'
+    },
+
+    'analyse_en_cours': {},
+
+    'demande_attente_complement': {},
+
+    'traitement_termine': {
+      'subject': 'Approbation du Correspondant',
+      'template': 'emails/correspondant/approbation_reponse.html'
+    },
+  },
+  # Templates des emails pour les demandes d'autorisation
+  'demande_autorisation': { 
+    'demande_attente_traitement':{},
+    '	analyse_en_cours': {},
+    'demande_attente_complement': {},
+    'traitement_termine': {},
+  },
+}
+
 def send_email(request, mail_content, recipient_list, context, show_message=True):
   """ Fonction d'envoi d'email.
   Paramètres :
@@ -60,7 +87,6 @@ def send_email(request, mail_content, recipient_list, context, show_message=True
   context['domain'] = "http://" + current_site.domain # constitution de l'url du site. Utilisée dans les mails pour former les liens
   html_message = render_to_string(mail_content['template'], context) # contenu du mail au format HTML
   text_message = strip_tags(html_message) # contenu du mail au format texte
-  print('EMAIL message : ', text_message)
   
   # tentative d'envoi du mail
   try:
@@ -81,6 +107,35 @@ def send_email(request, mail_content, recipient_list, context, show_message=True
     print('EMAIL ERREUR : ', e)
     if show_message:
       messages.error(request, 'Une erreur est survenue lors de l\'envoi de l\'e-mail : \n' + str(e))
+
+
+
+def send_automatic_email(mail_content, context):
+  """ Fonction d'envoi d'email automatique.
+  Paramètres :
+  - mail_content -- le dictionnaire contenant le sujet et le template de l'email (voir MAIL_CONTENTS plus haut)
+  - context -- le contexte de l'email sous forme de dictionnaire. Utilisé pour passer des variables au template
+  """
+  print ('context - send email : ', context)
+  email_from = settings.EMAIL_HOST_USER # récupère l'adresse email par défaut 
+  print('EMAIL from : ', email_from)
+  html_message = render_to_string(mail_content['template'], context) # contenu du mail au format HTML
+  text_message = strip_tags(html_message) # contenu du mail au format texte
+  
+  # tentative d'envoi du mail
+  try:
+    send_mail(
+      subject=mail_content['subject'], 
+      message=text_message,
+      html_message=html_message, 
+      from_email=email_from, 
+      recipient_list=context['recipient_list'], 
+      fail_silently=False # indique si l'échec de l'envoi doit générer une erreur
+    )
+
+  # en cas d'erreur d'envoi du mail
+  except Exception as e:
+    print('EMAIL ERROR : ', e)
 
 
 

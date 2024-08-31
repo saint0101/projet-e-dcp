@@ -5,6 +5,9 @@ Fonctions de filtres personnalisés utilisables dans les templates.
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.db.models import FileField
+from django.contrib.sites.shortcuts import get_current_site
+# from django.contrib.sites.models import Site
+
 
 register = template.Library()
 
@@ -105,11 +108,17 @@ def leading_zeros(value, num_digits):
     return str(value).zfill(num_digits)
 
 @register.filter
-def get_demande_url(demande):
+def get_demande_url(demande, absolute_url=False):
     """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
-    print('demandes', demande.categorie.label)
+    domain = ''
+    if absolute_url:    
+        # current_site = Site.objects.get_current()
+        # domain = "http://" + current_site.domain
+        # domain = "http://" + get_current_site() # recuperation de l'adresse du site
+        pass
+
     if demande.categorie.label == 'designation_dpo':
-        return 'dashboard:correspondant:'
+        return domain + 'dashboard:correspondant:'
     
     if demande.categorie.label == 'demande_autorisation':
-        return 'dashboard:demande_auto:'
+        return domain + 'dashboard:demande_auto:'

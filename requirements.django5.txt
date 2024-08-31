@@ -18,6 +18,7 @@ django-crispy-forms==2.3
 django-extensions==3.2.3
 django-feather==0.3.0
 django-formtools==2.5.1
+django-htmx==1.19.0
 django-libsass==0.9
 django-livereload-server==0.5.1
 django_compressor==4.5
@@ -65,6 +66,3 @@ weasyprint==62.3
 webencodings==0.5.1
 xhtml2pdf==0.2.16
 zopfli==0.2.3
-django-formtools
-flake8
-

@@ -1,17 +1,16 @@
 from django.contrib import messages
-from base_edcp.emails import send_email
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from django import forms
-from .models import *
-from .forms import *
+
 # CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
 from demande.views import save_historique
-from demande.models import Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
+from demande.models import CategorieDemande, Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
+from .models import *
+from .forms import *
 
 ######## Fonctions utilitaires ########
 
@@ -212,7 +211,7 @@ def create(request):
     if request.method == 'POST':
       form = CreateDemandeForm(request.POST)
       if form.is_valid():
-        form.cleaned_data['user'] = request.user # assignation de l'utilisateur
+        form.cleaned_data['created_by'] = request.user # assignation de l'utilisateur
         form.cleaned_data['status'] = Status.objects.get(label='brouillon') # ajout du statut par défaut (brouillon)
 
         demande = None # initialisation de la demande
@@ -229,7 +228,14 @@ def create(request):
         if form.cleaned_data['type_demande'] == DemandeAutoBiometrie.get_type_demande():
            demande = DemandeAutoBiometrie.objects.create(**form.cleaned_data)
 
-        save_historique(demande, 'creation', request.user) # création de l'historique
+        """
+        TODO : ajouter la catégorie et le statu
+        """
+        demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement')
+        demande.categorie, created = CategorieDemande.objects.get_or_create(label='demande_autorisation')
+        demande.save()
+        demande.save_historique('creation', request.user, demande.status)
+        #save_historique(demande, 'creation', request.user) # création de l'historique
 
         return redirect('dashboard:demande_auto:edit', pk=demande.id)        
 
@@ -246,6 +252,8 @@ def update(request, pk):
   if request.method == 'POST':
     context = get_form_context(pk, request) # récupération du contexte avec la requête associée
     if context['raw_form'].is_valid(): # si le formulaire est valide
+      update_data = context['raw_form'].cleaned_data
+      print('update data : ', update_data)
       context['raw_form'].save() # sauvegarde de la modification
       messages.success(request, 'La demande a bien été enregistrée.')
       return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
@@ -261,6 +269,7 @@ def update(request, pk):
 
 
 ########## Class Based Views ###########
+
 
 class DemandeListView(ListView):
   """ Liste des demandes d'autorisation """
@@ -279,11 +288,13 @@ class DemandeListView(ListView):
 
 ######## TO DELETE ###########@
 
-"""
+
 class demandeUpdateView(UpdateView):
   model = DemandeAuto
-  fields = '__all__'
+  # fields = '__all__'
+  form_class = UpdateDemandeForm
   template_name = 'demande_auto/demande_edit.html'
+  context_object_name = 'demande'
   context_form_structure = []
 
   def get_object(self, queryset=None):
@@ -293,26 +304,30 @@ class demandeUpdateView(UpdateView):
       print ('update traitement')
       self.context_form_structure = FORM_STRUCTURE_TRAITEMENT
       self.model = DemandeAutoTraitement
+      self.form_class = UpdateDemandeTraitementForm
 
     if object.type_demande.label == 'transfert':
       print ('update transfert')
       self.context_form_structure = FORM_STRUCTURE_TRANSFERT
       self.model = DemandeAutoTransfert
+      self.form_class = UpdateDemandeTransfertForm
 
     if object.type_demande.label == 'videosurveillance':
       print ('update videosurveillance')
       self.context_form_structure = FORM_STRUCTURE_VIDEO
       self.model = DemandeAutoVideo
+      self.form_class = UpdateDemandeVideoForm
 
     if object.type_demande.label == 'biometrie':
       print ('update biometrie')
       self.context_form_structure = FORM_STRUCTURE_BIOMETRIE
       self.model = DemandeAutoBiometrie
+      self.form_class = UpdateDemandeBioForm
 
     # Now, call the original get_object method
     return object
   
-  def get_form(self, form_class=None):
+  """def get_form(self, form_class=None):
     form = super().get_form(form_class)
     type_demande_label = self.object.type_demande.label
     list_finalites = TypeDemandeAuto.objects.get(label=type_demande_label).finalites.all()
@@ -326,14 +341,25 @@ class demandeUpdateView(UpdateView):
     # form.fields['personnes_concernees'].widget = forms.CheckboxSelectMultiple(attrs={'required': True})
     # form_html = form.render()  # Renders the form with the default rendering or custom template
     rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
+    return rendered_form"""
+
+
+  def get_form(self, form_class=None):
+    form = super().get_form(form_class)
+    rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
     return rendered_form
+
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
+    form = super().get_form()
+    rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
+
+    context['rendered_form'] = rendered_form
     context['historique'] = HistoriqueDemande.objects.filter(demande=self.object)
     context['form_structure'] = self.context_form_structure
     return context
- """ 
+ 
 
 
 """ class demandeCreateView(CreateView):

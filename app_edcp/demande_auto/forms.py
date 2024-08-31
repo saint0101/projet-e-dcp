@@ -1,9 +1,9 @@
 from django import forms
-from demande.models import Status, Commentaire, AnalyseDemande
-from demande_auto.models import *
 # Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
-
 from base_edcp.models import Enregistrement
+from demande.models import Status, Commentaire, AnalyseDemande
+from demande_auto.forms_structures import *
+from demande_auto.models import *
 
 
 class CommentaireForm(forms.ModelForm):
@@ -144,8 +144,8 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
   
   class Meta:
     model = DemandeAutoTraitement
-    # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_TRAITEMENT)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):

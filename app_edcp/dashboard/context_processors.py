@@ -1,3 +1,5 @@
+# from django.contrib.sites.shortcuts import get_current_site
+
 
 # Create your views here.
 """
@@ -384,3 +386,10 @@ def get_menu(request):
     return {'get_menu': MENU_MGR} 
   
   return {'get_menu': MENU_CLIENT} 
+
+
+def get_site_url(request):
+  """ Renvoie l'URL du site actuel afind e pouvoir l'afficher dans un template. """
+  # print('processing site url : ', get_current_site(request).domain)
+  # return {'site_url': 'http://' + get_current_site(request).domain}
+  pass

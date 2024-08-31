@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    # 'django.contrib.sites',
     'livereload', # rechargement automatique de la page web en cas de changement sur les fichiers
     'django.contrib.staticfiles',
     'compressor', # compression des fichiers statiques CSS et JS
@@ -54,10 +55,13 @@ INSTALLED_APPS = [
     'user',
     'enregistrement',
     'demande_auto',
+    # 'django-htmx',
     # 'admindocs', # génération automatique de la documentation dans l'admin Django.
     # 'django_extensions', # génération de diagrammes de classe UML
     # ,
 ]
+
+# SITE_ID = 1  # Set to the ID of your default site
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

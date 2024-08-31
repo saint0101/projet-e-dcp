@@ -1,8 +1,6 @@
 # django
 from datetime import datetime
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.core.validators import FileExtensionValidator
 # apps
 from base_edcp.models import User, Enregistrement
@@ -110,7 +108,15 @@ class Demande(models.Model):
     historique.save()
 
   def save(self, *args, **kwargs):
-    """ Redéfinit la méthode save() afin de générer le numéro de demande. """
+    """ Redéfinit la méthode save() afin de : 
+    - générer le numéro de demande. 
+    - identifier le changement de statut de la demande.
+    """
+
+    # si l'objet est déjà créé
+    if self.pk:
+      demande = Demande.objects.get(pk=self.pk)
+      self._original_status = demande.status # enregistrement du statut de la demande avant la sauvegarde
 
     super().save(*args, **kwargs)
 
@@ -134,6 +140,7 @@ def create_num_demande(sender, instance, **kwargs):
       #f'{str(i):<5}'
       instance.num_demande = f'{date_demande.year}{date_demande.month}{date_demande.day}-{str(instance.id):>06}'
       print('num_demande : ', instance.num_demande) """
+
 
 
 

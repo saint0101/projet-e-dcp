@@ -18,7 +18,7 @@ def test_pdf(request):
 
 def get_demande_url(demande):
   """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
-  print('demandes', demande.categorie.label)
+  
   if demande.categorie.label == 'designation_dpo': # si désignation de correspondant
       return 'dashboard:correspondant:'
   

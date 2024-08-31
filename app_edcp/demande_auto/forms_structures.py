@@ -70,3 +70,10 @@ FORM_STRUCTURE_BIOMETRIE = [
    'fields': ['mesures_securite']
   },
 ]
+
+
+def get_form_fields(form_structure):
+  fields = []
+  for elmt in form_structure:
+    fields += elmt['fields']
+  return fields
