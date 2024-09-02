@@ -31,9 +31,10 @@ def notify_by_email(demande):
   if categorie_label in DEMANDE_EMAILS_TEMPLATES.keys():
     if status_label in DEMANDE_EMAILS_TEMPLATES[categorie_label].keys():
       mail_content = DEMANDE_EMAILS_TEMPLATES[categorie_label][status_label]
-      recipient_list = [demande.created_by.email, demande.organisation.email_contact]
-      mail_context = {
-        'demande': demande,
-        'recipient_list': recipient_list
-      }
-      send_automatic_email(mail_content=mail_content, context=mail_context)
+      if 'subject' in mail_content and 'template' in mail_content:
+        recipient_list = [demande.created_by.email, demande.organisation.email_contact]
+        mail_context = {
+          'demande': demande,
+          'recipient_list': recipient_list
+        }
+        send_automatic_email(mail_content=mail_content, context=mail_context)

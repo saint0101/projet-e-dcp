@@ -181,7 +181,8 @@ def analyse_demande(request, pk, action=None):
       analyse.evaluation = serialized_data # enregstrement du champ
 
       analyse.save()
-      return redirect(f'{demande.get_url_name()}:analyse', pk=pk)
+      messages.success(request, 'Analyse enregistrée.')
+      return redirect(f'dashboard:demande:analyse', pk=pk)
 
   form = AnalyseDemandeForm(initial=analyse.__dict__) # initialisation du formulaire d'analyse
 
@@ -225,7 +226,34 @@ def analyse_demande(request, pk, action=None):
 
 
 def submit_analyse(request, pk):
-  pass
+  """ Soumission de l'analyse pour validation par le supérieur """
+  demande = get_object_or_404(Demande, pk=pk)
+  analyse = demande.analyse
+	
+	# si l'analyse a bien été créée, changement du statut
+  if analyse :
+    analyse.is_locked = True # verrouillage de l'analyse pendant la validation pour éviter une modification
+
+    # si l'utilisateur qui traite la demande est un superviseur (niv_validation 1)
+    # la demande passe directement au niveau 2
+    if user_has_niv_validation(request.user, 1):
+      analyse.niv_validation = 2
+      status, created = Status.objects.get_or_create(
+        label='analyse_attente_validation_2',
+        defaults={'description': 'En attente de validation niv. 2'}    
+      )
+    else:
+      analyse.niv_validation = 1
+      status, created = Status.objects.get_or_create(
+        label='analyse_attente_validation_1',
+        defaults={'description': 'En attente de validation niv. 1'}    
+      )
+
+    analyse.status = status
+    analyse.save()
+    demande.save_historique(action_label='changement_statut', user=request.user, status=analyse.status, is_private=True)
+ 
+  return redirect('dashboard:demande:analyse', pk=pk)
 
 
 def handle_validation(request, pk):
@@ -279,7 +307,7 @@ def handle_validation(request, pk):
           }
           send_email_with_attachment(
             request=request, 
-            mail_content=MAIL_CONTENTS['correspondant_approbation_reponse'], 
+            mail_content=MAIL_CONTENTS['decision_autorisation'], 
             recipient_list=[demande.organisation.email_contact, request.user.email], # à compléter
             context=mail_context
           ) 
@@ -333,7 +361,7 @@ def add_commentaire(request, pk):
 
   context['demande'] = demande
   context['commentaires'] = demande.get_commentaires()
-  context['messages'] = messages.get_messages(request)
+  # context['messages'] = messages.get_messages(request)
   return render(request, 'demande/commentaires_list.html', context=context)
   # return HttpResponse('Ok')
 
@@ -378,7 +406,7 @@ def add_commentaire_old(request, pk):
 
 
 
-def generate_response(request, pk, template):
+def generate_response(request, pk, template=None):
   """ Vue de génération du projet de réponse. """
 
   if request.method == 'POST':
@@ -396,6 +424,8 @@ def generate_response(request, pk, template):
           'titre_destinataire': form.cleaned_data['titre_destinataire'],
           'adresse_destinataire': form.cleaned_data['adresse_destinataire'],
       }
+
+      template = form.cleaned_data['type_reponse'].label
       pdf_file = generate_pdf(request, PDF_TEMPLATES[template], context) # génération du fichier PDF
       
       # si un projet de réponse existe déjà, il est utilisé sinon un projet de réponse est créé
@@ -405,16 +435,15 @@ def generate_response(request, pk, template):
         projet_reponse = ReponseDemande.objects.create()
       
       # enregistrement du projet de réponse
-      projet_reponse.fichier_reponse.save(f'projet_reponse_{template}.pdf', pdf_file)
+      projet_reponse.fichier_reponse.save(f'reponse_{template}_{demande.organisation}_{demande.num_demande}.pdf', pdf_file)
       projet_reponse.intitule = 'Lettre d\'approbation'
       projet_reponse.save()
       # mise à jour de l'analyse
       demande.analyse.projet_reponse = projet_reponse
       demande.analyse.save()
-
       messages.success(request, 'Projet de réponse généré.')
 
-  return redirect('dashboard:correspondant:analyse', pk=pk)
+  return redirect('dashboard:demande:analyse', pk=pk)
 
 
 def delete_demande(request, pk):

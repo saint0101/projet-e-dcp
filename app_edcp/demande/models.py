@@ -162,7 +162,6 @@ class Demande(models.Model):
         demande = self.demandeauto.demandeautobiometrie
         form = BiometrieFormDisabled(instance=self)
 
-    print('form, demande : ', demande, form)
     return demande, form
 
   def save(self, *args, **kwargs):

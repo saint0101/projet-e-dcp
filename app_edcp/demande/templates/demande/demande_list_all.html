@@ -21,7 +21,7 @@
                 {% comment %} <th scope="col">Utilisateur</th> {% endcomment %}
                 <th scope="col">Date</th>
                 <th scope="col">Objet</th>
-                <th scope="col">Statut</th>
+                <th scope="col">Statut de la demande</th>
                 <th scope="col">Analyse</th>
                 <th scope="col">Affecté à</th>
                 <th scope="col">Action</th>
@@ -32,7 +32,7 @@
                 <tr>
                   {% comment %} <td> {{ forloop.counter }} </td> {% endcomment %}
                   {% comment %} <td> {{ demande.id|stringformat:"08d" }} </td> {% endcomment %}
-                  <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
+                  <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-primary fw-bold"> {{ demande.num_demande }} </a></td>
                   <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}"> {{ demande.organisation }} </a> </td>
                   {% comment %} <td> {{ enregistrement.user.nom }} {{ enregistrement.user.prenoms }} </td> {% endcomment %}
                   <td> {{ demande.created_at }} </td>

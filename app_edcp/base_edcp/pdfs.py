@@ -16,7 +16,10 @@ from PIL import Image
 
 PDF_TEMPLATES = {
   # Lettre d'approbation du Correspondant
-  'correspondant_approbation': 'pdfs/correspondant/approbation_client.html'
+  'lettre_approbation': 'pdfs/correspondant/lettre_approbation.html',
+  'lettre_refus': 'pdfs/correspondant/lettre_refus.html',
+  'decision_autorisation': 'pdfs/demande_auto/decision_autorisation.html',
+  'decision_refus': 'pdfs/demande_auto/decision_refus.html',
 }
 
 def generate_pdf(request, template, context):

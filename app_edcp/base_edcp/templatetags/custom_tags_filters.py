@@ -137,7 +137,7 @@ def get_status_color(status):
         if status.label in ['demande_attente_traitement',]:
             badge_class = "text-bg-danger text-light"
 
-        if status.label in ['analyse_en_cours',]:
+        if status.label in ['analyse_en_cours', 'analyse_attente_validation_1', 'analyse_attente_validation_2', 'analyse_attente_validation_3', 'analyse_attente_validation_4', 'analyse_attente_validation_5']:
             badge_class = "text-bg-primary text-light"
 
         if status.label in ['demande_attente_complement',]: 
@@ -147,10 +147,10 @@ def get_status_color(status):
             badge_class = "text-bg-success text-light"
         
         if status.description:
-            description = f'{status.description[0:30]}...' if len(status.description) > 30 else status.description
+            description = f'{status.description[0:36]}...' if len(status.description) > 36 else status.description
             return f'<span class="badge rounded-pill {badge_class} fw-normal">{description}</span>'
         
         else:
             return f'<span class="badge rounded-pill {badge_class} fw-normal">{status.label}</span>'
     
-    return ''
+    return '<em class="text-hint">statut manquant</em>'

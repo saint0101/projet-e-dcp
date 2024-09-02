@@ -96,9 +96,9 @@
 
                   {% if request.user.is_staff %}
                     {% if analyse_exists %}
-                      <a href="{% url 'dashboard:demande_auto:analyse' pk=demande.id %}" class="btn btn-secondary me-2">Poursuivre l'analyse</a>
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.id %}" class="btn btn-secondary me-2">Poursuivre l'analyse</a>
                     {% else %}
-                      <a href="{% url 'dashboard:demande_auto:analyse' pk=demande.id %}" class="btn btn-info me-2">Commencer l'analyse</a>
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.id %}" class="btn btn-info me-2">Commencer l'analyse</a>
                     {% endif %}
                     
                   {% endif %}

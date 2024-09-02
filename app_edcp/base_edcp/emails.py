@@ -42,6 +42,10 @@ MAIL_CONTENTS = {
     'subject': 'Approbation du Correspondant',
     'template': 'emails/correspondant/approbation_reponse.html'
   },
+  'decision_autorisation': {
+    'subject': 'Votre demande d\'autorisation',
+    'template': 'emails/demande_auto/decision_autorisation.html',
+  },
 }
 
 

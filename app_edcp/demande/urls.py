@@ -15,6 +15,7 @@ urlpatterns = [
   path('analyse/submit/<int:pk>/', views.submit_analyse, name='submit'), # vue de soumission de l'analyse
   path('validation/<int:pk>/', views.handle_validation, name='validation'), # validation d'une demande
   path('commentaire/<int:pk>/', views.add_commentaire, name='add_commentaire'), # ajout de commentaires
+  path('reponse/<int:pk>/', views.generate_response, name='response_create'), # vue de génération du projet de reponse
   path('reponse/<int:pk>/<str:template>/', views.generate_response, name='response_create'), # vue de génération du projet de reponse
   path('delete/<int:pk>/', views.delete_demande, name='delete'),
   # autres motifs d'URL

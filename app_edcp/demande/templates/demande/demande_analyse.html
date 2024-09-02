@@ -12,14 +12,35 @@
       $('#form-demande input').attr('disabled', true);
       $('#form-demande textarea').attr('disabled', true);
       $('#form-demande select').attr('disabled', true);
-      $('span.asteriskField').toggle(false);
+      $('#form-demande span.asteriskField').toggle(false);
 
       var show_comments = $('#action-parameter').val();
       console.log(show_comments);
       if (show_comments == 'True'){ // valeur python
         $('#offcanvasCommentaires').addClass('show');
       } 
+
+      updateSelectStyle();
+
+      $('#formAnalyse .select.form-select').change(function (){
+        updateSelectStyle();
+      })
     });
+    
+    function updateSelectStyle(){
+      $('#formAnalyse .select.form-select').each(function (){
+        var selectedValue = $(this).val();
+        if(selectedValue == 0){
+          $(this).css('color', '#ee0813') ;
+        }
+        if(selectedValue == 5){
+          $(this).css('color', '#FB8521') ;
+        }
+        if(selectedValue == 10){
+          $(this).css('color', '#339966') ;
+        }
+      })
+    }
 
     function goToAnalyse(){
       $('#accordion-btn-analyse').removeClass('collapsed')
@@ -38,6 +59,10 @@
     }
   </script>
 {% endblock %}
+
+{% block toastr %}
+<script></script>
+{% endblock toastr %}
 
 {% block content %}
 
@@ -144,15 +169,15 @@
         </div>
       </div> {% endcomment %}
       <div class="col-6">
-        <div class="accordion" id="accordionAnalyse">
+        <div class="accordion" id="accordionDetails">
 
           <div class="accordion-item" id="accordionOrganisation">
             <h2 class="accordion-header">
-              <button id="accordion-btn-analyse" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrganisation" aria-expanded="true" aria-controls="collapseOrganisation">
+              <button id="accordion-btn-analyse" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrganisation" aria-expanded="true" aria-controls="collapseOrganisation">
                 Organisation
               </button>
             </h2>
-            <div id="collapseOrganisation" class="accordion-collapse" data-bs-parent="#accordionOrganisation">
+            <div id="collapseOrganisation" class="accordion-collapse collapse show" data-bs-parent="#accordionDetails">
               <div class="accordion-body">
                 {% with demande.organisation as org %}
                   <p>
@@ -175,11 +200,11 @@
         
           <div class="accordion-item" id="accordionJustificatifs">
             <h2 class="accordion-header">
-              <button id="accordion-btn-analyse" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseJustificatifs" aria-expanded="true" aria-controls="collapseJustificatifs">
+              <button id="accordion-btn-analyse" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseJustificatifs" aria-expanded="true" aria-controls="collapseJustificatifs">
                 Justificatifs
               </button>
             </h2>
-            <div id="collapseJustificatifs" class="accordion-collapse collapse" data-bs-parent="#accordionJustificatifs">
+            <div id="collapseJustificatifs" class="accordion-collapse collapse" data-bs-parent="#accordionDetails">
               <div class="accordion-body">
                 {% if demande.is_personne_morale %}
                   <ul class="list-group list-group-flush">
@@ -207,11 +232,11 @@
         
           <div class="accordion-item" id="accordionFormulaire">
             <h2 class="accordion-header">
-              <button id="accordion-btn-analyse" class="accordion-button show" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormulaire" aria-expanded="true" aria-controls="collapseFormulaire">
+              <button id="accordion-btn-analyse" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormulaire" aria-expanded="true" aria-controls="collapseFormulaire">
                 Formulaire
               </button>
             </h2>
-            <div id="collapseFormulaire" class="accordion-collapse" data-bs-parent="#accordionFormulaire">
+            <div id="collapseFormulaire" class="accordion-collapse collapse show" data-bs-parent="#accordionDetails">
               <div class="accordion-body">
                 <p>
                   {% if demande.categorie.label == 'designation_dpo' %}
@@ -278,7 +303,7 @@
               </h2>
               <div id="collapseAnalyse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:' , show'}} " data-bs-parent="#accordionAnalyse">
                 <div class="accordion-body">
-                  <form method="post" onsubmit="openLoader()">
+                  <form method="post" onsubmit="openLoader()" id="formAnalyse">
                     {% csrf_token %}
                     {{ form|crispy }}
                     <button class="btn btn-primary" name="analyse_form_submit" {{ demande.analyse.is_locked|yesno:'disabled, ' }} type="submit">Enregistrer</button>
@@ -295,7 +320,7 @@
               </h2>
               <div id="collapseReponse" class="accordion-collapse collapse {{projet_reponse_pdf|yesno:'show, '}}" data-bs-parent="#accordionAnalyse">
                 <div class="accordion-body">
-                  <form method="post" action="{% url 'dashboard:demande:response_create' pk=demande.id template='demande_approbation' %}">
+                  <form method="post" action="{% url 'dashboard:demande:response_create' pk=demande.id %}">
                     {% csrf_token %}
                     {{ form_projet_reponse|crispy }}
                     <button type="submit" class="btn btn-primary" {{ demande.analyse.is_locked|yesno:'disabled, ' }}>Générer le projet de réponse</button>
@@ -313,44 +338,11 @@
 
           </div>
         </div>
-
-        {% comment %} {% if demande.analyse.projet_reponse %}
-          <div class="card custom-card mb-3">
-            <div class="card-header custom-text-light">
-              Projet de réponse
-            </div>
-            <div class="card-body small-padding">
-              <p>{{ demande.analyse.projet_reponse.fichier_reponse|get_fileinfos|safe }}</p>
-              <div>
-                <object id="embedded_pdf" data="data:application/pdf;base64,{{ projet_reponse_pdf }}" type="application/pdf" width="100%" height="700"></object>
-              </div>
-            </div>
-          </div>
-        {% endif %}
-        <div class="card custom-card">
-          <div class="card-header custom-text-light">
-            Analyse
-          </div>
-          <div class="card-body small-padding">
-            <form method="post" onsubmit="openLoader()">
-              {% csrf_token %}
-              {{ form|crispy }}
-              <button class="btn btn-primary" name="analyse_form_submit" type="submit">Enregistrer</button>
-            </form>
-          </div>
-        </div> {% endcomment %}
-
         
       </div>
     </div>
   </div>
   
-  
-  {% comment %} <div class="col">
-    
-  </div> {% endcomment %}
-  
-  {% comment %} <div class="col-3"></div> {% endcomment %}
 </div>
 
 
@@ -358,48 +350,6 @@
   {% include "demande/commentaires_demande.html" with demande=demande %}
 {% endblock %}
 
-{% comment %} <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCommentaires" aria-labelledby="offcanvasCommentaires">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title custom-text-light" id="offcanvasLabel">Commentaires sur la demande</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <form method="post" onsubmit="openLoader()" action="{% url 'dashboard:demande:add_commentaire' pk=demande.id%}">
-      {% csrf_token %}
-      {{ form_comment|crispy}}
-      <button type="submit" class="btn btn-primary me-1 mb-2" name="form_comment_submit">Envoyer</button>
-      {% if demande.status.label == 'attente_complement' %}
-        <button type="submit" class="btn btn-secondary mb-2" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
-      {% else %}
-        <button type="submit" class="btn btn-outline-danger mb-2" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
-      {% endif %}
-    </form>
-    
-    <div class="col-12 col-list-commentaires py-3">
-      {% for commentaire in commentaires %}
-        {% if commentaire.auteur == request.user %}
-          <div class="message-bubble ">
-        {% else %}
-          <div class="message-bubble message-bubble-self">
-        {% endif %}
-          <span class="message-bubble-title text-hint custom-text-light">
-            <i class="bi bi-person"></i>
-            {{ commentaire.auteur }} - {{ commentaire.created_at }}
-          </span><br>
-          <span class=" message-bubble-body text-hint fw-bold">
-            {{ commentaire.objet }}
-          </span>
-          <br>
-          <span class=" message-bubble-body">
-            {{ commentaire.message }}
-          </span>
-        </div>
-      {% empty%}
-        Aucun commentaire pour l'instant.
-      {% endfor %}
-    </div>
-  </div>
-</div> {% endcomment %}
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
 {% endblock content %}
 

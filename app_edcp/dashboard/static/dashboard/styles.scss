@@ -210,17 +210,17 @@
   font-size: .8rem;
   font-weight: 600;
   // color: $custom-light;
-  color: #fff;
+  color: #777;
   // background-color: $custom-bg-light;
-  background-color: #a6aab0;
+  background-color: #eee;
 }
 
 .accordion-button:not(.collapsed) {
   // color: $custom-light;
-  color: #fff;
+  color: #777;
   font-weight: 600;
   // background-color: $custom-bg-light;
-  background-color: #a6aab0;
+  background-color: #eee;
   // background-color: #FFF;
 }
 
@@ -402,4 +402,13 @@
   height: 100%;
   border: 1px solid #dddddd;
   border-radius: 5px;
+}
+
+#div_id_avis_juridique .form-check, #div_id_avis_technique .form-check{
+  display: inline-flex;
+  margin-right: 10px;
+}
+
+#div_id_avis_juridique .form-check-input, #div_id_avis_technique .form-check-input{
+  margin-right: 4px;
 }

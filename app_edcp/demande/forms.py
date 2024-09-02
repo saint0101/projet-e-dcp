@@ -1,3 +1,4 @@
+from email.policy import default
 import json
 from django import forms
 
@@ -22,7 +23,8 @@ class ValidateForm(forms.Form):
 
 
 def generate_analyse_form(categorie_demande, analyse=None):
-  AVIS_CHOICES = [('', '---------'),] + [(False, 'Refuser'), (True, 'Autoriser')]
+  # AVIS_CHOICES = [('', '---------'),] + [(False, 'Refuser'), (True, 'Autoriser')]
+  AVIS_CHOICES = [(False, 'Refuser'), (True, 'Autoriser')]
   observations = forms.CharField(
     label='Observations', 
     required=False,
@@ -36,7 +38,14 @@ def generate_analyse_form(categorie_demande, analyse=None):
   avis_juridique = forms.BooleanField(
     label='Avis juridique',
     required=False,
-    widget=forms.Select(choices=AVIS_CHOICES)
+    initial=None,
+    widget=forms.RadioSelect(choices=AVIS_CHOICES)
+  )
+  avis_technique = forms.BooleanField(
+    label='Avis technique',
+    required=False,
+    initial=None,
+    widget=forms.RadioSelect(choices=AVIS_CHOICES)
   )
   
   class AnalyseDemandeForm(forms.Form):
@@ -44,7 +53,7 @@ def generate_analyse_form(categorie_demande, analyse=None):
     pass
   
   critere_fields = CritereEvaluation.objects.filter(categorie_demande=categorie_demande)
-  NOTATION_CHOICES = [('', '---------'),] + [(notation.id, notation.description) for notation in EchelleNotation.objects.all()]
+  NOTATION_CHOICES = [('', '---------'),] + [(notation.valeur, notation.description) for notation in EchelleNotation.objects.all()]
 
   deserialized_data = {}
   if analyse and analyse.evaluation :
@@ -70,6 +79,9 @@ def generate_analyse_form(categorie_demande, analyse=None):
   AnalyseDemandeForm.base_fields['prescriptions'] = prescriptions
   AnalyseDemandeForm.base_fields['avis_juridique'] = avis_juridique
   
+  if categorie_demande.label == 'demande_autorisation':
+    AnalyseDemandeForm.base_fields['avis_technique'] = avis_technique
+  
   return AnalyseDemandeForm
 
 
@@ -90,7 +102,9 @@ class ProjetReponseModelForm(forms.ModelForm):
   """ Formulaire de génération de projet de réponse. """
   type_reponse = forms.ModelChoiceField(
     queryset=TypeReponse.objects.all(),
-    widget=forms.RadioSelect
+    widget=forms.RadioSelect,
+    required=True,
+    label='Type de reponse',
   )
   class Meta:
     model = ReponseDemande
