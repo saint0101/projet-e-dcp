@@ -1,5 +1,9 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
+
 from base_edcp.models import User, Enregistrement
+from base_edcp import validators
+from options.models import Pays
 from options.models import OptionModel
 from demande.models import Demande, Status
 # from .forms import TraitementFormDisabled, TransfertFormDisabled, VideoFormDisabled, BiometrieFormDisabled
@@ -40,6 +44,128 @@ class PersConcernee(OptionModel):
   class Meta:
     verbose_name = 'Catégorie de personnes concernées'
     verbose_name_plural = 'Catégories de personnes concernées'
+
+
+
+class FondementJuridique(OptionModel):
+  """ Fondement juridique """
+  class Meta:
+    verbose_name = 'Fondement juridique'
+    verbose_name_plural = 'Fondements juridiques'
+
+
+class ModeRecueilConsent(OptionModel):
+  """ Table de recueil des concentement"""
+  class Meta:
+    verbose_name = 'Mode de recueil de consentement'
+    verbose_name_plural = 'Modes de recueil de consentement'
+
+
+class ModeTransfert(OptionModel):
+  class Meta:
+    verbose_name = 'Mode de transfert des données'
+    verbose_name_plural = 'Modes de transfert des données'
+
+
+class TypeDestinataireTransfert(OptionModel):
+  class Meta:
+    verbose_name = 'Type de destinataire des données'
+    verbose_name_plural = 'Types de destinataire des données'
+
+
+class TransfertDonnees(models.Model):
+  """ Table des transferts de donnees """
+  # pays = models.CharField(max_length=255, verbose_name="Pays")
+  created_at = models.DateTimeField( # date d'enregistrement.
+    auto_now_add=True, 
+    verbose_name='Date de Création'
+  )
+  pays = models.ForeignKey(
+    Pays, 
+    on_delete=models.SET_NULL,
+    null=True, 
+    verbose_name='Pays de destination'
+    )
+  destinataire = models.CharField(
+    max_length=255, 
+    blank=True,
+    null=True,
+    verbose_name="Destinataire données"
+    )
+  mode_transfert = models.ForeignKey(
+    ModeTransfert,
+    null=True,
+    on_delete=models.SET_NULL, 
+    verbose_name="Mode de transfert des données"
+    )
+  type_destinataire = models.ForeignKey(
+    TypeDestinataireTransfert, 
+    null=True,
+    on_delete=models.SET_NULL,
+    verbose_name="Type de Destinataire"
+    )
+  
+  class Meta:
+    verbose_name = 'Transfert de données'
+    verbose_name_plural = 'Transferts de données'
+
+  def __str__(self):
+    return f"Transfert vers {self.destinataire} ({self.pays})"
+
+
+class CategorieDonnees(OptionModel):
+  """ Categorie de données """
+  class Meta:
+    verbose_name = 'Categorie de données'
+    verbose_name_plural = 'Categories de données'
+
+
+class TypeDonnees(OptionModel):
+  """ Types de données personnelles """
+  categorie_donnees = models.ForeignKey(
+    CategorieDonnees, 
+    on_delete=models.SET_NULL, 
+    null=True,
+    verbose_name="Categorie de données"
+  )
+  
+  class Meta:
+    verbose_name = 'Type de données personnelles'
+    verbose_name_plural = 'Types de données personnelles'
+
+
+class ModeInterconnexion(OptionModel):
+  class Meta:
+    verbose_name = 'Mode d\'interconnexion'
+    verbose_name_plural = 'Modes d\'interconnexion'
+
+
+class InterConnexion(models.Model):
+  created_at = models.DateTimeField( # date d'enregistrement.
+    auto_now_add=True, 
+    verbose_name='Date de Création'
+  )
+  destinataire = models.CharField(
+    max_length=100, 
+    null=True,
+    verbose_name="Destinataire des données"
+    )
+  mode_interconnexion = models.ForeignKey(
+    ModeInterconnexion,
+    null=True,
+    on_delete=models.SET_NULL, 
+    verbose_name="Mode d'interconnexion"
+    )
+  description = models.CharField(
+    max_length=255, 
+    blank=True,
+    null=True,
+    verbose_name="Description de l'interconnexion"
+    )
+  
+  class Meta:
+    verbose_name = 'Interconnexion'
+    verbose_name_plural = 'Interconnexions'
 
 
 class EchelleNotation(OptionModel):
@@ -95,6 +221,11 @@ class DemandeAuto(Demande):
       'SousFinalite', 
       blank=True,
       verbose_name='Sous-finalités'
+    )
+    description_traitement = models.TextField(
+      blank=True, 
+      null=True, 
+      verbose_name='Description du traitement'
     )
     type_demande = models.ForeignKey(
       'TypeDemandeAuto', 
@@ -161,17 +292,51 @@ class DemandeAuto(Demande):
 
 class DemandeAutoTraitement(DemandeAuto):
   """ Sous-classe de demande d'autorisation pour les traitements """
-  fondement_juridique = models.CharField(
+  autre_sous_finalite = models.CharField(
+    max_length=255, null=True, blank=True,
+    verbose_name='Autre sous-finalité'
+  )
+  fondement_juridique = models.ForeignKey(
+    'FondementJuridique',
     null=True,
     blank=True,
+    on_delete=models.SET_NULL,
     max_length=255,
     verbose_name='Fondement Juridique'
+  )
+  description_fondement= models.TextField(
+    null=True, blank=True,
+    verbose_name='Description du fondement juridique'
+  )
+  mode_consentement = models.ManyToManyField(
+    'ModeRecueilConsent',
+    verbose_name='Modes de recueil du consentement'
+  )
+  autre_mode_consentement = models.CharField(
+    max_length=255, null=True, blank=True,
+    verbose_name='Autre mode de recueil du consentement'
   )
   procedures = models.TextField(
     null=True,
     blank=True,
     max_length=500,
-    verbose_name='Procédures'
+    verbose_name='Procédures de gestion des droits des personnes'
+  )
+  donnees_traitees = models.ManyToManyField(
+    'TypeDonnees',
+    verbose_name='Données traitees'
+  )
+  autre_donnees_traitees = models.CharField(
+    max_length=255, null=True, blank=True,
+    verbose_name='Autre données traitées'
+  )
+  transferts = models.ManyToManyField(
+    'TransfertDonnees',
+    verbose_name='Transferts de données'
+  )
+  interconnexions = models.ManyToManyField(
+    'InterConnexion',
+    verbose_name='Interconnexions de données'
   )
   mesures_securite = models.TextField(
     null=True,
@@ -179,6 +344,23 @@ class DemandeAutoTraitement(DemandeAuto):
     max_length=500,
     verbose_name='Mesures de Securité'
   )
+  file_consentement = models.FileField(
+    null=True,
+    blank=True,
+    upload_to='docs/demande_auto',
+    verbose_name='Preuve du recueil du consentement',
+    validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+    help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
+  )
+  file_cgu = models.FileField(
+    null=True,
+    blank=True,
+    upload_to='docs/demande_auto',
+    verbose_name='Conditions Générales d\'Utilisation',
+    validators=[validators.validate_files, FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])],
+    help_text='Formats acceptés images et documents PDF : jpg, jpeg, png, pdf. Taille limite: 8 Mb.'
+  )
+  
   @classmethod
   def get_type_demande(cls):
     return TypeDemandeAuto.objects.get(label='traitement')

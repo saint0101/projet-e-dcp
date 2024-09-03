@@ -64,6 +64,27 @@
           // $('#id_sous_finalites option[value="' + sousFinalite.id + '"]').toggle(true)
         })
       }
+
+      function toggleConsent(){
+        var $fondement = $('#id_fondement_juridique').val()
+
+        if($fondement == 1){
+          $('#div_id_description_fondement').toggle(false);
+          $('#div_id_mode_consentement').toggle(true);
+          $('#div_id_autre_mode_consentement').toggle(true);
+        }
+        else {
+          $('#div_id_description_fondement').toggle(true);
+          $('#div_id_mode_consentement').toggle(false); 
+          $('#div_id_autre_mode_consentement').toggle(false);
+        }
+      }
+
+      toggleConsent();
+
+      $('#id_fondement_juridique').change(function(){
+        toggleConsent();
+      })
     });
     {% comment %} document.addEventListener("DOMContentLoaded", function(){
       const fieldFinalite = document.getElementById('id_finalite')

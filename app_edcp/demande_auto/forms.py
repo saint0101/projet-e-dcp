@@ -3,7 +3,9 @@ from django import forms
 from base_edcp.models import Enregistrement
 from demande.models import Status, Commentaire, AnalyseDemande
 from demande_auto.forms_structures import FORM_STRUCTURE_BIOMETRIE, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_VIDEO, get_form_fields
-from demande_auto.models import TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, DemandeAuto, DemandeAutoTraitement, DemandeAutoBiometrie, DemandeAutoTransfert, DemandeAutoVideo
+from demande_auto.models import (
+TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, FondementJuridique, ModeRecueilConsent,
+DemandeAuto, DemandeAutoTraitement, DemandeAutoBiometrie, DemandeAutoTransfert, DemandeAutoVideo)
 
 
 class ChangeStatusForm(forms.Form):
@@ -118,6 +120,7 @@ class UpdateDemandeForm(forms.ModelForm):
 class UpdateDemandeTraitementForm(forms.ModelForm):
   """ Formulaire de mise à jour d'une demande d'autorisation de traitement """
   # type_demande_auto = TypeDemandeAuto.objects.get(label='traitement')
+  # MODES_CONSENT = 
   label_type = 'traitement'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
@@ -133,6 +136,17 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
+  )
+  """ fondement_juridique = forms.ModelChoiceField(
+    label='Fondement juridique',
+    queryset=FondementJuridique.objects.all(),
+    widget=forms.RadioSelect
+  ) """
+  mode_consentement = forms.ModelMultipleChoiceField(
+    label='Mode de recueil du consentement',
+    # queryset=[(mode.id, mode.description) for mode in ModeRecueilConsent.objects.all()] + [('O', 'Autre'),],
+    queryset=ModeRecueilConsent.objects.all().order_by('ordre'),
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre'}),
   )
   
   class Meta:

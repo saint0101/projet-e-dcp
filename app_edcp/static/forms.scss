@@ -98,7 +98,8 @@
   display: block;
   margin: .5em;
   min-height: 35em;
-  overflow: hidden;
+  height: auto;
+  overflow-y: scroll;
   position: relative;
   width: auto;
   -webkit-border-radius: 5px;
