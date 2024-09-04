@@ -38,7 +38,7 @@
     {% endblock %}
 
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% comment %} <script>
     document.body.addEventListener('htmx:configRequest', function(evt) {
       evt.detail.parameters['X-CSRFToken'] = '{{ csrf_token }}'; // add a new parameter into the mix

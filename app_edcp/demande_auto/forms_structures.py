@@ -6,7 +6,7 @@ sous forme de formulaire multisteps
 FORM_STRUCTURE_TRAITEMENT = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',
-   'fields': ['finalite', 'sous_finalites', 'autre_sous_finalite', 'description_traitement',]
+   'fields': ['finalite', 'sous_finalites', 'autre_sous_finalites', 'description_traitement',]
   },
 
   {'label': 'transparence',

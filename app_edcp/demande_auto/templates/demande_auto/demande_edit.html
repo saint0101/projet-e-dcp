@@ -31,13 +31,15 @@
       const selectFinalite = $('#id_finalite');
       const inputName = 'sous_finalites';
        
-      $('input[name="' + inputName + '"]').parent('div').toggle(false);
+      // $('input[name="' + inputName + '"]').parent('div').toggle(false);
       // $('#id_sous_finalites option').toggle(false);
       //console.log('inputs ', 'input[name="' + inputName + '"]');
       
       getSousFinalite()
 
       selectFinalite.on('change', function(){
+        $('#div_id_sous_finalites .form-check input').prop("checked", false);
+        $('#div_id_autre_sous_finalites').toggle(false);
         getSousFinalite();
       });
 
@@ -71,7 +73,10 @@
         if($fondement == 1){
           $('#div_id_description_fondement').toggle(false);
           $('#div_id_mode_consentement').toggle(true);
-          $('#div_id_autre_mode_consentement').toggle(true);
+          // $('#div_id_autre_mode_consentement').toggle(true);
+          if($('#id_mode_consentement_3').checked){
+            $('#div_id_autre_mode_consentement').toggle(true);
+          }
         }
         else {
           $('#div_id_description_fondement').toggle(true);
@@ -80,12 +85,51 @@
         }
       }
 
+      var $checkOther = $('fieldset div .form-check:last-child input[data-other="true"]');
+      // console.log('selector : ', $checkOther);
+      $('[id^=div_id_autre_]').toggle(false);
+
+      $checkOther.each(function(){
+        // console.log('input value changed : ', e, $(e.target).parents()[3].id);
+        const idParent = $(this).parents()[3].id;
+        const fieldName = idParent.replace('div_id_', '');
+
+        if(this.checked){
+          $('#div_id_autre_' + fieldName).toggle(true);
+        }
+        else {
+          $('#div_id_autre_' + fieldName).toggle(false);
+        }
+      });
+
+      $checkOther.change(function(e){
+        // console.log('input value changed : ', e, $(e.target).parents()[3].id);
+        const idParent = $(e.target).parents()[3].id;
+        const fieldName = idParent.replace('div_id_', '');
+
+        if(this.checked){
+          $('#div_id_autre_' + fieldName).toggle(true);
+        }
+        else {
+          $('#div_id_autre_' + fieldName).toggle(false);
+        }
+      });
+
       toggleConsent();
 
       $('#id_fondement_juridique').change(function(){
         toggleConsent();
       })
     });
+
+    function disableRequired(){
+      console.log('disabling : ', $('#tab-transfert input[required]'));
+      $('#tab-transfert input[required]').removeAttr('required');
+      $('#tab-transfert select[required]').removeAttr('required');
+      
+      $('#tab-interco input[required]').removeAttr('required');
+      $('#tab-interco select[required]').removeAttr('required');
+    }
     {% comment %} document.addEventListener("DOMContentLoaded", function(){
       const fieldFinalite = document.getElementById('id_finalite')
       fieldFinalite.addEventListener('change', function(){
@@ -129,14 +173,22 @@
           <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
 
           <div class="card-text mt-3">
+            {% if form.errors %}
+              <div class="alert alert-danger" role="alert">
+                {% for error in form.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
             <form method="post" id="update-demande-form" onsubmit="openLoader()">
               {% csrf_token %}
               {{ form }}
               {% comment %} {{ rendered_form }} {% endcomment %}
-              <button id="btn-submit" name="form_submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
-              <button id="btn-submit-quit" name="form_submit_quit" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
+              <button onclick="disableRequired()" id="btn-submit" name="form_submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
+              <button onclick="disableRequired()" id="btn-submit-quit" name="form_submit_quit" class="btn btn-dark py-2 m-2" type="submit">Enregistrer et quitter</a>
             </form>
           </div>
+
         </div>
       </div>
     </div>

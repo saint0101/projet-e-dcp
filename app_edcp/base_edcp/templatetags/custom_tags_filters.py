@@ -128,6 +128,12 @@ def get_demande_url(demande, absolute_url=False):
     
 
 @register.filter
+def check_initial(value, item):
+    """ Vérifie si l'ID de item est dans la liste des ID de value (dict). """
+    return item.id in [i.id for i in value]
+
+
+@register.filter
 def get_status_color(status):
     badge_class = ""
     if status and status.label:

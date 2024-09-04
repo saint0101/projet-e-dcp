@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
 # CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
@@ -16,9 +17,13 @@ from .models import (
   DemandeAutoTransfert, 
   DemandeAutoVideo, 
   DemandeAutoBiometrie,
+  InterConnexion,
+  TransfertDonnees,
   TypeDemandeAuto,
   SousFinalite)
 from .forms import (
+  AddIntercoForm,
+  AddTransfertForm,
   CreateDemandeForm, 
   ChangeStatusForm, 
   UpdateDemandeForm,
@@ -41,7 +46,7 @@ def get_sous_finalites(request, pk):
   if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
     id_finalite = request.GET.get('id_finalite') # récupération de l'ID de la finalité dans la requête
     if id_finalite and int(id_finalite) > 0:
-      sous_finalites = SousFinalite.objects.filter(finalite_id=int(id_finalite)).values('id', 'label') # récupération des sous-finalités
+      sous_finalites = SousFinalite.objects.filter(Q(finalite_id=int(id_finalite)) | Q(label='autre')).values('id', 'label') # récupération des sous-finalités
       return JsonResponse({'sousFinalites': list(sous_finalites)}) # renvoi les sous finalités au format JSON
 
     return JsonResponse({'sousFinalites': []})
@@ -65,11 +70,16 @@ def get_form_context(obj_id, request=None):
   form = None
   object = None
   context = {}
+  transferts = None
+  intercos = None
   # Instanciations en fonction du type de demande
   if type_demande_label == 'traitement': 
     print ('update traitement')
     form_structure = FORM_STRUCTURE_TRAITEMENT
     object = get_object_or_404(DemandeAutoTraitement, pk=obj_id) # récupération de l'objet selon son type de demande
+    transferts = object.transferts.all()
+    intercos = object.interconnexions.all()
+
     if request:
       form = UpdateDemandeTraitementForm(request.POST, instance=object) # instanciation du formulaire
     else:
@@ -103,16 +113,92 @@ def get_form_context(obj_id, request=None):
       form = UpdateDemandeBioForm(instance=object)
   
   # génération du formulaire sous forme de multisteps
-  rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
+  #rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
+  
+  form_context = {
+    'demande': object,
+    'form': form, 
+    'form_structure': form_structure,
+    'form_transfert': AddTransfertForm(),
+    'transferts': transferts,
+    'form_interco': AddIntercoForm(),
+    'intercos': intercos,
+  }
+  rendered_form = form.render('forms/multisteps_v2.html', context=form_context)
 
   # création du contexte
   context['demande'] = object
   context['raw_form'] = form
   context['form'] = rendered_form
+  # context['form2'] = rendered_form2
   context['form_structure'] = form_structure
   context['historique'] = HistoriqueDemande.objects.filter(demande=object)
   
   return context
+
+
+######### HTMX requests ########@@@
+
+def add_transfert(request, pk):
+  """ Formulaire d'ajout de transfert """
+  if request.method == 'POST':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    form = AddTransfertForm(request.POST)
+    if form.is_valid():
+      transfert = form.save(commit=True)
+      demande.transferts.add(transfert)
+      demande.save()
+    else:
+      print('erreur : ', form.errors)
+      # messages.error(request, f'{form.errors}')
+
+    transferts = demande.transferts.all()
+    return render(request, 'demande_auto/partials/list_transferts.html', {'transferts': transferts, 'demande': demande})   
+  
+  else:
+    return HttpResponseBadRequest('Bad request')
+  
+
+def add_interco(request, pk):
+  """ Formulaire d'ajout d'interconnexion """
+  if request.method == 'POST':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    form = AddIntercoForm(request.POST)
+    if form.is_valid():
+      interco = form.save(commit=True)
+      demande.interconnexions.add(interco)
+      demande.save()
+    else:
+      print('erreur : ', form.errors)
+      # messages.error(request, f'{form.errors}')
+
+    intercos = demande.interconnexions.all()
+    return render(request, 'demande_auto/partials/list_intercos.html', {'intercos': intercos, 'demande': demande})   
+  
+  else:
+    return HttpResponseBadRequest('Bad request')
+
+
+def delete_transfert(request, pk, transfert_id):
+  if request.method == 'DELETE':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    transfert = get_object_or_404(TransfertDonnees, pk=transfert_id)
+    if demande.created_by == request.user and demande.transferts.filter(pk=transfert_id).exists():
+      nb_deleted, entries_deleted = transfert.delete()
+    
+    transferts = demande.transferts.all()
+    return render(request, 'demande_auto/partials/list_transferts.html', {'transferts': transferts, 'demande': demande})
+  
+
+def delete_interco(request, pk, interco_id):
+  if request.method == 'DELETE':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    interco = get_object_or_404(InterConnexion, pk=interco_id)
+    if demande.created_by == request.user and demande.interconnexions.filter(pk=interco_id).exists():
+      nb_deleted, entries_deleted = interco.delete()
+    
+    intercos = demande.interconnexions.all()
+    return render(request, 'demande_auto/partials/list_intercos.html', {'intercos': intercos, 'demande': demande})
 
 
 ######## Vues #########

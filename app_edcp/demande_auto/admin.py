@@ -21,7 +21,7 @@ class FinaliteAdmin(admin.ModelAdmin):
 class SousFinaliteAdmin(admin.ModelAdmin):
     """ Sous-finalités de traitement """
     ordering = ['id']
-    list_display = ['finalite','label', 'description', 'is_sensible', 'ordre']
+    list_display = ['label', 'description', 'finalite', 'is_sensible', 'ordre']
 
 
 

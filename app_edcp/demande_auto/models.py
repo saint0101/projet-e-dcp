@@ -292,7 +292,7 @@ class DemandeAuto(Demande):
 
 class DemandeAutoTraitement(DemandeAuto):
   """ Sous-classe de demande d'autorisation pour les traitements """
-  autre_sous_finalite = models.CharField(
+  autre_sous_finalites = models.CharField(
     max_length=255, null=True, blank=True,
     verbose_name='Autre sous-finalité'
   )
@@ -332,10 +332,12 @@ class DemandeAutoTraitement(DemandeAuto):
   )
   transferts = models.ManyToManyField(
     'TransfertDonnees',
+    blank=True,
     verbose_name='Transferts de données'
   )
   interconnexions = models.ManyToManyField(
     'InterConnexion',
+    blank=True,
     verbose_name='Interconnexions de données'
   )
   mesures_securite = models.TextField(

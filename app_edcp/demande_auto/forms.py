@@ -1,10 +1,13 @@
+from cProfile import label
+from pyexpat import model
 from django import forms
+from django.db.models import Q
 # Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
 from base_edcp.models import Enregistrement
 from demande.models import Status, Commentaire, AnalyseDemande
 from demande_auto.forms_structures import FORM_STRUCTURE_BIOMETRIE, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_VIDEO, get_form_fields
 from demande_auto.models import (
-TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, FondementJuridique, ModeRecueilConsent,
+CategorieDonnees, InterConnexion, TransfertDonnees, TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, FondementJuridique, ModeRecueilConsent, TypeDonnees,
 DemandeAuto, DemandeAutoTraitement, DemandeAutoBiometrie, DemandeAutoTransfert, DemandeAutoVideo)
 
 
@@ -117,6 +120,29 @@ class UpdateDemandeForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) """
 
 
+class AddTransfertForm(forms.ModelForm):
+  """ Formulaire permettant d'ajouter des transferts lors d'une demande d'autorisation """
+  """ QUESTION_TRANSFERT_CHOICES = [
+    (False, 'Non, les données sont conservées sur le territoire ivoirien uniquement.'), 
+    (True, 'Oui, les données sont transférées hors de la Côte d\'Ivoire.')]
+  
+  has_transferts = forms.BooleanField(
+    label='Les données collectées sont-elles transférées hors de la Côte d\'Ivoire ?', 
+    required=False,
+    widget=forms.RadioSelect(choices=QUESTION_TRANSFERT_CHOICES),
+  ) """
+
+  class Meta:
+    model = TransfertDonnees
+    fields = '__all__'
+
+
+class AddIntercoForm(forms.ModelForm):
+  class Meta:
+    model = InterConnexion
+    fields = '__all__'
+
+
 class UpdateDemandeTraitementForm(forms.ModelForm):
   """ Formulaire de mise à jour d'une demande d'autorisation de traitement """
   # type_demande_auto = TypeDemandeAuto.objects.get(label='traitement')
@@ -129,7 +155,7 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
   sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
-    widget=forms.CheckboxSelectMultiple,
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
     help_text='Veuillez sélectionner une finalité pour afficher les sous-finalités correspondantes.'
   )
   personnes_concernees = forms.ModelMultipleChoiceField(
@@ -146,8 +172,35 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     label='Mode de recueil du consentement',
     # queryset=[(mode.id, mode.description) for mode in ModeRecueilConsent.objects.all()] + [('O', 'Autre'),],
     queryset=ModeRecueilConsent.objects.all().order_by('ordre'),
-    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre'}),
+    required=False,
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
   )
+  """autre_mode_consentement = forms.CharField(
+    label='Autre mode de recueil du consentement',
+    required=False,
+    widget=forms.TextInput(attrs={'class': 'is-autre', 'data-other': 'mode_consentement'}),
+  )"""
+  donnees_traitees = forms.ModelMultipleChoiceField(
+    label='Données traitees',
+    queryset=TypeDonnees.objects.select_related('categorie_donnees').order_by('categorie_donnees__is_sensible', 'categorie_donnees__ordre', 'ordre'),
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
+  )
+
+  def get_nested_dcp(self):
+    categories = CategorieDonnees.objects.all().order_by('is_sensible', 'ordre')
+    nested_items = []
+
+    for categorie in categories:
+      items = self.fields['donnees_traitees'].queryset.filter(categorie_donnees=categorie)
+      
+      nested_items.append((categorie, items))
+
+    # print('items : ', nested_items)
+    return nested_items
+  
+
+  def get_initial_donnees_traitees(self):
+    return [donnee.id for donnee in self.initial['donnees_traitees']]
   
   class Meta:
     model = DemandeAutoTraitement
@@ -157,9 +210,11 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
+    list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.exclude(label='autre')
     self.fields['finalite'].queryset = list_finalites
-    self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+    self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(Q(finalite__in=list_finalites) | Q(label='autre')).order_by('ordre')
+    # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) | SousFinalite.objects.filter(label='autre')
+    # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(label='autre')
 
 
 class TraitementFormDisabled(UpdateDemandeTraitementForm):
