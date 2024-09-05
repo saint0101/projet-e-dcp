@@ -69,7 +69,11 @@ DEMANDE_EMAILS_TEMPLATES = {
   # Templates des emails pour les demandes d'autorisation
   'demande_autorisation': { 
     'demande_attente_traitement':{},
-    '	analyse_en_cours': {},
+    'demande_attente_paiement': {
+      'subject': 'Votre demande d\'autorisation',
+      'template': 'emails/demande_auto/demande_attente_paiement.html'
+    },
+    'analyse_en_cours': {},
     'demande_attente_complement': {},
     'traitement_termine': {},
   },

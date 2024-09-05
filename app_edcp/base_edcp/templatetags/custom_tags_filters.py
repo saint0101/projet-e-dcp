@@ -151,6 +151,9 @@ def get_status_color(status):
 
         if status.label in ['traitement_termine',]: 
             badge_class = "text-bg-success text-light"
+
+        if status.label in ['demande_attente_paiement',]: 
+            badge_class = "text-bg-info text-light"
         
         if status.description:
             description = f'{status.description[0:36]}...' if len(status.description) > 36 else status.description

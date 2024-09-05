@@ -18,6 +18,7 @@ urlpatterns = [
     path('edit/<str:pk>/add-interco/', views.add_interco, name='add_interco'),
     path('edit/<str:pk>/delete-transfert/<str:transfert_id>', views.delete_transfert, name='delete_transfert'),
     path('edit/<str:pk>/delete-interco/<str:interco_id>', views.delete_interco, name='delete_interco'),
+    path('edit/<str:pk>/submit-demande/', views.submit_demande, name='submit_demande'),
     path('<int:pk>', views.detail, name='detail'),
     
     # autres motifs d'URL

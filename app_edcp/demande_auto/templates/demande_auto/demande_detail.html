@@ -38,7 +38,7 @@
           <div class="card-text">
             <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }} </span><br>
             <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }} </span><br>
-            <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong> </span><br>
+            <span><i class="bi bi-sticky-fill custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong> </span><br>
             <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
             
             {% if show_form_analyse %}
@@ -75,15 +75,21 @@
                 
                 <div class="col">
                   {% if not request.user.is_staff %}
-                    {% if not demande.is_locked %}
+                    {% if demande.status.label == 'brouillon' or demande.status.label == 'demande_attente_complement' %}
                       <a href="{% url 'dashboard:demande_auto:edit' pk=demande.id %}" class="btn btn-primary me-2">Modifier</a>
-                      <button class="btn btn-success me-2">Soumettre la demande</button>
-                      <button class="btn btn-danger me-2">Supprimer</button>
+                      <a href="{% url 'dashboard:demande_auto:submit_demande' pk=demande.id %}" class="btn btn-success me-2" onclick="openLoader()">Soumettre la demande</a>
+                      
+                      {% if demande.status.label == 'brouillon' %}
+                        <button class="btn btn-danger me-2">Supprimer</button>
+                      {% endif %}
+                    
+                    {% elif demande.status.label == 'demande_attente_paiement' %}
+                      <a href="" class="btn btn-primary me-2" onclick="openLoader()">Joindre le justificatif de paiement</a>
                     
                     {% else %}
                       <button class="btn btn-primary me-2" disabled>Modifier</a>
                       <button class="btn btn-success me-2" disabled>Soumettre la demande</button>
-                      <button class="btn btn-danger me-2" disabled>Supprimer</button>
+                      {% comment %} <button class="btn btn-danger me-2" disabled>Supprimer</button> {% endcomment %}
                     {% endif %}
                     
                     <button class="btn btn-light me-2 mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">

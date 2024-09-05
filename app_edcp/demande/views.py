@@ -299,6 +299,9 @@ def handle_validation(request, pk):
           analyse.status, created = Status.objects.get_or_create(label='analyse_terminee', defaults={'description': 'Analyse terminée'}) 
           demande.status, created = Status.objects.get_or_create(label='traitement_termine', defaults={'description': 'Traitement terminé'}) 
 
+          if demande.categorie.label == 'demande_autorisation':
+            demande.status, created = Status.objects.get_or_create(label='demande_attente_paiement', defaults={'description': 'Validée (en attente de paiement)'})
+
           """ A modifier """
           demande.reponse_ok = demande.analyse.avis_juridique 
           

@@ -383,11 +383,11 @@ def submit_demande(request, pk):
   """ Soumission d'une demande d'autorisation """
   demande = get_object_or_404(DemandeAuto, pk=pk)
   demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement', defaults={'description': 'En attente de traitement'})
-  demande.is_locked = True # verrouillage de la demande pour empâcher les modifications
+  demande.is_locked = True # verrouillage de la demande pour empêcher les modifications
   demande.save()
   demande.save_historique(action_label='changement_statut', user=request.user, status=demande.status)
   # demande.notify_by_email()
-  return redirect('dashboard:demande_auto:edit', pk=demande.id)
+  return redirect('dashboard:demande_auto:detail', pk=demande.id)
 
 
 ########## Class Based Views ###########

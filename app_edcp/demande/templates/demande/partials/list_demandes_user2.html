@@ -1,0 +1,67 @@
+{% load custom_tags_filters %}
+
+<div class="row">
+  <div class="col-11" style="max-width: 100%; overflow-x: scroll;">
+    <table class="table table-striped table-hover table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Organisation</th>
+          {% comment %} <th scope="col">Utilisateur</th> {% endcomment %}
+          <th scope="col">Date</th>
+          <th scope="col">Objet</th>
+          <th scope="col">Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for demande in demandes %}
+          <tr>
+            <td> <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" class="text-secondary fw-bold"> {{ demande.num_demande }} </a></td>
+            <td> <a href="{% url 'dashboard:enregistrement:detail' pk=demande.organisation.id %}"> {{ demande.organisation }} </a> </td>
+            <td> {{ demande.created_at }} </td>
+            <td> {{ demande.categorie }} </td>
+            <td> {{ demande.status|get_status_color|safe }} </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-1">
+    <table class="table table-striped table-hover table-sm" style="width: 120%;">
+      <thead>
+        <tr>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for demande in demandes %}
+          <tr>
+            <td> 
+              <a href="{% url demande|get_demande_url|add:'detail' pk=demande.pk %}" data-bs-toggle="tooltip" title="Afficher">
+                <i class="bi bi-eye fw-bold large custom-text-light me-1"></i>
+              </a>
+              <a href="{% url demande|get_demande_url|add:'edit' pk=demande.pk %}" data-bs-toggle="tooltip" title="Modifier">
+                <i class="bi bi-pencil-square fw-bold large custom-text-light me-1"></i>
+              </a>
+              <a hx-delete="{% url 'dashboard:demande:delete' pk=demande.pk %}" 
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                hx-confirm="Voulez-vous vraiment supprimer cette demande ?"
+                hx-target="#list-demandes"
+                data-bs-toggle="tooltip" 
+                title="Supprimer">
+                <i class="bi bi-trash fw-bold large text-danger me-1"></i>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+{% for message in messages %}
+  <script>toastr.{{ message.tags }}('{{ message }}')</script>
+{% endfor %}
