@@ -31,7 +31,7 @@ services:
       - "5436:5432"
 
     volumes:
-      - devedcp-db-data:/var/lib/postgresql/data
+      - devedcp-db-data:/var/lib/postgresql/data:rw
 
     networks:
       - default
