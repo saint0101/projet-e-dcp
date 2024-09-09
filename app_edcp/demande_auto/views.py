@@ -8,6 +8,7 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView
 # CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
+from facturation.models import Facture, Paiement
 from demande.views import save_historique
 from demande.models import CategorieDemande, Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
 from demande.forms import CommentaireForm
@@ -249,9 +250,11 @@ def detail(request, pk):
   context['form_comment'] = form_comment # affichage du formulaire de commentaires
   context['commentaires'] = demande.get_commentaires() # récuperation des commentaires sur la demande
   context['historique'] = demande.get_historique() # récuperation de l'historique de la demande
+  context['facture'] = Facture.objects.filter(demande=demande).last()
+  context['paiements'] = Paiement.objects.filter(facture__demande=demande)
   context['form_status'] = form_status # affichage du formulaire de changement de statut
   context['analyse_exists'] = AnalyseDemande.objects.filter(demande=context['demande']).exists() # si l'analyse a déjà commencé
-
+  # print('paiement', context['paiement'])
   return render(request, "demande_auto/demande_detail.html", context)
 
 

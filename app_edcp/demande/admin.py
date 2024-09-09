@@ -52,7 +52,7 @@ class TypeReponseAdmin(admin.ModelAdmin):
 class CategorieDemandeAdmin(admin.ModelAdmin):
     """ Catégories de demande """
     ordering = ['id']
-    list_display = ['label', 'description', 'niv_validation', 'is_sensible', 'ordre']
+    list_display = ['label', 'description', 'niv_validation', 'is_sensible', 'ordre', 'montant']
 
 
 

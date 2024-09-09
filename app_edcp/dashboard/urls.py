@@ -12,4 +12,5 @@ urlpatterns = [
     path('correspondant/', include('correspondant.urls')),
     path('user/', include('user.urls')),
     path('demande-autorisation/', include('demande_auto.urls')),
+    path('facturation/', include('facturation.urls')),
 ]

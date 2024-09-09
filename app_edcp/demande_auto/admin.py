@@ -45,7 +45,7 @@ class EchelleNotationAdmin(admin.ModelAdmin):
 class DemandeAutoAdmin(admin.ModelAdmin):
     """ Demande d'autorisation """
     ordering = ['id']
-    list_display = ['created_at', 'type_demande', 'status','organisation', 'created_by', 'finalite']
+    list_display = ['id', 'created_at', 'type_demande', 'status','organisation', 'created_by', 'finalite']
 
 
 

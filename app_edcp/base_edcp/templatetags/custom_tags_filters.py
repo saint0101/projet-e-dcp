@@ -133,6 +133,15 @@ def check_initial(value, item):
     return item.id in [i.id for i in value]
 
 
+
+@register.filter
+def icon_true_false(value):
+    if value:
+        return '<i class="bi bi-check-circle-fill text-success"></i>'
+    else:
+        return '<i class="bi bi-x-circle-fill text-danger"></i>'
+
+
 @register.filter
 def get_status_color(status):
     badge_class = ""

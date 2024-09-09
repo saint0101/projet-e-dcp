@@ -11,6 +11,7 @@ from base_edcp.models import User, GroupExtension
 from base_edcp.emails import send_email, send_email_with_attachment, MAIL_CONTENTS
 from base_edcp.pdfs import generate_pdf, PDF_TEMPLATES
 from options.models import Status
+from facturation.models import Facture
 from demande.models import (
   Demande, 
   CategorieDemande,
@@ -204,6 +205,7 @@ def analyse_demande(request, pk, action=None):
     'can_validate': can_validate(request.user, demande),
     'can_terminate': can_terminate(request.user, demande),
     'commentaires': demande.get_commentaires(),
+    'factures': Facture.objects.filter(demande=demande),
     'historique': demande.get_historique(),
     'validations': analyse.validations.all(),
     'action': action,

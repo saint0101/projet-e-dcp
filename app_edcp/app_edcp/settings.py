@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'formtools',
+    'django_htmx',
     'base_edcp',
     'options',
     'public',
@@ -55,7 +56,7 @@ INSTALLED_APPS = [
     'user',
     'enregistrement',
     'demande_auto',
-    'django_htmx',
+    'facturation',
     # 'admindocs', # génération automatique de la documentation dans l'admin Django.
     # 'django_extensions', # génération de diagrammes de classe UML
     # ,

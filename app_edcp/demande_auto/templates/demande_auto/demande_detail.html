@@ -37,9 +37,30 @@
           </h3>
           <div class="card-text">
             <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }} </span><br>
+            <span><i class="bi bi-calendar-check-fill custom-text-light"></i> {{ demande.created_at }} </span><br>
             <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }} </span><br>
             <span><i class="bi bi-sticky-fill custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong> </span><br>
-            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
+            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br>
+            {% if facture %}
+              <span><i class="bi bi-wallet-fill custom-text-light"></i> 
+                <a href="" hx-get="{% url 'dashboard:facturation:detail_htmx' pk=facture.id %}" hx-target="#factureDetailModal" class="text-primary" data-bs-toggle="modal" data-bs-target="#factureModal">
+                  {{ facture }} ({{facture.get_montant_cfa}})
+                </a>
+              </span><br>
+            {% endif %}
+            {% for paiement in paiements %}
+              <span><i class="bi bi-arrow-right-short custom-text-light"></i> 
+                <a href="" class="text-secondary">
+                  {{ paiement.created_at }} - {{ paiement.get_montant_cfa }} 
+                  {% if paiement.is_valid %}
+                    (validé)
+                  {% else %}
+                    (en attente de validation)
+                  {% endif %}
+                </a>
+              </span><br>
+            {% endfor %}
+            <br>
             
             {% if show_form_analyse %}
               <div id="row-actions" class="row">
@@ -84,7 +105,7 @@
                       {% endif %}
                     
                     {% elif demande.status.label == 'demande_attente_paiement' %}
-                      <a href="" class="btn btn-primary me-2" onclick="openLoader()">Joindre le justificatif de paiement</a>
+                      <a href="" data-bs-toggle="modal" data-bs-target="#modePaiementModal" class="btn btn-primary me-2" onclick="openLoader()">Paiement</a>
                     
                     {% else %}
                       <button class="btn btn-primary me-2" disabled>Modifier</a>
@@ -160,6 +181,60 @@
 {% endblock %}
 
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+
+<div class="modal fade" id="factureModal" tabindex="-1" aria-labelledby="factureModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/detail.html' %}
+</div>
+
+<div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/paiement_detail.html' %}
+</div>
+
+
+<div class="modal fade" id="modePaiementModal" tabindex="-1" aria-labelledby="modePaiementModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" id="">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5 custom-text-light" id="factureModalLabel"> Mode de paiement </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if facture %}
+          <p>
+            <a href="{% url 'dashboard:facturation:paiement_caisse' pk=facture.id %}" class="btn btn-primary">
+              <i class="bi bi-person"></i> 
+              Paiement à la caisse
+            </a> <br>
+            <span class="custom-text-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+          </p>
+
+          <p><a href="" class="btn btn-info disabled">
+            <i class="bi bi-person"></i> 
+            Paiement par carte bancaire
+          </a></p>
+
+          <p><a href="" class="btn btn-dark disabled">
+            <i class="bi bi-person"></i> 
+            Paiement mobile money
+          </a></p>
+        {% else %}
+          <p>
+            Aucune facture à régler.
+          </p>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} <div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/paiement_create.html' %}
+</div> {% endcomment %}
 
 {% endblock content %}
 

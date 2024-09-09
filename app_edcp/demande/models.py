@@ -116,9 +116,15 @@ class Demande(models.Model):
   
   def get_commentaires(self):
     return Commentaire.objects.filter(demande=self).order_by('created_at')
+    
   
   def get_url_name(self):
-    return 'dashboard:demande'
+    if self.categorie.label == 'designation_dpo':
+      return 'dashboard:correspondant'
+    
+    if self.categorie.label == 'demande_autorisation':
+      return 'dashboard:demande_auto'
+    
   
   def get_form_and_instance(self):
     from correspondant.forms import DPOCabinetFormDisabled, DPODPOUpdateFormDisabled
@@ -224,6 +230,10 @@ class CategorieDemande(OptionModel):
     TypeReponse,
     blank=True,
     verbose_name='Types de réponse pour ce type de demande.'
+  )
+  montant = models.BigIntegerField(
+    default=0,
+    verbose_name='Montant à payer'
   )
 
   class Meta:
