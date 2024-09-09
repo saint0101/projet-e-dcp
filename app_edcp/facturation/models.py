@@ -30,6 +30,10 @@ class Facture(models.Model):
     default=0,
     verbose_name='Montant de la facture'
   )
+  restant = models.BigIntegerField(
+    default=0,
+    verbose_name='Reste à payer'
+  )
   statut = models.ForeignKey(
     Status,
     on_delete=models.PROTECT,
@@ -45,6 +49,7 @@ class Facture(models.Model):
   def calcul_montant(self):
     if self.demande.categorie.label == 'demande_autorisation':
       self.montant = self.demande.categorie.montant
+      self.restant = self.montant
       print('montant ', self.montant)
       self.save(update_fields=['montant'])
 

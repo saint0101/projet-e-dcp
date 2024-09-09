@@ -54,7 +54,8 @@ DEMANDE_EMAILS_TEMPLATES = {
   'designation_dpo': { 
     'demande_attente_traitement':{
       'subject': 'Désignation de Correspondant',
-      'template': 'emails/correspondant/designation_notification.html'
+      'template': 'emails/correspondant/designation_notification.html',
+      'has_attachment': False,
     },
 
     'analyse_en_cours': {},
@@ -63,7 +64,8 @@ DEMANDE_EMAILS_TEMPLATES = {
 
     'traitement_termine': {
       'subject': 'Approbation du Correspondant',
-      'template': 'emails/correspondant/approbation_reponse.html'
+      'template': 'emails/correspondant/approbation_reponse.html',
+      'has_attachment': True,
     },
   },
   # Templates des emails pour les demandes d'autorisation
@@ -71,11 +73,16 @@ DEMANDE_EMAILS_TEMPLATES = {
     'demande_attente_traitement':{},
     'demande_attente_paiement': {
       'subject': 'Votre demande d\'autorisation',
-      'template': 'emails/demande_auto/demande_attente_paiement.html'
+      'template': 'emails/demande_auto/demande_attente_paiement.html',
+      'has_attachment': False,
     },
     'analyse_en_cours': {},
     'demande_attente_complement': {},
-    'traitement_termine': {},
+    'traitement_termine': {
+      'subject': 'Votre demande d\'autorisation',
+      'template': 'emails/demande_auto/decision_autorisation.html',
+      'has_attachment': True,
+    },
   },
 }
 
@@ -189,8 +196,55 @@ def send_email_with_attachment(request, mail_content, recipient_list, context, s
     # en cas d'erreur d'envoi du mail
     except Exception as e:
       print('EMAIL ERREUR : ', e)
-      # if show_message:
-      messages.error(request, 'Une erreur est survenue lors de l\'envoi de l\'e-mail : \n' + str(e))
+      if show_message:
+        messages.error(request, 'Une erreur est survenue lors de l\'envoi de l\'e-mail : \n' + str(e))
 
   else:
+    print('ERREUR lors de l\'envoi du mail.')
     messages.error(request, 'Le projet de réponse n\'a pas été trouvé. Impossible d\'envoyer l\'email.')
+
+
+
+
+def send_email_with_attachment_v2(mail_content, context):
+  """ Fonction d'envoi d'email avec pièce jointe.
+  Paramètres :
+  - request -- l'objet request de la requête HTTP
+  - mail_content -- le dictionnaire contenant le sujet et le template de l'email (voir MAIL_CONTENTS plus haut)
+  - recipient_list -- la liste des destinataires de l'email, sous forme de tableau
+  - context -- le contexte de l'email sous forme de dictionnaire. Utilisé pour passer des variables au template
+  - show_message -- indique si un message doit être affiché ou non sous forme d'alerte Toast (default True)
+  """
+
+  email_from = settings.EMAIL_HOST_USER # récupère l'adresse email par défaut 
+  recipient_list = context['recipient_list']
+  html_message = render_to_string(mail_content['template'], context) # contenu du mail au format HTML
+  fichier = context['demande'].analyse.projet_reponse.fichier_reponse # récupération du fichier à joindre
+
+  # création d'un objet email
+  email = EmailMessage(
+    subject=mail_content['subject'], # objet
+    body=html_message, # corps du mail
+    from_email=email_from, # adresse de l'expéditeur
+    to=recipient_list,  # liste des destinataires
+  )
+  email.content_subtype = 'html' # Set the email content type to HTML
+  
+  # si le fichier existe bien
+  if fichier:
+    
+    try: # tentative d'envoi du mail
+      mime_type, _ = mimetypes.guess_type(fichier.name) # obtention du type MIME du fichier
+      email.attach(fichier.name, fichier.read(), mime_type) # attachement du fichier
+      email.send(fail_silently=False) # fail_silently=False # indique si l'échec de l'envoi doit générer une erreur
+      print('EMAIL envoyé')
+
+    # en cas d'erreur d'envoi du mail
+    except Exception as e:
+      print('EMAIL ERREUR : ', e)
+
+  else:
+    print('ERREUR lors de l\'envoi du mail.')
+
+
+

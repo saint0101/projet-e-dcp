@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
-from base_edcp.emails import send_automatic_email, MAIL_CONTENTS, DEMANDE_EMAILS_TEMPLATES
+from base_edcp.emails import send_automatic_email, MAIL_CONTENTS, DEMANDE_EMAILS_TEMPLATES, send_email_with_attachment, send_email_with_attachment_v2
 from .models import Demande
 
 
@@ -37,4 +37,9 @@ def notify_by_email(demande):
           'demande': demande,
           'recipient_list': recipient_list
         }
-        send_automatic_email(mail_content=mail_content, context=mail_context)
+        
+        if mail_content['has_attachment']:
+          send_email_with_attachment_v2(mail_content=mail_content, context=mail_context)
+
+        else:
+          send_automatic_email(mail_content=mail_content, context=mail_context)

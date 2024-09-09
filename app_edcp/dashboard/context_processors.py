@@ -251,6 +251,24 @@ MENU_MGR = [
   },
 
   {
+    'text' : 'Paiements',
+    'type' : 'sous-menu',
+    'id' : 'paiements',
+    'icon' : 'wallet-fill',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Tous les paiements',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:facturation:list_paiements',
+        'disabled': False, 
+      },
+    ],
+  },
+
+  {
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',

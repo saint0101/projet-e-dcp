@@ -14,7 +14,7 @@ class FactureAdmin(admin.ModelAdmin):
 class PaiementAdmin(admin.ModelAdmin):
     """ Paiements effectués """
     ordering = ['id']
-    list_display = ['created_at', 'created_by', 'facture', 'montant', 'mode_paiement',]
+    list_display = ['created_at', 'created_by', 'facture', 'montant', 'mode_paiement', 'is_valid',]
 
 
 

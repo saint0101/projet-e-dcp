@@ -1,3 +1,4 @@
+import base64
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
@@ -41,7 +42,7 @@ def detail_htmx(request, pk):
   context = {
     'facture': facture
   }
-  return render(request, 'facturation/partials/detail.html', context)
+  return render(request, 'facturation/partials/facture_detail.html', context)
 
 
 def create_paiement_caisse(request, pk):
@@ -77,6 +78,47 @@ def create_paiement_caisse(request, pk):
 
   return render(request, 'facturation/paiement_create.html', context) 
 
+
+def list_paiements(request):
+  paiements = Paiement.objects.all().order_by('is_valid')
+
+  return render(request, 'facturation/paiements_list.html', {'paiements': paiements})
+
+
+def detail_paiement(request, pk):
+  paiement = get_object_or_404(Paiement, pk=pk)
+  context = {}
+
+  if paiement.file_justificatif:
+    pdf_path = paiement.file_justificatif.path # récupération de l'adresse du fichier
+    with open(pdf_path, 'rb') as pdf_file: # ouverture du fichier PDF
+      # Convert pdf to a string
+      pdf_content = base64.b64encode(pdf_file.read()).decode()
+      context['file_justificatif_pdf'] = pdf_content
+  
+  context['paiement'] = paiement
+
+  return render(request, 'facturation/partials/paiement_detail.html', context=context)
+
+
+def validate_paiement(request, pk):
+  paiement = get_object_or_404(Paiement, pk=pk)
+  paiement.is_valid = True
+  paiement.save()
+
+  paiement.facture.restant = paiement.facture.montant - paiement.montant
+  print('restant : ', paiement.facture.restant)
+  if paiement.facture.restant <= 0:
+    print('paiement complet')
+    paiement.facture.is_paid = True
+    paiement.facture.statut, created = Status.objects.get_or_create(label='facture_payee', defaults={'description': 'Payée'})
+    paiement.facture.save()
+
+    paiement.facture.demande.status, created = Status.objects.get_or_create(label='traitement_termine', defaults={'description': 'Traitement terminé'})
+    paiement.facture.demande.save()
+
+  messages.success(request, 'Paiement validé.')
+  return redirect('dashboard:facturation:list_paiements')
 
 
 
