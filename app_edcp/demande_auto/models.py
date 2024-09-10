@@ -86,7 +86,7 @@ class TransfertDonnees(models.Model):
     null=True, 
     verbose_name='Pays de destination'
     )
-  destinataire = models.CharField(
+  destinataire_transfert = models.CharField(
     max_length=255, 
     blank=True,
     null=True,
@@ -145,7 +145,7 @@ class InterConnexion(models.Model):
     auto_now_add=True, 
     verbose_name='Date de Création'
   )
-  destinataire = models.CharField(
+  destinataire_interco = models.CharField(
     max_length=100, 
     null=True,
     verbose_name="Destinataire des données"

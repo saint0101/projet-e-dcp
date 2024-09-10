@@ -165,7 +165,7 @@ def designate_cabinet(request, org):
 	form = DPOCabinetForm()
 
 	if request.method == 'POST':
-		form = DPOCabinetForm(request.POST)
+		form = DPOCabinetForm(request.POST, request.FILES)
 		if form.is_valid():
 			# dpo = form.save(commit=False)
 			dpo = form.cleaned_data

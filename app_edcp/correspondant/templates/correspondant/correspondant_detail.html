@@ -14,6 +14,9 @@
   </script>
 {% endblock %}
 
+{% block toastr %}
+{% endblock %}
+
 {% block content %}
 
 <div class="row mx-5 my-3">
@@ -205,10 +208,12 @@
 </div>
 
 
-{% block commentaires %}
-  {% include "demande/commentaires_demande.html" with demande=correspondant %}
-{% endblock %}
+
 
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
 
 {% endblock content %}
+
+{% block commentaires %}
+  {% include "demande/commentaires_demande.html" with demande=correspondant %}
+{% endblock %}

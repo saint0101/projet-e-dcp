@@ -150,34 +150,35 @@
               </div>
             </div>
 
-            {% elif form_tab.label == 'interconnexions' %}
-              <div class="row mb-4" id="tab-interco">
-                <div class="col"> 
-                  <h4 class="custom-text-light mb-3">Ajouter une interconnexion</h4>
-                  {% comment %} <form method="post" onsubmit="openLoader()" id="form-transfert">
-                  </form> {% endcomment %}
-                  {% comment %} {% csrf_token %} {% endcomment %}
-                  <p class="text-hint custom-text-light">Si des interconnexions avec des bases de données externes sont effectuées,
-                    veuillez remplir le formulaire pour chaque interconnexion.
-                  </p>
-                  {{ form_interco|crispy }} 
-                  <button 
-                    class="btn btn-success"
-                    hx-post="{% url 'dashboard:demande_auto:add_interco' pk=demande.id %}" 
-                    hx-target="#list-intercos">
-                    Ajouter {{ csrf_token }}
-                  </button>
-                  
-                </div>
-
-                <div class="col" >
-                    <h4 class="custom-text-light mb-3">Liste des interconnexions</h4>
-                    <div id="list-intercos">
-                    {% include 'demande_auto/partials/list_intercos.html' with demande=demande %}
-                    </div>
-                </div>
+          {% elif form_tab.label == 'interconnexions' %}
+            <div class="row mb-4" id="tab-interco">
+              <div class="col"> 
+                <h4 class="custom-text-light mb-3">Ajouter une interconnexion</h4>
+                {% comment %} <form method="post" onsubmit="openLoader()" id="form-transfert">
+                </form> {% endcomment %}
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <p class="text-hint custom-text-light">Si des interconnexions avec des bases de données externes sont effectuées,
+                  veuillez remplir le formulaire pour chaque interconnexion.
+                </p>
+                {{ form_interco|crispy }} 
+                <button 
+                  class="btn btn-success"
+                  hx-post="{% url 'dashboard:demande_auto:add_interco' pk=demande.id %}" 
+                  hx-target="#list-intercos">
+                  Ajouter {{ csrf_token }}
+                </button>
+                
               </div>
-          
+
+              <div class="col" >
+                  <h4 class="custom-text-light mb-3">Liste des interconnexions</h4>
+                  <div id="list-intercos">
+                  {% include 'demande_auto/partials/list_intercos.html' with demande=demande %}
+                  </div>
+              </div>
+            </div>
+        
+        
           {% else %}
             {% for field in form_tab.fields %}
               {{ form|get_form_field:field|as_crispy_field:"bootstrap5" }}

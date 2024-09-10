@@ -185,6 +185,12 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     queryset=TypeDonnees.objects.select_related('categorie_donnees').order_by('categorie_donnees__is_sensible', 'categorie_donnees__ordre', 'ordre'),
     widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
   )
+  """ transferts = forms.ModelMultipleChoiceField(
+    label='Transferts de données',
+    queryset=TransfertDonnees.objects.all(),
+    widget=forms.CheckboxSelectMultiple()
+  ) """
+
 
   def get_nested_dcp(self):
     categories = CategorieDonnees.objects.all().order_by('is_sensible', 'ordre')
@@ -192,7 +198,6 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
 
     for categorie in categories:
       items = self.fields['donnees_traitees'].queryset.filter(categorie_donnees=categorie)
-      
       nested_items.append((categorie, items))
 
     # print('items : ', nested_items)
@@ -215,6 +220,8 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(Q(finalite__in=list_finalites) | Q(label='autre')).order_by('ordre')
     # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) | SousFinalite.objects.filter(label='autre')
     # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(label='autre')
+    demande =  self.instance
+    # self.fields['transferts'].queryset = demande.transferts.all()
 
 
 class TraitementFormDisabled(UpdateDemandeTraitementForm):

@@ -61,8 +61,7 @@
 {% endblock %}
 
 {% block toastr %}
-<script></script>
-{% endblock toastr %}
+{% endblock %}
 
 {% block content %}
 
@@ -126,9 +125,11 @@
                   Générer le projet de réponse
                 </a>
 
-                <a href="{% url 'dashboard:facturation:create' demande_pk=demande.id %}" class="btn btn-success me-2 mt-2 btn-sm {{ demande.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
-                  Générer la facture
-                </a>
+                {% if not demande.categorie.label == 'designation_dpo' %}
+                  <a href="{% url 'dashboard:facturation:create' demande_pk=demande.id %}" class="btn btn-success me-2 mt-2 btn-sm {{ demande.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
+                    Générer la facture
+                  </a>
+                {% endif %}
 
                 <a href="{% url 'dashboard:demande:submit' pk=demande.id %}" 
                   class="btn btn-info me-2 mt-2 btn-sm {{ demande.analyse.is_locked|yesno:"disabled, " }}" onclick="openLoader()">
@@ -316,22 +317,24 @@
               </div>
             </div>
 
-            <div class="accordion-item" id="accordion-analyse">
-              <h2 class="accordion-header">
-                <button id="accordion-btn-facture" class="accordion-button {{ factures|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFacture" aria-expanded="true" aria-controls="collapseFacture">
-                  Facture
-                </button>
-              </h2>
-              <div id="collapseFacture" class="accordion-collapse collapse {{ factures|yesno:' , show'}} " data-bs-parent="#accordionAnalyse">
-                <div class="accordion-body">
-                  {% for facture in factures %}
-                    <a href="" hx-get="{% url 'dashboard:facturation:detail_htmx' pk=facture.id %}" hx-target="#factureDetailModal" class="text-primary" data-bs-toggle="modal" data-bs-target="#factureModal">
-                      {{ facture }} ({{facture.get_montant_cfa}})
-                    </a><br>
-                  {% endfor %}
+            {% if not demande.categorie.label == 'designation_dpo' %}
+              <div class="accordion-item" id="accordion-analyse">
+                <h2 class="accordion-header">
+                  <button id="accordion-btn-facture" class="accordion-button {{ factures|yesno:'collapsed, '}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFacture" aria-expanded="true" aria-controls="collapseFacture">
+                    Facture
+                  </button>
+                </h2>
+                <div id="collapseFacture" class="accordion-collapse collapse {{ factures|yesno:' , show'}} " data-bs-parent="#accordionAnalyse">
+                  <div class="accordion-body">
+                    {% for facture in factures %}
+                      <a href="" hx-get="{% url 'dashboard:facturation:detail_htmx' pk=facture.id %}" hx-target="#factureDetailModal" class="text-primary" data-bs-toggle="modal" data-bs-target="#factureModal">
+                        {{ facture }} ({{facture.get_montant_cfa}})
+                      </a><br>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
-            </div>
+            {% endif %}
 
             <div class="accordion-item" id="accordion-reponse">
               <h2 class="accordion-header">
@@ -367,17 +370,17 @@
 </div>
 
 
-{% block commentaires %}
-  {% include "demande/commentaires_demande.html" with demande=demande %}
-{% endblock %}
-
 
 <!-- Modal -->
 <div class="modal fade" id="factureModal" tabindex="-1" aria-labelledby="factureModalLabel" aria-hidden="true">
-  {% include 'facturation/partials/detail.html' %}
+  {% include 'facturation/partials/facture_detail.html' %}
 </div>
 
 <input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
 {% endblock content %}
+
+{% block commentaires %}
+  {% include "demande/commentaires_demande.html" with demande=demande %}
+{% endblock %}
 
 

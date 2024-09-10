@@ -49,7 +49,7 @@
 
         <div class="container pt-4" id="content">
             <!-- Affichage des notifications via Toastr -->
-             {% block taostr %}
+             {% block toastr %}
                 {% if messages %}
                     <ul class="messages">
                     {% for message in messages %}
@@ -58,7 +58,7 @@
                     {% endfor %}
                     </ul>
                 {% endif %}
-             {% endblock taostr %}
+             {% endblock %}
 
 
             {% block content %}

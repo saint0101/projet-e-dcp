@@ -1,11 +1,11 @@
 <ul class="list-group">
   {% for interco in intercos %}
   <li class="list-group-item" style="background-color: rgba(0, 0, 0, 0);">
-    {{ interco.destinataire }} - {{ interco.mode_interconnexion }}
+    {{ interco.destinataire_interco }} - {{ interco.mode_interconnexion }}
 
     <a href="" 
       hx-delete="{% url 'dashboard:demande_auto:delete_interco' pk=demande.id interco_id=interco.id %}" 
-      hx-params="destinataire,description,mode_interconnexion"
+      hx-params="destinataire_interco,description,mode_interconnexion"
       hx-confirm="Voulez-vous vraiment supprimer cette interconnexion ?"
       hx-target="#list-intercos"
       data-bs-toggle="tooltip" 

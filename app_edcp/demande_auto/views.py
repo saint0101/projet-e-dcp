@@ -82,7 +82,7 @@ def get_form_context(obj_id, request=None):
     intercos = object.interconnexions.all()
 
     if request:
-      form = UpdateDemandeTraitementForm(request.POST, instance=object) # instanciation du formulaire
+      form = UpdateDemandeTraitementForm(request.POST, request.FILES, instance=object) # instanciation du formulaire
     else:
       form = UpdateDemandeTraitementForm(instance=object)
 
@@ -91,7 +91,7 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_TRANSFERT
     object = get_object_or_404(DemandeAutoTransfert, pk=obj_id)
     if request:
-      form = UpdateDemandeTransfertForm(request.POST, instance=object)
+      form = UpdateDemandeTransfertForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeTransfertForm(instance=object)
 
@@ -100,7 +100,7 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_VIDEO
     object = get_object_or_404(DemandeAutoVideo, pk=obj_id)
     if request:
-      form = UpdateDemandeVideoForm(request.POST, instance=object)
+      form = UpdateDemandeVideoForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeVideoForm(instance=object)
 
@@ -109,7 +109,7 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_BIOMETRIE
     object = get_object_or_404(DemandeAutoBiometrie, pk=obj_id)
     if request:
-      form = UpdateDemandeBioForm(request.POST, instance=object)
+      form = UpdateDemandeBioForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeBioForm(instance=object)
   
@@ -255,6 +255,9 @@ def detail(request, pk):
   context['form_status'] = form_status # affichage du formulaire de changement de statut
   context['analyse_exists'] = AnalyseDemande.objects.filter(demande=context['demande']).exists() # si l'analyse a déjà commencé
   # print('paiement', context['paiement'])
+  context['transferts'] = demande.transferts.all()
+  context['intercos'] = demande.interconnexions.all()
+
   return render(request, "demande_auto/demande_detail.html", context)
 
 
@@ -361,7 +364,7 @@ def update(request, pk):
     context = get_form_context(pk, request) # récupération du contexte avec la requête associée
     if context['raw_form'].is_valid(): # si le formulaire est valide
       update_data = context['raw_form'].cleaned_data
-      print('update data : ', update_data)
+      # print('update data : ', update_data)
       context['raw_form'].save() # sauvegarde de la modification
       messages.success(request, 'La demande a bien été enregistrée.')
 

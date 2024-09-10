@@ -19,14 +19,16 @@ FORM_STRUCTURE_TRAITEMENT = [
    'fields': ['donnees_traitees', 'autre_donnees_traitees', ]
   },
 
-  {'label': 'transferts',
-   'display_name': 'Transferts de données',
-   'fields': ['transferts', ]
+  { 'label': 'transferts',
+    'display_name': 'Transferts de données',
+    # 'fields': ['transferts', ]
+    'fields': [],
   },
 
   {'label': 'interconnexions',
    'display_name': 'Interconnexions de données',
-   'fields': ['interconnexions', ]
+   #'fields': ['interconnexions', ],
+   'fields': [],
   },
 
   {'label': 'securite',

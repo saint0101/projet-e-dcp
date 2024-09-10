@@ -76,7 +76,7 @@ class TypeDestinataireTransfertAdmin(admin.ModelAdmin):
 @admin.register(models.TransfertDonnees)
 class TransfertDonneesAdmin(admin.ModelAdmin):
     ordering = ['id']
-    list_display = ['created_at', 'pays', 'destinataire', 'mode_transfert', 'type_destinataire']
+    list_display = ['created_at', 'pays', 'destinataire_transfert', 'mode_transfert', 'type_destinataire']
 
 
 @admin.register(models.CategorieDonnees)
@@ -100,6 +100,6 @@ class ModeInterconnexionAdmin(admin.ModelAdmin):
 @admin.register(models.InterConnexion)
 class InterconnexionAdmin(admin.ModelAdmin):
     ordering = ['id']
-    list_display = ['created_at', 'destinataire', 'mode_interconnexion',]
+    list_display = ['created_at', 'destinataire_interco', 'mode_interconnexion',]
 
 # admin.site.unregister(models.Status, StatusAdmin)
