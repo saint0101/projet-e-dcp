@@ -1,0 +1,12 @@
+<!-- templates/notifications/notification_list.html -->
+<h2>Vos Notifications</h2>
+<ul>
+    {% for notification in notifications %}
+        <li>
+            {{ notification.message }} - {{ notification.created_at }}
+            <a href="{% url 'mark_as_read' notification.id %}">Marquer comme lu</a>
+        </li>
+    {% empty %}
+        <li>Vous n'avez pas de nouvelles notifications.</li>
+    {% endfor %}
+</ul>

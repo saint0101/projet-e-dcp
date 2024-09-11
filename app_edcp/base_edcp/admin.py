@@ -95,17 +95,16 @@ class GroupExtensionAdmin(admin.ModelAdmin):
     ordering = ['niv_validation']  # Ordonne les GroupExtension par ID
     list_display = ['group_name', 'group', 'niv_validation']  # Affiche les GroupExtension
 
-
+"""
 # module notificaton
 @admin.register(models.Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    """ definir la page de l'administrateur """
+    definir la page de l'administrateur 
 
     ordering = ['id']  # Ordonne les notifications par ID
     list_display = ['user', 'message', 'created_at', 'is_read']  # Affiche les utilisateurs par user et message
     search_fields = ('user__username', 'message')
-
-
+"""
 
 # module Enregistrement
 @admin.register(models.Enregistrement)

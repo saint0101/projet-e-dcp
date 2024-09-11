@@ -40,16 +40,18 @@ class UserRegistrationForm(UserCreationForm):
     
     # ajoute de point de verification du formulaires
     def check_size_pitcher(self):
-      """ 
-      Verification de la taille de l'image d'avatar 
-      """
-      avatar = self.cleaned_data.get('avatar')
-      if avatar:
-        # Si l'image dépasse 1 Mo, soulever une erreur
-        if avatar.size > 1 * 1024 * 1024:  # 1 Mo
-          raise forms.ValidationError("L'image d'avatar dépasse la taille maximale autorisée de 1 Mo.")
+        """ 
+        Vérification de la taille de l'image d'avatar
+        """
+        avatar = self.cleaned_data.get('avatar')
+        if avatar:
+            # Si l'image dépasse 1 Mo, lever une erreur
+            if avatar.size > 1 * 1024 * 1024:  # 1 Mo
+                raise forms.ValidationError({
+                    'avatar': "L'image d'avatar dépasse la taille maximale autorisée de 1 Mo."
+                })
         return avatar.size
-      
+          
 
     def check_id_user(self):
         """
@@ -67,6 +69,20 @@ class UserRegistrationForm(UserCreationForm):
         
         return cleaned_data
 
+    def check_email_user(self):
+        """
+        Vérification pour éviter les doublons (email, etc.)
+        """
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+
+        # Vérifier si un autre utilisateur avec le même email existe
+        if User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError({
+            'email': "Un utilisateur avec cet email existe déjà."
+        })
+
+        return cleaned_data
 
     def save(self, commit=True):
         """

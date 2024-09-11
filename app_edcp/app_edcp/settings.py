@@ -54,10 +54,13 @@ INSTALLED_APPS = [
     'user',
     'enregistrement',
     'demande_auto',
+    'notifications',
+    'channels'
     # 'admindocs', # génération automatique de la documentation dans l'admin Django.
     # 'django_extensions', # génération de diagrammes de classe UML
     # ,
 ]
+ASGI_APPLICATION = 'app_edcp.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,6 +88,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'dashboard.context_processors.get_menu',
+                'notifications.context_processors.notifications_processor',
             ],
         },
     },
