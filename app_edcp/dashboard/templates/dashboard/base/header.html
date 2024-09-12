@@ -9,7 +9,7 @@
     <a class="navbar-brand fw-bold text-primary fs-3" href="{% url 'public:index' %}">
       e-DCP &nbsp;
       {% if request.user.is_authenticated and request.user.is_staff %}
-       <span class="fs-6 fw-normal">Manager</span>
+       <span class="fs-6 fw-normal">Administration</span>
       {% endif %}
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">

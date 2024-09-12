@@ -1,0 +1,17 @@
+<ul class="list-group">
+  {% for transfert in transferts %}
+  <li class="list-group-item" style="background-color: rgba(0, 0, 0, 0);">
+    {{ transfert.pays }} - {{ transfert.destinataire_transfert }}
+
+    <a href="" 
+      hx-delete="{% url 'dashboard:demande_auto:delete_transfert' pk=demande.id transfert_id=transfert.id %}" 
+      hx-params="pays,destinataire_transfert,type_destinataire,mode_transfert"
+      hx-confirm="Voulez-vous vraiment supprimer ce transfert ?"
+      hx-target="#list-transferts"
+      data-bs-toggle="tooltip" 
+      title="Supprimer">
+      <i class="bi bi-trash fw-bold large text-danger me-1 float-end"></i>
+    </a>
+  </li>
+  {% endfor %}
+</ul>

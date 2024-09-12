@@ -5,6 +5,9 @@ Fonctions de filtres personnalisés utilisables dans les templates.
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.db.models import FileField
+from django.contrib.sites.shortcuts import get_current_site
+# from django.contrib.sites.models import Site
+
 
 register = template.Library()
 
@@ -105,11 +108,67 @@ def leading_zeros(value, num_digits):
     return str(value).zfill(num_digits)
 
 @register.filter
-def get_demande_url(demande):
+def get_demande_url(demande, absolute_url=False):
     """ Renvoie l'url de la page de la demande, en fonction de sa catégorie. """
-    print('demandes', demande.categorie.label)
-    if demande.categorie.label == 'designation_dpo':
-        return 'dashboard:correspondant:'
+    domain = ''
+    if absolute_url:    
+        # current_site = Site.objects.get_current()
+        # domain = "http://" + current_site.domain
+        # domain = "http://" + get_current_site() # recuperation de l'adresse du site
+        pass
     
-    if demande.categorie.label == 'demande_autorisation':
-        return 'dashboard:demande_auto:'
+    if demande and demande.categorie and demande.categorie.label:
+        if demande.categorie.label == 'designation_dpo':
+            return domain + 'dashboard:correspondant:'
+        
+        if demande.categorie.label == 'demande_autorisation':
+            return domain + 'dashboard:demande_auto:'
+
+    return ''
+    
+
+@register.filter
+def check_initial(value, item):
+    """ Vérifie si l'ID de item est dans la liste des ID de value (dict). """
+    return item.id in [i.id for i in value]
+
+
+
+@register.filter
+def icon_true_false(value):
+    if value:
+        return '<i class="bi bi-check-circle-fill text-success"></i>'
+    else:
+        return '<i class="bi bi-x-circle-fill text-danger"></i>'
+
+
+@register.filter
+def get_status_color(status):
+    badge_class = ""
+    if status and status.label:
+        if status.label == 'brouillon':
+            badge_class = "text-bg-secondary text-light"
+        
+        if status.label in ['demande_attente_traitement',]:
+            badge_class = "text-bg-danger text-light"
+
+        if status.label in ['analyse_en_cours', 'analyse_attente_validation_1', 'analyse_attente_validation_2', 'analyse_attente_validation_3', 'analyse_attente_validation_4', 'analyse_attente_validation_5']:
+            badge_class = "text-bg-primary text-light"
+
+        if status.label in ['demande_attente_complement',]: 
+            badge_class = "text-bg-warning"
+
+        if status.label in ['traitement_termine',]: 
+            badge_class = "text-bg-success text-light"
+
+        if status.label in ['demande_attente_paiement',]: 
+            badge_class = "text-bg-info text-light"
+        
+        if status.description:
+            description = f'{status.description[0:36]}...' if len(status.description) > 36 else status.description
+            return f'<span class="badge rounded-pill {badge_class} fw-normal">{description}</span>'
+        
+        else:
+            return f'<span class="badge rounded-pill {badge_class} fw-normal">{status.label}</span>'
+    
+    return '<em class="text-hint">statut manquant</em>'

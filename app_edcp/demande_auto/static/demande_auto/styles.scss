@@ -84,37 +84,6 @@
   overflow-y: scroll;
 }
 
-.col-form-commentaires textarea{
-  height: 100px;
-}
-
-.col-list-commentaires{
-  height: 500px;
-  overflow: scroll;
-  background-color: #eaeef3;
-  border-radius: 8px;
-  // box-shadow: inset 0px 1px 6px rgba(0, 0, 0, 0.15);
-}
-
-.message-bubble{
-  background-color: #fff;
-  padding: 0.5rem;
-  margin: .5rem;
-  border-radius: 10px;
-  max-width: 80%;
-  margin-left: 10%;
-}
-
-.message-bubble-self{
-  background-color: #212529;
-  color: #eee !important;
-  margin-left: 2%;
-}
-
-.message-bubble-body{
-  margin-left: 12px;
-}
-
 #row-actions{
   border-top: 1px solid #eaeef3;
   padding-top: 15px;

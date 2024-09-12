@@ -1,3 +1,5 @@
+# from django.contrib.sites.shortcuts import get_current_site
+
 
 # Create your views here.
 """
@@ -33,6 +35,31 @@ MENU_CLIENT = [
         'disabled': False, 
       },
     ], 
+  },
+
+  {
+    'text' : 'Démarches',
+    'type' : 'sous-menu',
+    'id' : 'demarches',
+    'icon' : 'file-earmark-person',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Toutes mes demandes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:demande:mes_demandes',
+        'disabled': False, 
+      },
+      {
+        'text' : 'Mises à jour récentes',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:construction',
+        'disabled': False, 
+      },
+    ],
   },
 
   {
@@ -224,6 +251,24 @@ MENU_MGR = [
   },
 
   {
+    'text' : 'Paiements',
+    'type' : 'sous-menu',
+    'id' : 'paiements',
+    'icon' : 'wallet-fill',
+    'url' : '',
+    'disabled': False, 
+    'items' : [
+      {
+        'text' : 'Tous les paiements',
+        'type' : 'sous-menu-item',
+        'icon' : '',
+        'url' : 'dashboard:facturation:list_paiements',
+        'disabled': False, 
+      },
+    ],
+  },
+
+  {
     'text' : 'Enregistrement',
     'id' : 'enregistrement',
     'type' : 'sous-menu',
@@ -384,3 +429,10 @@ def get_menu(request):
     return {'get_menu': MENU_MGR} 
   
   return {'get_menu': MENU_CLIENT} 
+
+
+def get_site_url(request):
+  """ Renvoie l'URL du site actuel afind e pouvoir l'afficher dans un template. """
+  # print('processing site url : ', get_current_site(request).domain)
+  # return {'site_url': 'http://' + get_current_site(request).domain}
+  pass

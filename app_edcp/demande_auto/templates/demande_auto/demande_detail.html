@@ -25,6 +25,8 @@
   </script>
 {% endblock %}
 
+{% block toastr %}{% endblock %}
+
 
 {% block content %}
   <div class="row mx-3 my-4">
@@ -32,14 +34,35 @@
       <div class="card custom-card">
         <div class="card-body small-padding">
           <h3 class="mb-3 card-title">Demande d'autorisation
-            #<strong>{{ demande.id|stringformat:"08d" }}</strong> :
+            #<strong>{{ demande.num_demande }}</strong> :
             {{ demande.type_demande }}
           </h3>
           <div class="card-text">
             <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }} </span><br>
-            <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }} </span><br>
-            <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong> </span><br>
-            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status }} </span><br><br>
+            <span><i class="bi bi-calendar-check-fill custom-text-light"></i> {{ demande.created_at }} </span><br>
+            <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }} </span><br>
+            <span><i class="bi bi-sticky-fill custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong> </span><br>
+            <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br>
+            {% if facture %}
+              <span><i class="bi bi-wallet-fill custom-text-light"></i> 
+                <a href="" hx-get="{% url 'dashboard:facturation:detail_htmx' pk=facture.id %}" hx-target="#factureDetailModal" class="text-primary" data-bs-toggle="modal" data-bs-target="#factureModal">
+                  {{ facture }} ({{facture.get_montant_cfa}})
+                </a>
+              </span><br>
+            {% endif %}
+            {% for paiement in paiements %}
+              <span><i class="bi bi-arrow-right-short custom-text-light"></i> 
+                <a href="" class="text-secondary">
+                  {{ paiement.created_at }} - {{ paiement.get_montant_cfa }} 
+                  {% if paiement.is_valid %}
+                    (validé)
+                  {% else %}
+                    (en attente de validation)
+                  {% endif %}
+                </a>
+              </span><br>
+            {% endfor %}
+            <br>
             
             {% if show_form_analyse %}
               <div id="row-actions" class="row">
@@ -57,32 +80,54 @@
               </div>
             {% else %}
               <div id="row-actions" class="row">
-                <div class="col">
-                  <form method="post" id="change-status-form">
-                    {% csrf_token %}
-                    <div class="row">
-                      <div class="col-7">
-                        {{ form_status.status }}
+                {% if request.user.is_staff %}
+                  <div class="col">
+                    <form method="post" id="change-status-form">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-7">
+                          {{ form_status.status }}
+                        </div>
+                        <div class="col-5">
+                          <button type="submit" class="btn btn-primary" name="form_status_submit">Modifier le statut</button>
+                        </div>
                       </div>
-                      <div class="col-5">
-                        <button type="submit" class="btn btn-primary" name="form_status_submit">Modifier le statut</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-
+                    </form>
+                  </div>
+                {% endif %}
+                
                 <div class="col">
                   {% if not request.user.is_staff %}
-                    <a href="{% url 'dashboard:demande_auto:edit' pk=demande.id %}" class="btn btn-primary me-2">Modifier</a>
-                    <button class="btn btn-success me-2">Soumettre la demande</button>
-                    <button class="btn btn-danger me-2">Supprimer</button>
+                    {% if demande.status.label == 'brouillon' or demande.status.label == 'demande_attente_complement' %}
+                      <a href="{% url 'dashboard:demande_auto:edit' pk=demande.id %}" class="btn btn-primary me-2">Modifier</a>
+                      <a href="{% url 'dashboard:demande_auto:submit_demande' pk=demande.id %}" class="btn btn-success me-2" onclick="openLoader()">Soumettre la demande</a>
+                      
+                      {% if demande.status.label == 'brouillon' %}
+                        <button class="btn btn-danger me-2">Supprimer</button>
+                      {% endif %}
+                    
+                    {% elif demande.status.label == 'demande_attente_paiement' %}
+                      <a href="" data-bs-toggle="modal" data-bs-target="#modePaiementModal" class="btn btn-primary me-2" onclick="openLoader()">Paiement</a>
+                    
+                    {% else %}
+                      <button class="btn btn-primary me-2" disabled>Modifier</a>
+                      <button class="btn btn-success me-2" disabled>Soumettre la demande</button>
+                      {% comment %} <button class="btn btn-danger me-2" disabled>Supprimer</button> {% endcomment %}
+                    {% endif %}
+                    
+                    <button class="btn btn-light me-2 mb-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasHistorique" aria-controls="offcanvasHistorique">
+                      Afficher l'historique
+                    </button>
+                    <button class="btn btn-light mb-2 me-2 float-end" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCommentaires" aria-controls="offcanvasCommentaires">
+                      Commentaires
+                    </button>
                   {% endif %}
 
                   {% if request.user.is_staff %}
                     {% if analyse_exists %}
-                      <a href="{% url 'dashboard:demande_auto:analyse' pk=demande.id %}" class="btn btn-secondary me-2">Poursuivre l'analyse</a>
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.id %}" class="btn btn-secondary me-2">Poursuivre l'analyse</a>
                     {% else %}
-                      <a href="{% url 'dashboard:demande_auto:analyse' pk=demande.id %}" class="btn btn-info me-2">Commencer l'analyse</a>
+                      <a href="{% url 'dashboard:demande:analyse' pk=demande.id %}" class="btn btn-info me-2">Commencer l'analyse</a>
                     {% endif %}
                     
                   {% endif %}
@@ -96,109 +141,7 @@
   </div>
 
   <div class="row mx-3 my-4">
-    <div class="col-5">
-      {% if show_form_analyse %}
-        <div class="card custom-card">
-          <div class="card-header custom-text-light">
-            Analyse de la demande
-          </div>
-          <div class="card-body small-padding">
-            <div class="card-text">
-              <form method="post" onsubmit="openLoader()">
-                {% csrf_token %}
-                {{ form_analyse|crispy}}
-                <button type="submit" class="btn btn-primary" name="form_analyse_submit">Enregistrer</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      {% else %}
-        <div id="card-historique" class="card custom-card mb-3">
-          <div class="card-header custom-text-light">
-            Historique
-          </div>
-          <div class="card-body small-padding">
-            <ul class="list-group">
-              {% for elmt in historique %}
-                {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
-                <li class="list-group-item">
-                  <span class="text-hint custom-text-light">{{ elmt.created_at }}</span> <br> 
-                  <span class="text-hint text-body-secondary"><strong>{{ elmt.action }}</strong> - {{ elmt.status }} </span>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-
-        <div class="card custom-card">
-          <div class="card-header custom-text-light">
-            Commentaires
-          </div>
-          <div class="card-body small-padding">
-            <div class="card-text">
-              <div class="row">
-                <div class="col-12 col-form-commentaires mb-3">
-                  <form method="post" onsubmit="openLoader()">
-                    {% csrf_token %}
-                    {{ form_comment|crispy}}
-                    <button type="submit" class="btn btn-primary me-1" name="form_comment_submit">Envoyer</button>
-                    {% if demande.status.label == 'attente_complement' %}
-                      <button type="submit" class="btn btn-secondary" disabled name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
-                    {% else %}
-                      <button type="submit" class="btn btn-outline-primary" name="form_comment_submit_suspend">Envoyer et suspendre la demande</button>
-                    {% endif %}
-                    
-                  </form>
-                </div>
-                {% comment %} <span class="fw-bold custom-text-light mb-3">Messages</span><br> {% endcomment %}
-                <div class="col-12 col-list-commentaires py-3">
-                  {% for commentaire in commentaires %}
-                      {% if commentaire.auteur == request.user %}
-                        <div class="message-bubble ">
-                      {% else %}
-                        <div class="message-bubble message-bubble-self">
-                      {% endif %}
-                        <span class="message-bubble-title text-hint custom-text-light">
-                          <i class="bi bi-person"></i>
-                          {{ commentaire.auteur }} - {{ commentaire.created_at }}
-                        </span><br>
-                        <span class=" message-bubble-body text-hint fw-bold">
-                          {{ commentaire.objet }}
-                        </span>
-                        <br>
-                        <span class=" message-bubble-body">
-                          {{ commentaire.message }}
-                        </span>
-                      </div>
-                    {% empty%}
-                      Aucun commentaire pour l'instant.
-                    {% endfor %}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      {% endif %}
-      
-    </div>
-
     <div class="col-7">
-      <div class="card mb-3 custom-card">
-        <div class="card-header custom-text-light">
-          Fichiers joints
-        </div>
-        <div class="card-body small-padding">
-          <ul class="list-group list-group-flush">
-            {% for file_field in demande|get_file_fields %}
-              <li class="list-group-item">
-                <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
-                  {{ demande|attr:file_field.name|get_fileinfos|safe }}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-
       <div class="card custom-card" style="max-height: 800px; overflow: scroll;">
         <div class="card-header custom-text-light">
           Contenu du formulaire
@@ -214,34 +157,141 @@
         </div>
       </div>
     </div>
-  </div>
-  
-  <div class="row mx-3 my-4">
 
-    
-
-    <div class="col-7">
-      
-    </div>
-
-    {% comment %} <div class="col-3">
-      <div class="card custom-card">
+    <div class="col-5">
+      <div class="card mb-3 custom-card">
         <div class="card-header custom-text-light">
-          Fichiers
+          Transferts de données
+        </div>
+        <div class="card-body small-padding" style="max-width: 100%; overflow: scroll;">
+          <table class="table table-striped table-hover table-sm table-nowrap">
+            <thead>
+              <tr>
+                <th scope="col">Pays</th>
+                <th scope="col">Dest.</th>
+                <th scope="col">type</th>
+                <th scope="col">Mode</th>
+              </tr>
+            </thead>
+            <tbody id="list-demandes">
+             {% for transfert in transferts %}
+                <tr>
+                  <td>{{ transfert.pays }}</td>
+                  <td>{{ transfert.destinataire_transfert }}</td>
+                  <td>{{ transfert.type_destinataire }}</td>
+                  <td>{{ transfert.mode_transfert }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card mb-3 custom-card">
+        <div class="card-header custom-text-light">
+          Interconnexions de données
+        </div>
+        <div class="card-body small-padding" style="max-width: 100%; overflow: scroll;">
+          <table class="table table-striped table-hover table-sm table-nowrap">
+            <thead>
+              <tr>
+                <th scope="col">Dest.</th>
+                <th scope="col">Mode</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody id="list-demandes">
+             {% for interco in intercos %}
+                <tr>
+                  <td>{{ interco.destinataire_interco }}</td>
+                  <td>{{ interco.mode_interconnexion }}</td>
+                  <td>{{ interco.description }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="card mb-3 custom-card">
+        <div class="card-header custom-text-light">
+          Fichiers joints
         </div>
         <div class="card-body small-padding">
-          <ul class="list-group">
-            {% for elmt in historique %}
-              <li class="list-group-item">{{ elmt.created_at }} - {{ elmt.action }} </li>
+          <ul class="list-group list-group-flush">
+            {% for file_field in demande|get_file_fields %}
+              <li class="list-group-item">
+                <strong class="custom-text-light">{{ file_field.verbose_name }} : </strong>
+                  {{ demande|attr:file_field.name|get_fileinfos|safe }}
+              </li>
             {% endfor %}
           </ul>
         </div>
       </div>
-    </div> {% endcomment %}
-    
+    </div>
   </div>
-
   
+
+<input id="action-parameter" style="display: none;" type="hidden" value="{{show_comments}}"> 
+
+<div class="modal fade" id="factureModal" tabindex="-1" aria-labelledby="factureModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/facture_detail.html' %}
+</div>
+
+<div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/paiement_detail.html' %}
+</div>
+
+
+<div class="modal fade" id="modePaiementModal" tabindex="-1" aria-labelledby="modePaiementModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" id="">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fs-5 custom-text-light" id="factureModalLabel"> Mode de paiement </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if facture %}
+          <p>
+            <a href="{% url 'dashboard:facturation:paiement_caisse' pk=facture.id %}" class="btn btn-primary">
+              <i class="bi bi-person-fill-gear"></i> 
+              Paiement à la caisse
+            </a> <br>
+            <span class="custom-text-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+          </p>
+
+          <p><a href="" class="btn btn-info disabled">
+            <i class="bi bi-credit-card-2-back-fill"></i> 
+            Paiement par carte bancaire
+          </a></p>
+
+          <p><a href="" class="btn btn-dark disabled">
+            <i class="bi bi-phone-fill"></i> 
+            Paiement mobile money
+          </a></p>
+        {% else %}
+          <p>
+            Aucune facture à régler.
+          </p>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} <div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/paiement_create.html' %}
+</div> {% endcomment %}
+
 {% endblock content %}
 
 
+{% block commentaires %}
+  {% include "demande/commentaires_demande.html" with demande=demande %}
+{% endblock %}

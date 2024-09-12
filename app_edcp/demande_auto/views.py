@@ -1,17 +1,38 @@
 from django.contrib import messages
-from base_edcp.emails import send_email
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
-from django import forms
-from .models import *
-from .forms import *
+
 # CommentaireForm, CreateDemandeForm, UpdateDemandeForm, UpdateDemandeTraitementForm, UpdateDemandeTransfertForm, UpdateDemandeVideoForm, UpdateDemandeBioForm
 from .forms_structures import FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_VIDEO, FORM_STRUCTURE_BIOMETRIE
 from base_edcp.models import Enregistrement
+from facturation.models import Facture, Paiement
 from demande.views import save_historique
-from demande.models import Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
+from demande.models import CategorieDemande, Status, Commentaire, AnalyseDemande, HistoriqueDemande, ActionDemande
+from demande.forms import CommentaireForm
+from .models import (
+  DemandeAuto, 
+  DemandeAutoTraitement, 
+  DemandeAutoTransfert, 
+  DemandeAutoVideo, 
+  DemandeAutoBiometrie,
+  InterConnexion,
+  TransfertDonnees,
+  TypeDemandeAuto,
+  SousFinalite)
+from .forms import (
+  AddIntercoForm,
+  AddTransfertForm,
+  CreateDemandeForm, 
+  ChangeStatusForm, 
+  UpdateDemandeForm,
+  UpdateDemandeTraitementForm,
+  UpdateDemandeTransfertForm,
+  UpdateDemandeVideoForm,
+  UpdateDemandeBioForm,
+  AnalyseDemandeForm)
 
 ######## Fonctions utilitaires ########
 
@@ -25,9 +46,11 @@ def get_sous_finalites(request, pk):
   # si la requête est une requête AJAX
   if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
     id_finalite = request.GET.get('id_finalite') # récupération de l'ID de la finalité dans la requête
-    sous_finalites = SousFinalite.objects.filter(finalite_id=id_finalite).values('id', 'label') # récupération des sous-finalités
-    return JsonResponse({'sousFinalites': list(sous_finalites)}) # renvoi les sous finalités au format JSON
+    if id_finalite and int(id_finalite) > 0:
+      sous_finalites = SousFinalite.objects.filter(Q(finalite_id=int(id_finalite)) | Q(label='autre')).values('id', 'label') # récupération des sous-finalités
+      return JsonResponse({'sousFinalites': list(sous_finalites)}) # renvoi les sous finalités au format JSON
 
+    return JsonResponse({'sousFinalites': []})
 
 def get_form_context(obj_id, request=None):
   """ Initialise le formulaire de demande d'autorisation et le contexte.
@@ -48,13 +71,18 @@ def get_form_context(obj_id, request=None):
   form = None
   object = None
   context = {}
+  transferts = None
+  intercos = None
   # Instanciations en fonction du type de demande
   if type_demande_label == 'traitement': 
     print ('update traitement')
     form_structure = FORM_STRUCTURE_TRAITEMENT
     object = get_object_or_404(DemandeAutoTraitement, pk=obj_id) # récupération de l'objet selon son type de demande
+    transferts = object.transferts.all()
+    intercos = object.interconnexions.all()
+
     if request:
-      form = UpdateDemandeTraitementForm(request.POST, instance=object) # instanciation du formulaire
+      form = UpdateDemandeTraitementForm(request.POST, request.FILES, instance=object) # instanciation du formulaire
     else:
       form = UpdateDemandeTraitementForm(instance=object)
 
@@ -63,7 +91,7 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_TRANSFERT
     object = get_object_or_404(DemandeAutoTransfert, pk=obj_id)
     if request:
-      form = UpdateDemandeTransfertForm(request.POST, instance=object)
+      form = UpdateDemandeTransfertForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeTransfertForm(instance=object)
 
@@ -72,7 +100,7 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_VIDEO
     object = get_object_or_404(DemandeAutoVideo, pk=obj_id)
     if request:
-      form = UpdateDemandeVideoForm(request.POST, instance=object)
+      form = UpdateDemandeVideoForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeVideoForm(instance=object)
 
@@ -81,21 +109,97 @@ def get_form_context(obj_id, request=None):
     form_structure = FORM_STRUCTURE_BIOMETRIE
     object = get_object_or_404(DemandeAutoBiometrie, pk=obj_id)
     if request:
-      form = UpdateDemandeBioForm(request.POST, instance=object)
+      form = UpdateDemandeBioForm(request.POST, request.FILES, instance=object)
     else:
       form = UpdateDemandeBioForm(instance=object)
   
   # génération du formulaire sous forme de multisteps
-  rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
+  #rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': form_structure})
+  
+  form_context = {
+    'demande': object,
+    'form': form, 
+    'form_structure': form_structure,
+    'form_transfert': AddTransfertForm(),
+    'transferts': transferts,
+    'form_interco': AddIntercoForm(),
+    'intercos': intercos,
+  }
+  rendered_form = form.render('forms/multisteps_v2.html', context=form_context)
 
   # création du contexte
   context['demande'] = object
   context['raw_form'] = form
   context['form'] = rendered_form
+  # context['form2'] = rendered_form2
   context['form_structure'] = form_structure
   context['historique'] = HistoriqueDemande.objects.filter(demande=object)
   
   return context
+
+
+######### HTMX requests ########@@@
+
+def add_transfert(request, pk):
+  """ Formulaire d'ajout de transfert """
+  if request.method == 'POST':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    form = AddTransfertForm(request.POST)
+    if form.is_valid():
+      transfert = form.save(commit=True)
+      demande.transferts.add(transfert)
+      demande.save()
+    else:
+      print('erreur : ', form.errors)
+      # messages.error(request, f'{form.errors}')
+
+    transferts = demande.transferts.all()
+    return render(request, 'demande_auto/partials/list_transferts.html', {'transferts': transferts, 'demande': demande})   
+  
+  else:
+    return HttpResponseBadRequest('Bad request')
+  
+
+def add_interco(request, pk):
+  """ Formulaire d'ajout d'interconnexion """
+  if request.method == 'POST':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    form = AddIntercoForm(request.POST)
+    if form.is_valid():
+      interco = form.save(commit=True)
+      demande.interconnexions.add(interco)
+      demande.save()
+    else:
+      print('erreur : ', form.errors)
+      # messages.error(request, f'{form.errors}')
+
+    intercos = demande.interconnexions.all()
+    return render(request, 'demande_auto/partials/list_intercos.html', {'intercos': intercos, 'demande': demande})   
+  
+  else:
+    return HttpResponseBadRequest('Bad request')
+
+
+def delete_transfert(request, pk, transfert_id):
+  if request.method == 'DELETE':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    transfert = get_object_or_404(TransfertDonnees, pk=transfert_id)
+    if demande.created_by == request.user and demande.transferts.filter(pk=transfert_id).exists():
+      nb_deleted, entries_deleted = transfert.delete()
+    
+    transferts = demande.transferts.all()
+    return render(request, 'demande_auto/partials/list_transferts.html', {'transferts': transferts, 'demande': demande})
+  
+
+def delete_interco(request, pk, interco_id):
+  if request.method == 'DELETE':
+    demande = get_object_or_404(DemandeAutoTraitement, pk=pk)
+    interco = get_object_or_404(InterConnexion, pk=interco_id)
+    if demande.created_by == request.user and demande.interconnexions.filter(pk=interco_id).exists():
+      nb_deleted, entries_deleted = interco.delete()
+    
+    intercos = demande.interconnexions.all()
+    return render(request, 'demande_auto/partials/list_intercos.html', {'intercos': intercos, 'demande': demande})
 
 
 ######## Vues #########
@@ -108,14 +212,15 @@ def index(request):
 def detail(request, pk):
   """ Vue de détail d'une demande d'autorisation """
   context = get_form_context(pk) # récupération du contexte à envoyer au template
+  demande = context['demande']
   form_comment = CommentaireForm() # initialisation du formulaire de commentaire
-  form_status = ChangeStatusForm(initial={'status': context['demande'].status}) # initialisation du formulaire de changement de status
+  form_status = ChangeStatusForm(initial={'status': demande.status}) # initialisation du formulaire de changement de status
 
   # si une requête a été soumise
   if request.method == 'POST':
     # si la requête est un ajout de commentaire
     # avec ou sans suspension de la demande
-    if 'form_comment_submit' in request.POST or 'form_comment_submit_suspend' in request.POST:
+    """ if 'form_comment_submit' in request.POST or 'form_comment_submit_suspend' in request.POST:
       form_comment = CommentaireForm(request.POST) # récupération des données du formulaire
       if form_comment.is_valid():
         # si le formulaire est valide, sauvegarde du commentaire
@@ -133,19 +238,25 @@ def detail(request, pk):
         # context['form_comment'] = form_comment
         print('erreur : ', form_comment.errors)
         messages.error(request, f'{form_comment.errors}')
-    
+     """
     if 'form_status_submit' in request.POST:
       form_status = ChangeStatusForm(request.POST) # instanciation du formulaire
       if form_status.is_valid():
-        context['demande'].status = form_status.cleaned_data['status'] # suspension de la demande
-        context['demande'].save()
+        demande.status = form_status.cleaned_data['status'] # suspension de la demande
+        demande.save()
         save_historique(context['demande'], 'changement_statut', request.user)
         messages.success(request, 'Statut de la demande mis à jour')
 
   context['form_comment'] = form_comment # affichage du formulaire de commentaires
-  context['commentaires'] = Commentaire.objects.filter(demande=context['demande']) # récuperation des commentaires sur la demande
+  context['commentaires'] = demande.get_commentaires() # récuperation des commentaires sur la demande
+  context['historique'] = demande.get_historique() # récuperation de l'historique de la demande
+  context['facture'] = Facture.objects.filter(demande=demande).last()
+  context['paiements'] = Paiement.objects.filter(facture__demande=demande)
   context['form_status'] = form_status # affichage du formulaire de changement de statut
   context['analyse_exists'] = AnalyseDemande.objects.filter(demande=context['demande']).exists() # si l'analyse a déjà commencé
+  # print('paiement', context['paiement'])
+  context['transferts'] = demande.transferts.all()
+  context['intercos'] = demande.interconnexions.all()
 
   return render(request, "demande_auto/demande_detail.html", context)
 
@@ -212,8 +323,9 @@ def create(request):
     if request.method == 'POST':
       form = CreateDemandeForm(request.POST)
       if form.is_valid():
-        form.cleaned_data['user'] = request.user # assignation de l'utilisateur
-        form.cleaned_data['status'] = Status.objects.get(label='brouillon') # ajout du statut par défaut (brouillon)
+        form.cleaned_data['created_by'] = request.user # assignation de l'utilisateur
+        form.cleaned_data['status'], created = Status.objects.get_or_create(label='brouillon', defaults={'description': 'Brouillon de la demande d’autorisation'})
+        form.cleaned_data['categorie'], created = CategorieDemande.objects.get_or_create(label='demande_autorisation', defaults={'description': 'Demande d\'autorisation'})
 
         demande = None # initialisation de la demande
         # instantiation du modèle approprié en fonction du type de la demande
@@ -229,7 +341,12 @@ def create(request):
         if form.cleaned_data['type_demande'] == DemandeAutoBiometrie.get_type_demande():
            demande = DemandeAutoBiometrie.objects.create(**form.cleaned_data)
 
-        save_historique(demande, 'creation', request.user) # création de l'historique
+        # demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement')
+        # demande.categorie, created = CategorieDemande.objects.get_or_create(label='demande_autorisation')
+        # demande.save()
+        if demande:
+          demande.save_historique('creation', request.user, demande.status)
+        #save_historique(demande, 'creation', request.user) # création de l'historique
 
         return redirect('dashboard:demande_auto:edit', pk=demande.id)        
 
@@ -246,9 +363,16 @@ def update(request, pk):
   if request.method == 'POST':
     context = get_form_context(pk, request) # récupération du contexte avec la requête associée
     if context['raw_form'].is_valid(): # si le formulaire est valide
+      update_data = context['raw_form'].cleaned_data
+      # print('update data : ', update_data)
       context['raw_form'].save() # sauvegarde de la modification
       messages.success(request, 'La demande a bien été enregistrée.')
-      return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
+
+      # si l'utilisateur a cliqué sur 'enregistrer et quitter', retour à la vue de détail
+      if 'form_submit_quit' in request.POST:
+        return redirect('dashboard:demande_auto:detail', pk=context['demande'].id)
+      else:
+        return redirect('dashboard:demande_auto:edit', pk=context['demande'].id)
     
     else:
       print('form not valid')
@@ -260,7 +384,20 @@ def update(request, pk):
   return render(request, "demande_auto/demande_edit.html", context)
 
 
+
+def submit_demande(request, pk):
+  """ Soumission d'une demande d'autorisation """
+  demande = get_object_or_404(DemandeAuto, pk=pk)
+  demande.status, created = Status.objects.get_or_create(label='demande_attente_traitement', defaults={'description': 'En attente de traitement'})
+  demande.is_locked = True # verrouillage de la demande pour empêcher les modifications
+  demande.save()
+  demande.save_historique(action_label='changement_statut', user=request.user, status=demande.status)
+  # demande.notify_by_email()
+  return redirect('dashboard:demande_auto:detail', pk=demande.id)
+
+
 ########## Class Based Views ###########
+
 
 class DemandeListView(ListView):
   """ Liste des demandes d'autorisation """
@@ -279,11 +416,13 @@ class DemandeListView(ListView):
 
 ######## TO DELETE ###########@
 
-"""
+
 class demandeUpdateView(UpdateView):
   model = DemandeAuto
-  fields = '__all__'
+  # fields = '__all__'
+  form_class = UpdateDemandeForm
   template_name = 'demande_auto/demande_edit.html'
+  context_object_name = 'demande'
   context_form_structure = []
 
   def get_object(self, queryset=None):
@@ -293,26 +432,30 @@ class demandeUpdateView(UpdateView):
       print ('update traitement')
       self.context_form_structure = FORM_STRUCTURE_TRAITEMENT
       self.model = DemandeAutoTraitement
+      self.form_class = UpdateDemandeTraitementForm
 
     if object.type_demande.label == 'transfert':
       print ('update transfert')
       self.context_form_structure = FORM_STRUCTURE_TRANSFERT
       self.model = DemandeAutoTransfert
+      self.form_class = UpdateDemandeTransfertForm
 
     if object.type_demande.label == 'videosurveillance':
       print ('update videosurveillance')
       self.context_form_structure = FORM_STRUCTURE_VIDEO
       self.model = DemandeAutoVideo
+      self.form_class = UpdateDemandeVideoForm
 
     if object.type_demande.label == 'biometrie':
       print ('update biometrie')
       self.context_form_structure = FORM_STRUCTURE_BIOMETRIE
       self.model = DemandeAutoBiometrie
+      self.form_class = UpdateDemandeBioForm
 
     # Now, call the original get_object method
     return object
   
-  def get_form(self, form_class=None):
+  """def get_form(self, form_class=None):
     form = super().get_form(form_class)
     type_demande_label = self.object.type_demande.label
     list_finalites = TypeDemandeAuto.objects.get(label=type_demande_label).finalites.all()
@@ -326,14 +469,25 @@ class demandeUpdateView(UpdateView):
     # form.fields['personnes_concernees'].widget = forms.CheckboxSelectMultiple(attrs={'required': True})
     # form_html = form.render()  # Renders the form with the default rendering or custom template
     rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
+    return rendered_form"""
+
+
+  def get_form(self, form_class=None):
+    form = super().get_form(form_class)
+    rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
     return rendered_form
+
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
+    form = super().get_form()
+    rendered_form = form.render('forms/multisteps_form.html', context={'form': form, 'form_structure': self.context_form_structure})
+
+    context['rendered_form'] = rendered_form
     context['historique'] = HistoriqueDemande.objects.filter(demande=self.object)
     context['form_structure'] = self.context_form_structure
     return context
- """ 
+ 
 
 
 """ class demandeCreateView(CreateView):

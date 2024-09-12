@@ -1,0 +1,14 @@
+{% extends '../base.html' %}
+{% load custom_tags_filters %}
+
+{% block content %}
+  Bonjour,
+  <br><br>
+  La désignation de <strong>{{ demande }}</strong> comme Correspondant à la protection des données de l'organiation <strong>"{{ demande.organisation }}"</strong>, par <strong>{{ demande.created_by }}</strong> a bien été enregistrée.
+  <br>
+{% comment %}   {% get_current_site as site %} {% endcomment %}
+  Vous pouvez cliquer sur <a href="https://{{ site.domain }}{% url demande|get_demande_url|add:'detail' pk=demande.pk %}">ce lien</a> pour afficher les détails.
+  <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

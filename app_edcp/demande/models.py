@@ -1,13 +1,14 @@
 # django
 from datetime import datetime
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+from django.shortcuts import get_object_or_404
 from django.core.validators import FileExtensionValidator
 # apps
 from base_edcp.models import User, Enregistrement
 from base_edcp import validators
 from options.models import OptionModel, Status
+# from correspondant.models import Correspondant
+# from demande_auto.models import DemandeAuto, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, DemandeAutoBiometrie
 
 
 
@@ -109,8 +110,76 @@ class Demande(models.Model):
     historique.is_private = is_private
     historique.save()
 
+  
+  def get_historique(self):
+    return HistoriqueDemande.objects.filter(demande=self)
+  
+  def get_commentaires(self):
+    return Commentaire.objects.filter(demande=self).order_by('created_at')
+    
+  
+  def get_url_name(self):
+    if self.categorie.label == 'designation_dpo':
+      return 'dashboard:correspondant'
+    
+    if self.categorie.label == 'demande_autorisation':
+      return 'dashboard:demande_auto'
+    
+  
+  def get_form_and_instance(self):
+    from correspondant.forms import DPOCabinetFormDisabled, DPODPOUpdateFormDisabled
+    from demande_auto.forms import TraitementFormDisabled, TransfertFormDisabled, VideoFormDisabled, BiometrieFormDisabled
+    from correspondant.models import Correspondant
+    from demande_auto.models import DemandeAuto, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, DemandeAutoBiometrie
+
+    print('getting instance form : ', self.categorie.label)
+    demande = None
+    form = None
+
+    if self.categorie.label == 'designation_dpo':
+      demande = self.correspondant
+
+      if demande.is_personne_morale:
+        form = DPOCabinetFormDisabled(instance=demande)
+      else:
+        form = DPODPOUpdateFormDisabled(instance=demande)
+    
+    if self.categorie.label == 'demande_autorisation':
+      # type_demande_label = DemandeAuto.objects.get(pk=self.pk).type_demande.label
+      type_demande_label = self.demandeauto.type_demande.label
+
+      if type_demande_label == 'traitement': 
+        # demande = get_object_or_404(DemandeAutoTraitement, pk=self.pk)
+        demande = self.demandeauto.demandeautotraitement
+        form = TraitementFormDisabled(instance=demande)
+
+      if type_demande_label == 'transfert':
+        # demande = get_object_or_404(DemandeAutoTransfert, pk=self.pk)
+        demande = self.demandeauto.demandeautotransfert
+        form = TransfertFormDisabled(instance=self)
+
+      if type_demande_label == 'videosurveillance':
+        # demande = get_object_or_404(DemandeAutoVideo, pk=self.pk)
+        demande = self.demandeauto.demandeautovideo
+        form = VideoFormDisabled(instance=self)
+
+      if type_demande_label == 'biometrie':
+        # demande = get_object_or_404(DemandeAutoBiometrie, pk=self.pk)
+        demande = self.demandeauto.demandeautobiometrie
+        form = BiometrieFormDisabled(instance=self)
+
+    return demande, form
+
   def save(self, *args, **kwargs):
-    """ Redéfinit la méthode save() afin de générer le numéro de demande. """
+    """ Redéfinit la méthode save() afin de : 
+    - générer le numéro de demande. 
+    - identifier le changement de statut de la demande.
+    """
+
+    # si l'objet est déjà créé
+    if self.pk:
+      demande = Demande.objects.get(pk=self.pk)
+      self._original_status = demande.status # enregistrement du statut de la demande avant la sauvegarde
 
     super().save(*args, **kwargs)
 
@@ -137,6 +206,7 @@ def create_num_demande(sender, instance, **kwargs):
 
 
 
+
 class TypeReponse(OptionModel):
   """ Types de réponses aux demandes """
   class Meta:
@@ -160,6 +230,10 @@ class CategorieDemande(OptionModel):
     TypeReponse,
     blank=True,
     verbose_name='Types de réponse pour ce type de demande.'
+  )
+  montant = models.BigIntegerField(
+    default=0,
+    verbose_name='Montant à payer'
   )
 
   class Meta:

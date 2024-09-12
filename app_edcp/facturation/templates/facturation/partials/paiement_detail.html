@@ -1,0 +1,53 @@
+{% load custom_tags_filters %}
+
+
+<div class="modal-dialog modal-lg modal-dialog-scrollable" id="paiementDetailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title fs-5 custom-text-light" id="paiementModalLabel">Paiement - {{ paiement.facture }}  </h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      {% if paiement %}
+      <p class="text-hint custom-text-light">
+        Paiement effectué le <strong>{{ paiement.created_at }}</strong>
+        pour la facture N° {{ paiement.facture.get_num_facture }}.
+      </p>
+      <p>
+        Montant payé : <strong>{{ paiement.get_montant_cfa }} </strong>
+      </p>
+      <p>
+        Demande : <a href="{% url paiement.facture.demande|get_demande_url|add:'detail' pk=paiement.facture.demande.pk %}" class="text-primary">{{ paiement.facture.demande }}</a>
+      </p>
+      <p>
+        Utilisateur : <a href="{% url 'dashboard:user:detail' pk=paiement.created_by.id %}">{{ paiement.created_by }}</a>
+      </p>
+      <p>
+        Statut : {{ paiement.is_valid|icon_true_false|safe }} 
+        {% if paiement.is_valid %}
+          <span class="text-success">validé</span>
+        {% else %}
+          <span class="text-danger">en attente de validation</span>
+        {% endif %}
+      </p>
+      <p>
+        Justificatif: <br>
+
+        {% if file_justificatif_pdf %}
+          <object id="embedded_pdf" data="data:application/pdf;base64,{{ file_justificatif_pdf }}" type="application/pdf" width="100%" height="700"></object>
+        {% else %}
+          Aucun fichier joint.
+        {% endif %}
+      </p>
+      {% endif %}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary float-start" data-bs-dismiss="modal">Fermer</button>
+      {% if paiement %}
+        <a href="{% url 'dashboard:facturation:paiement_valider' pk=paiement.id %}" type="button" class="btn btn-primary float-end" onclick="openLoader()">Valider le paiement</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,35 @@
+<div class="autoscrollable-wrapper">
+  <div class="autoscrollable-content" id="commentsAutoScroll">
+    {% for commentaire in commentaires %}
+      {% if commentaire.auteur == request.user %}
+        <div class="message-bubble ">
+      
+      {% else %}
+        <div class="message-bubble message-bubble-self">
+      
+      {% endif %}
+        <span class="message-bubble-title text-hint custom-text-light">
+          <i class="bi bi-person-fill"></i>
+          {{ commentaire.auteur }} - {{ commentaire.created_at }}
+        </span><br>
+        
+        <span class=" message-bubble-body text-hint fw-bold">
+          {{ commentaire.objet }}
+        </span><br>
+        
+        <span class=" message-bubble-body">
+          {{ commentaire.message }}
+        </span>
+      </div> 
+
+  {% empty%}
+    <p class="p-3 text-secondary">Aucun commentaire pour l'instant.</p>  
+  {% endfor %}
+    
+  </div>
+</div>
+
+
+{% for message in messages %}
+  <script>toastr.{{ message.tags }}('{{ message }}')</script>
+{% endfor %}

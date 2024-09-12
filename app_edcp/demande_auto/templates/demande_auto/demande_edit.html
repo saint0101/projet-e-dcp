@@ -31,24 +31,32 @@
       const selectFinalite = $('#id_finalite');
       const inputName = 'sous_finalites';
        
-      $('input[name="' + inputName + '"]').parent('div').toggle(false);
+      // $('input[name="' + inputName + '"]').parent('div').toggle(false);
       // $('#id_sous_finalites option').toggle(false);
       //console.log('inputs ', 'input[name="' + inputName + '"]');
+      
+      getSousFinalite()
 
       selectFinalite.on('change', function(){
+        $('#div_id_sous_finalites .form-check input').prop("checked", false);
+        $('#div_id_autre_sous_finalites').toggle(false);
+        getSousFinalite();
+      });
+
+      function getSousFinalite(){
         const idFinalite = selectFinalite.val();
-        console.log('select changed value : ', idFinalite);
+        // console.log('select changed value : ', idFinalite);
 
         $.ajax({
           url: 'sous-finalites',
           data: { id_finalite: idFinalite },
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
           success: function(data) {
-            console.log('response : ', data)
+            // console.log('response : ', data)
             showSousFinalite(data);
           }
         });
-      });
+      }
 
       function showSousFinalite(data){
         $('input[name="' + inputName + '"]').parent('div').toggle(false);
@@ -58,7 +66,70 @@
           // $('#id_sous_finalites option[value="' + sousFinalite.id + '"]').toggle(true)
         })
       }
+
+      function toggleConsent(){
+        var $fondement = $('#id_fondement_juridique').val()
+
+        if($fondement == 1){
+          $('#div_id_description_fondement').toggle(false);
+          $('#div_id_mode_consentement').toggle(true);
+          // $('#div_id_autre_mode_consentement').toggle(true);
+          if($('#id_mode_consentement_3').checked){
+            $('#div_id_autre_mode_consentement').toggle(true);
+          }
+        }
+        else {
+          $('#div_id_description_fondement').toggle(true);
+          $('#div_id_mode_consentement').toggle(false); 
+          $('#div_id_autre_mode_consentement').toggle(false);
+        }
+      }
+
+      var $checkOther = $('fieldset div .form-check:last-child input[data-other="true"]');
+      // console.log('selector : ', $checkOther);
+      $('[id^=div_id_autre_]').toggle(false);
+
+      $checkOther.each(function(){
+        // console.log('input value changed : ', e, $(e.target).parents()[3].id);
+        const idParent = $(this).parents()[3].id;
+        const fieldName = idParent.replace('div_id_', '');
+
+        if(this.checked){
+          $('#div_id_autre_' + fieldName).toggle(true);
+        }
+        else {
+          $('#div_id_autre_' + fieldName).toggle(false);
+        }
+      });
+
+      $checkOther.change(function(e){
+        // console.log('input value changed : ', e, $(e.target).parents()[3].id);
+        const idParent = $(e.target).parents()[3].id;
+        const fieldName = idParent.replace('div_id_', '');
+
+        if(this.checked){
+          $('#div_id_autre_' + fieldName).toggle(true);
+        }
+        else {
+          $('#div_id_autre_' + fieldName).toggle(false);
+        }
+      });
+
+      toggleConsent();
+
+      $('#id_fondement_juridique').change(function(){
+        toggleConsent();
+      })
     });
+
+    function disableRequired(){
+      console.log('disabling : ', $('#tab-transfert input[required]'));
+      $('#tab-transfert input[required]').removeAttr('required');
+      $('#tab-transfert select[required]').removeAttr('required');
+      
+      $('#tab-interco input[required]').removeAttr('required');
+      $('#tab-interco select[required]').removeAttr('required');
+    }
     {% comment %} document.addEventListener("DOMContentLoaded", function(){
       const fieldFinalite = document.getElementById('id_finalite')
       fieldFinalite.addEventListener('change', function(){
@@ -66,21 +137,22 @@
       });
     }); {% endcomment %}
   </script>
-
 {% endblock %}
 
+{% block toastr %}
+  <script></script>
+{% endblock toastr %}
 
 {% block content %}
-  <div class="row mx-3 my-4">
+  {% comment %} <div class="row mx-3 my-4">
     <div class="col">
       <div id="card-historique" class="card custom-card">
         <div class="card-body">
           <h3 class="text-hint mb-3 card-title">Historique</h3>
             <ul class="list-group">
             {% for elmt in historique %}
-              {% comment %} <li class="list-group-item">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : {{ elmt.action }} </li> {% endcomment %}
               <li class="list-group-item">
-                <span class="text-hint custom-text-light">{{ elmt.created_at }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
+                <span class="text-hint custom-text-light">{{ elmt.created_at|date:"SHORT_DATE_FORMAT" }} : </span> <span class="text-hint fw-bold">{{ elmt.action }}</span> 
               </li>
             {% endfor %}
             </ul>
@@ -89,7 +161,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
   
   <div class="row mx-3 my-4">
     <div class="col">
@@ -98,16 +170,27 @@
         <div class="card-body">
           <h3 class="mb-3 card-title">Edition de la demande d'autorisation</h3>
           <span><i class="bi bi-building-fill custom-text-light"></i> {{ demande.organisation }}<br>
-          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> {{ demande.type_demande }}<br>
-          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.id|stringformat:"08d" }}</strong><br>
+          <span><i class="bi bi-file-earmark-text-fill custom-text-light"></i> Objet : {{ demande.type_demande }}<br>
+          <span><i class="bi bi-hash custom-text-light"></i> N° <strong>{{ demande.num_demande }}</strong><br>
+          <span><i class="bi bi-stopwatch-fill custom-text-light"></i> {{ demande.status|get_status_color|safe }} </span><br><br>
+
           <div class="card-text mt-3">
-            <form method="post" id="update-demande-form" onsubmit="openLoader()">
+            {% if form.errors %}
+              <div class="alert alert-danger" role="alert">
+                {% for error in form.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+            <form method="post" id="update-demande-form" enctype="multipart/form-data" onsubmit="openLoader()">
               {% csrf_token %}
               {{ form }}
-              <button id="btn-submit" name="submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
-              <a href="{% url 'dashboard:demande_auto:detail' pk=demande.id %}" class="btn btn-dark py-2 m-2">Enregistrer et quitter</a>
+              {% comment %} {{ rendered_form }} {% endcomment %}
+              <button onclick="disableRequired()" id="btn-submit" name="form_submit" class="btn btn-secondary py-2 me-2" type="submit">Enregistrer le brouillon</button>
+              <button onclick="disableRequired()" id="btn-submit-quit" name="form_submit_quit" class="btn btn-dark py-2 m-2" type="submit">Enregistrer et quitter</a>
             </form>
           </div>
+
         </div>
       </div>
     </div>

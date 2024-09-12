@@ -1,0 +1,49 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  
+  <div class="head-content">
+    <div class="col col-left" id="col-qrcode">
+      <img src="data:image/png;base64,{{qr_code}}" alt="QR Code" width="150px">
+    </div>
+
+    <div class="col col-right" id="col-destinataire" style="margin-left: 300px;">
+      Abidjan, le {{ date }} <br>
+      <h3>Le Président du Conseil de Régulation</h3> 
+      <h3>À</h3>
+      <h3>{{ titre_destinataire }} de {{ demande.organisation }} <br>
+        {{ adresse_destinataire }}</h3>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <p>
+      <h3 style="display: inline;">Objet : </h3> {{ type_reponse }}
+    </p>
+
+    <p>
+      <strong>{{ titre_destinataire }}</strong>
+    </p>
+    
+    <p>
+      Demande : "<strong>{{ demande }}</strong>"
+    </p>
+    <p>
+      Envoyée le : <strong>{{ demande.created_at }}</strong>.
+    </p>
+
+    <p> 
+      Contenu de la décision :
+    </p>
+  </div>
+
+  <div class="footer-content">
+    <div class="footer-signature" style="margin-left: 300px;">
+      <h3>Signataire</h3>
+      <p class="signature" id="col-qrcode">
+        <img src="static/assets/img/signature.png" alt="Signataire" width="250px">
+      </p>
+    </div>
+  </div>
+  
+{% endblock %}

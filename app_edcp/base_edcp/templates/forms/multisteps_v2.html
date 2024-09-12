@@ -1,0 +1,245 @@
+{% load crispy_forms_tags %}
+{% load custom_tags_filters %}
+{% load static %}
+
+
+<style>
+  .form-tab-name{
+    padding: 10px;
+    background-color: #eaeef3;
+    padding: 10px;
+    font-size: 15px;
+    text-align: right;
+    border-radius: 7px 0 0 7px;
+    cursor: pointer;
+  }
+
+  .form-tab-name.active{
+    background-color: bisque;
+    font-weight: bold;
+    border-right: 3px solid #fb8521;
+  }
+
+  #tab-content{
+    border-radius: 0px 7px 7px 0px;
+    padding: 0;
+    max-height: 800px;
+    overflow-y: scroll;
+  }
+
+  div.form-tab-content{
+    padding: 40px;
+    display: none;
+    background-color: #eaeef3;
+  }
+
+  div.form-tab-content.show{
+    display: block;
+    transition: display 2s;
+  }
+
+  legend{
+    font-size: 1.3rem;
+  }
+
+  #form-transfert .list-group-item{
+    background-color: none;
+  }
+
+</style>
+
+<script>
+  $(document).ready(function(){
+    console.log('tabs : ', $('.form-tab-name').length);
+    gotoStep(1);
+  });
+
+  function gotoStep(i){
+    $('.form-tab-name.active').removeClass('active');
+    $('#form-tab-name-'+i).addClass('active');
+
+    $('.form-tab-content.show').removeClass('show');
+    $('#form-tab-content-'+i).addClass('show');
+  }
+
+  function gotoPrevious(i){
+    if (i > 0){
+      gotoStep(i-1);
+    }
+  }
+
+  function gotoNext(i){
+    const tabsNumber = $('.form-tab-name').length;
+    if (i < tabsNumber){
+      gotoStep(i+1);
+    }
+  }
+
+</script>
+
+
+<div id="multi-form">
+  <div class="row">
+    <div id="tablist" class="col-3">
+      {% for form_tab in form_structure %}
+        <h3 id="form-tab-name-{{forloop.counter}}" class="form-tab-name mb-2" onclick="gotoStep({{forloop.counter}})">
+          {{forloop.counter}}. {{ form_tab.display_name }}
+        </h3>
+      {% endfor %}
+    </div>
+
+    <div id="tab-content" class="col-9">
+      {% for form_tab in form_structure %}
+        <div id="form-tab-content-{{forloop.counter}}" class="form-tab-content mb-2">
+          
+          {% if form_tab.label == 'donnees' %}
+            {% for categorie, items in form.get_nested_dcp %}
+            <fieldset class="mb-3">
+              <legend>{{ categorie }} 
+                {% if categorie.is_sensible %}
+                  <span class="text-hint text-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i> données sensibles
+                  </span>
+                {% endif %}
+            </legend> 
+
+              {% for item in items %}
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    name="donnees_traitees" 
+                    value="{{item.id}}" 
+                    data-other="true"
+                    id="id_input_donnees_traitees_{{item.id}}"
+                    {% if item.id in form.get_initial_donnees_traitees %} checked {% endif %}>
+
+                  <label class="form-check-label" for="id_input_donnees_traitees_{{item.id}}">
+                    {{ item.description }}
+                  </label>
+                </div>
+              {% endfor %}
+            </fieldset>
+            {% endfor %}
+          
+          {% elif form_tab.label == 'transferts' %}
+            <div class="row mb-4" id="tab-transfert">
+              <div class="col"> 
+                <h4 class="custom-text-light mb-3">Ajouter un transfert</h4>
+                {% comment %} <form method="post" onsubmit="openLoader()" id="form-transfert">
+                </form> {% endcomment %}
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <p class="text-hint custom-text-light">Si les données sont transférées ou hébergées hors de la Côte d'Ivoire,
+                  veuillez remplir le formulaire pour chaque pays.
+                </p>
+                {{ form_transfert|crispy }} 
+                <button 
+                  class="btn btn-success"
+                  hx-post="{% url 'dashboard:demande_auto:add_transfert' pk=demande.id %}" 
+                  hx-target="#list-transferts">
+                  Ajouter {{ csrf_token }}
+                </button>
+                
+              </div>
+
+              <div class="col" >
+                  <h4 class="custom-text-light mb-3">Liste des transferts</h4>
+                  <div id="list-transferts">
+                  {% include 'demande_auto/partials/list_transferts.html' with demande=demande %}
+                  </div>
+              </div>
+            </div>
+
+          {% elif form_tab.label == 'interconnexions' %}
+            <div class="row mb-4" id="tab-interco">
+              <div class="col"> 
+                <h4 class="custom-text-light mb-3">Ajouter une interconnexion</h4>
+                {% comment %} <form method="post" onsubmit="openLoader()" id="form-transfert">
+                </form> {% endcomment %}
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <p class="text-hint custom-text-light">Si des interconnexions avec des bases de données externes sont effectuées,
+                  veuillez remplir le formulaire pour chaque interconnexion.
+                </p>
+                {{ form_interco|crispy }} 
+                <button 
+                  class="btn btn-success"
+                  hx-post="{% url 'dashboard:demande_auto:add_interco' pk=demande.id %}" 
+                  hx-target="#list-intercos">
+                  Ajouter {{ csrf_token }}
+                </button>
+                
+              </div>
+
+              <div class="col" >
+                  <h4 class="custom-text-light mb-3">Liste des interconnexions</h4>
+                  <div id="list-intercos">
+                  {% include 'demande_auto/partials/list_intercos.html' with demande=demande %}
+                  </div>
+              </div>
+            </div>
+        
+        
+          {% else %}
+            {% for field in form_tab.fields %}
+              {{ form|get_form_field:field|as_crispy_field:"bootstrap5" }}
+            {% endfor %}
+          {% endif %}
+
+  
+          <div id="form-tab-buttons d-flex flex-row">
+            <button class="btn btn-secondary" onclick="gotoPrevious({{forloop.counter}})" {% if forloop.first %} disabled {% endif %}>Précédent</button>
+            <button class="btn btn-primary" onclick="gotoNext({{forloop.counter}})" {% if forloop.last %} disabled {% endif %}>Suivant</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+
+</div>
+
+<!-- 
+<div class="container p-5 d-flex align-items-start" id="tab-panel">
+  <ul class=" nav nav-pills flex-column nav-pills border-end border-3 me-3 align-items-end" id="pills-tab" role="tablist">
+    {% for form_tab in form_structure %}
+      <li class="nav-item" role="presentation">
+        {{ form_tab.display_name }}
+        {% comment %} <button 
+          (click)="goToStep(i)" 
+          ngClass="{
+            'active': activeStep == i,
+            'invalid': formGroup.invalid && !formGroup.pristine,
+            'valid': formGroup.valid && !formGroup.pristine
+          }"
+          class="nav-link text-secondary fw-semibold  position-relative" 
+          id="form_tab_{{forloop.counter}}" role="tab" 
+          aria-controls="pills-home" aria-selected="true">
+            {{ form_tab.display_name }}
+        </button> {% endcomment %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="tab-content border rounded-3 border-primary p-3 text-primary w-100" id="pills-tabContent">
+    {% for form_tab in form_structure %}
+      <div id="tab_{{forloop.counter}}}}" ngClass="activeStep == i ? 'show active' : '' " class="tab-pane fade" role="tabpanel" aria-labelledby="pills-home-tab">
+        <h2>{{ form_tab.display_name }}</h2>
+        <main class="form m-auto">
+          {% for field in form_tab.fields %}
+            <div class="fieldWrapper">
+              {% comment %} {{ form|get_form_field:field|as_crispy_field }} {% endcomment %}
+              {{ field }}
+            </div>
+          {% endfor %}
+          <div class="form-row d-flex justify-content-between" >
+            <button class="btn btn-secondary py-2" type="submit" (click)="previous()" [disabled]="activeStep==0">Précédent</button>
+            <button class="btn btn-primary py-2" type="submit" (click)="next()" [disabled]="activeStep==sections.length-1">Suivant</button>
+          </div>
+        
+        </main>
+      </div>
+    {% endfor %}
+    
+  </div>
+</div>
+-->

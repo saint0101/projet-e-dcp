@@ -1,17 +1,14 @@
+from cProfile import label
+from pyexpat import model
 from django import forms
-from demande.models import Status, Commentaire, AnalyseDemande
-from demande_auto.models import *
+from django.db.models import Q
 # Commentaire, PersConcernee, DemandeAuto, DemandeAutoBiometrie, DemandeAutoTraitement, DemandeAutoTransfert, DemandeAutoVideo, TypeDemandeAuto, Finalite, SousFinalite
-
 from base_edcp.models import Enregistrement
-
-
-class CommentaireForm(forms.ModelForm):
-  """ Formulaire d'ajout de commentaires """
-  class Meta:
-    model = Commentaire
-    fields = ['objet', 'message']
-    
+from demande.models import Status, Commentaire, AnalyseDemande
+from demande_auto.forms_structures import FORM_STRUCTURE_BIOMETRIE, FORM_STRUCTURE_TRANSFERT, FORM_STRUCTURE_TRAITEMENT, FORM_STRUCTURE_VIDEO, get_form_fields
+from demande_auto.models import (
+CategorieDonnees, InterConnexion, TransfertDonnees, TypeDemandeAuto, Finalite, SousFinalite, PersConcernee, FondementJuridique, ModeRecueilConsent, TypeDonnees,
+DemandeAuto, DemandeAutoTraitement, DemandeAutoBiometrie, DemandeAutoTransfert, DemandeAutoVideo)
 
 
 class ChangeStatusForm(forms.Form):
@@ -123,9 +120,33 @@ class UpdateDemandeForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) """
 
 
+class AddTransfertForm(forms.ModelForm):
+  """ Formulaire permettant d'ajouter des transferts lors d'une demande d'autorisation """
+  """ QUESTION_TRANSFERT_CHOICES = [
+    (False, 'Non, les données sont conservées sur le territoire ivoirien uniquement.'), 
+    (True, 'Oui, les données sont transférées hors de la Côte d\'Ivoire.')]
+  
+  has_transferts = forms.BooleanField(
+    label='Les données collectées sont-elles transférées hors de la Côte d\'Ivoire ?', 
+    required=False,
+    widget=forms.RadioSelect(choices=QUESTION_TRANSFERT_CHOICES),
+  ) """
+
+  class Meta:
+    model = TransfertDonnees
+    fields = '__all__'
+
+
+class AddIntercoForm(forms.ModelForm):
+  class Meta:
+    model = InterConnexion
+    fields = '__all__'
+
+
 class UpdateDemandeTraitementForm(forms.ModelForm):
   """ Formulaire de mise à jour d'une demande d'autorisation de traitement """
   # type_demande_auto = TypeDemandeAuto.objects.get(label='traitement')
+  # MODES_CONSENT = 
   label_type = 'traitement'
   finalite = forms.ModelChoiceField(
     label='Finalité du traitement', 
@@ -134,25 +155,80 @@ class UpdateDemandeTraitementForm(forms.ModelForm):
   sous_finalites = forms.ModelMultipleChoiceField(
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
-    widget=forms.CheckboxSelectMultiple,
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
+    help_text='Veuillez sélectionner une finalité pour afficher les sous-finalités correspondantes.'
   )
   personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
     queryset=PersConcernee.objects.all(),
     widget=forms.CheckboxSelectMultiple,
   )
+  """ fondement_juridique = forms.ModelChoiceField(
+    label='Fondement juridique',
+    queryset=FondementJuridique.objects.all(),
+    widget=forms.RadioSelect
+  ) """
+  mode_consentement = forms.ModelMultipleChoiceField(
+    label='Mode de recueil du consentement',
+    # queryset=[(mode.id, mode.description) for mode in ModeRecueilConsent.objects.all()] + [('O', 'Autre'),],
+    queryset=ModeRecueilConsent.objects.all().order_by('ordre'),
+    required=False,
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
+  )
+  """autre_mode_consentement = forms.CharField(
+    label='Autre mode de recueil du consentement',
+    required=False,
+    widget=forms.TextInput(attrs={'class': 'is-autre', 'data-other': 'mode_consentement'}),
+  )"""
+  donnees_traitees = forms.ModelMultipleChoiceField(
+    label='Données traitees',
+    queryset=TypeDonnees.objects.select_related('categorie_donnees').order_by('categorie_donnees__is_sensible', 'categorie_donnees__ordre', 'ordre'),
+    widget=forms.CheckboxSelectMultiple(attrs={'class': 'has-autre', 'data-other': 'true'}),
+  )
+  """ transferts = forms.ModelMultipleChoiceField(
+    label='Transferts de données',
+    queryset=TransfertDonnees.objects.all(),
+    widget=forms.CheckboxSelectMultiple()
+  ) """
+
+
+  def get_nested_dcp(self):
+    categories = CategorieDonnees.objects.all().order_by('is_sensible', 'ordre')
+    nested_items = []
+
+    for categorie in categories:
+      items = self.fields['donnees_traitees'].queryset.filter(categorie_donnees=categorie)
+      nested_items.append((categorie, items))
+
+    # print('items : ', nested_items)
+    return nested_items
+  
+
+  def get_initial_donnees_traitees(self):
+    return [donnee.id for donnee in self.initial['donnees_traitees']]
   
   class Meta:
     model = DemandeAutoTraitement
-    # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_TRAITEMENT)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
+    list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.exclude(label='autre')
     self.fields['finalite'].queryset = list_finalites
-    self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+    self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(Q(finalite__in=list_finalites) | Q(label='autre')).order_by('ordre')
+    # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites) | SousFinalite.objects.filter(label='autre')
+    # self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(label='autre')
+    demande =  self.instance
+    # self.fields['transferts'].queryset = demande.transferts.all()
+
+
+class TraitementFormDisabled(UpdateDemandeTraitementForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de traitement """
+  class Meta:
+    model = DemandeAutoTraitement
+    fields = get_form_fields(FORM_STRUCTURE_TRAITEMENT, hide_files=True)
 
 
 class UpdateDemandeTransfertForm(forms.ModelForm):
@@ -166,6 +242,7 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
     label='Sous-finalités', 
     queryset=SousFinalite.objects.all(),
     widget=forms.CheckboxSelectMultiple,
+    help_text='Veuillez sélectionner une finalité pour afficher les sous-finalités correspondantes.'
   )
   personnes_concernees = forms.ModelMultipleChoiceField(
     label='Personnes concernées', 
@@ -176,7 +253,8 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoTransfert
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_TRANSFERT)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
   
   def __init__(self, *args, **kwargs):
@@ -184,6 +262,13 @@ class UpdateDemandeTransfertForm(forms.ModelForm):
     list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
     self.fields['finalite'].queryset = list_finalites
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+
+
+class TransfertFormDisabled(UpdateDemandeTransfertForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de transfert """
+  class Meta:
+    model = DemandeAutoTransfert
+    fields = get_form_fields(FORM_STRUCTURE_TRANSFERT, hide_files=True)
 
 
 class UpdateDemandeVideoForm(forms.ModelForm):
@@ -207,7 +292,8 @@ class UpdateDemandeVideoForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoVideo
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_VIDEO)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
@@ -215,6 +301,13 @@ class UpdateDemandeVideoForm(forms.ModelForm):
     list_finalites = TypeDemandeAuto.objects.get(label=self.label_type).finalites.all()
     self.fields['finalite'].queryset = list_finalites
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
+
+
+class VideoFormDisabled(UpdateDemandeVideoForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de vidéosurveillance """
+  class Meta:
+    model = DemandeAutoVideo
+    fields = get_form_fields(FORM_STRUCTURE_VIDEO, hide_files=True)
 
 
 class UpdateDemandeBioForm(forms.ModelForm):
@@ -238,7 +331,8 @@ class UpdateDemandeBioForm(forms.ModelForm):
   class Meta:
     model = DemandeAutoBiometrie
     # fields = '__all__'
-    exclude = ['user', 'organisation', 'type_demande', 'created_at', 'status']
+    fields = get_form_fields(FORM_STRUCTURE_BIOMETRIE)
+    # exclude = ['created_by', 'organisation', 'type_demande', 'created_at', 'status']
     # widgets={'personnes_concernees': forms.CheckboxSelectMultiple},
 
   def __init__(self, *args, **kwargs):
@@ -248,3 +342,12 @@ class UpdateDemandeBioForm(forms.ModelForm):
     self.fields['sous_finalites'].queryset = SousFinalite.objects.filter(finalite__in=list_finalites)
 
     # print('user : ', request.user)
+
+
+
+class BiometrieFormDisabled(UpdateDemandeBioForm):
+  """ Formulaire d'affichage' d'une demande d'autorisation de biométrie """
+  class Meta:
+    model = DemandeAutoBiometrie
+    fields = get_form_fields(FORM_STRUCTURE_BIOMETRIE, hide_files=True)
+

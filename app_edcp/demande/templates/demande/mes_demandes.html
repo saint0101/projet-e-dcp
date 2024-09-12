@@ -1,0 +1,56 @@
+{% extends '../dashboard/base/master.html' %}
+{% load static %}
+{% load custom_tags_filters %}
+
+
+{% block custom_scripts %}
+  <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    console.log('tooltips', tooltipTriggerList);
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+  </script>
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col">
+    <div class="card custom-card">
+      <div class="card-body">
+        {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+        <h3 class="card-title mb-5 mt-3">Mes demandes</h3>
+        <div class="card-text" id="list-demandes">
+          {% comment %} {% include 'demande/partials/list_demandes_user2.html' %} {% endcomment %}
+
+          <div class="row">
+            <div class="col">
+              <table class="table table-striped table-hover table-sm table-nowrap">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Organisation</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Objet</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="list-demandes">
+                  {% include 'demande/partials/list_demandes_user.html' %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

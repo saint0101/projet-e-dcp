@@ -4,7 +4,7 @@ from base_edcp.models import User, Enregistrement
 from base_edcp import validators
 from demande.models import Demande
 from options.models import OptionModel
-
+# from .forms import DPOCabinetFormDisabled, DPODPOUpdateFormDisabled
 
 
 class TypeDPO(OptionModel):
@@ -237,6 +237,18 @@ class Correspondant(Demande):
        verbose_name='Contrat',
     )
 
+
+    def get_url_name(self):
+      return 'dashboard:correspondant'
+    
+    def get_instance_form(self):
+        from .forms import DPOCabinetFormDisabled, DPODPOUpdateFormDisabled
+        
+        if self.is_personne_morale:
+            return DPOCabinetFormDisabled(instance=self)
+        else:
+            return DPODPOUpdateFormDisabled(instance=self)
+    
     class Meta:
         verbose_name = 'Correspondant à la protection des données'
         verbose_name_plural = 'Correspondants à la protection des données'

@@ -1,0 +1,13 @@
+{% extends '../base.html' %}
+
+{% block content %}
+  Bonjour,
+  <br><br>
+  Votre demande d'autorisation : <strong>{{ demande }}</strong>, 
+  soumise le <strong>{{ demande.created_by }}</strong> a été traitée.
+  Vous pouvez à présent effectuer le paiement.
+
+ <br><br>
+  Merci !<br>
+  L'Autorité de Protection
+{% endblock %}

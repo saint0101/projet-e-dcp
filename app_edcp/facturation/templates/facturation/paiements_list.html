@@ -1,0 +1,75 @@
+{% extends '../dashboard/base/master.html' %}
+{% load static %}
+{% load custom_tags_filters %}
+
+
+{% block content %}
+
+<div class="row mx-5 my-3">
+  {% comment %}   <div class="col-3"></div> {% endcomment %}
+  <div class="col">
+    <div class="card custom-card">
+      <div class="card-body">
+        {% comment %} <div class="card-title">Organisations enregistrées</div> {% endcomment %}
+        <h3 class="card-title mb-5 mt-3">Tous les paiements</h3>
+        <div class="card-text">
+          <table class="table table-striped table-hover table-sm table-responsive-md align-middle">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Montant</th>
+                <th scope="col">Facture</th>
+                <th scope="col">Demande</th>
+                <th scope="col">Validé ?</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for paiement in paiements %}
+                <tr>
+                  <td> {{ paiement.created_at|date:"SHORT_DATE_FORMAT" }}</td>
+                  <td> {{ paiement.get_montant_cfa }}</td>
+                  <td>
+                    <a href="" hx-get="{% url 'dashboard:facturation:detail_htmx' pk=paiement.facture.id %}" hx-target="#factureDetailModal" class="text-primary" data-bs-toggle="modal" data-bs-target="#factureModal">
+                      {{ paiement.facture }} ({{paiement.facture.get_montant_cfa}})
+                    </a>
+                  </td>
+                  <td>
+                    <a href="{% url paiement.facture.demande|get_demande_url|add:'detail' pk=paiement.facture.demande.pk %}" class="text-primary">
+                      {{ paiement.facture.demande }}
+                    </a>
+                  </td>
+                  <td>
+                    {{ paiement.is_valid|icon_true_false|safe }}
+                  </td>
+                  <td> 
+                    <a href="" hx-get="{% url 'dashboard:facturation:paiement_detail' pk=paiement.id %}" hx-target="#paiementDetailModal" data-bs-toggle="modal" title="Afficher" class="text-primary" data-bs-toggle="modal" data-bs-target="#paiementModal">
+                      <i class="bi bi-eye fw-bold large custom-text-light me-1"></i>
+                    </a>
+                  </td>
+                </tr>
+              {% empty %}
+                <p>Aucun paiement à traiter.</p>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} <div class="col">
+    
+  </div> {% endcomment %}
+  
+  {% comment %} <div class="col-3"></div> {% endcomment %}
+</div>
+
+<div class="modal fade" id="factureModal" tabindex="-1" aria-labelledby="factureModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/facture_detail.html' %}
+</div>
+
+<div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
+  {% include 'facturation/partials/paiement_detail.html' %}
+</div>
+
+{% endblock content %}

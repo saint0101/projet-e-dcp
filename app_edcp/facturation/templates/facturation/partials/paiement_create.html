@@ -1,0 +1,26 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-dialog modal-lg" id="">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title fs-5 custom-text-light" id="paiementModalLabel">{{ facture}}  </h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-hint custom-text-light">
+        Facture émise le <strong>{{ facture.created_at }}</strong>
+        pour la demande N° {{ facture.demande.num_demande }}.
+      </p>
+
+      <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary" type="submit">Enregistrer</button> 
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+    </div>
+  </div>
+</div>

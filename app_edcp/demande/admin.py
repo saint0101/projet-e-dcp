@@ -52,7 +52,7 @@ class TypeReponseAdmin(admin.ModelAdmin):
 class CategorieDemandeAdmin(admin.ModelAdmin):
     """ Catégories de demande """
     ordering = ['id']
-    list_display = ['label', 'description', 'niv_validation', 'is_sensible', 'ordre']
+    list_display = ['label', 'description', 'niv_validation', 'is_sensible', 'ordre', 'montant']
 
 
 
@@ -60,7 +60,7 @@ class CategorieDemandeAdmin(admin.ModelAdmin):
 class CritereEvaluationAdmin(admin.ModelAdmin):
     """ Actions effectuées """
     ordering = ['id']
-    list_display = ['categorie_demande', 'label', 'field_name', 'field_type']
+    list_display = ['label', 'categorie_demande', 'field_name', 'field_required', 'field_type']
 
 
 

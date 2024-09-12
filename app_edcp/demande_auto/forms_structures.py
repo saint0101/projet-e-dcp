@@ -6,24 +6,47 @@ sous forme de formulaire multisteps
 FORM_STRUCTURE_TRAITEMENT = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',
-   'fields': ['finalite', 'sous_finalites', 'personnes_concernees']
+   'fields': ['finalite', 'sous_finalites', 'autre_sous_finalites', 'description_traitement',]
   },
 
   {'label': 'transparence',
    'display_name': 'Transparence',
-   'fields': ['fondement_juridique', 'procedures']
+   'fields': ['personnes_concernees', 'fondement_juridique', 'description_fondement', 'mode_consentement', 'autre_mode_consentement', 'procedures']
+  },
+
+  {'label': 'donnees',
+   'display_name': 'Données traitées',
+   'fields': ['donnees_traitees', 'autre_donnees_traitees', ]
+  },
+
+  { 'label': 'transferts',
+    'display_name': 'Transferts de données',
+    # 'fields': ['transferts', ]
+    'fields': [],
+  },
+
+  {'label': 'interconnexions',
+   'display_name': 'Interconnexions de données',
+   #'fields': ['interconnexions', ],
+   'fields': [],
   },
 
   {'label': 'securite',
-   'display_name': 'Sécurité',
+   'display_name': 'Mesures de sécurité',
    'fields': ['mesures_securite']
   },
+
+  {'label': 'documents',
+   'display_name': 'Documents justificatifs',
+   'fields': ['file_consentement', 'file_cgu']
+  },
+
 ]
 
 FORM_STRUCTURE_TRANSFERT = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',
-   'fields': ['finalite', 'sous_finalites', 'personnes_concernees']
+   'fields': ['finalite', 'sous_finalites', 'description_traitement', 'personnes_concernees']
   },
 
   {'label': 'details',
@@ -40,7 +63,7 @@ FORM_STRUCTURE_TRANSFERT = [
 FORM_STRUCTURE_VIDEO = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',
-   'fields': ['finalite', 'sous_finalites', 'personnes_concernees']
+   'fields': ['finalite', 'sous_finalites', 'description_traitement', 'personnes_concernees']
   },
 
   {'label': 'details',
@@ -57,7 +80,7 @@ FORM_STRUCTURE_VIDEO = [
 FORM_STRUCTURE_BIOMETRIE = [
   {'label': 'finalite',
    'display_name': 'Finalité du traitement',
-   'fields': ['finalite', 'sous_finalites', 'personnes_concernees']
+   'fields': ['finalite', 'sous_finalites', 'description_traitement', 'personnes_concernees']
   },
 
   {'label': 'details',
@@ -70,3 +93,13 @@ FORM_STRUCTURE_BIOMETRIE = [
    'fields': ['mesures_securite']
   },
 ]
+
+
+def get_form_fields(form_structure, hide_files=False):
+  fields = []
+  for elmt in form_structure:
+    if elmt['label'] == 'files' and hide_files:
+      continue
+    fields += elmt['fields']
+
+  return fields

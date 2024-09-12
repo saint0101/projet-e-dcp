@@ -1,5 +1,18 @@
 @import "../../../static/colors.scss";
 
+
+/******************** HTMX *********************/
+
+.htmx-indicator{
+  display:none;
+}
+.htmx-request .htmx-indicator{
+  display:inline;
+}
+.htmx-request.htmx-indicator{
+  display:inline;
+}
+
 /******************** HEADER *********************/
 #header{
   background-color: #FFF;
@@ -196,15 +209,23 @@
 .accordion-button{
   font-size: .8rem;
   font-weight: 600;
-  color: $custom-light;
-  background-color: $custom-bg-light;
+  // color: $custom-light;
+  color: #777;
+  // background-color: $custom-bg-light;
+  background-color: #eee;
 }
 
 .accordion-button:not(.collapsed) {
-  color: $custom-light;
+  // color: $custom-light;
+  color: #777;
   font-weight: 600;
-  background-color: $custom-bg-light;
+  // background-color: $custom-bg-light;
+  background-color: #eee;
   // background-color: #FFF;
+}
+
+.accordion-button::after {
+  color: #fff;
 }
 
 .accordion-button:focus {
@@ -332,13 +353,13 @@
   width: 450px;
 }
 
-.col-form-commentaires textarea{
-  height: 100px;
+#form-comment textarea.form-control{
+  max-height: 100px;
 }
 
 .col-list-commentaires{
-  height: 390px;
-  overflow: scroll;
+  max-height: 390px;
+  overflow-y: scroll;
   background-color: #eaeef3;
   border-radius: 8px;
   box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.15);
@@ -364,11 +385,11 @@
   margin-left: 12px;
 }
 
-.autoscrollable-wrapper {
+.autoscrollable-wrapper, .autoscrollable-content{
   overflow: auto;
   max-height: 100%;
-  display: flex;
-  flex-direction: column-reverse;
+  // display: flex;
+  // flex-direction: column-reverse;
 }
 
 #row-actions{
@@ -381,4 +402,13 @@
   height: 100%;
   border: 1px solid #dddddd;
   border-radius: 5px;
+}
+
+#div_id_avis_juridique .form-check, #div_id_avis_technique .form-check{
+  display: inline-flex;
+  margin-right: 10px;
+}
+
+#div_id_avis_juridique .form-check-input, #div_id_avis_technique .form-check-input{
+  margin-right: 4px;
 }
