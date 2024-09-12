@@ -2,6 +2,7 @@
     Test du models.
 """
 
+from re import T
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -13,20 +14,20 @@ class ModelTest(TestCase):
         """ Test de creation d'iuntilisateur avec succes """
 
         # champs de la base de donnees
-        login = 'john_doe'
+        username = 'john_doe'
         avatar = 'avatar.jpg'
         nom = 'Doe'
         prenoms = 'John'
         organisation = 'XYZ Corp'
         telephone = '+1234567890'
         fonction = 'Manager'
-        consentement = 'Yes'
+        consentement = True
         email = 'test@example.com'
         password = 'mptestuser123'
 
         # creation d'un objet utilisateur
         user = get_user_model().objects.create_user(
-            login=login,
+            username=username,
             avatar=avatar,
             nom=nom,
             prenoms=prenoms,
@@ -39,7 +40,7 @@ class ModelTest(TestCase):
         )
 
         # les tests possibles
-        self.assertEqual(user.login, login)
+        self.assertEqual(user.username, username)
         self.assertTrue(user.check_password(password))
         self.assertEqual(user.avatar, avatar)
         self.assertEqual(user.nom, nom)
@@ -69,7 +70,7 @@ class ModelTest(TestCase):
 
                 user = get_user_model().objects.create_user(
                     email=email,
-                    login='sample1230',
+                    username='sample1230',
                     # role=1,
                     avatar='avatar.jpg',
                     nom='Doe',
@@ -77,7 +78,7 @@ class ModelTest(TestCase):
                     organisation='XYZ Corp',
                     telephone='+1234567890',
                     fonction='Manager',
-                    consentement='Yes',
+                    consentement=True,
                     is_active=True,
                     is_staff=False,
                     password='mptestuser123',
@@ -98,8 +99,7 @@ class ModelTest(TestCase):
         """
         Test de création d'un super utilisateur (admin) avec les informations réussie
         """
-
-        login = 'john_doe'
+        username = 'john_doe'
         # role = 1
         avatar = 'avatar.jpg'
         nom = 'Doe'
@@ -107,13 +107,12 @@ class ModelTest(TestCase):
         organisation = 'XYZ Corp'
         telephone = '+1234567890'
         fonction = 'Manager'
-        consentement = 'Yes'
+        consentement = True
         email = 'test@example.com'
         password = 'mptestuser123'
 
         user = get_user_model().objects.create_superuser(
-            login=login,
-            # role=role,
+            username=username,
             avatar=avatar,
             nom=nom,
             prenoms=prenoms,

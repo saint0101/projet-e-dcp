@@ -85,9 +85,7 @@ def can_terminate(user, demande):
     return niv_validation == demande.categorie.niv_validation
 
 
-
 ### VUES
-
 def demandes_all(request):
   """Affiche la liste des demandes """
   niv_validation = get_niv_validation_max(request.user) # récupération du niveau de validation de l'utilisateur
@@ -96,38 +94,44 @@ def demandes_all(request):
 
   return render(request, 'demande/demande_list_all.html', context)
 
-
 def demandes_a_traiter(request):
-  """
-  Affiche la liste des demandes à traiter.
-  Seuls les 'agents' et 'superviseurs' peuvent traiter les demande.
-  Le superviseur peut traiter les demandes et valider celles de niveau 1.
-  Les autres proifils (validateurs 1 à 5) ne peuvent que valider les analyses et projets de réponse.
-  """
-  demandes = None
-  niv_validation = get_niv_validation_max(request.user)
-  print('get_niv_validation_max : ', user_get_niv_validation(request.user))
+    """
+    Affiche la liste des demandes à traiter.
+    Seuls les 'agents' et 'superviseurs' peuvent traiter les demande.
+    Le superviseur peut traiter les demandes et valider celles de niveau 1.
+    Les autres profils (validateurs 1 à 5) ne peuvent que valider les analyses et projets de réponse.
+    """
+    demandes = None
+    niv_validation = get_niv_validation_max(request.user)
+    
+    #TODO: ajouter au git "Ajout d'une gestion de None pour niv_validation au cas ou il n'y pas de valeur"
+    # Ajout d'une gestion de None pour niv_validation
+    if niv_validation is None:
+        # Si niv_validation est None, on pourrait choisir d'afficher une erreur ou un message spécifique
+        return render(request, 'demande/demande_list_all.html', {'error': "Votre niveau de validation est inconnu."})
 
-  # si l'utilisateur est un agent (niveau 0)
-  if niv_validation == 0:
-    # filtrage des demandes : sans analyse (None) ou analyse en cours (analyse niveau 0)
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0)).exclude(status__label='brouillon').order_by('-created_at')
+    # si l'utilisateur est un agent (niveau 0)
+    if niv_validation == 0:
+        # filtrage des demandes : sans analyse (None) ou analyse en cours (analyse niveau 0)
+        demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation=0)).order_by('-created_at')
 
-  # si l'utilisateur est un superviseur (niveau 1)
-  if niv_validation == 1:
-    # filtrage des demandes : sans analyse (None) ou analyse en cours ou à valider (analyse niveau 0 ou 1)
-    demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1])).exclude(status__label='brouillon').order_by('-created_at')
+    # si l'utilisateur est un superviseur (niveau 1)
+    elif niv_validation == 1:
+        # filtrage des demandes : sans analyse (None) ou analyse en cours ou à valider (analyse niveau 0 ou 1)
+        demandes = Demande.objects.filter(Q(analyse=None) | Q(analyse__niv_validation__in=[0, 1])).order_by('-created_at')
 
-  # si l'utilisateur est un validateur (niveau 2 à 5)  
-  elif niv_validation > 1:
-    niv_validations = user_get_niv_validation(request.user)
-    # filtrage des demandes avec les niveau de validation de l'utilisateur
-    demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations).exclude(status__label='brouillon').order_by('-created_at')
-  
-  context = {'demandes': demandes}
-  context['user_niv_validation'] = niv_validation
+    # si l'utilisateur est un validateur (niveau 2 à 5)
+    elif niv_validation > 1:
+        niv_validations = user_get_niv_validation(request.user)
+        # Si niv_validations est None, on filtre pour ne pas provoquer d'erreur
+        if niv_validations is not None:
+            # filtrage des demandes avec les niveaux de validation de l'utilisateur
+            demandes = Demande.objects.filter(analyse__niv_validation__in=niv_validations).order_by('-created_at')
 
-  return render(request, 'demande/demande_list_all.html', context)
+    context = {'demandes': demandes}
+    context['user_niv_validation'] = niv_validation
+
+    return render(request, 'demande/demande_list_all.html', context)
 
 
 def mes_demandes(request):

@@ -28,9 +28,35 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#"> <i class="bi bi-card-list x-large fw-bold header-menu-icon"></i></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"><i class="bi bi-bell x-large fw-bold header-menu-icon"></i></a>
+          
+          <!-- 
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="bi bi-bell x-large fw-bold header-menu-icon"></i></a>
+            </li>
+          -->
+          <li class="nav-item dropdown">
+              <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-bell x-large fw-bold header-menu-icon"></i>
+                  {% if notifications %}
+                      <span class="badge bg-danger">{{ notifications.count }}</span>
+                  {% endif %}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {% if notifications %}
+                      {% for notification in notifications %}
+                          <li>
+                              <a class="dropdown-item" href="{% url 'mark_notification_as_read' notification.id %}">
+                                  {{ notification.message }}
+                              </a>
+                          </li>
+                      {% endfor %}
+                  {% else %}
+                      <li><a class="dropdown-item" href="#">Aucune nouvelle notification</a></li>
+                  {% endif %}
+              </ul>
           </li>
+
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle fw-bold header-menu-icon x-large"></i>

@@ -57,10 +57,13 @@ INSTALLED_APPS = [
     'enregistrement',
     'demande_auto',
     'facturation',
+    'notifications',
+    'channels'
     # 'admindocs', # génération automatique de la documentation dans l'admin Django.
     # 'django_extensions', # génération de diagrammes de classe UML
     # ,
 ]
+ASGI_APPLICATION = 'app_edcp.asgi.application'
 
 # SITE_ID = 1  # Set to the ID of your default site
 
@@ -91,6 +94,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'dashboard.context_processors.get_menu',
+                'notifications.context_processors.notifications_processor',
             ],
         },
     },

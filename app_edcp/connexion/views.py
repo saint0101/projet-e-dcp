@@ -149,7 +149,6 @@ class Login(LoginView):
         return response
 
 
-
 class Logout(LogoutView):
     pass
 
@@ -157,7 +156,6 @@ class Logout(LogoutView):
         response = super().form_valid(form)
         messages.success(self.request, 'Déconnexion effectuée')
         return response
-
 
 class PasswordChange(PasswordChangeView):
     template_name = 'registration/password_change.html'
